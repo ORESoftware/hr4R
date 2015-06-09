@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="bin/www" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="/usr/local/bin/node" path-to-js-file="$USER_HOME$/WebstormProjects/ORESoftware/sc-admin-ui-express/bin/www" working-dir="$USER_HOME$/WebstormProjects/ORESoftware/sc-admin-ui-express">
+    <envs>
+      <env name="DEBUG" value="sc-ui-express:*" />
+    </envs>
+    <browser url="http://localhost:3000/" />
+    <method />
+  </configuration>
+</component>

@@ -1,0 +1,28 @@
+{
+  "name": "sc-admin-ui-express",
+  "version": "0.0.0",
+  "authors": [
+    "Alexander Mills <alexander_mills2@cable.comcast.com>"
+  ],
+  "main": "static/app/js/main",
+  "moduleType": [
+    "amd",
+    "es6",
+    "globals",
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "requirejs": "~2.1.18",
+    "underscore": "~1.8.3",
+    "handlebars": "~3.0.3",
+    "bootstrap": "~3.3.4",
+    "backbone": "~1.2.1"
+  }
+}
