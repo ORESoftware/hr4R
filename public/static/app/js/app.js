@@ -17,6 +17,9 @@ define(['app/js/views','handlebars', 'backbone'], function(views,Handlebars, Bac
         console.log('rudolf4');
     };
 
+    console.log('views:',views);
+    console.log('views.SomeView:',views.SomeView);
+
     return {
         start: start
     };
