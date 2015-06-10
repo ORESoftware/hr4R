@@ -4,18 +4,14 @@
 
 //http://ozkatz.github.io/converting-an-existing-backbonejs-project-to-requirejs.html
 //https://github.com/volojs/create-template
+//http://www.webdeveasy.com/optimize-requirejs-projects/
+//https://github.com/tastejs/todomvc/tree/gh-pages/examples/backbone_require
 
-//requirejs.config({
-require.config({
+requirejs.config({
     'baseUrl': '/static',
     'paths': {
         //'app': 'app/js',
         // define vendor paths
-        //'jquery': 'js/vendor/jquery.min',
-        //'underscore': 'js/vendor/underscore-min',
-        //'backbone': 'js/vendor/backbone-min',
-        //'bootstrap': 'js/vendor/bootstrap.min',
-        //'handlebars': 'js/vendor/handlebars.min'
         'jquery': 'js/vendor/jquery',
         'underscore': 'js/vendor/underscore',
         'backbone': 'js/vendor/backbone',

@@ -3,7 +3,7 @@
  */
 
 
-define(['collections','jquery', 'underscore', 'handlebars', 'backbone'], function ($, _, Handlebars, Backbone) {
+define(['app/js/collections','jquery', 'underscore', 'handlebars', 'backbone'], function (collections, $, _, Handlebars, Backbone) {
 
 //define(['handlebars', 'backbone'], function(Handlebars, Backbone) {
 
@@ -23,6 +23,9 @@ define(['collections','jquery', 'underscore', 'handlebars', 'backbone'], functio
     });
 
     return {
-        'SomeView': new SomeView()
+        SomeView: new SomeView({
+            collection: collections.todos,
+            el : null
+        })
     };
 });

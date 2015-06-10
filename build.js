@@ -4,8 +4,8 @@
 
 
 ({
-    "baseUrl": "./static",
+    "baseUrl": "./public/static",
     "name": "app/js/main",
-    "mainConfigFile": "./static/app/js/main.js",
-    "out": "./static/js/optimized.js"
+    "mainConfigFile": "./public/static/app/js/main.js",
+    "out": "./public/static/js/optimized.js"
 })
