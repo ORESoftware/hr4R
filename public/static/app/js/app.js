@@ -6,19 +6,14 @@
 
 //define(['app/js/views','handlebars', 'backbone'], function(views,Handlebars, Backbone) {
 
-define(['app/js/views','handlebars', 'backbone'], function(views,Handlebars, Backbone) {
+define(['app/js/views', 'handlebars', 'backbone'], function (views, Handlebars, Backbone) {
 
-    console.log('rudolf1');
-    console.log('rudolf2');
+    var start = function () {
 
-    var start = function(){
-
-        console.log('rudolf3');
-        console.log('rudolf4');
+        require(['app/js/boot'], function (boot) {
+            boot.initialize();
+        });
     };
-
-    console.log('views:',views);
-    console.log('views.SomeView:',views.SomeView);
 
     return {
         start: start

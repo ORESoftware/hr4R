@@ -2,7 +2,8 @@
  * Created by amills001c on 6/9/15.
  */
 
-/*global define*/
+
+
 define(['underscore', 'backbone'], function (_, Backbone) {
 
     'use strict';

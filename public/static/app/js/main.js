@@ -16,7 +16,8 @@ requirejs.config({
         'underscore': 'js/vendor/underscore',
         'backbone': 'js/vendor/backbone',
         'bootstrap': 'js/vendor/bootstrap',
-        'handlebars': 'js/vendor/handlebars'
+        'handlebars': 'js/vendor/handlebars',
+        'backbone-validation': 'js/vendor/backbone-validation-amd'
     },
     // Shim declaration
     'shim': {
@@ -38,3 +39,16 @@ require(['app/js/app'], function(Application) {
     //app.start(); // or whatever startup logic your app uses.
     var app = Application.start();
 });
+
+//require(['app/js/commonjs'], function(value) {
+//    //var app = new Application();
+//    //app.start(); // or whatever startup logic your app uses.
+//    console.log(value);
+//});
+//
+//
+//require(['app/js/commonjs2'], function(value) {
+//    //var app = new Application();
+//    //app.start(); // or whatever startup logic your app uses.
+//    console.log(value);
+//});

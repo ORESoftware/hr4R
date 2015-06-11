@@ -14,4 +14,6 @@ define(function (require) {
     var print = require('print');
 
     print(messages.getHello());
+
+    return new String('dude');
 });

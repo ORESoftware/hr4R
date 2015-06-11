@@ -3,12 +3,15 @@
  */
 
 
-define(['app/js/collections','jquery', 'underscore', 'handlebars', 'backbone'], function (collections, $, _, Handlebars, Backbone) {
+define(['app/js/collections','jquery', 'underscore', 'handlebars', 'backbone','backbone-validation'],
+
+    function (collections, $, _, Handlebars, Backbone, BackboneValidation) {
 
 //define(['handlebars', 'backbone'], function(Handlebars, Backbone) {
 
-    console.log('jquery:', Backbone.$);
-    console.log('underscore:', _);
+    //console.log('jquery:', Backbone.$);
+    //console.log('underscore:', _);
+        console.log('backbonevalidation:',BackboneValidation);
 
 
     var SomeView = Backbone.View.extend({
