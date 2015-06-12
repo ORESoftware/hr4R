@@ -3,10 +3,10 @@
  */
 
 
-define(['app/js/collections', 'jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
+define(['app/js/collections', 'ejs','jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
 
 
-    function (collections, $, _, Handlebars, Backbone, BackboneValidation) {
+    function (collections, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
 
 
         var HomeView = Backbone.View.extend({
@@ -36,7 +36,7 @@ define(['app/js/collections', 'jquery', 'underscore', 'handlebars', 'backbone', 
                 ////Generate some HTML code from the compiled Template
                 //var HTML = Template({ Recipes : RecipeData });
 
-                var source = $('#some-hbs-template').html();
+              /*  var source = $('#some-hbs-template').html();
                 //var source= document.querySelector("#some-hbs-template").innerHTML;
                 var template = Handlebars.compile(source);
                 console.log('template:',template);
@@ -44,7 +44,19 @@ define(['app/js/collections', 'jquery', 'underscore', 'handlebars', 'backbone', 
                     {'username':'donald','firstName': 'duck', 'lastName': 'goose'}]};
                 var rendered = template(users);
                 this.$el.html(rendered);
-                console.log('rendered:',rendered);
+                console.log('rendered:',rendered);*/
+
+                var data  = {"hi":'john',"users":[{'username':'denman','firstName': 'alex', 'lastName': 'mills'},
+                    {'username':'donald','firstName': 'duck', 'lastName': 'goose'}]};
+                var html = new EJS({url: '/static/html/ejs/indexEJSTemplate.ejs'}).render(data);
+
+                //var userHomeMainTemplate = document.getElementById('user-home-main-template').innerHTML;
+                //this.$el.html(_.template(userHomeMainTemplate)());
+                this.$el.html(html);
+                console.log('HomeView rendered');
+                return this;
+
+
                 //this.$el.append(rendered);
                 //$('#main-div-id').append(rendered);
             }

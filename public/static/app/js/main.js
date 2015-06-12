@@ -14,6 +14,7 @@ requirejs.config({
         //'app': 'app/js',
         // define vendor paths
         'jquery': 'vendor/jquery',
+        'ejs': 'vendor/ejs',
         'underscore': 'vendor/underscore',
         'backbone': 'vendor/backbone',
         'bootstrap': 'vendor/bootstrap',
