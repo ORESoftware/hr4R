@@ -6,7 +6,7 @@
 
 //define(['app/js/views','handlebars', 'backbone'], function(views,Handlebars, Backbone) {
 
-define(['app/js/views', 'handlebars', 'backbone'], function (views, Handlebars, Backbone) {
+define(['handlebars', 'backbone'], function (Handlebars, Backbone) {
 
     var start = function () {
 

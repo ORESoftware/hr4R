@@ -10,13 +10,18 @@ define(['jquery','backbone','app/js/routers'], function($,Backbone,routers) {
     var initialize = function() {
         // Require home page from server
         $.ajax({
-            url: '/home',
+            url: '/authenticate',
             type: 'GET',
             dataType: 'json',
-            success: function() {
+            success: function(msg) {
+                console.log('authentication message:',msg);
                 runApplication(true);
             },
-            error: function() {
+            error: function(err) {
+                console.log('authentication error:',err);
+                setTimeout(function(){
+                    alert('authentication error: '+String(err));
+                },100);
                 runApplication(false);
             }
         });
@@ -26,8 +31,9 @@ define(['jquery','backbone','app/js/routers'], function($,Backbone,routers) {
 
         // Authenticated user move to home page
         if(authenticated) {
-            //window.location.hash='home';
-            router.navigate('home', {trigger: true});
+            window.location.hash='home';
+            console.log('authenticated!!');
+            //router.navigate('home', {trigger: true});
         }
         else {
             //window.location.hash='login';

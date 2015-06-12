@@ -2,6 +2,7 @@
  * Created by amills001c on 6/9/15.
  */
 
+//https://github.com/ccoenraets/nodecellar
 //http://ozkatz.github.io/converting-an-existing-backbonejs-project-to-requirejs.html
 //https://github.com/volojs/create-template
 //http://www.webdeveasy.com/optimize-requirejs-projects/
@@ -12,12 +13,12 @@ requirejs.config({
     'paths': {
         //'app': 'app/js',
         // define vendor paths
-        'jquery': 'js/vendor/jquery',
-        'underscore': 'js/vendor/underscore',
-        'backbone': 'js/vendor/backbone',
-        'bootstrap': 'js/vendor/bootstrap',
-        'handlebars': 'js/vendor/handlebars',
-        'backbone-validation': 'js/vendor/backbone-validation-amd'
+        'jquery': 'vendor/jquery',
+        'underscore': 'vendor/underscore',
+        'backbone': 'vendor/backbone',
+        'bootstrap': 'vendor/bootstrap',
+        'handlebars': 'vendor/handlebars',
+        'backbone-validation': 'vendor/backbone-validation-amd'
     },
     // Shim declaration
     'shim': {
