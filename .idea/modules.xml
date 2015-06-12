@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$USER_HOME$/WebstormProjects/ORESoftware/sc-admin-ui-express/.idea/sc-admin-ui-express.iml" filepath="$USER_HOME$/WebstormProjects/ORESoftware/sc-admin-ui-express/.idea/sc-admin-ui-express.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../ORESoftware/sc-admin-ui-express/.idea/sc-admin-ui-express.iml" filepath="$PROJECT_DIR$/../ORESoftware/sc-admin-ui-express/.idea/sc-admin-ui-express.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/sc-ui.iml" filepath="$PROJECT_DIR$/.idea/sc-ui.iml" />
     </modules>
   </component>
 </project>
