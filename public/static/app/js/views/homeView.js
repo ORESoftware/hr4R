@@ -46,14 +46,40 @@ define(['app/js/collections', 'ejs','jquery', 'underscore', 'handlebars', 'backb
                 this.$el.html(rendered);
                 console.log('rendered:',rendered);*/
 
-                var data  = {"hi":'john',"users":[{'username':'denman','firstName': 'alex', 'lastName': 'mills'},
-                    {'username':'donald','firstName': 'duck', 'lastName': 'goose'}]};
-                var html = new EJS({url: '/static/html/ejs/indexEJSTemplate.ejs'}).render(data);
+                //var data  = {"hi":'john',"users":[{'username':'denman','firstName': 'alex', 'lastName': 'mills'},
+                //    {'username':'donald','firstName': 'duck', 'lastName': 'goose'}]};
+
+                var data  = [{'username':'denman','firstName': 'alex', 'lastName': 'mills'},
+                    {'username':'donald','firstName': 'duck', 'lastName': 'goose'}];
+                //var html = new EJS({url: '/static/html/ejs/indexEJSTemplate.ejs'}).render(data);
 
                 //var userHomeMainTemplate = document.getElementById('user-home-main-template').innerHTML;
                 //this.$el.html(_.template(userHomeMainTemplate)());
-                this.$el.html(html);
-                console.log('HomeView rendered');
+
+                var self = this;
+
+                $.ajax({
+                    url: 'static/html/ejs/indexEJSTemplate.ejs',
+                    type: 'GET',
+                    success: function(msg) {
+                        var ret = EJS.render(msg, {
+                            title:'Welcome to the jungle',
+                            users: data
+                            //filename: '/static/html/ejs/indexEJSTemplate.ejs'
+                        });
+
+                        console.log(ret);
+
+                        self.$el.html(ret);
+                        //$('body').append(ret);
+                        console.log('HomeView rendered');
+                    },
+                    error: function(err) {
+                        console.log('error:',err);
+                    }
+                });
+
+
                 return this;
 
 

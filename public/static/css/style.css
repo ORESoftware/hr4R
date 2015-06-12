@@ -1,0 +1,14 @@
+body {
+    padding: 50px;
+    padding-top: 80px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+    color: #00B7FF;
+}
+
+.add-player-form-check {
+    text-align: center;
+    color: red;
+}

@@ -32,7 +32,10 @@ requirejs.config({
         },
         'handlebars': {
             'exports': 'Handlebars'
-        }
+        },
+        ejs: {
+            exports: "ejs"
+        },
     }
 });
 

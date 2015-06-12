@@ -1,0 +1,359 @@
+body, html {
+    height: 100%
+}
+
+body {
+    padding-top: 50px;
+    font-family: 'Open Sans', sans-serif;
+    background-color: #fcfcfc
+}
+
+.ir {
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden
+}
+
+@font-face {
+    font-family: 'iconfont';
+    src: url('../fonts/iconfont.eot?-o2trw');
+    src: url('../fonts/iconfont.eot?#iefix-o2trw') format('embedded-opentype'), url('../fonts/iconfont.ttf?-o2trw') format('truetype'), url('../fonts/iconfont.woff?-o2trw') format('woff'), url('../fonts/iconfont.svg?-o2trw#iconfont') format('svg');
+    font-weight: normal;
+    font-style: normal
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    font-family: 'iconfont';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale
+}
+
+.icon-checkmark:before {
+    content: "\e602"
+}
+
+.icon-yingyang:before {
+    content: "\e601"
+}
+
+.icon-linkedin:before {
+    content: "\eac9"
+}
+
+.icon-teamsnap:before {
+    content: "\e600"
+}
+
+body > .page {
+    position: relative;
+    min-height: 100%
+}
+
+body.loading > .page {
+    background: url(../img/loader.gif) center center no-repeat
+}
+
+body[role="login"].loading > .page {
+    background: none
+}
+
+body[role="login"].loading > .page::after {
+    content: "";
+    background: url(../img/loader.gif) center center no-repeat;
+    opacity: .5;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1
+}
+
+.box-shadow-light {
+    -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.16), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.16), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.16), 0 1px 3px 0 rgba(0, 0, 0, 0.12)
+}
+
+.btn {
+    -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.16), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.16), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.16), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 0;
+    border: none;
+    border-radius: 2px;
+    display: inline-block;
+    height: 36px;
+    line-height: 36px;
+    outline: 0;
+    padding: 0 2rem;
+    text-transform: capitalize
+}
+
+.card {
+    -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.16), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.16), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.16), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+    background-color: #fff;
+    margin: 10px auto;
+    border-radius: 2px;
+    padding-top: 2em
+}
+
+p {
+    font-size: 16px
+}
+
+table {
+    background-color: #fff;
+    margin-top: 5px
+}
+
+.table > thead > tr > th {
+    border-bottom: 1px solid #ddd
+}
+
+table > thead > tr {
+    background-color: #bedef8
+}
+
+table th:last-child, table td:last-child {
+    text-align: right
+}
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    vertical-align: middle
+}
+
+.navbar-default {
+    background-color: #2c9aec;
+    border: none
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #fff
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+    background-color: #5bb0f0;
+    color: #fff
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: #fafafa
+}
+
+.navbar-brand {
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    background-image: url("/static/img/loader.gif");
+    width: 100px;
+    height: auto;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    top: 10px
+}
+
+.nav.top-menu .btn {
+    padding-left: 1rem;
+    padding-right: 1rem
+}
+
+.nav.top-menu i {
+    color: #999
+}
+
+.nav.top-menu li {
+    margin-right: 5px;
+    margin-bottom: 5px
+}
+
+.nav.top-menu li a {
+    padding-top: 10px;
+    padding-bottom: 10px
+}
+
+.main.container {
+    padding-bottom: 100px
+}
+
+footer {
+    position: absolute;
+    width: 100%;
+    bottom: 0
+}
+
+body[role='lineup'] .table-padding {
+    padding: 15px
+}
+
+body[role='lineup'] .jumbotron {
+    min-height: 100px;
+    min-height: 110px
+}
+
+body[role='lineup'] .xxx {
+    background-color: indianred;
+    color: indianred
+}
+
+body[role='lineup'] .page-header {
+    min-height: 100px;
+    max-height: 100px
+}
+
+body[role='lineup'] .navbar-default {
+    background-color: #337ab7;
+    border-color: #dad3d5
+}
+
+body[role='lineup'] .footer {
+    height: 40px
+}
+
+body[role='login'] {
+    background-color: none;
+    background-image: url("/static/img/pitch.jpg")
+}
+
+body[role='login'] .navbar-default {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-color: none
+}
+
+body[role='login'] .alert-info {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    right: 0
+}
+
+body[role='login'] .jumbotron {
+    background-color: transparent;
+    background: transparent
+}
+
+body[role='login'] .teamsnap-button {
+    background: url('/static/img/tlg-icon.png') left center no-repeat;
+    padding-left: 15px
+}
+
+body[role='login'] .paragraph1 {
+    font-size: 28px
+}
+
+body[role='login'] .paragraph2 {
+    font-size: 33px
+}
+
+body[role='login'] .hero {
+    padding-top: 100px;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5)
+}
+
+body[role='login'] .hero h1 {
+    color: #2c9aec;
+    color: #fff;
+    font-weight: 600;
+    font-size: 40px;
+    text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3)
+}
+
+body[role='login'] .hero p {
+    font-size: 22px;
+    color: #fafafa;
+    text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3)
+}
+
+body[role='login'] .hero p strong {
+    font-weight: 600;
+    font-size: 22px;
+    text-transform: uppercase;
+    color: #ffae32
+}
+
+body[role='login'] .hero .login-form {
+    margin-top: 20px
+}
+
+body[role='login'] .hero .login-form a#accountRecoveryId {
+    display: block;
+    color: #fff;
+    padding-bottom: 20px;
+    text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3)
+}
+
+body[role='login'] .hero .login-form button {
+    width: 100%;
+    margin: 5px 0;
+    max-width: 300px
+}
+
+body[role='login'] .hero .login-form button i {
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 2rem
+}
+
+body[role='login'] .hero .footer p {
+    font-size: 10px
+}
+
+body[role='login'] .brand {
+    background: url("/static/img/tlg-icon.png") no-repeat left center;
+    height: 20px;
+    width: 20px
+}
+
+body[role='roster'] .player-add-form-error-msg {
+    color: red
+}
+
+body[role='team'] #team-dashboard-menu-div-id {
+    padding: 20px 0 0 0
+}
+
+body[role='user'] .paragraph1 {
+    font-size: 18px
+}
+
+body[role='user'] .paragraph2 {
+    font-size: 13px
+}
+
+body[role='user'] .font-big {
+    font-weight: bold;
+    font-size: 16px
+}
+
+body[role='user'] #loader {
+    background-color: white;
+    margin: 0
+}
+
+body[role='user-register'].loading {
+    background: none
+}
+
+body[role='user-register'] .auth {
+    padding: 24px;
+    text-align: center
+}
+
+body[role='user-register'] .auth form {
+    display: inline-block;
+    margin: 0 8px
+}
+
+body[role='user-register'] .actions {
+    padding: 24px 0
+}

@@ -12,13 +12,13 @@ var expressLayouts = require('express-ejs-layouts')
 
 var app = express();
 
-
+app.use(expressLayouts);
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.set('layout', 'layouts/layout');
+app.set('layout', 'layout');
 app.engine('html', ejs.renderFile);
-app.use(expressLayouts);
+
 
 
 // uncomment after placing your favicon in /public
@@ -28,12 +28,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-//app.use(express.static(path.join(__dirname, 'bower_components')));
-//app.use(express.static('static'));
+app.use(express.static(path.join(__dirname, 'bower_components')));
+//app.use(express.static('bower_components'));
+//app.use('/bower_components', express.static( root +'/bower_components'));
 
 app.use('/', routes);
 app.use('/users', users);
-app.use('/authenticate', users);
+app.use('/authenticate', authRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

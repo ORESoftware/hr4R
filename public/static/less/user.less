@@ -1,0 +1,48 @@
+body[role='user'] {
+	/*font-family: "new century schoolbook";*/
+
+	.paragraph1 {
+		font-size: 18px;
+	}
+	.paragraph2 {
+		font-size: 13px;
+	}
+
+	.font-big{
+		/*font: italic bold 12px/30px Georgia, serif;
+		font-size: 30px;
+		font-family: Arial;
+		font-style: italic;*/
+		font-weight: bold;
+		font-size: 16px;
+	}
+
+	#loader {
+		/*width: 100%;
+		height: 100%;*/
+		background-color: white;
+		margin: 0;
+	}
+
+}
+
+
+body[role='user-register'] {
+	&.loading {
+		background: none;
+	}
+
+	.auth {
+		padding: 24px;
+		text-align: center;
+
+		form {
+			display: inline-block;
+			margin: 0 8px;
+		}
+	}
+
+	.actions {
+		padding: 24px 0;
+	}
+}
