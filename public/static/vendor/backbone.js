@@ -397,7 +397,7 @@
     validationError: null,
 
     // The default name for the JSON `id` attribute is `"id"`. MongoDB and
-    // CouchDB users may want to set this to `"_id"`.
+    // CouchDB usersRoutes may want to set this to `"_id"`.
     idAttribute: 'id',
 
     // The prefix is used to create the client id which is used to identify models locally.
@@ -1410,8 +1410,8 @@
   // Backbone.Router
   // ---------------
 
-  // Routers map faux-URLs to actions, and fire events when routes are
-  // matched. Creating a new one sets its `routes` hash, if not set statically.
+  // Routers map faux-URLs to actions, and fire events when indexRoute are
+  // matched. Creating a new one sets its `indexRoute` hash, if not set statically.
   var Router = Backbone.Router = function(options) {
     options || (options = {});
     if (options.routes) this.routes = options.routes;
@@ -1470,9 +1470,9 @@
       return this;
     },
 
-    // Bind all defined routes to `Backbone.history`. We have to reverse the
-    // order of the routes here to support behavior where the most general
-    // routes can be defined at the bottom of the route map.
+    // Bind all defined indexRoute to `Backbone.history`. We have to reverse the
+    // order of the indexRoute here to support behavior where the most general
+    // indexRoute can be defined at the bottom of the route map.
     _bindRoutes: function() {
       if (!this.routes) return;
       this.routes = _.result(this, 'routes');
@@ -1702,7 +1702,7 @@
     },
 
     // Add a route to be tested when the fragment changes. Routes added later
-    // may override previous routes.
+    // may override previous indexRoute.
     route: function(route, callback) {
       this.handlers.unshift({route: route, callback: callback});
     },
@@ -1724,10 +1724,10 @@
     },
 
     // Attempt to load the current URL fragment. If a route succeeds with a
-    // match, returns `true`. If no defined routes matches the fragment,
+    // match, returns `true`. If no defined indexRoute matches the fragment,
     // returns `false`.
     loadUrl: function(fragment) {
-      // If the root doesn't match, no routes can match either.
+      // If the root doesn't match, no indexRoute can match either.
       if (!this.matchRoot()) return false;
       fragment = this.fragment = this.getFragment(fragment);
       return _.any(this.handlers, function(handler) {

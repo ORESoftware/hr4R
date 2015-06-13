@@ -6,44 +6,89 @@
 //define(['app/js/collections', 'jquery', '../../../../../bower_components/underscore/underscore', 'handlebars', 'backbone', 'backbone-validation'],
 
 
-define(['app/js/collections', 'jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
+define(['app/js/collections', 'app/js/views/loginView', 'ejs', 'jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
 
 
-    function (collections, $, _, Handlebars, Backbone, BackboneValidation) {
+    function (collections, LoginView, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
 
 
         var IndexView = Backbone.View.extend({
 
-            el:'#main-div-id',
+            el: '#main-div-id',
+
+            childView: new LoginView(),
+
+            events: {
+                'click #loginAsGuest': 'onLoginAsGuest',
+                'click #accountRecoveryId': 'onAccountRecovery'
+            },
 
             initialize: function () {
                 _.bindAll(this, "render");
                 this.collection.bind("reset", this.render);
+                //this.model.bind('change', this.render);
+                this.collection.fetch({
+                    success: this.onFetchSuccess.bind(this),
+                    error: this.onFetchFailure.bind(this)
+                });
             },
             render: function () {
                 console.log('attempting to render IndexView.');
-                //var template = Handlebars.compile($('#some-hbs-template').html());
-                //var rendered = template(this.getContext());
 
-                //var Source = document.getElementById("Handlebars-Template").textContent;
-                //
-                ////Compile the actual Template file
-                //var Template = Handlebars.compile(Source);
-                //
-                ////Generate some HTML code from the compiled Template
-                //var HTML = Template({ Recipes : RecipeData });
+                //this.$el.html(this.template(this.model.toJSON()));
+                this.childView.$el = this.$('#child-view-container');
+                console.log('this.childView.$el',this.childView.$el);
+                this.childView.render();
+                this.childView.delegateEvents();
 
-                var source = $('#some-hbs-template').html();
-                var template = Handlebars.compile(source);
-                console.log('template:',template);
-                var rendered = template({'users':[{'username:':'denman','firstName': 'alex', 'lastName': 'mills'}]});
-                this.$el.html(rendered);
-                console.log('rendered:',rendered);
+                var data = this.collection.items;
+
+                //TODO:users are in database but not showing up on index page
+
+                if(!data){
+                    data = [];
+                }
+
+                var self = this;
+
+                $.ajax({
+                    url: 'static/html/ejs/indexTemplate.ejs',
+                    type: 'GET',
+                    success: function (msg) {
+                        var ret = EJS.render(msg, {
+                            title: 'Welcome to the jungle',
+                            users: data
+                            //filename: '/static/html/ejs/indexEJSTemplate.ejs'
+                        });
+
+                        console.log(ret);
+
+                        self.$el.html(ret);
+                        //$('body').append(ret);
+                        console.log('IndexView rendered');
+                    },
+                    error: function (err) {
+                        console.log('error:', err);
+                    }
+                });
+
+
+                return this;
+
+            },
+
+            onFetchSuccess: function () {
+                this.render();
+            },
+
+            onFetchFailure: function () {
+                alert('failed to fetch IndexView collection.');
             }
         });
 
+
         return new IndexView({
-            collection: collections.todos
+            collection: collections.users
         })
 
     });

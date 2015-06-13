@@ -11,9 +11,13 @@ define(['app/js/collections', 'jquery', 'underscore', 'handlebars', 'backbone', 
 
 
         var LoginView = Backbone.View.extend({
+
+            model:null,
+            collection: null,
+
             initialize: function () {
                 _.bindAll(this, "render");
-                this.collection.bind("reset", this.render);
+                //this.collection.bind("reset", this.render);
             },
             render: function () {
                 //var template = Handlebars.compile($('#template-someview').html());
@@ -29,18 +33,17 @@ define(['app/js/collections', 'jquery', 'underscore', 'handlebars', 'backbone', 
                 ////Generate some HTML code from the compiled Template
                 //var HTML = Template({ Recipes : RecipeData });
 
-                var source = $('#some-hbs-template').html();
-                var template = Handlebars.compile(source);
-                console.log('template:',template);
-                var rendered = template({'users':[{'username:':'denman','firstName': 'alex', 'lastName': 'mills'}]});
-                this.$el.html(rendered);
-                console.log('rendered:',rendered);
+                //var source = $('#some-hbs-template').html();
+                //var template = Handlebars.compile(source);
+                //console.log('template:',template);
+                //var rendered = template({'users':[{'username:':'denman','firstName': 'alex', 'lastName': 'mills'}]});
+                //this.$el.html(rendered);
+                //console.log('rendered:',rendered);
+
+                return this;
             }
         });
 
-        return new LoginView({
-            collection: collections.todos,
-            el: null
-        })
+        return LoginView;
 
     });

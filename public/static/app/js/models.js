@@ -9,8 +9,9 @@ define(['underscore', 'backbone'], function (_, Backbone) {
     'use strict';
 
     var Todo = Backbone.Model.extend({
-        // Default attributes for thetodo
-        // and ensure that eachtodo created has `title` and `completed` keys.
+
+        urlRoot: '/todos',
+
         defaults: {
             title: '',
             completed: false
@@ -25,8 +26,9 @@ define(['underscore', 'backbone'], function (_, Backbone) {
     });
 
     var User = Backbone.Model.extend({
-        // Default attributes for thetodo
-        // and ensure that eachtodo created has `title` and `completed` keys.
+
+        urlRoot: '/users',
+
         defaults: {
             title: '',
             completed: false

@@ -2705,7 +2705,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  // Note: Using env.VM references rather than local var references throughout this section to allow
-	  // for external users to override these as psuedo-supported APIs.
+	  // for external usersRoutes to override these as psuedo-supported APIs.
 	  env.VM.checkRevision(templateSpec.compiler);
 
 	  function invokePartialWrapper(partial, context, options) {

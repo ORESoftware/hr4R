@@ -1,10 +1,18 @@
-<div>
-    hello1
-    <% for(var i=0; i<users.length; i++) { %>
-    <li>
-        <%= users[i].username %>
-    </li>
-    <% } %>
-
-    hello2
-</div>
+<script id="some-hbs-template" type="text/x-handlebars-template">
+    hello:{{hi}}
+    <table>
+        <thead>
+        <th>Real Name</th>
+        <th>Email</th>
+        </thead>
+        <tbody>
+        {{#each users}}
+        <tr>
+            <td>{{username}}</td>
+            <td>{{firstName}} {{lastName}}</td>
+            <td>{{email}}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</script>

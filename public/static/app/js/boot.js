@@ -38,7 +38,8 @@ define(['jquery','backbone','app/js/routers'], function($,Backbone,routers) {
         else {
             //window.location.hash='login';
             console.log('not authenticated..!');
-            router.navigate('login', {trigger: true});
+            window.location.hash='index';
+            //router.navigate('index', {trigger: true});
         }
         Backbone.history.start();
     }
