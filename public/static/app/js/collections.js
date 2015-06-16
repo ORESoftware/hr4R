@@ -7,42 +7,31 @@
 define(['underscore', 'backbone', 'app/js/models'], function (_, Backbone, models) {
     'use strict';
 
-    var TodosCollection = Backbone.Collection.extend({
-        // Reference to this collection's model.
-        model: models.Todo,
-
-        //// Save all of thetodo items under the `"todos"` namespace.
-        //localStorage: new Store('todos-backbone'),
-
-        // Filter down the list of alltodo items that are finished.
-        completed: function () {
-            return this.where({completed: true});
-        },
-
-        // Filter down the list to onlytodo items that are still not finished.
-        remaining: function () {
-            return this.where({completed: false});
-        },
-
-        // We keep the Todos in sequential order, despite being saved by unordered
-        // GUID in the database. This generates the next order number for new items.
-        nextOrder: function () {
-            return this.length ? this.last().get('order') + 1 : 1;
-        },
-
-        // Todos are sorted by their original insertion order.
-        comparator: 'order'
-    });
-
     var UsersCollection = Backbone.Collection.extend({
         // Reference to this collection's model.
-        model: models.User,
+        model: models.UserModel,
 
-        initialize: function(){
+        initialize: function () {
+
             //this.fetch({
             //    success: this.fetchSuccess,
             //    error: this.fetchError
             //});
+
+            console.log('model for UsersCollection is:', this.model);
+
+            // This will be called when an item is added. pushed or unshifted
+            this.on('add', function(model) {
+                console.log('something got added');
+            });
+            // This will be called when an item is removed, popped or shifted
+            this.on('remove',  function(model) {
+                console.log('something got removed');
+            });
+            // This will be called when an item is updated
+            this.on('change', function(model) {
+                console.log('something got changed');
+            });
         },
 
         url: function(){
@@ -55,7 +44,6 @@ define(['underscore', 'backbone', 'app/js/models'], function (_, Backbone, model
     });
 
     return {
-        todos: new TodosCollection(),
         users: new UsersCollection()
     };
 });

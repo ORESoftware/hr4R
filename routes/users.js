@@ -12,9 +12,9 @@ router.get('/', function (req, res, next) {
         if (err) {
             throw err;
         }
+        console.log(items);
         res.json(items);
     });
-
 
 });
 

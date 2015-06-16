@@ -6,7 +6,7 @@
 //this is a completely single-page-app, so there is only one router
 
 
-define(['app/js/views/indexView', 'app/js/views/loginView','app/js/views/homeView'], function(indexView, loginView, homeView) {
+define(['app/js/views/indexView', 'app/js/views/loginView','app/js/views/homeView'], function(IndexView, LoginView, HomeView) {
 
     var BootRouter = Backbone.Router.extend({
 
@@ -15,7 +15,8 @@ define(['app/js/views/indexView', 'app/js/views/loginView','app/js/views/homeVie
         routes: {
             'index':'index',
             'home': 'home',
-            'login': 'login'
+            'login': 'login',
+            "*actions": "defaultRoute" // Backbone will try to match the routes above first
         },
 
         changeView: function(view) {
@@ -28,19 +29,27 @@ define(['app/js/views/indexView', 'app/js/views/loginView','app/js/views/homeVie
         },
 
         home: function() {
-            this.changeView(homeView);
+            this.changeView(new HomeView());
         },
 
-        login: function() {
-            this.changeView(loginView);
-        },
+        //login: function() {
+        //    this.changeView(loginView);
+        //},
 
         index: function() {
-            this.changeView(indexView);
+            this.changeView(new IndexView());
         }
     });
 
+    bootRouter = new BootRouter();
+
+    bootRouter.on('route:defaultRoute', function (actions) {
+        console.log( 'default route invoked...' + actions );
+    });
+
+
+
     return {
-        bootRouter: new BootRouter()
+        bootRouter: bootRouter
     }
 });

@@ -13,8 +13,10 @@ requirejs.config({
     'paths': {
         //'app': 'app/js',
         // define vendor paths
+        'async':'vendor/async',
         'jquery': 'vendor/jquery',
         'ejs': 'vendor/ejs',
+        'form2js': 'vendor/form2js',
         'underscore': 'vendor/underscore',
         'backbone': 'vendor/backbone',
         'bootstrap': 'vendor/bootstrap',
@@ -40,9 +42,10 @@ requirejs.config({
 });
 
 require(['app/js/app'], function(Application) {
-    //var app = new Application();
-    //app.start(); // or whatever startup logic your app uses.
-    var app = Application.start();
+
+    $(document).ready(function () {
+        var app = Application.start();
+    });
 });
 
 //require(['app/js/commonjs'], function(value) {

@@ -1,0 +1,15 @@
+<div>
+    <table>
+        <thead>
+        <th>Registered users:</th>
+        </thead>
+        <tbody>
+        <% for(var i=0; i<users.length; i++) { %>
+        <tr>
+            <td><%=users[i].firstName%></td>
+            <td><%=users[i].lastName%></td>
+        </tr>
+        <% } %>
+        </tbody>
+    </table>
+</div>

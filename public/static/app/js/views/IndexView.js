@@ -6,17 +6,21 @@
 //define(['app/js/collections', 'jquery', '../../../../../bower_components/underscore/underscore', 'handlebars', 'backbone', 'backbone-validation'],
 
 
-define(['app/js/collections', 'app/js/views/loginView', 'ejs', 'jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
+define(['app/js/collections', 'app/js/views/loginView', 'app/js/views/registeredUsersView', 'ejs', 'jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
 
 
-    function (collections, LoginView, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
+    function (collections, LoginView, RegisteredUsersView, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
 
 
         var IndexView = Backbone.View.extend({
 
             el: '#main-div-id',
 
-            childView: new LoginView(),
+            model: null,
+            collection: collections.users,
+
+            childLoginView: null,
+            childRegisteredUsersView: null,
 
             events: {
                 'click #loginAsGuest': 'onLoginAsGuest',
@@ -32,22 +36,13 @@ define(['app/js/collections', 'app/js/views/loginView', 'ejs', 'jquery', 'unders
                     error: this.onFetchFailure.bind(this)
                 });
             },
+
+            //http://stackoverflow.com/questions/7113049/backbone-js-nesting-views-through-templating
+
             render: function () {
                 console.log('attempting to render IndexView.');
 
-                //this.$el.html(this.template(this.model.toJSON()));
-                this.childView.$el = this.$('#child-view-container');
-                console.log('this.childView.$el',this.childView.$el);
-                this.childView.render();
-                this.childView.delegateEvents();
-
-                var data = this.collection.items;
-
-                //TODO:users are in database but not showing up on index page
-
-                if(!data){
-                    data = [];
-                }
+                var data = this.collection.models;
 
                 var self = this;
 
@@ -61,10 +56,19 @@ define(['app/js/collections', 'app/js/views/loginView', 'ejs', 'jquery', 'unders
                             //filename: '/static/html/ejs/indexEJSTemplate.ejs'
                         });
 
-                        console.log(ret);
-
                         self.$el.html(ret);
-                        //$('body').append(ret);
+
+                        //this.$el.html(this.template(this.model.toJSON()));
+                        self.childLoginView = new LoginView({el: self.$('#child-view-login-container')});
+                        //console.log('this.childLoginView.$el', self.childLoginView.$el);
+                        self.childLoginView.render();
+                        self.childLoginView.delegateEvents();
+
+                        self.childRegisteredUsersView = new RegisteredUsersView({el: self.$('#child-view-registered-users-container')});
+                        //console.log('this.childRegisteredUsersView.$el', self.childRegisteredUsersView.$el);
+                        self.childRegisteredUsersView.render();
+                        self.childRegisteredUsersView.delegateEvents();
+
                         console.log('IndexView rendered');
                     },
                     error: function (err) {
@@ -72,12 +76,14 @@ define(['app/js/collections', 'app/js/views/loginView', 'ejs', 'jquery', 'unders
                     }
                 });
 
-
                 return this;
 
             },
 
             onFetchSuccess: function () {
+                alert('Successfully fetched IndexView collection (users).');
+                //console.log('this.collection:', this.collection);
+                //console.log('this.collection.models:', this.collection.models);
                 this.render();
             },
 
@@ -87,8 +93,6 @@ define(['app/js/collections', 'app/js/views/loginView', 'ejs', 'jquery', 'unders
         });
 
 
-        return new IndexView({
-            collection: collections.users
-        })
+        return IndexView;
 
     });

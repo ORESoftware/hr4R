@@ -22,22 +22,64 @@ define(['underscore', 'backbone'], function (_, Backbone) {
             this.save({
                 completed: !this.get('completed')
             });
+        },
+        validate: function (attr) {
+            if (attr.ID <= 0) {
+                return "Invalid value for ID supplied."
+            }
         }
     });
 
     var User = Backbone.Model.extend({
 
-        urlRoot: '/users',
+
+        idAttribute: "mongo_ID",
+
+        urlRoot: '/users?user_id=',
 
         defaults: {
-            title: '',
-            completed: false
+            firstName: null,
+            lastName: null,
+            username: null,
+            password: null
         },
 
-        // Toggle the `completed` state of thistodo item.
-        toggle: function () {
-            this.save({
-                completed: !this.get('completed')
+        initialize: function(){
+            console.log('User has been intialized');
+
+
+            this.on('change',  function() {
+                if(this.hasChanged('ID')){
+                    console.log('ID has been changed');
+                }
+                if(this.hasChanged('BookName')){
+                    console.log('BookName has been changed');
+                }
+            });
+        },
+
+        constructor: function (attributes, options) {
+            Backbone.Model.apply(this, arguments);
+        },
+
+        validate: function (attr) {
+            //if (attr.ID <= 0) {
+            //    return "Invalid value for ID supplied."
+            //}
+
+            return true;
+        },
+
+        persist: function(callback){
+            this.save({}, {
+                success: function (model, response, options) {
+                    console.log("The model has been saved to the server");
+                    callback(model,response,options);
+                },
+                error: function (model, xhr, options) {
+                    console.log("Something went wrong while saving the model");
+                    callback(model,response,options);
+                }
             });
         }
     });

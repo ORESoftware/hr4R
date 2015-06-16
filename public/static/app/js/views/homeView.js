@@ -3,18 +3,19 @@
  */
 
 
-define(['app/js/collections', 'ejs','jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
+define(['app/js/collections', 'form2js','ejs','jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
 
 
-    function (collections, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
+    function (collections, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
 
 
         var HomeView = Backbone.View.extend({
 
-            id: 'HomeViewID',
-            tagName: 'HomeViewTagName',
-            className: 'HomeViewClassName',
+            //id: 'HomeViewID',
+            //tagName: 'HomeViewTagName',
+            //className: 'HomeViewClassName',
 
+            model:null,
             collection: collections.users,
 
             el: '#main-div-id',
@@ -26,9 +27,6 @@ define(['app/js/collections', 'ejs','jquery', 'underscore', 'handlebars', 'backb
             },
             render: function () {
                 console.log('attempting to render HomeView.');
-
-                var data  = [{'username':'denman','firstName': 'alex', 'lastName': 'mills'},
-                    {'username':'donald','firstName': 'duck', 'lastName': 'goose'}];
 
                 var self = this;
 
@@ -42,7 +40,6 @@ define(['app/js/collections', 'ejs','jquery', 'underscore', 'handlebars', 'backb
                             //filename: '/static/html/ejs/indexEJSTemplate.ejs'
                         });
 
-                        console.log(ret);
 
                         self.$el.html(ret);
                         //$('body').append(ret);
@@ -53,12 +50,7 @@ define(['app/js/collections', 'ejs','jquery', 'underscore', 'handlebars', 'backb
                     }
                 });
 
-
                 return this;
-
-
-                //this.$el.append(rendered);
-                //$('#main-div-id').append(rendered);
             }
         });
 

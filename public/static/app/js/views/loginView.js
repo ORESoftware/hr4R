@@ -4,44 +4,97 @@
 
 
 
-define(['app/js/collections', 'jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
+define(['app/js/collections', 'app/js/models', 'form2js','ejs', 'jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
 
 
-    function (collections, $, _, Handlebars, Backbone, BackboneValidation) {
+    function (collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
 
 
         var LoginView = Backbone.View.extend({
 
-            model:null,
+            model: null,
             collection: null,
+
+            el: '#child-view-login-container',
 
             initialize: function () {
                 _.bindAll(this, "render");
                 //this.collection.bind("reset", this.render);
+                this.model = new models.UserModel();
             },
+
+            events: {
+                'click #submit-login-button-id': 'onSubmitLogin',
+                'click #submit-registration-button-id': 'onSubmitRegistration',
+                'click #accountRecoveryId': 'showAccountRecoveryView'
+            },
+
+
             render: function () {
-                //var template = Handlebars.compile($('#template-someview').html());
-                //var rendered = template(this.getContext());
 
                 console.log('attempting to render LoginView.');
 
-                //var Source = document.getElementById("Handlebars-Template").textContent;
-                //
-                ////Compile the actual Template file
-                //var Template = Handlebars.compile(Source);
-                //
-                ////Generate some HTML code from the compiled Template
-                //var HTML = Template({ Recipes : RecipeData });
+                var self = this;
 
-                //var source = $('#some-hbs-template').html();
-                //var template = Handlebars.compile(source);
-                //console.log('template:',template);
-                //var rendered = template({'users':[{'username:':'denman','firstName': 'alex', 'lastName': 'mills'}]});
-                //this.$el.html(rendered);
-                //console.log('rendered:',rendered);
+
+                $.ajax({
+                    url: 'static/html/ejs/loginTemplate.ejs',
+                    type: 'GET',
+                    success: function (msg) {
+                        var ret = EJS.render(msg, {});
+                        //console.log('login view:', ret);
+                        self.$el.html(ret);
+                        console.log('IndexView rendered');
+                    },
+                    error: function (err) {
+                        console.log('error:', err);
+                    }
+                });
 
                 return this;
+            },
+
+            onSubmitLogin: function (event) {
+                event.preventDefault();
+
+
+            },
+
+            onSubmitRegistration: function (event) {
+                event.preventDefault();
+
+
+                var self = this;
+
+                var data = form2js('register-form-id','.',true);
+
+                console.log('registration data:',data);
+
+                $.ajax({
+                    type:"POST",
+                    url: '/register',
+                    //dataType: "json",
+                    data: data})
+
+                    .done(function(response) {
+                        if(response == 'bad login'){
+                            window.mainLoginView.render();
+                            alert("bad login");
+                            return;
+                        }
+                        var url = response;
+                        $(location).attr('href',url);
+                    })
+                    .fail(function() {
+                        alert("error registering");
+                        self.render();
+                    })
+                    .always(function() {
+
+                    });
             }
+
+
         });
 
         return LoginView;
