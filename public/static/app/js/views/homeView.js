@@ -31,12 +31,11 @@ define(['app/js/collections', 'form2js','ejs','jquery', 'underscore', 'handlebar
                 var self = this;
 
                 $.ajax({
-                    url: 'static/html/ejs/indexEJSTemplate.ejs',
+                    url: 'static/html/ejs/homeTemplate.ejs',
                     type: 'GET',
                     success: function(msg) {
                         var ret = EJS.render(msg, {
                             title:'Welcome to the jungle',
-                            users: data
                             //filename: '/static/html/ejs/indexEJSTemplate.ejs'
                         });
 

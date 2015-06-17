@@ -5,8 +5,16 @@
 
 //this is a completely single-page-app, so there is only one router
 
+var app  = app || {};
 
-define(['app/js/views/indexView', 'app/js/views/loginView','app/js/views/homeView'], function(IndexView, LoginView, HomeView) {
+
+define(['app/js/allViews'], function(allViews) {
+
+    var IndexView = allViews.Index;
+    var LoginView = allViews.Login;
+    var HomeView = allViews.Home;
+    var HeaderView = allViews.Header;
+    var FooterView = allViews.Footer;
 
     var BootRouter = Backbone.Router.extend({
 
@@ -26,6 +34,15 @@ define(['app/js/views/indexView', 'app/js/views/loginView','app/js/views/homeVie
             this.currentView = view;
             console.log('current view:',view);
             this.currentView.render();
+            if(!app.footerView){
+                app.footerView = new FooterView();
+            }
+            if(!app.headerView){
+                app.headerView = new HeaderView();
+            }
+            app.footerView.render();
+            app.headerView.render();
+
         },
 
         home: function() {
@@ -41,13 +58,11 @@ define(['app/js/views/indexView', 'app/js/views/loginView','app/js/views/homeVie
         }
     });
 
-    bootRouter = new BootRouter();
+    var bootRouter = new BootRouter();
 
     bootRouter.on('route:defaultRoute', function (actions) {
         console.log( 'default route invoked...' + actions );
     });
-
-
 
     return {
         bootRouter: bootRouter

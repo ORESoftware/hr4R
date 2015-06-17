@@ -41,7 +41,9 @@ var registerSchema = function () {
     userSchema.path('username').validate(/^[a-z]+$/i, function (err) {
         if (err) {
             console.log(err);
+            return false;
         }
+        return true;
     });
 
     userSchema.methods.validPassword = function (pwd) {

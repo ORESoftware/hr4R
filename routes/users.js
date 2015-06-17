@@ -10,7 +10,7 @@ router.get('/', function (req, res, next) {
     var User = UserModel.getNewUser();
     User.find({}, function (err, items) {
         if (err) {
-            throw err;
+            return next(err);
         }
         console.log(items);
         res.json(items);

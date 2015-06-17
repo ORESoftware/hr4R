@@ -2,38 +2,34 @@
  * Created by amills001c on 6/10/15.
  */
 
+var app = app || {};
 
 define(['jquery','backbone','app/js/routers'], function($,Backbone,routers) {
 
-    var router = routers.bootRouter;
+    var router = app.router = routers.bootRouter;
 
     var initialize = function() {
 
         Backbone.history.start();
-        // Require home page from server
+        // Require index page from server
         $.ajax({
             url: '/authenticate',
             type: 'GET',
             dataType: 'json',
             success: function(msg) {
                 console.log('authentication message:',msg);
-                runApplication(true);
+                runApplication(msg.msg); //msg.msg is boolean value sent from server, representing user authentication, yes or no
             },
             error: function(err) {
-                console.log('authentication error:',err);
+                console.log('server error:',err);
                 setTimeout(function(){
-                    console.log('authentication error: '+String(err));
+                    alert('server error: '+String(err));
                 },100);
-                runApplication(false);
             }
         });
     };
 
- /*   TODO: $(document).ready(function () {
-        console.log("I don't want to play nice");
-    });
-*/
-
+    //TODO: create new user with Backbone model
 
     var runApplication = function(authenticated) {
 
@@ -49,7 +45,6 @@ define(['jquery','backbone','app/js/routers'], function($,Backbone,routers) {
             //window.location.hash='index';
             router.navigate('index', {trigger: true});
         }
-        //Backbone.history.start();
     };
 
     return {

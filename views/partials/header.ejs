@@ -1,3 +1,11 @@
 <header>
-    header is here
+    <div>
+        <div id="header-div-id">Header Div Here</div>
+        <% if(loggedInUser) { %>
+        <div>Logged In As: <%=loggedInUser%></div>
+        <button id="logout-button-id">Logout</button>
+        <% } else { %>
+        <div>You need to either register or login.</div>
+        <% } %>
+    </div>
 </header>

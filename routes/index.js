@@ -22,13 +22,14 @@ router.get('/', function(req, res, next) {
         next(new Error('user session existed, but no user matched'));
         return;
       } else {
-        res.render('home', {
-          userInfo:user
-        });
+        //res.render('home', {
+        //  userInfo:user
+        //});
+        res.json({msg:user});
       }
     });
   } else {
-    console.log("redirecting to login.html...");
+    console.log("rendering index...");
     //res.redirect('/login');
     res.render('index', { title: 'SmartConnect Admin Portal' });
   }

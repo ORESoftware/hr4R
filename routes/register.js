@@ -24,26 +24,37 @@ var passport = require('passport');
 
 router.post('/', function (req, res, next) {
 
-  postRegistrationAndOrLoginInfo(req,res,next);
+  postRegistrationAndOrLoginInfo(req,res,next,false);
 
 });
 
 
-function postRegistrationAndOrLoginInfo(req,res,next){
+function postRegistrationAndOrLoginInfo(req,res,next,justRegistered){
 
     passport.authenticate('local', function (err, user, info) {
         if (err) {
             return next(err);
         }
         if (!user) {
+            if(justRegistered){
+                throw new Error('user was just registered, so user should be defined.')
+            }
             console.log('no account found, so we will register user as expected...');
-            return registerUser(req,res,next);
+            registerUser(req,res,next);
         }
         else{
-            console.log('user already has an account...');
-            res.render('home',{
-                userInfo:user
-            });
+            if(justRegistered){
+                console.log('user was registered and now should be authenticated...');
+            }
+            else{
+                console.log('user already has an account...');
+            }
+
+            //res.render('home',{
+            //    title:'Admin Portal Home View',
+            //    userInfo:user._doc
+            //});
+            res.json({alreadyRegistered: !justRegistered,msg:user._doc});
         }
 
     })(req, res, next);
@@ -53,14 +64,16 @@ function postRegistrationAndOrLoginInfo(req,res,next){
 function registerUser(req, res, next) {
 
     console.log('about to register user:', req.body);
-    var firstName = req.body.firstName;
-    var lastName = req.body.lastName;
-    var username = req.body.username;
-    var password = req.body.password;
-    var email = req.body.email;
 
-    var Model = req.site.models.User;
-    var User = Model.getNewUser();
+    var user = req.body;
+    var firstName = user.firstName;
+    var lastName = user.lastName;
+    var username = user.username;
+    var password = user.password;
+    var email = user.email;
+
+    var UserModel = req.site.models.User;
+    var User = UserModel.getNewUser();
 
     var newUser = new User({
         username: username,
@@ -75,9 +88,9 @@ function registerUser(req, res, next) {
             console.log("error in user save method:", err);
             res.send('database error');
         }
-        if (result) {
+        else if (result) {
             console.log('Added new user: ', result);
-            postRegistrationAndOrLoginInfo(req,res,next);
+            postRegistrationAndOrLoginInfo(req,res,next,true);
             //res.json('successful user registration');
         } else {
             next(new Error('grave error in newUser.save method in registration'));

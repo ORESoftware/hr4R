@@ -81,7 +81,7 @@ define(['app/js/collections', 'app/js/views/loginView', 'app/js/views/registered
             },
 
             onFetchSuccess: function () {
-                alert('Successfully fetched IndexView collection (users).');
+                console.log('Successfully fetched IndexView collection (users).');
                 //console.log('this.collection:', this.collection);
                 //console.log('this.collection.models:', this.collection.models);
                 this.render();

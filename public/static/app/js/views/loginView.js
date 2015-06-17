@@ -3,8 +3,9 @@
  */
 
 
+var app = app || {};
 
-define(['app/js/collections', 'app/js/models', 'form2js','ejs', 'jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
+define(['app/js/collections', 'app/js/models', 'form2js', 'ejs', 'jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
 
 
     function (collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
@@ -66,30 +67,41 @@ define(['app/js/collections', 'app/js/models', 'form2js','ejs', 'jquery', 'under
 
                 var self = this;
 
-                var data = form2js('register-form-id','.',true);
+                var data = form2js('register-form-id', '.', true);
 
-                console.log('registration data:',data);
+                console.log('registration data:', data);
+
+                //var userData = JSON.stringify(data.user);
+
+                var userData = data.user;
+
+                //TODO: userdata is not in json format or what??
+                //TODO: use socket.io to get server data
 
                 $.ajax({
-                    type:"POST",
+                    type: "POST",
                     url: '/register',
-                    //dataType: "json",
-                    data: data})
-
-                    .done(function(response) {
-                        if(response == 'bad login'){
-                            window.mainLoginView.render();
+                    dataType: "json",
+                    data: userData
+                }).done(function (response) {
+                    if (response == 'bad login') {
+                        setTimeout(function () {
                             alert("bad login");
-                            return;
-                        }
-                        var url = response;
-                        $(location).attr('href',url);
-                    })
-                    .fail(function() {
-                        alert("error registering");
+                        }, 200);
+                        self.render();
+                        return;
+                    }
+                    //var url = response;
+                    //$(location).attr('href', url);
+                    app.router.navigate('home', {trigger: true});
+                })
+                    .fail(function () {
+                        setTimeout(function () {
+                            alert("Server error during user login/registration.");
+                        }, 200);
                         self.render();
                     })
-                    .always(function() {
+                    .always(function () {
 
                     });
             }

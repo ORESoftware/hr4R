@@ -8,10 +8,10 @@ var router = express.Router();
 
 router.get('/', function(req, res, next) {
 
-    if(false){
+    if (req.user) {
         res.json({"authenticated":true});
-    }else{
-        res.send('not authenticated');
+    } else {
+        res.json({"authenticated":false});
     }
 });
 

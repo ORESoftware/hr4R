@@ -1,4 +1,5 @@
 var passport = require('passport');
+var colors = require('colors');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -9,9 +10,9 @@ var expressLayouts = require('express-ejs-layouts');
 var express = require('express');
 var app = express();
 var router = express.Router();
-app.use(router);
+
 var session = require('./lib/controllers/session');
-var colors = require('colors');
+
 app.use(session);
 
 app.use(expressLayouts);
@@ -24,7 +25,7 @@ app.engine('html', ejs.renderFile);
 // initialize passport
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use(router);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -37,7 +38,26 @@ app.use(express.static(path.join(__dirname, '/bower_components')));
 //app.use(express.static('bower_components'));
 //app.use('/bower_components', express.static( root +'/bower_components'));
 
-console.log('ENVIRONMENT:', colors.bgYellow.blue(app.get('env')));
+console.log('ENVIRONMENT:', colors.bgGreen.blue(app.get('env')));
+
+
+app.use(function(req,res,next){
+
+    console.log(colors.green(''));
+    console.log(colors.cyan('New request:'));
+    console.log(colors.cyan('___________________________________________________________'));
+    console.log(colors.bgYellow('METHOD:'),req.method);
+    console.log(colors.bgYellow('HEADERS:'),req.headers);
+    console.log(colors.bgYellow('PARAMS:'),req.params);
+    console.log(colors.bgYellow('BODY:'),req.body);
+    console.log(colors.bgYellow('QUERY:'),req.query);
+    console.log(colors.bgYellow('SECRET:'),req.secret);
+    console.log(colors.bgYellow('SESSION:'),req.session);
+    console.log(colors.bgYellow('COOKIES:'),req.cookies);
+
+    next();
+
+});
 
 // Passport auth
 app.use(function (req, res, next) {
@@ -46,7 +66,9 @@ app.use(function (req, res, next) {
     var user = req.user;
     if (user) {
         if (user._id !== req.session.passport.user) {
-            res.redirect('/logout');
+            console.log('user id is not equal to passport object, logging out...');
+            throw new Error('this shouldnt happen when user is defined');
+            //res.redirect('/logout');
         } else {
             next();
         }
@@ -54,9 +76,30 @@ app.use(function (req, res, next) {
     else {
         //if user is not defined, they are *probably* trying to access the login page, however,
         //we should check the url here to make sure it doesn't start with "/users"
-        next();
-    }
+        //next();
 
+        //res.send({msg:'user not authenticated, should be redirected to Backbone index view'});
+
+        console.log(colors.bgYellow('no user session found...'));
+        if(String(req.originalUrl).indexOf('/ra/') === 0){
+            console.log(colors.bgYellow('user attempted to request /ra/ route, so rendering index page...'));
+            res.locals.loggedInUser = null;
+            res.render('index', { title: 'SmartConnect Admin Portal' });
+        }
+        else{
+            next();
+        }
+    }
+});
+
+
+app.use(function(req,res,next){
+
+    //if(req.user == null){
+    //    throw new Error('req.user was null in app.use function.');
+    //}
+    res.locals.loggedInUser = req.user;
+    next();
 });
 
 var site = require('./lib/site');
