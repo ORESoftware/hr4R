@@ -2,11 +2,13 @@
  * Created by amills001c on 6/10/15.
  */
 
-var app = app || {};
+//var app = app || {};
 
-define(['jquery','backbone','app/js/routers'], function($,Backbone,routers) {
+//define(['jquery','backbone','app/js/routers'], function($,Backbone,routers) {
 
-    var router = app.router = routers.bootRouter;
+define(['jquery','backbone','app/js/giant'], function($,Backbone,giant) {
+
+    var router = giant.bootRouter;
 
     var initialize = function() {
 
@@ -18,7 +20,7 @@ define(['jquery','backbone','app/js/routers'], function($,Backbone,routers) {
             dataType: 'json',
             success: function(msg) {
                 console.log('authentication message:',msg);
-                runApplication(msg.msg); //msg.msg is boolean value sent from server, representing user authentication, yes or no
+                runApplication(msg.isAuthenticated); //msg.msg is boolean value sent from server, representing user authentication, yes or no
             },
             error: function(err) {
                 console.log('server error:',err);
@@ -34,7 +36,7 @@ define(['jquery','backbone','app/js/routers'], function($,Backbone,routers) {
     var runApplication = function(authenticated) {
 
         // Authenticated user move to home page
-        if(authenticated) {
+        if(authenticated === true) {
             //window.location.hash='home';
             console.log('authenticated!!');
             router.navigate('home', {trigger: true});

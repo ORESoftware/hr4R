@@ -19,13 +19,28 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server = http.createServer(app).listen(port);
+var io = require('socket.io').listen(server);
+
+
+io.on('connection', function(socket){
+  console.log('a user connected - ', socket.id);
+
+  socket.on('chat message', function(msg){
+    console.log(socket.id, 'says', msg);
+
+    socket.emit('chat message','hey baby hey - I am '.concat(socket.id));
+  });
+
+  socket.on('disconnect', function(){
+    console.log('user disconnected -', socket.id);
+  });
+});
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 

@@ -10,7 +10,8 @@ function registerRoutes(app){
         req.session.passport.user = null;
         req.user = undefined;
         req.logout();
-        res.redirect('/login');
+        //res.redirect('/login');
+        res.redirect('/');
     });
 
     app.post('/logout',function (req, res, next) {
@@ -28,7 +29,7 @@ function registerRoutes(app){
         //    }
         //    res.redirect('/login');
         //});
-        res.redirect('/login');
+        res.redirect('/');
     });
 }
 

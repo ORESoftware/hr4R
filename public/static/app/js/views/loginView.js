@@ -77,6 +77,7 @@ define(['app/js/collections', 'app/js/models', 'form2js', 'ejs', 'jquery', 'unde
 
                 //TODO: userdata is not in json format or what??
                 //TODO: use socket.io to get server data
+                //TODO: localstorage vs cookies
 
                 $.ajax({
                     type: "POST",

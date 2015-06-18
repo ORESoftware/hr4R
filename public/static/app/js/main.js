@@ -13,7 +13,7 @@ requirejs.config({
     'paths': {
         //'app': 'app/js',
         // define vendor paths
-        'async':'vendor/async',
+        'async': 'vendor/async',
         'jquery': 'vendor/jquery',
         'ejs': 'vendor/ejs',
         'form2js': 'vendor/form2js',
@@ -21,7 +21,8 @@ requirejs.config({
         'backbone': 'vendor/backbone',
         'bootstrap': 'vendor/bootstrap',
         'handlebars': 'vendor/handlebars',
-        'backbone-validation': 'vendor/backbone-validation-amd'
+        'backbone-validation': 'vendor/backbone-validation-amd',
+        'socketio': 'https://cdn.socket.io/socket.io-1.3.5'
     },
     // Shim declaration
     'shim': {
@@ -37,11 +38,11 @@ requirejs.config({
         },
         ejs: {
             exports: "ejs"
-        },
+        }
     }
 });
 
-require(['app/js/app'], function(Application) {
+require(['app/js/app'], function (Application) {
 
     $(document).ready(function () {
         var app = Application.start();

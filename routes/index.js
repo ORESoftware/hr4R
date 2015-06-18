@@ -4,9 +4,6 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', function(req, res, next) {
 
-  console.log('cookies', req.cookies);
-  console.log('session', req.session);
-
   if (req.session.passport.user) {
     console.log("user session exists...checking DB for user");
     var Model = req.site.models.User;
@@ -25,11 +22,12 @@ router.get('/', function(req, res, next) {
         //res.render('home', {
         //  userInfo:user
         //});
-        res.json({msg:user});
+        //res.json({msg:user});
+        res.render('index', { title: 'SmartConnect Admin Portal' });
       }
     });
   } else {
-    console.log("rendering index...");
+    console.log("no passport session found in index route, rendering index page...");
     //res.redirect('/login');
     res.render('index', { title: 'SmartConnect Admin Portal' });
   }

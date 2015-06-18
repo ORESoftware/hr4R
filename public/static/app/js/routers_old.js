@@ -1,4 +1,9 @@
 /**
+ * Created by amills001c on 6/17/15.
+ */
+
+
+/**
  * Created by amills001c on 6/10/15.
  */
 
@@ -14,20 +19,16 @@
 //    var HeaderView = allViews.Header;
 //    var FooterView = allViews.Footer;
 
+define(['require','app/js/allViews'], function(require) {
 
-define(function() {
+    var allViews = require('app/js/allViews');
 
-//define(['require','app/js/allViews'], function(require) {
+    var IndexView = allViews.Index;
+    var LoginView = allViews.Login;
+    var HomeView = allViews.Home;
+    var HeaderView = allViews.Header;
+    var FooterView = allViews.Footer;
 
-    //var allViews = require('app/js/allViews');
-
-    //var IndexView = allViews.Index;
-    //var LoginView = allViews.Login;
-    //var HomeView = allViews.Home;
-    //var HeaderView = allViews.Header;
-    //var FooterView = allViews.Footer;
-
-    var allViews = null;
 
     var BootRouter = Backbone.Router.extend({
 
@@ -59,26 +60,21 @@ define(function() {
         },
 
         home: function() {
-            this.changeView(new allViews.Home());
+            this.changeView(new HomeView());
         },
 
         index: function() {
-            this.changeView(new allViews.Index());
+            this.changeView(new IndexView());
         }
     });
 
-    var bootRouter = new BootRouter();
+    app.routers.bootRouter = new BootRouter();
 
     bootRouter.on('route:defaultRoute', function (actions) {
         console.log( 'default route invoked...' + actions );
     });
 
-    return function($allViews) {
-
-        allViews = $allViews;
-
-        return{
-            bootRouter: bootRouter
-        }
+    return {
+        bootRouter: bootRouter
     }
 });

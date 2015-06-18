@@ -37,14 +37,14 @@ function postRegistrationAndOrLoginInfo(req,res,next,justRegistered){
         }
         if (!user) {
             if(justRegistered){
-                throw new Error('user was just registered, so user should be defined.')
+                return next(new Error('user was just registered, so user should be defined.'));
             }
             console.log('no account found, so we will register user as expected...');
             registerUser(req,res,next);
         }
         else{
             if(justRegistered){
-                console.log('user was registered and now should be authenticated...');
+                console.log('user was just registered, and now should be authenticated...');
             }
             else{
                 console.log('user already has an account...');
@@ -54,7 +54,19 @@ function postRegistrationAndOrLoginInfo(req,res,next,justRegistered){
             //    title:'Admin Portal Home View',
             //    userInfo:user._doc
             //});
-            res.json({alreadyRegistered: !justRegistered,msg:user._doc});
+
+            req.logIn(user, function (err) {
+
+                if(err){
+                    return next(err);
+                }
+
+                res.locals.loggedInUser = user._doc;
+
+                res.json({alreadyRegistered: !justRegistered,msg:user._doc});
+            });
+
+
         }
 
     })(req, res, next);

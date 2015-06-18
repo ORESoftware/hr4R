@@ -1,3 +1,7 @@
+/**
+ * Created by amills001c on 6/15/15.
+ */
+
 var passport = require('passport');
 var colors = require('colors');
 var path = require('path');
@@ -11,21 +15,6 @@ var express = require('express');
 var app = express();
 var router = express.Router();
 
-var session = require('./lib/controllers/session');
-
-app.use(session);
-
-app.use(expressLayouts);
-
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-app.set('layout', 'layout');
-app.engine('html', ejs.renderFile);
-
-// initialize passport
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(router);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -38,29 +27,56 @@ app.use(express.static(path.join(__dirname, '/bower_components')));
 //app.use(express.static('bower_components'));
 //app.use('/bower_components', express.static( root +'/bower_components'));
 
-console.log('ENVIRONMENT:', colors.bgGreen.blue(app.get('env')));
+
+var session = require('./lib/controllers/session');
+
+app.use(session);
+
+//var session = require('express-session');
+//
+//app.use(session({
+//    secret: 'something',
+//    saveUninitialized: false, // (default: true)
+//    resave: false, // (default: true)
+//    cookie: {
+//        secure: false
+//    }}));
+
+app.use(expressLayouts);
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.set('layout', 'layout');
+app.engine('html', ejs.renderFile);
 
 
-app.use(function(req,res,next){
+// initialize passport
+//app.use(router);
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(router);
+
+
+/*app.use(function (req, res, next) {
 
     console.log(colors.green(''));
     console.log(colors.cyan('New request:'));
     console.log(colors.cyan('___________________________________________________________'));
-    console.log(colors.bgYellow('METHOD:'),req.method);
-    console.log(colors.bgYellow('HEADERS:'),req.headers);
-    console.log(colors.bgYellow('PARAMS:'),req.params);
-    console.log(colors.bgYellow('BODY:'),req.body);
-    console.log(colors.bgYellow('QUERY:'),req.query);
-    console.log(colors.bgYellow('SECRET:'),req.secret);
-    console.log(colors.bgYellow('SESSION:'),req.session);
-    console.log(colors.bgYellow('COOKIES:'),req.cookies);
+    console.log(colors.bgYellow('METHOD:'), req.method);
+    console.log(colors.bgYellow('HEADERS:'), req.headers);
+    console.log(colors.bgYellow('PARAMS:'), req.params);
+    console.log(colors.bgYellow('BODY:'), req.body);
+    console.log(colors.bgYellow('QUERY:'), req.query);
+    console.log(colors.bgYellow('SECRET:'), req.secret);
+    console.log(colors.bgYellow('SESSION:'), req.session);
+    console.log(colors.bgYellow('COOKIES:'), req.cookies);
 
     next();
 
-});
+});*/
 
 // Passport auth
-app.use(function (req, res, next) {
+/*app.use(function (req, res, next) {
 
     //this function checks to see, if there is a user logged in and if so, that the session matches the user id
     var user = req.user;
@@ -80,20 +96,20 @@ app.use(function (req, res, next) {
 
         //res.send({msg:'user not authenticated, should be redirected to Backbone index view'});
 
-        console.log(colors.bgYellow('no user session found...'));
-        if(String(req.originalUrl).indexOf('/ra/') === 0){
+        console.log(colors.bgYellow('req.user is null...'));
+        if (String(req.originalUrl).indexOf('/ra/') === 0) {
             console.log(colors.bgYellow('user attempted to request /ra/ route, so rendering index page...'));
             res.locals.loggedInUser = null;
-            res.render('index', { title: 'SmartConnect Admin Portal' });
+            res.render('index', {title: 'SmartConnect Admin Portal'});
         }
-        else{
+        else {
             next();
         }
     }
-});
+});*/
 
 
-app.use(function(req,res,next){
+app.use(function (req, res, next) {
 
     //if(req.user == null){
     //    throw new Error('req.user was null in app.use function.');
@@ -111,6 +127,7 @@ app.use(function (req, res, next) {
 });
 
 
+require('./routes/logout')(app);
 var indexRoute = require('./routes/index');
 var usersRoutes = require('./routes/users');
 var registerRoute = require('./routes/register');
@@ -123,9 +140,9 @@ app.use('/authenticate', authRoute);
 app.use('/register', registerRoute);
 
 
-//var routes = require('./routes')(app);
-var passport = require('./lib/controllers/passport')(site.models.User);
-var params = require('./lib/controllers/params')(app);
+//require('./routes')(app);
+require('./lib/controllers/passport_setup')(site.models.User);
+require('./lib/controllers/params')(app);
 
 
 // catch 404 and forward to error handler
