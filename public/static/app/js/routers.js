@@ -82,6 +82,7 @@ define('app/js/routers',['app/js/currentView'],function($currentView) {
     });
 
     //TODO: ejs.update()
+    //TODO: http://danhough.com/blog/backbone-view-inheritance/
 
     var bootRouter = new BootRouter();
 

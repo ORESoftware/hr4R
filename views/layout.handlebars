@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{title}}</title>
+      <!--<script src="/static/vendor/require.js"></script>-->
+      <!--<script src="/static/app/js/optimized.js"></script>-->
+      <script data-main="/static/app/js/main" src="/static/vendor/require.js"></script>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    {{{body}}}
+
+    <script id="some-hbs-template" type="text/x-handlebars-template">
+        hello:{{hi}}
+        <table>
+            <thead>
+            <th>Username</th>
+            <th>Real Name</th>
+            <th>Email</th>
+            </thead>
+            <tbody>
+            {{#each users}}
+                <tr>
+                    <td>{{username}}</td>
+                    <td>{{firstName}} {{lastName}}</td>
+                    <td>{{email}}</td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </script>
+  </body>
+</html>
