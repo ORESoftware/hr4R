@@ -1,0 +1,13 @@
+
+<header>
+    <div>
+        <div id="header-div-id">Header Div Here
+        <% if(app && app.currentUser != null) { %>
+        <div>Logged In As: <%= app.currentUser%></div>
+        <button id="logout-button-id">Logout</button>
+        <% } else { %>
+        <div>You need to either register or login.</div>
+        <% } %>
+        </div>
+    </div>
+</header>

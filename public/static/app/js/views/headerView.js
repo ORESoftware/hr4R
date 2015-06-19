@@ -3,7 +3,7 @@
  */
 
 
-
+console.log('loading headerView');
 
 define(['app/js/routers','app/js/models', 'form2js','ejs','jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
 
@@ -11,7 +11,7 @@ define(['app/js/routers','app/js/models', 'form2js','ejs','jquery', 'underscore'
     function (routers, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
 
 
-        var router = routers.bootRouter;
+        var router = routers(null).bootRouter;
 
         var HeaderView = Backbone.View.extend({
 

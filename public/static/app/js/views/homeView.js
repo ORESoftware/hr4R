@@ -3,6 +3,8 @@
  */
 
 
+console.log('loading homeView');
+
 define(['app/js/collections', 'form2js','ejs','jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
 
 

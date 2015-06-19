@@ -2,6 +2,8 @@
  * Created by amills001c on 6/16/15.
  */
 
+console.log('loading footerView');
+
 
 define(['app/js/models', 'form2js','ejs','jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
 
@@ -34,7 +36,7 @@ define(['app/js/models', 'form2js','ejs','jquery', 'underscore', 'handlebars', '
                 var self = this;
 
 
-
+                console.log('re-rendered FooterView.');
                 return this;
             },
             onClickFooter: function(event){

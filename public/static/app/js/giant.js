@@ -3,6 +3,7 @@
  */
 
 
+console.log('loading app/js/giant.js');
 
 define(
     ['socketio',
@@ -21,6 +22,17 @@ define(
 
         socket.emit('chat message', 'this is the user talking to the server');
 
-        return routers(allViews);
+        socket.on('error', function (reason){
+            console.error('Unable to connect Socket.IO', reason);
+        });
+
+        socket.on('connect', function (){
+            console.info('successfully established a working and authorized connection');
+        });
+
+
+        return {
+            routers : routers(allViews)
+        };
     });
 

@@ -3,6 +3,7 @@
  */
 
 
+console.log('loading app/js/MODELS.js');
 
 define(['underscore', 'backbone'], function (_, Backbone) {
 

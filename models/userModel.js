@@ -15,13 +15,22 @@ var registerSchema = function () {
 
     userSchema = mongoose.Schema({
         username: {
-            type: String
-            //isUnique: true
-            //required: true
+            type: String,
+            isUnique: true,
+            required: true
         },
         password: {
-            type: String
-            //required: true
+            type: String,
+            required: true
+        },
+        firstName: {
+            type: String,
+            //isUnique: true
+            required: true
+        },
+        lastName: {
+            type: String,
+            required: true
         },
         registered_at: {
             type: Date,

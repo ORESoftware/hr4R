@@ -8,9 +8,13 @@
 //http://www.webdeveasy.com/optimize-requirejs-projects/
 //https://github.com/tastejs/todomvc/tree/gh-pages/examples/backbone_require
 
+console.log('loading app/js/main.js');
+
 requirejs.config({
-    'baseUrl': '/static',
-    'paths': {
+    enforceDefine: false,
+    waitSeconds: 8,
+    baseUrl: '/static',
+    paths: {
         //'app': 'app/js',
         // define vendor paths
         'async': 'vendor/async',

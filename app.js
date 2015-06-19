@@ -108,6 +108,12 @@ app.use(router);
     }
 });*/
 
+app.locals = {
+
+    title:'SmartConnect Admin Portal'
+
+};
+
 
 app.use(function (req, res, next) {
 
@@ -132,12 +138,13 @@ var indexRoute = require('./routes/index');
 var usersRoutes = require('./routes/users');
 var registerRoute = require('./routes/register');
 var authRoute = require('./routes/authenticate');
-
+var loginRoute = require('./routes/login');
 
 app.use('/', indexRoute);
 app.use('/users*', usersRoutes);
 app.use('/authenticate', authRoute);
 app.use('/register', registerRoute);
+app.use('/login', loginRoute);
 
 
 //require('./routes')(app);

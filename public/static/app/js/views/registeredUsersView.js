@@ -3,6 +3,7 @@
  */
 
 
+console.log('loading registeredUsersView');
 
 define(['app/js/collections', 'ejs', 'jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
 

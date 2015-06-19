@@ -3,13 +3,17 @@
  */
 
 
-var app = app || {};
-
-define(['app/js/collections', 'app/js/models', 'form2js', 'ejs', 'jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
+//var app = app || {};
 
 
-    function (collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
+console.log('loading loginView');
 
+define(['app/js/routers','app/js/collections', 'app/js/models', 'form2js', 'ejs', 'jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
+
+
+    function (routers,collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
+
+        var router = routers(null).bootRouter;
 
         var LoginView = Backbone.View.extend({
 
@@ -85,16 +89,18 @@ define(['app/js/collections', 'app/js/models', 'form2js', 'ejs', 'jquery', 'unde
                     dataType: "json",
                     data: userData
                 }).done(function (response) {
-                    if (response == 'bad login') {
+                    if (response.user == null) {
                         setTimeout(function () {
-                            alert("bad login");
+                            alert("Bad login");
                         }, 200);
                         self.render();
                         return;
                     }
+
+                    appGlobal.currentUser = response.user;
                     //var url = response;
                     //$(location).attr('href', url);
-                    app.router.navigate('home', {trigger: true});
+                    router.navigate('home', {trigger: true});
                 })
                     .fail(function () {
                         setTimeout(function () {

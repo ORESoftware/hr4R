@@ -5,22 +5,16 @@
 
 //this is a completely single-page-app, so there is only one router
 
+console.log('loading app/js/ROUTERS.js');
 
-//define(['app/js/allViews'], function(allViews) {
-//
-//    var IndexView = allViews.Index;
-//    var LoginView = allViews.Login;
-//    var HomeView = allViews.Home;
-//    var HeaderView = allViews.Header;
-//    var FooterView = allViews.Footer;
+//define(['app/js/currentView'],function($currentView) {
 
+//define('app/js/routers',['require'],function(require) {
 
-define(function() {
+define('app/js/routers',['app/js/currentView'],function($currentView) {
 
 //define(['require','app/js/allViews'], function(require) {
-
     //var allViews = require('app/js/allViews');
-
     //var IndexView = allViews.Index;
     //var LoginView = allViews.Login;
     //var HomeView = allViews.Home;
@@ -31,7 +25,9 @@ define(function() {
 
     var BootRouter = Backbone.Router.extend({
 
-        currentView: null,
+        //currentView: require('app/js/currentView'),
+
+        currentView: $currentView,
 
         routes: {
             'index':'index',
@@ -40,21 +36,39 @@ define(function() {
             "*actions": "defaultRoute" // Backbone will try to match the routes above first
         },
 
+        //changeView: function(view) {
+        //    if(this.currentView.get('mainView') != null){
+        //        this.currentView.get('mainView').undelegateEvents();
+        //    }
+        //    this.currentView.set('mainView',view);
+        //    console.log('current main view:',view);
+        //    this.currentView.get('mainView').render();
+        //    if(this.currentView.get('footerView') == null){
+        //        this.currentView.set('footerView',new allViews.Footer());
+        //    }
+        //    if(this.currentView.get('headerView') == null){
+        //        this.currentView.set('headerView',new allViews.Header());
+        //    }
+        //    this.currentView.get('footerView').render();
+        //    this.currentView.get('headerView').render();
+        //
+        //},
+
         changeView: function(view) {
-            if(this.currentView != null){
-                this.currentView.undelegateEvents();
+            if($currentView.get('mainView') != null){
+                $currentView.get('mainView').undelegateEvents();
             }
-            this.currentView = view;
-            console.log('current view:',view);
-            this.currentView.render();
-            if(!app.footerView){
-                app.footerView = new FooterView();
+            $currentView.set('mainView',view);
+            console.log('current main view:',view);
+            $currentView.get('mainView').render();
+            if($currentView.get('footerView') == null){
+                $currentView.set('footerView',new allViews.Footer());
             }
-            if(!app.headerView){
-                app.headerView = new HeaderView();
+            if($currentView.get('headerView') == null){
+                $currentView.set('headerView',new allViews.Header());
             }
-            app.footerView.render();
-            app.headerView.render();
+            $currentView.get('footerView').render();
+            $currentView.get('headerView').render();
 
         },
 
@@ -67,6 +81,8 @@ define(function() {
         }
     });
 
+    //TODO: ejs.update()
+
     var bootRouter = new BootRouter();
 
     bootRouter.on('route:defaultRoute', function (actions) {
@@ -75,7 +91,14 @@ define(function() {
 
     return function($allViews) {
 
-        allViews = $allViews;
+        if(allViews === null){
+            if($allViews == null){
+                //throw new Error('null value to passed routers.js');
+                console.log('null value to passed routers.js');
+            }
+            console.log('initializing routers with allViews');
+            allViews = $allViews;
+        }
 
         return{
             bootRouter: bootRouter

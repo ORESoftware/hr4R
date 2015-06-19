@@ -29,7 +29,7 @@ function registerRoutes(app){
         //    }
         //    res.redirect('/login');
         //});
-        res.redirect('/');
+        res.json(true);
     });
 }
 
