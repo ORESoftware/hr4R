@@ -21,7 +21,11 @@ define(['app/js/routers','app/js/models', 'form2js','ejs','jquery', 'underscore'
 
             model:null,
 
-            el: '#header-div-id',
+            template: null,
+
+            //el: '#header-div-id',
+
+            el: '#index_header_div_id',
 
             events: {
                 'click #logout-button-id': 'onClickLogout'
@@ -37,7 +41,29 @@ define(['app/js/routers','app/js/models', 'form2js','ejs','jquery', 'underscore'
 
                 var self = this;
 
+                if(self.template == null){
 
+                    $.ajax({
+                        url: 'static/html/ejs/header.ejs',
+                        type: 'GET',
+                        success: function (msg) {
+                            self.template = msg;
+                            var ret = EJS.render(self.template, appGlobal);
+                            self.$el.html(ret);
+                        },
+                        error: function (err) {
+                            alert(err.toString());
+                        }
+                    });
+                }
+                else{
+
+                    var ret = EJS.render(self.template, appGlobal);
+                    self.$el.html(ret);
+
+                }
+
+                console.log('re-rendered FooterView.');
 
                 return this;
             },
@@ -53,13 +79,23 @@ define(['app/js/routers','app/js/models', 'form2js','ejs','jquery', 'underscore'
                     dataType: 'json',
                     type: 'POST',
                     success: function (msg) {
+                        if(msg === true){
+                            appGlobal.currentUser = null;
+                            appGlobal.authorized = false;
+                            router.navigate('index',{trigger:true});
+                            Backbone.history.loadUrl();
+                        }
+                        else{
+                            alert('logout failed.')
+                        }
 
-                        router.navigate('index',{trigger:true});
-                        Backbone.history.loadUrl();
+
                     },
                     error: function (err) {
                         console.log('error:', err);
-
+                        alert('internal server error - logout failed.')
+                        appGlobal.currentUser = null;
+                        appGlobal.authorized = false;
                         router.navigate('index',{trigger:true});
                         Backbone.history.loadUrl();
                     }

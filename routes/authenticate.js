@@ -8,17 +8,24 @@ var router = express.Router();
 
 router.get('/', function(req, res, next) {
 
-    //if (req.user) {
-    //    res.json({"authenticated":true});
-    //} else {
-    //    res.json({"authenticated":false});
-    //}
+    var env = process.env.NODE_ENV;
 
     if (req.isAuthenticated()) {
-        res.json({"isAuthenticated":true, "user":req.user});
+        res.json({isAuthenticated:true, user:req.user, env:env});
     } else {
-        res.json({"isAuthenticated":false, "user":null});
+        res.json({isAuthenticated:false, user:null ,env:env});
     }
 });
+
+/*router.post('/', function(req, res, next) {
+
+    var env = process.env.NODE_ENV;
+
+    if (req.isAuthenticated()) {
+        res.json({isAuthenticated:true, user:req.user, env:env});
+    } else {
+        res.json({isAuthenticated:false, user:null ,env:env});
+    }
+});*/
 
 module.exports = router;

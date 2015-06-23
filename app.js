@@ -12,7 +12,43 @@ var bodyParser = require('body-parser');
 var ejs = require('ejs');
 var expressLayouts = require('express-ejs-layouts');
 var express = require('express');
+//var session = require('express-session');
+
+
+//var redis = require('redis');
+//var redisClient = redis.createClient();
+//var RedisStore = require('connect-redis')(session);
+//var redisStore = new RedisStore({ client: redisClient });
+
+// Other
+var config = require('./config/config_constants.json');
+//var sessionService = require('./lib/controllers/session-service.js');
+//sessionService.initializeRedis(redisClient, redisStore);
+
+
 var app = express();
+
+// Enable CORS
+var allowCrossDomain = function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", config.allowedCORSOrigins);
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    res.header("Access-Control-Allow-Credentials", "true");
+    next();
+};
+
+app.use(allowCrossDomain);
+
+//app.use(cookieParser(config.sessionSecret));
+//app.use(session({
+//    store: redisStore,
+//    key: config.sessionCookieKey,
+//    secret: config.sessionSecret,
+//    resave: true,
+//    saveUninitialized: true
+//}));
+
+
 var router = express.Router();
 
 
@@ -21,7 +57,7 @@ var router = express.Router();
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser());
+app.use(cookieParser('foo'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, '/bower_components')));
 //app.use(express.static('bower_components'));
@@ -29,18 +65,17 @@ app.use(express.static(path.join(__dirname, '/bower_components')));
 
 
 var session = require('./lib/controllers/session');
-
 app.use(session);
 
-//var session = require('express-session');
-//
-//app.use(session({
-//    secret: 'something',
-//    saveUninitialized: false, // (default: true)
-//    resave: false, // (default: true)
-//    cookie: {
-//        secure: false
-//    }}));
+/*var session = require('express-session');
+
+app.use(session({
+    secret: 'something',
+    saveUninitialized: false, // (default: true)
+    resave: false, // (default: true)
+    cookie: {
+        secure: false
+    }}));*/
 
 app.use(expressLayouts);
 
@@ -51,10 +86,10 @@ app.engine('html', ejs.renderFile);
 
 
 // initialize passport
-//app.use(router);
+app.use(router);
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(router);
+//app.use(router);
 
 
 /*app.use(function (req, res, next) {
@@ -139,13 +174,14 @@ var usersRoutes = require('./routes/users');
 var registerRoute = require('./routes/register');
 var authRoute = require('./routes/authenticate');
 var loginRoute = require('./routes/login');
+var testSocketIORoute = require('./routes/testSocketIO');
 
 app.use('/', indexRoute);
 app.use('/users*', usersRoutes);
 app.use('/authenticate', authRoute);
 app.use('/register', registerRoute);
 app.use('/login', loginRoute);
-
+app.use('/testSocketIO', testSocketIORoute);
 
 //require('./routes')(app);
 require('./lib/controllers/passport_setup')(site.models.User);

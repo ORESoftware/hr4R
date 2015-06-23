@@ -19,7 +19,10 @@ define(['app/js/models', 'form2js','ejs','jquery', 'underscore', 'handlebars', '
 
             model:null,
 
-            el: '#footer-div-id',
+            template:null,
+
+            //el: '#footer-div-id',
+            el: '#index_footer_div_id',
 
             events: {
                 'click #footer-button-id': 'onClickFooter'
@@ -35,14 +38,49 @@ define(['app/js/models', 'form2js','ejs','jquery', 'underscore', 'handlebars', '
 
                 var self = this;
 
+                if(self.template == null){
+
+                    $.ajax({
+                        url: 'static/html/ejs/footer.ejs',
+                        type: 'GET',
+                        success: function (msg) {
+                            self.template = msg;
+                            var ret = EJS.render(self.template, appGlobal);
+                            //console.log('login view:', ret);
+                            self.$el.html(ret);
+                        },
+                        error: function (err) {
+                            //console.log('error:', err);
+                            alert(err.toString());
+                        }
+                    });
+                }
+                else{
+
+                    var ret = EJS.render(self.template, appGlobal);
+                    self.$el.html(ret);
+
+                }
 
                 console.log('re-rendered FooterView.');
+                this.delegateEvents();
                 return this;
             },
             onClickFooter: function(event){
                 event.preventDefault();
 
                 console.log('clicked footer...');
+
+                $.ajax({
+                    url: '/testSocketIO',
+                    type: 'GET',
+                    success: function (msg) {
+                        console.log(msg);
+                    },
+                    error: function (err) {
+                        alert(err.toString());
+                    }
+                });
 
             }
         });

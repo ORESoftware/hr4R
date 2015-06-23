@@ -20,7 +20,6 @@ appGlobal = {
 
 define(['handlebars', 'backbone'], function (Handlebars, Backbone) {
 
-
     //window.onbeforeunload = function() {  //user confirms he wants to leave page
     //    return "Dude, are you sure you want to leave? Think of the kittens!";
     //};

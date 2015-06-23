@@ -33,6 +33,7 @@ define('app/js/boot',
                     console.log('authentication message:', msg);
 
                     appGlobal.currentUser = msg.user;
+                    appGlobal.env = msg.env;
                     runApplication(msg.isAuthenticated); //msg.msg is boolean value sent from server, representing user authentication, yes or no
                 },
                 error: function (err) {
@@ -44,6 +45,7 @@ define('app/js/boot',
             });
         };
 
+        //TODO: effectiveJS not EmbeddedJS...see google for this
         //TODO: create new user with Backbone model
 
         var runApplication = function (authenticated) {

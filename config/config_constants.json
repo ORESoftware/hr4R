@@ -1,0 +1,4 @@
+{
+  "sessionCookieKey": "express.sid",
+  "sessionSecret": "foo"
+}

@@ -63,6 +63,61 @@ define(['app/js/routers','app/js/collections', 'app/js/models', 'form2js', 'ejs'
                 event.preventDefault();
 
 
+                var self = this;
+
+                var data = form2js('login-form-id', '.', true);
+
+                console.log('registration data:', data);
+
+                //var userData = JSON.stringify(data.user);
+
+                var userData = data.user;
+
+                //TODO: userdata is not in json format or what??
+                //TODO: use socket.io to get server data
+                //TODO: localstorage vs cookies
+
+                $.ajax({
+                    type: "POST",
+                    url: '/login',
+                    dataType: "json",
+                    data: userData
+                }).done(function (msg) {
+                    console.log('authentication message:', msg);
+
+                    appGlobal.authorized = msg.isAuthenticated;
+                    appGlobal.currentUser = msg.user;
+                    appGlobal.env = msg.env;
+
+
+                    if ( appGlobal.authorized === true) {
+                        //window.location.hash='home';
+                        console.log('user logged in successfully!!');
+                        router.navigate('home', {trigger: true});
+                    }
+                    else {
+                        //window.location.hash='login';
+                        console.log('user did not log in successfully..!');
+
+                        alert('bad login');
+                        router.navigate('index', {trigger: true});
+                    }
+
+
+
+                })
+                    .fail(function () {
+                        setTimeout(function () {
+                            alert("Server error during user login/registration.");
+                        }, 200);
+                        self.render();
+                    })
+                    .always(function () {
+
+                    });
+
+
+
             },
 
             onSubmitRegistration: function (event) {
