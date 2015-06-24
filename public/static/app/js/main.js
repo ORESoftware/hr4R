@@ -22,6 +22,7 @@ requirejs.config({
         'ejs': 'vendor/ejs',
         'form2js': 'vendor/form2js',
         'underscore': 'vendor/underscore',
+        'ijson':'vendor/idempotent-json',
         'backbone': 'vendor/backbone',
         'bootstrap': 'vendor/bootstrap',
         'handlebars': 'vendor/handlebars',

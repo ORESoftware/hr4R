@@ -5,10 +5,10 @@
 
 console.log('loading homeView');
 
-define(['app/js/collections', 'form2js','ejs','jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
+define(['app/js/models','app/js/collections', 'form2js','ejs','jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
 
 
-    function (collections, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
+    function (models,collections, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
 
 
         var HomeView = Backbone.View.extend({
@@ -23,9 +23,33 @@ define(['app/js/collections', 'form2js','ejs','jquery', 'underscore', 'handlebar
             el: '#main-div-id',
 
             initialize: function () {
+
+                //TODO: why have this video have it's own collection, just use global user collection? (collections.users)
+                var coll = this.collection;
+
+               /* coll.each(function(item,index) {
+                   if(item.username === appGlobal.currentUser.username){
+                       this.model = item;
+                   }
+                });
+
+                if(this.model === null){
+                    throw new Error('no user found in users collection')
+                }
+                this.model = new models.UserModel(appGlobal.currentUser);*/
+
                 _.bindAll(this, "render");
                 this.collection.bind("reset", this.render);
+                this.listenTo(this.model, 'sync', this.handleModelSyncSuccess);
+                this.listenTo(this.model, 'error', this.handleModelError);
+                this.listenTo(Backbone, 'books:created', this.show);
                 //this.model.bind('change', this.render);
+            },
+
+            show:function(){
+
+                console.log('heard about BOOKS:CREATED: this:',this);
+
             },
             render: function () {
                 console.log('attempting to render HomeView.');
@@ -52,6 +76,12 @@ define(['app/js/collections', 'form2js','ejs','jquery', 'underscore', 'handlebar
                 });
 
                 return this;
+            },
+            handleModelSyncSuccess: function(){
+                console.log('model sync success');
+            },
+            handleModelError: function(){
+                console.log('model error!! in this:',this);
             }
         });
 

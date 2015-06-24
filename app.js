@@ -12,20 +12,12 @@ var bodyParser = require('body-parser');
 var ejs = require('ejs');
 var expressLayouts = require('express-ejs-layouts');
 var express = require('express');
-//var session = require('express-session');
-
-
-//var redis = require('redis');
-//var redisClient = redis.createClient();
-//var RedisStore = require('connect-redis')(session);
-//var redisStore = new RedisStore({ client: redisClient });
+var expressSession = require('express-session');
 
 // Other
 var config = require('./config/config_constants.json');
-//var sessionService = require('./lib/controllers/session-service.js');
-//sessionService.initializeRedis(redisClient, redisStore);
 
-
+//app
 var app = express();
 
 // Enable CORS
@@ -38,22 +30,10 @@ var allowCrossDomain = function (req, res, next) {
 };
 
 app.use(allowCrossDomain);
-
-//app.use(cookieParser(config.sessionSecret));
-//app.use(session({
-//    store: redisStore,
-//    key: config.sessionCookieKey,
-//    secret: config.sessionSecret,
-//    resave: true,
-//    saveUninitialized: true
-//}));
-
-
 var router = express.Router();
 
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -64,8 +44,24 @@ app.use(express.static(path.join(__dirname, '/bower_components')));
 //app.use('/bower_components', express.static( root +'/bower_components'));
 
 
-var session = require('./lib/controllers/session');
+var session = require('./lib/controllers/session.js');
 app.use(session);
+
+//var sessionStore = new expressSession.MemoryStore();
+//
+//app.use(expressSession({
+//    name: 'connect.sid',
+//    store: sessionStore,
+//    secret: 'foo',
+//    saveUninitialized: true,
+//    resave: true,
+//    cookie: {
+//        path: '/',
+//        httpOnly: true,
+//        secure: false,
+//        maxAge: null
+//    }
+//}));
 
 /*var session = require('express-session');
 
@@ -86,39 +82,45 @@ app.engine('html', ejs.renderFile);
 
 
 // initialize passport
+//TODO: is it app.use(router) before or after passport?
+//TODO: use redis or mongodb for session store?
+
 app.use(router);
 app.use(passport.initialize());
 app.use(passport.session());
 //app.use(router);
 
 
-/*app.use(function (req, res, next) {
+app.use(function (req, res, next) {
 
-    console.log(colors.green(''));
-    console.log(colors.cyan('New request:'));
-    console.log(colors.cyan('___________________________________________________________'));
-    console.log(colors.bgYellow('METHOD:'), req.method);
-    console.log(colors.bgYellow('HEADERS:'), req.headers);
-    console.log(colors.bgYellow('PARAMS:'), req.params);
-    console.log(colors.bgYellow('BODY:'), req.body);
-    console.log(colors.bgYellow('QUERY:'), req.query);
-    console.log(colors.bgYellow('SECRET:'), req.secret);
-    console.log(colors.bgYellow('SESSION:'), req.session);
-    console.log(colors.bgYellow('COOKIES:'), req.cookies);
+    //console.log(colors.green(''));
+    //console.log(colors.cyan('New request:'));
+    //console.log(colors.cyan('___________________________________________________________'));
+    //console.log(colors.bgYellow('METHOD:'), req.method);
+    //console.log(colors.bgYellow('HEADERS:'), req.headers);
+    //console.log(colors.bgYellow('PARAMS:'), req.params);
+    //console.log(colors.bgYellow('BODY:'), req.body);
+    //console.log(colors.bgYellow('QUERY:'), req.query);
+    //console.log(colors.bgYellow('SECRET:'), req.secret);
+    //console.log(colors.bgYellow('SESSION:'), req.session);
+    console.log(colors.bgYellow('SESSION_ID:'), req.session.id);
+    //console.log(colors.bgYellow('COOKIES:'), req.cookies);
 
     next();
 
-});*/
+});
+
+//TODO: why is it user._doc now?
 
 // Passport auth
-/*app.use(function (req, res, next) {
+app.use(function (req, res, next) {
 
     //this function checks to see, if there is a user logged in and if so, that the session matches the user id
     var user = req.user;
     if (user) {
-        if (user._id !== req.session.passport.user) {
+        if (user._doc._id != req.session.passport.user) {
             console.log('user id is not equal to passport object, logging out...');
-            throw new Error('this shouldnt happen when user is defined');
+            next(new Error('this should never happen when user is defined'));
             //res.redirect('/logout');
         } else {
             next();
@@ -141,23 +143,20 @@ app.use(passport.session());
             next();
         }
     }
-});*/
-
-app.locals = {
-
-    title:'SmartConnect Admin Portal'
-
-};
-
-
-app.use(function (req, res, next) {
-
-    //if(req.user == null){
-    //    throw new Error('req.user was null in app.use function.');
-    //}
-    res.locals.loggedInUser = req.user;
-    next();
 });
+
+
+//app.locals = {
+//
+//    title:'SmartConnect Admin Portal'
+//
+//};
+
+
+//app.use(function (req, res, next) {
+//    res.locals.loggedInUser = req.user;
+//    next();
+//});
 
 var site = require('./lib/site');
 
@@ -182,6 +181,8 @@ app.use('/authenticate', authRoute);
 app.use('/register', registerRoute);
 app.use('/login', loginRoute);
 app.use('/testSocketIO', testSocketIORoute);
+
+
 
 //require('./routes')(app);
 require('./lib/controllers/passport_setup')(site.models.User);

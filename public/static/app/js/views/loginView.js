@@ -4,14 +4,14 @@
 
 
 //var app = app || {};
-
+//TODO: http://cdnjs.com/libraries/backbone.js/tutorials/what-is-a-model
 
 console.log('loading loginView');
 
-define(['app/js/routers','app/js/collections', 'app/js/models', 'form2js', 'ejs', 'jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
+define(['app/js/routers', 'app/js/collections', 'app/js/models', 'form2js', 'ejs', 'jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
 
 
-    function (routers,collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
+    function (routers, collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
 
         var router = routers(null).bootRouter;
 
@@ -86,14 +86,30 @@ define(['app/js/routers','app/js/collections', 'app/js/models', 'form2js', 'ejs'
                     console.log('authentication message:', msg);
 
                     appGlobal.authorized = msg.isAuthenticated;
-                    appGlobal.currentUser = msg.user;
+                    //appGlobal.currentUser = msg.user;  //TODO: might need to find currentUser in users collection first
+                    var user = msg.user
                     appGlobal.env = msg.env;
 
+                    if (appGlobal.authorized === true) {
 
-                    if ( appGlobal.authorized === true) {
-                        //window.location.hash='home';
-                        console.log('user logged in successfully!!');
-                        router.navigate('home', {trigger: true});
+                        collections.users.fetch().done(function () {
+
+                            for (var i = 0; i < collections.users.models.length; i++) {
+
+                                if (user.username === collections.users.models[i].username) {
+                                    appGlobal.currentUser = collections.users.models[i];
+                                    break;
+                                }
+
+                            }
+
+                            if (appGlobal.currentUser === null) {
+                                throw new Error('null appGlobal.currentUser');
+                            }
+                            //window.location.hash='home';
+                            console.log('user logged in successfully!!');
+                            router.navigate('home', {trigger: true});
+                        });
                     }
                     else {
                         //window.location.hash='login';
@@ -102,7 +118,6 @@ define(['app/js/routers','app/js/collections', 'app/js/models', 'form2js', 'ejs'
                         alert('bad login');
                         router.navigate('index', {trigger: true});
                     }
-
 
 
                 })
@@ -115,7 +130,6 @@ define(['app/js/routers','app/js/collections', 'app/js/models', 'form2js', 'ejs'
                     .always(function () {
 
                     });
-
 
 
             },
@@ -152,7 +166,15 @@ define(['app/js/routers','app/js/collections', 'app/js/models', 'form2js', 'ejs'
                         return;
                     }
 
-                    appGlobal.currentUser = response.user;
+                    var newUser = models.UserModel.newUser(response.user);
+
+                    var userColl = collections.users;
+
+                    userColl.add(newUser);
+
+                    Backbone.sync(userColl);
+
+                    appGlobal.currentUser = newUser;
                     //var url = response;
                     //$(location).attr('href', url);
                     router.navigate('home', {trigger: true});

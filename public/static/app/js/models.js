@@ -34,7 +34,7 @@ define(['underscore', 'backbone'], function (_, Backbone) {
     var User = Backbone.Model.extend({
 
 
-        idAttribute: "mongo_ID",
+        idAttribute: "_id",
 
         urlRoot: '/users?user_id=',
 
@@ -42,7 +42,8 @@ define(['underscore', 'backbone'], function (_, Backbone) {
             firstName: null,
             lastName: null,
             username: null,
-            password: null
+            password: null,
+            email: null
         },
 
         initialize: function(){
@@ -71,6 +72,20 @@ define(['underscore', 'backbone'], function (_, Backbone) {
             return true;
         },
 
+        newUser: function($user){
+
+            var user = new User();
+
+            user.firstName = $user.firstName;
+            user.lastName = $user.lastName;
+            user.username = $user.username;
+            user.password = $user.password;
+            user.email = $user.email;
+
+            return user;
+
+        },
+
         persist: function(callback){
             this.save({}, {
                 success: function (model, response, options) {
@@ -79,7 +94,7 @@ define(['underscore', 'backbone'], function (_, Backbone) {
                 },
                 error: function (model, xhr, options) {
                     console.log("Something went wrong while saving the model");
-                    callback(model,response,options);
+                    callback(model,xhr,options);
                 }
             });
         }

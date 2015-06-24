@@ -3,6 +3,9 @@
  */
 
 
+//http://devble.com/create-cookies-in-javascript-read-values/
+//TODO: http://geeks.bizzabo.com/post/83917692143/7-battle-tested-backbonejs-rules-for-amazing-web-apps
+
 console.log('loading app/js/giant.js');
 
 define(
@@ -10,15 +13,19 @@ define(
     [
         'socketio',
         'app/js/routers',
-        'app/js/allViews'
+        'app/js/allViews',
+        'backbone'
     ],
 
-    function (io, routers, allViews) {
+    function (io, routers, allViews, Backbone) {
 
+
+
+        console.log('document.cookie before socketio:',document.cookie);
 
         var socket = io.connect('http://127.0.0.1:3000');
 
-        //var socket = io.connect('ws://127.0.0.1:3000');
+        //TODO: match socket session with express session
 
 
         socket.on('burger', function (msg) {
@@ -48,6 +55,8 @@ define(
         });
 
         socket.on('connect', function () {
+            Backbone.trigger('books:created', this);
+            console.log('document.cookie after socketio connection:',document.cookie);
             console.info('successfully established a working and authorized connection'.toUpperCase());
         });
 

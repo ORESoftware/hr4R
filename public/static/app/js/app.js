@@ -18,11 +18,16 @@ appGlobal = {
 };
 
 
-define(['handlebars', 'backbone'], function (Handlebars, Backbone) {
+define(['handlebars', 'backbone','ijson'], function (Handlebars, Backbone, IJSON) {
 
     //window.onbeforeunload = function() {  //user confirms he wants to leave page
     //    return "Dude, are you sure you want to leave? Think of the kittens!";
+    // TODO: save all collections here before popping the question
     //};
+
+    var x = IJSON.parse({});
+
+    console.log(x);
 
     var start = function () {
 

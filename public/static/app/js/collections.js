@@ -16,11 +16,40 @@ define('app/js/collections',
     ],
 
     function (_, Backbone, models) {
-        'use strict';
 
         var UsersCollection = Backbone.Collection.extend({
             // Reference to this collection's model.
             model: models.UserModel,
+
+            url: function () {
+                //return '/users?user_id=' + this.options.user_id;
+                return '/users';
+            },
+
+            persist: function(){
+                //Backbone.sync('create', this, {
+                //    success: function() {
+                //        console.log('Saved users collection!');
+                //    },
+                //    error: function(){
+                //        alert('error syncing users collection');
+                //    }
+                //});
+
+               this.each(function(user,index){
+                  user.save({
+                      success:function(msg){
+                          console.log('saved user --->',msg);
+                      },
+
+                      error:function(err){
+                       throw new Error(err);
+                      }
+                  })
+
+               });
+
+            },
 
             initialize: function () {
 
@@ -43,11 +72,6 @@ define('app/js/collections',
                 this.on('change', function (model) {
                     console.log('something got changed');
                 });
-            },
-
-            url: function () {
-                //return '/users?user_id=' + this.options.user_id;
-                return '/users';
             },
 
             // Todos are sorted by their original insertion order.

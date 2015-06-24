@@ -13,17 +13,22 @@ define('app/js/boot',
     [
         'jquery',
         'backbone',
-        'app/js/giant'
+        'app/js/giant',
+        'app/js/collections'
     ],
 
-    function ($, Backbone, giant) {
+    function ($, Backbone, giant,collections) {
 
 
         var router = giant.routers.bootRouter;  //we need to load giant NOW because we need routers to get populated with allViews
 
+        //TODO: might need to figure out how to set ENV before socket.io tries to make connection to server
+
         var initialize = function () {
 
             Backbone.history.start();
+            //Backbone.history.start({ pushState: true });
+
             // Require index page from server
             $.ajax({
                 url: '/authenticate',
@@ -31,10 +36,8 @@ define('app/js/boot',
                 dataType: 'json',
                 success: function (msg) {
                     console.log('authentication message:', msg);
-
-                    appGlobal.currentUser = msg.user;
                     appGlobal.env = msg.env;
-                    runApplication(msg.isAuthenticated); //msg.msg is boolean value sent from server, representing user authentication, yes or no
+                    runApplication(msg.isAuthenticated,msg.user);
                 },
                 error: function (err) {
                     console.log('server error:', err);
@@ -48,18 +51,35 @@ define('app/js/boot',
         //TODO: effectiveJS not EmbeddedJS...see google for this
         //TODO: create new user with Backbone model
 
-        var runApplication = function (authenticated) {
+        var runApplication = function (authenticated,user) {
 
-            // Authenticated user move to home page
             if (authenticated === true) {
-                //window.location.hash='home';
+                //window.location.hash='home';//Backbone.history.navigate('home', true);
                 console.log('authenticated!!');
-                router.navigate('home', {trigger: true});
+
+                collections.users.fetch().done(function () {
+
+                    for (var i = 0; i < collections.users.models.length; i++) {
+
+                        if (user.username === collections.users.models[i].get('username')) {
+                            appGlobal.currentUser = collections.users.models[i];
+                            break;
+                        }
+
+                    }
+
+                    if (appGlobal.currentUser === null) {
+                        throw new Error('null appGlobal.currentUser');
+                    }
+                    //window.location.hash='home';
+                    router.navigate('home', {trigger: true});
+                });
             }
             else {
                 //window.location.hash='login';
                 console.log('not authenticated..!');
                 //window.location.hash='index';
+                //Backbone.history.navigate('index', true);
                 router.navigate('index', {trigger: true});
             }
         };

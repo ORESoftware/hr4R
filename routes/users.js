@@ -2,9 +2,11 @@ var express = require('express');
 var router = express.Router();
 
 /* GET usersRoutes listing. */
+
+
 router.get('/', function (req, res, next) {
 
-    var db = req.site.mongoDB;
+    //var db = req.site.mongoDB;
 
     var UserModel = req.site.models.User;
     var User = UserModel.getNewUser();
@@ -21,55 +23,101 @@ router.get('/', function (req, res, next) {
 router.get(':user_id', function (req, res, next) {
 
     var user_id = req.params.user_id;
+    var user = req.specialParams.model;
+
+    user.save(function (err, result) {
+        if (err) {
+            console.log("error in user save method:", err);
+            res.send('database error');
+        }
+        else if (result) {
+            res.send(user);
+        }
+        else {
+            next(new Error('grave error in newUser.save method in users'));
+        }
+    });
+
+});
+
+
+router.post('/', function (req, res, next) {
+
+    console.log('about to post new user:', req.body);
+
+    var user = req.body;
+    var firstName = user.firstName;
+    var lastName = user.lastName;
+    var username = user.username;
+    var password = user.password;
+    var email = user.email;
 
     var UserModel = req.site.models.User;
     var User = UserModel.getNewUser();
 
-    User.findById(user_id, function (err, user) {
-        if (err) {
-            return next(err);
-        }
-        if (!user) {
-            console.log('no user matched');
-            return next(new Error("no user matched"));
-        }
-        res.json(user);
-    });
-
-});
-
-router.post(':user_id', function (req, res, next) {
-
-    var firstName = req.body.firstName;
-    var lastName = req.body.lastName;
-    var username = req.body.username;
-    var password = req.body.password;
-    var email = req.body.email;
-
-    var Model = req.site.models.User;
-    var User = Model.getNewUser();
-
     var newUser = new User({
         username: username,
         password: password,
+        email: email,
         firstName: firstName,
-        lastName: lastName,
-        email: email
+        lastName: lastName
     });
 
     newUser.save(function (err, result) {
         if (err) {
-            return next(err);
+            console.log("error in user save method:", err);
+            res.send('database error');
         }
-        if (result) {
+        else if (result) {
             console.log('Added new user: ', result);
-            res.send('successful user registration');
+            //postRegistrationAndOrLoginInfo(req,res,next,true);
+            //res.json('successful user registration');
+            loginNewlyRegisteredUser(result, req, res, next)
         } else {
-            next(new Error('no result in newUser save method.'));
+            next(new Error('grave error in newUser.save method in registration'));
         }
     });
-
 });
+
+
+router.put('/:user_id', function (req, res, next) {
+
+    console.log('about to post new user:', req.body);
+
+    var user = req.body;
+    var firstName = user.firstName;
+    var lastName = user.lastName;
+    var username = user.username;
+    var password = user.password;
+    var email = user.email;
+
+    var UserModel = req.site.models.User;
+    var User = UserModel.getNewUser();
+
+    var newUser = new User({
+        username: username,
+        password: password,
+        email: email,
+        firstName: firstName,
+        lastName: lastName
+    });
+
+    newUser.save(function (err, result) {
+        if (err) {
+            console.log("error in user save method:", err);
+            res.send('database error');
+        }
+        else if (result) {
+            console.log('Added new user: ', result);
+            //postRegistrationAndOrLoginInfo(req,res,next,true);
+            //res.json('successful user registration');
+            loginNewlyRegisteredUser(result, req, res, next)
+        } else {
+            next(new Error('grave error in newUser.save method in registration'));
+        }
+    });
+});
+
 
 router.delete(':user_id', function (req, res, next) {
     res.send('respond with a resource');
