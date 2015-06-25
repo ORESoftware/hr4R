@@ -70,7 +70,7 @@ router.post('/', function (req, res, next) {
         }
         else if (result) {
             console.log('Added new user: ', result);
-            //postRegistrationAndOrLoginInfo(req,res,next,true);
+            //postRegistrationInfo(req,res,next,true);
             //res.json('successful user registration');
             loginNewlyRegisteredUser(result, req, res, next)
         } else {
@@ -109,7 +109,7 @@ router.put('/:user_id', function (req, res, next) {
         }
         else if (result) {
             console.log('Added new user: ', result);
-            //postRegistrationAndOrLoginInfo(req,res,next,true);
+            //postRegistrationInfo(req,res,next,true);
             //res.json('successful user registration');
             loginNewlyRegisteredUser(result, req, res, next)
         } else {

@@ -18,10 +18,10 @@ define(['app/js/models', 'form2js','ejs','jquery', 'underscore', 'handlebars', '
             //className: 'HomeViewClassName',
 
             model:null,
+            collection:null,
 
             template:null,
 
-            //el: '#footer-div-id',
             el: '#index_footer_div_id',
 
             events: {
@@ -29,9 +29,11 @@ define(['app/js/models', 'form2js','ejs','jquery', 'underscore', 'handlebars', '
             },
 
             initialize: function () {
-                _.bindAll(this, "render");
-                //this.collection.bind("reset", this.render);
-                //this.model.bind('change', this.render);
+
+                _.bindAll(this, 'render');
+                this.listenTo(this.model,'change',this.render);
+                this.listenTo(this.collection,'reset',this.render);
+
             },
             render: function () {
                 console.log('attempting to render FooterView.');

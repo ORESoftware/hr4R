@@ -16,19 +16,11 @@ define('app/js/routers',
     [
         'async',
         'app/js/collections',
-        'app/js/currentView'
+        'app/js/viewState',
+        'ijson'
     ],
 
-    function (async, collections, $currentViews) {
-
-
-//define(['require','app/js/allViews'], function(require) {
-        //var allViews = require('app/js/allViews');
-        //var IndexView = allViews.Index;
-        //var LoginView = allViews.Login;
-        //var HomeView = allViews.Home;
-        //var HeaderView = allViews.Header;
-        //var FooterView = allViews.Footer;
+    function (async, collections, $viewState, IJSON) {
 
         var allViews = null;
 
@@ -36,48 +28,43 @@ define('app/js/routers',
 
             //currentView: require('app/js/currentView'),
 
-            currentView: $currentViews,
+            viewState: $viewState,
 
             routes: {
                 'index': 'index',
                 'home': 'home',
                 'login': 'login',
-                "*actions": "defaultRoute" // Backbone will try to match the routes above first
+                "*notFound": "defaultRoute" // Backbone will try to match the routes above first
             },
 
-            //changeView: function(view) {
-            //    if(this.currentView.get('mainView') != null){
-            //        this.currentView.get('mainView').undelegateEvents();
-            //    }
-            //    this.currentView.set('mainView',view);
-            //    console.log('current main view:',view);
-            //    this.currentView.get('mainView').render();
-            //    if(this.currentView.get('footerView') == null){
-            //        this.currentView.set('footerView',new allViews.Footer());
-            //    }
-            //    if(this.currentView.get('headerView') == null){
-            //        this.currentView.set('headerView',new allViews.Header());
-            //    }
-            //    this.currentView.get('footerView').render();
-            //    this.currentView.get('headerView').render();
-            //
-            //},
+            initialize: function () {
+
+                //_.bind(this.initialize,undefined);
+                _.bindAll(this, 'changeView');
+
+
+            },
+
+            destroyView: function (view) {
+
+                view.undelegateEvents();
+                view.$el.removeData().unbind();
+                view.stopListening();
+                //view.remove(); //this deletes DOM element from the DOM, and that is bad
+                //Backbone.View.prototype.remove.call(view);
+
+            },
+
 
             changeView: function (view) {
 
-
-
                 //we should sync all collections here before switching views
+
+                var self = this;
 
                 var collectionsToSync = [];
 
-                //for (var key in collections) {
-
-                    //if(!collections.hasOwnProperty(key)){
-                    //    continue;
-                    //}
-
-                Object.keys(collections).forEach(function(key){
+                Object.keys(collections).forEach(function (key) {
                     if (collections.hasOwnProperty(key)) {
                         collectionsToSync.push(function (cb) {
                             var coll = collections[key];
@@ -90,16 +77,14 @@ define('app/js/routers',
                     }
                 });
 
-
-                //}
-
                 async.parallel(collectionsToSync,
                     function final(err, results) {
                         if (err) {
                             onError(err);
                         }
                         else {
-                            continueOn();
+                            //continueOn(self);//continueOn().bind(self);//var func = continueOn.bind(self);//func();
+                            continueOn.bind(self)(view); //bind continueOn function self and then call continueOn()
                         }
 
                     }
@@ -109,44 +94,49 @@ define('app/js/routers',
                     alert('there was an error --->' + err + 'could not change the view.');
                 }
 
-                function continueOn() {
-                    if (!(appGlobal.currentUser !== null && appGlobal.authorized === true)) {
+             /*   function continueOn(self) {
+                    if (appGlobal.currentUser == null || appGlobal.authorized === false) {
 
-                        if ($currentViews.get('mainView') != null) {
-                            $currentViews.get('mainView').undelegateEvents();
+                        if (this.viewState.get('mainView') != null) {
+                            //this.destroyView(this.viewState.get('mainView'));
                         }
-                        $currentViews.set('mainView', new allViews.Index());
+                        this.viewState.set('mainView', new allViews.Index());
+                        this.viewState.get('mainView').render();
                         window.location.hash = 'index';
                         console.log('current main view was switched to index view because no user was logged in.');
-                        $currentViews.get('mainView').render();
-                        if ($currentViews.get('footerView') == null) {
-                            $currentViews.set('footerView', new allViews.Footer());
+
+                        if (this.viewState.get('footerView') == null) {
+                            this.viewState.set('footerView', new allViews.Footer());
                         }
-                        if ($currentViews.get('headerView') == null) {
-                            $currentViews.set('headerView', new allViews.Header());
+                        if (this.viewState.get('headerView') == null) {
+                            this.viewState.set('headerView', new allViews.Header());
                         }
-                        $currentViews.get('footerView').render();
-                        $currentViews.get('headerView').render();
+                        this.viewState.get('footerView').render();
+                        this.viewState.get('headerView').render();
 
                     }
-                    else {
+                    else { //user is authenticated/authorized
 
-                        if ($currentViews.get('mainView') != null) {
-                            $currentViews.get('mainView').undelegateEvents();
+                        //console.log(IJSON.parse(localStorage.getItem('sc_admin_user')));
+
+                        console.log(localStorage.getItem('sc_admin_user'));
+
+                        if (this.viewState.get('mainView') != null) {
+                            //this.destroyView(this.viewState.get('mainView'));
                         }
-                        $currentViews.set('mainView', view);
+                        this.viewState.set('mainView', view);
                         console.log('current main view:', view);
-                        $currentViews.get('mainView').render();
-                        if ($currentViews.get('footerView') == null) {
-                            $currentViews.set('footerView', new allViews.Footer());
+                        this.viewState.get('mainView').render();
+                        if (this.viewState.get('footerView') == null) {
+                            this.viewState.set('footerView', new allViews.Footer());
                         }
-                        if ($currentViews.get('headerView') == null) {
-                            $currentViews.set('headerView', new allViews.Header());
+                        if (this.viewState.get('headerView') == null) {
+                            this.viewState.set('headerView', new allViews.Header());
                         }
-                        $currentViews.get('footerView').render();
-                        $currentViews.get('headerView').render();
+                        this.viewState.get('footerView').render();
+                        this.viewState.get('headerView').render();
                     }
-                }
+                }*/
             },
 
             home: function () {
@@ -155,6 +145,12 @@ define('app/js/routers',
 
             index: function () {
                 this.changeView(new allViews.Index());
+            },
+
+            defaultRoute: function(){
+                //this.changeView(new allViews.Home());
+                this.navigate('home', {trigger: true});
+            //    TODO: fix this so that if user puts in unknown route into address bar, that it goes to home
             }
         });
 
@@ -162,16 +158,81 @@ define('app/js/routers',
 
         var bootRouter = new BootRouter();
 
-        bootRouter.on('route:defaultRoute', function (actions) {
-            console.log('default route invoked...' + actions);
-        });
+        //bootRouter.on('route:defaultRoute', function (actions) {
+        //    console.log('default route invoked...' + actions);
+        //
+        //    //TODO: catch route that was not recognized
+        //
+        //    continueOn.bind(this)();
+        //});
+
+
+        function continueOn($view) {
+
+
+            if (appGlobal.currentUser == null || appGlobal.authorized === false) {
+
+                if (this.viewState.get('mainView') != null) {
+                    //this.destroyView(this.viewState.get('mainView'));
+                }
+                this.viewState.set('mainView', new allViews.Index());
+                this.viewState.get('mainView').render();
+                window.location.hash = 'index';
+                console.log('current main view was switched to index view because no user was logged in.');
+
+                if (this.viewState.get('footerView') == null) {
+                    this.viewState.set('footerView', new allViews.Footer());
+                }
+                if (this.viewState.get('headerView') == null) {
+                    this.viewState.set('headerView', new allViews.Header());
+                }
+                this.viewState.get('footerView').render();
+                this.viewState.get('headerView').render();
+
+            }
+            else { //user is authenticated/authorized
+
+                //console.log(IJSON.parse(localStorage.getItem('sc_admin_user')));
+
+                var view = null;
+                if($view == null){
+                    throw new Error('null view in router');
+                }else{
+                    view = $view;
+                }
+
+                    console.log(localStorage.getItem('sc_admin_user'));
+
+                    if (this.viewState.get('mainView') != null) {
+                        //this.destroyView(this.viewState.get('mainView'));
+                    }
+                    this.viewState.set('mainView', view);
+                    console.log('current main view:', view);
+                    this.viewState.get('mainView').render();
+                    if (this.viewState.get('footerView') == null) {
+                        this.viewState.set('footerView', new allViews.Footer());
+                    }
+                    if (this.viewState.get('headerView') == null) {
+                        this.viewState.set('headerView', new allViews.Header());
+                    }
+                    this.viewState.get('footerView').render();
+                    this.viewState.get('headerView').render();
+                }
+            //}
+        }
+
+
+
+
+
+
 
         return function ($allViews) {
 
             if (allViews === null) {
                 if ($allViews == null) {
                     //throw new Error('null value to passed routers.js');
-                    console.log('null value to passed routers.js');
+                    console.log('null/undefined value to passed routers.js');
                 }
                 console.log('initializing routers with allViews');
                 allViews = $allViews;

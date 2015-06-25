@@ -7,7 +7,7 @@
 6 info start sc-admin-ui-express@0.0.0
 7 verbose unsafe-perm in lifecycle true
 8 info sc-admin-ui-express@0.0.0 Failed to exec start script
-9 verbose stack Error: sc-admin-ui-express@0.0.0 start: `NODE_ENV=development node ./bin/www`
+9 verbose stack Error: sc-admin-ui-express@0.0.0 start: `node ./bin/www`
 9 verbose stack Exit status 1
 9 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:213:16)
 9 verbose stack     at EventEmitter.emit (events.js:110:17)
@@ -22,13 +22,13 @@
 14 error node v0.12.2
 15 error npm  v2.7.4
 16 error code ELIFECYCLE
-17 error sc-admin-ui-express@0.0.0 start: `NODE_ENV=development node ./bin/www`
+17 error sc-admin-ui-express@0.0.0 start: `node ./bin/www`
 17 error Exit status 1
-18 error Failed at the sc-admin-ui-express@0.0.0 start script 'NODE_ENV=development node ./bin/www'.
+18 error Failed at the sc-admin-ui-express@0.0.0 start script 'node ./bin/www'.
 18 error This is most likely a problem with the sc-admin-ui-express package,
 18 error not with npm itself.
 18 error Tell the author that this fails on your system:
-18 error     NODE_ENV=development node ./bin/www
+18 error     node ./bin/www
 18 error You can get their info via:
 18 error     npm owner ls sc-admin-ui-express
 18 error There is likely additional logging output above.

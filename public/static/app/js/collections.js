@@ -21,12 +21,14 @@ define('app/js/collections',
             // Reference to this collection's model.
             model: models.UserModel,
 
-            url: function () {
-                //return '/users?user_id=' + this.options.user_id;
-                return '/users';
-            },
+            //url: function () {
+            //    //return '/users?user_id=' + this.options.user_id;
+            //    return '/users';
+            //},
 
-            persist: function(){
+            url: '/users',
+
+            persist: function(cb){
                 //Backbone.sync('create', this, {
                 //    success: function() {
                 //        console.log('Saved users collection!');
@@ -36,29 +38,29 @@ define('app/js/collections',
                 //    }
                 //});
 
-               this.each(function(user,index){
+               this.each(function(user,index){  //iterate through models
                   user.save({
                       success:function(msg){
                           console.log('saved user --->',msg);
                       },
 
                       error:function(err){
-                       throw new Error(err);
+                       throw new Error('error in users.persist function' + err);
                       }
                   })
 
                });
 
+                cb(null,null);
+
             },
 
             initialize: function () {
 
-                //this.fetch({
-                //    success: this.fetchSuccess,
-                //    error: this.fetchError
-                //});
-
                 console.log('model for UsersCollection is:', this.model);
+
+                //_.bind(this.initialize,undefined);
+                _.bindAll(this, 'persist');
 
                 // This will be called when an item is added. pushed or unshifted
                 this.on('add', function (model) {

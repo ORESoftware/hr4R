@@ -24,12 +24,12 @@ var passport = require('passport');
 
 router.post('/', function (req, res, next) {
 
-    postRegistrationAndOrLoginInfo(req, res, next, false);
+    postRegistrationInfo(req, res, next, false);
 
 });
 
 
-function postRegistrationAndOrLoginInfo(req, res, next, justRegistered) {
+function postRegistrationInfo(req, res, next, justRegistered) {
 
     passport.authenticate('local', function (err, user, info) {
         if (err) {
@@ -42,18 +42,7 @@ function postRegistrationAndOrLoginInfo(req, res, next, justRegistered) {
             console.log('no account found, so we will register user as expected...');
             registerUser(req, res, next);
         }
-        else {
-            if (justRegistered) {
-                console.log('user was just registered, and now should be authenticated...');
-            }
-            else {
-                console.log('user already has an account...');
-            }
-
-            //res.render('home',{
-            //    title:'Admin Portal Home View',
-            //    userInfo:user._doc
-            //});
+        else { //the user is already registered, we will log them in
 
             req.logIn(user, function (err) {
 
@@ -61,19 +50,12 @@ function postRegistrationAndOrLoginInfo(req, res, next, justRegistered) {
                     return next(err);
                 }
 
-                //res.locals.app = {};
-                //res.locals.app.currentUser = user._doc;
-                //res.locals.loggedInUser = user._doc;
-
                 res.json({
-                    app: {currentUser: user._doc},
-                    user:user._doc,
-                    alreadyRegistered: !justRegistered,
-                    msg: user._doc
+                    user: user._doc,
+                    alreadyRegistered: true,
+                    authorized: true
                 });
             });
-
-
         }
 
     })(req, res, next);
@@ -88,15 +70,10 @@ function loginNewlyRegisteredUser(user, req, res, next) {
             return next(err);
         }
 
-        //res.locals.app = {};
-        //res.locals.app.currentUser = user._doc;
-        //res.locals.loggedInUser = user._doc;
-
         res.json({
-            app: {currentUser: user._doc},
-            user:user._doc,
-            alreadyRegistered: true,
-            msg: user._doc
+            user: user._doc,
+            alreadyRegistered: false,
+            authorized: true
         });
     });
 
@@ -131,11 +108,9 @@ function registerUser(req, res, next) {
             res.send('database error');
         }
         else if (result) {
-            console.log('Added new user: ', result);
-            //postRegistrationAndOrLoginInfo(req,res,next,true);
-            //res.json('successful user registration');
             loginNewlyRegisteredUser(result, req, res, next)
-        } else {
+        }
+        else {
             next(new Error('grave error in newUser.save method in registration'));
         }
     });

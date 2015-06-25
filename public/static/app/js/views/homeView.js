@@ -20,30 +20,21 @@ define(['app/js/models','app/js/collections', 'form2js','ejs','jquery', 'undersc
             model:null,
             collection: collections.users,
 
+            //TODO: cache template
+
+            template: null,
+
             el: '#main-div-id',
 
             initialize: function () {
 
-                //TODO: why have this video have it's own collection, just use global user collection? (collections.users)
-                var coll = this.collection;
-
-               /* coll.each(function(item,index) {
-                   if(item.username === appGlobal.currentUser.username){
-                       this.model = item;
-                   }
-                });
-
-                if(this.model === null){
-                    throw new Error('no user found in users collection')
-                }
-                this.model = new models.UserModel(appGlobal.currentUser);*/
-
-                _.bindAll(this, "render");
-                this.collection.bind("reset", this.render);
+                //_.bind(this.initialize,undefined);
+                _.bindAll(this, 'render','show','handleModelSyncSuccess','handleModelError');
+                this.listenTo(this.collection,'reset', this.render);
+                this.listenTo(this.collection,'add', this.addOne);
                 this.listenTo(this.model, 'sync', this.handleModelSyncSuccess);
                 this.listenTo(this.model, 'error', this.handleModelError);
                 this.listenTo(Backbone, 'books:created', this.show);
-                //this.model.bind('change', this.render);
             },
 
             show:function(){
@@ -56,24 +47,39 @@ define(['app/js/models','app/js/collections', 'form2js','ejs','jquery', 'undersc
 
                 var self = this;
 
-                $.ajax({
-                    url: 'static/html/ejs/homeTemplate.ejs',
-                    type: 'GET',
-                    success: function(msg) {
-                        var ret = EJS.render(msg, {
-                            title:'Welcome to the jungle',
-                            //filename: '/static/html/ejs/indexEJSTemplate.ejs'
-                        });
+                if(this.template == null){
+
+                    $.ajax({
+                        url: 'static/html/ejs/homeTemplate.ejs',
+                        type: 'GET',
+                        success: function(msg) {
+                            var ret = EJS.render(msg, {
+                                title:'Welcome to the jungle',
+                                //filename: '/static/html/ejs/indexEJSTemplate.ejs'
+                            });
 
 
-                        self.$el.html(ret);
-                        //$('body').append(ret);
-                        console.log('HomeView rendered');
-                    },
-                    error: function(err) {
-                        console.log('error:',err);
-                    }
-                });
+                            self.$el.html(ret);
+                            //$('body').append(ret);
+                            console.log('HomeView rendered');
+                        },
+                        error: function(err) {
+                            console.log('error:',err);
+                        }
+                    });
+                }
+                else{
+                    var ret = EJS.render(this.template, {
+                        title:'Welcome to the jungle',
+                        //filename: '/static/html/ejs/indexEJSTemplate.ejs'
+                    });
+
+
+                    self.$el.html(ret);
+                    //$('body').append(ret);
+                    console.log('HomeView (re)rendered');
+
+                }
 
                 return this;
             },

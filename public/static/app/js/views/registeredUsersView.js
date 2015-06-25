@@ -17,8 +17,9 @@ define(['app/js/collections', 'ejs', 'jquery', 'underscore', 'handlebars', 'back
             collection: collections.users,
 
             initialize: function () {
-                _.bindAll(this, "render");
-                this.collection.bind("reset", this.render);
+                //_.bind(this.initialize,undefined);
+                _.bindAll(this, 'render');
+               this.listenTo(this.collection,'change',this.render);
             },
             render: function () {
 

@@ -32,10 +32,10 @@ define(['app/js/routers','app/js/models', 'form2js','ejs','jquery', 'underscore'
             },
 
             initialize: function () {
-                _.bindAll(this, "render");
-                //this.collection.bind("reset", this.render);
-                //this.model.bind('change', this.render);
+                //_.bind(this.initialize,undefined);
+                _.bindAll(this, 'render');
             },
+
             render: function () {
                 console.log('attempting to render HeaderView.');
 
@@ -63,7 +63,7 @@ define(['app/js/routers','app/js/models', 'form2js','ejs','jquery', 'underscore'
 
                 }
 
-                console.log('re-rendered FooterView.');
+                console.log('re-rendered headerView.');
 
                 return this;
             },

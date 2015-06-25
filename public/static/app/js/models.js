@@ -7,36 +7,14 @@ console.log('loading app/js/MODELS.js');
 
 define(['underscore', 'backbone'], function (_, Backbone) {
 
-    'use strict';
-
-    var Todo = Backbone.Model.extend({
-
-        urlRoot: '/todos',
-
-        defaults: {
-            title: '',
-            completed: false
-        },
-
-        // Toggle the `completed` state of thistodo item.
-        toggle: function () {
-            this.save({
-                completed: !this.get('completed')
-            });
-        },
-        validate: function (attr) {
-            if (attr.ID <= 0) {
-                return "Invalid value for ID supplied."
-            }
-        }
-    });
-
     var User = Backbone.Model.extend({
 
 
         idAttribute: "_id",
 
-        urlRoot: '/users?user_id=',
+        url: '/users',
+        //urlRoot: '/users?user_id=',
+        urlRoot: '/users',
 
         defaults: {
             firstName: null,
@@ -49,6 +27,7 @@ define(['underscore', 'backbone'], function (_, Backbone) {
         initialize: function(){
             console.log('User has been intialized');
 
+            _.bindAll(this,'validate');
 
             this.on('change',  function() {
                 if(this.hasChanged('ID')){
@@ -69,22 +48,11 @@ define(['underscore', 'backbone'], function (_, Backbone) {
             //    return "Invalid value for ID supplied."
             //}
 
+           //TODO:https://github.com/thedersen/backbone.validation
+
             return true;
         },
 
-        newUser: function($user){
-
-            var user = new User();
-
-            user.firstName = $user.firstName;
-            user.lastName = $user.lastName;
-            user.username = $user.username;
-            user.password = $user.password;
-            user.email = $user.email;
-
-            return user;
-
-        },
 
         persist: function(callback){
             this.save({}, {
@@ -97,11 +65,32 @@ define(['underscore', 'backbone'], function (_, Backbone) {
                     callback(model,xhr,options);
                 }
             });
+        },
+        validation: {
+            email: {
+                required: true,
+                pattern: 'email',
+                msg: 'Please enter a valid email'
+            }
         }
     });
 
+
+    User.newUser = function($user){
+
+        var user = new User({url:'/users'});
+
+        user.firstName = $user.firstName;
+        user.lastName = $user.lastName;
+        user.username = $user.username;
+        user.password = $user.password;
+        user.email = $user.email;
+
+        return user;
+
+    };
+
     return {
-        TodoModel:Todo,
         UserModel:User
     };
 });

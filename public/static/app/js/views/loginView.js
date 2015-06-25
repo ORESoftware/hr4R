@@ -23,9 +23,12 @@ define(['app/js/routers', 'app/js/collections', 'app/js/models', 'form2js', 'ejs
             el: '#child-view-login-container',
 
             initialize: function () {
-                _.bindAll(this, "render");
-                //this.collection.bind("reset", this.render);
-                this.model = new models.UserModel();
+
+                //_.bind(this.initialize,undefined);
+                _.bindAll(this, 'render', 'onSubmitLogin', 'onSubmitRegistration');
+
+
+                //this.model = new models.UserModel();
             },
 
             events: {
@@ -86,17 +89,17 @@ define(['app/js/routers', 'app/js/collections', 'app/js/models', 'form2js', 'ejs
                     console.log('authentication message:', msg);
 
                     appGlobal.authorized = msg.isAuthenticated;
-                    //appGlobal.currentUser = msg.user;  //TODO: might need to find currentUser in users collection first
-                    var user = msg.user
                     appGlobal.env = msg.env;
 
                     if (appGlobal.authorized === true) {
+
+                        var user = msg.user
 
                         collections.users.fetch().done(function () {
 
                             for (var i = 0; i < collections.users.models.length; i++) {
 
-                                if (user.username === collections.users.models[i].username) {
+                                if (user.username === collections.users.models[i].get('username')) {
                                     appGlobal.currentUser = collections.users.models[i];
                                     break;
                                 }
@@ -106,15 +109,18 @@ define(['app/js/routers', 'app/js/collections', 'app/js/models', 'form2js', 'ejs
                             if (appGlobal.currentUser === null) {
                                 throw new Error('null appGlobal.currentUser');
                             }
+                            else{
+
+                            }
                             //window.location.hash='home';
                             console.log('user logged in successfully!!');
+                            localStorage.setItem('sc_admin_user', JSON.stringify(appGlobal.currentUser.username));
                             router.navigate('home', {trigger: true});
                         });
                     }
                     else {
-                        //window.location.hash='login';
+                        appGlobal.authorized = false;
                         console.log('user did not log in successfully..!');
-
                         alert('bad login');
                         router.navigate('index', {trigger: true});
                     }
@@ -157,27 +163,21 @@ define(['app/js/routers', 'app/js/collections', 'app/js/models', 'form2js', 'ejs
                     url: '/register',
                     dataType: "json",
                     data: userData
-                }).done(function (response) {
-                    if (response.user == null) {
+                })
+
+                    .done(function (res) {
+
+                    if (res.user == null) {
                         setTimeout(function () {
-                            alert("Bad login");
+                            alert("Very Bad login");
                         }, 200);
                         self.render();
                         return;
                     }
+                    else {
+                        goHome(res);
+                    }
 
-                    var newUser = models.UserModel.newUser(response.user);
-
-                    var userColl = collections.users;
-
-                    userColl.add(newUser);
-
-                    Backbone.sync(userColl);
-
-                    appGlobal.currentUser = newUser;
-                    //var url = response;
-                    //$(location).attr('href', url);
-                    router.navigate('home', {trigger: true});
                 })
                     .fail(function () {
                         setTimeout(function () {
@@ -192,6 +192,52 @@ define(['app/js/routers', 'app/js/collections', 'app/js/models', 'form2js', 'ejs
 
 
         });
+
+
+        function goHome(res) {
+
+            if(res.alreadyRegistered){
+
+                console.log('user is already registered on server, attempting to match the user with collection object...');
+
+                var user = res.user;
+
+                collections.users.fetch().done(function () {
+
+                    for (var i = 0; i < collections.users.models.length; i++) {
+
+                        if (user.username === collections.users.models[i].get('username') &&
+                            user._id == collections.users.models[i].get('_id')
+                        ) {
+                            appGlobal.currentUser = collections.users.models[i];
+                            break;
+                        }
+
+                    }
+
+                    if (appGlobal.currentUser == null) {
+                        throw new Error('null appGlobal.currentUser');
+                    }else{
+                        appGlobal.authorized = true;
+                        router.navigate('home', {trigger: true});
+                    }
+
+                });
+
+
+            }
+            else{
+
+                var newUser = models.UserModel.newUser(response.user);
+                var userColl = collections.users;
+                userColl.add(newUser);
+                Backbone.sync(userColl);
+                appGlobal.currentUser = newUser;
+                router.navigate('home', {trigger: true});
+            }
+
+        }
+
 
         return LoginView;
 
