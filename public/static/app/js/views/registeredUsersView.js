@@ -13,6 +13,8 @@ define(['app/js/collections', 'ejs', 'jquery', 'underscore', 'handlebars', 'back
 
         var RegisteredUsersView = Backbone.View.extend({
 
+            className:'RegisteredUsersView',
+
             model: null,
             collection: collections.users,
 
@@ -23,32 +25,47 @@ define(['app/js/collections', 'ejs', 'jquery', 'underscore', 'handlebars', 'back
             },
             render: function () {
 
-                console.log('attempting to render ListUsersView.');
+                console.log('attempting to render registeredUsersView.');
 
                 var data = this.collection.models;
                 var self = this;
 
-                $.ajax({
-                    url: 'static/html/ejs/registeredUsersTemplate.ejs',
-                    type: 'GET',
-                    success: function (msg) {
-                        var ret = EJS.render(msg, {
-                            title: 'Welcome to the jungle',
-                            users: data
-                        });
+                if(this.template == null){
 
-                        self.$el.html(ret);
+                    console.log('registeredUsersView template is null, retrieving from server.')
 
-                        console.log('IndexView rendered');
-                    },
-                    error: function (err) {
-                        console.log('error:', err);
-                    }
-                });
+                    $.ajax({
+                        url: 'static/html/ejs/registeredUsersTemplate.ejs',
+                        type: 'GET',
+                        success: function (msg) {
+                            RegisteredUsersView.template = msg;
+                            renderThis.bind(self)(msg);
+                        },
+                        error: function (err) {
+                            throw err;
+                        }
+                    });
+                }
+                else{
+                    renderThis.bind(this)(RegisteredUsersView.template);
+                }
+
+                function renderThis($template){
+                    var ret = EJS.render($template, {
+                        users: data
+                    });
+
+                    self.$el.html(ret);
+
+                    console.log('registeredUsersView rendered');
+                }
+
 
                 return this;
             }
         });
+
+        RegisteredUsersView.template = null;
 
         return RegisteredUsersView;
 

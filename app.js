@@ -65,13 +65,13 @@ app.use(session);
 
 /*var session = require('express-session');
 
-app.use(session({
-    secret: 'something',
-    saveUninitialized: false, // (default: true)
-    resave: false, // (default: true)
-    cookie: {
-        secure: false
-    }}));*/
+ app.use(session({
+ secret: 'something',
+ saveUninitialized: false, // (default: true)
+ resave: false, // (default: true)
+ cookie: {
+ secure: false
+ }}));*/
 
 app.use(expressLayouts);
 
@@ -183,7 +183,6 @@ app.use('/login', loginRoute);
 app.use('/testSocketIO', testSocketIORoute);
 
 
-
 //require('./routes')(app);
 require('./lib/controllers/passport_setup')(site.models.User);
 require('./lib/controllers/params')(app);
@@ -200,21 +199,31 @@ app.use(function (req, res, next) {
 // development error handler
 if (app.get('env') === 'development') {
     app.use(function (err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
+        if (!res.headersSent) {
+            res.status(err.status || 500);
+            res.render('error', {
+                message: err.message,
+                error: err
+            });
+        } else {
+            console.error(colors.bgRed(err));
+        }
     });
 }
 
 // production error handler
 app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
+    if (!res.headersSent) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: {}
+        });
+    }
+    else {
+        console.error(colors.bgRed(err));
+    }
+
 });
 
 

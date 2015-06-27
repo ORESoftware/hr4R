@@ -5,7 +5,17 @@
 console.log('loading footerView');
 
 
-define(['app/js/models', 'form2js','ejs','jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
+define(
+    [
+        'app/js/models',
+        'form2js',
+        'ejs',
+        'jquery',
+        'underscore',
+        'handlebars',
+        'backbone',
+        'backbone-validation'
+    ],
 
 
     function (models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
@@ -16,6 +26,8 @@ define(['app/js/models', 'form2js','ejs','jquery', 'underscore', 'handlebars', '
             //id: 'HomeViewID',
             //tagName: 'HomeViewTagName',
             //className: 'HomeViewClassName',
+
+            className:'FooterView',
 
             model:null,
             collection:null,
@@ -28,8 +40,8 @@ define(['app/js/models', 'form2js','ejs','jquery', 'underscore', 'handlebars', '
                 'click #footer-button-id': 'onClickFooter'
             },
 
-            initialize: function () {
-
+            initialize: function (options) {
+                this.options = options || {};
                 _.bindAll(this, 'render');
                 this.listenTo(this.model,'change',this.render);
                 this.listenTo(this.collection,'reset',this.render);
@@ -41,6 +53,8 @@ define(['app/js/models', 'form2js','ejs','jquery', 'underscore', 'handlebars', '
                 var self = this;
 
                 if(self.template == null){
+
+                    console.log('footerView template is null, retrieving from server.');
 
                     $.ajax({
                         url: 'static/html/ejs/footer.ejs',

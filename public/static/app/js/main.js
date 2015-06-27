@@ -20,6 +20,7 @@ requirejs.config({
         'async': 'vendor/async',
         'jquery': 'vendor/jquery',
         'ejs': 'vendor/ejs',
+        'text': 'vendor/text',
         'form2js': 'vendor/form2js',
         'underscore': 'vendor/underscore',
         'ijson':'vendor/idempotent-json',
@@ -49,8 +50,10 @@ requirejs.config({
 
 require(['app/js/app'], function (Application) {
 
+    console.log('about to register document.ready call...');
     $(document).ready(function () {
-        var app = Application.start();
+        console.log('document.ready fired, starting application...');
+        var app = Application.start();//
     });
 });
 

@@ -3,10 +3,21 @@
  */
 
 
-//define(['app/js/collections', 'jquery', '../../../../../bower_components/underscore/underscore', 'handlebars', 'backbone', 'backbone-validation'],
+//TODO: http://codebeerstartups.com/2012/12/5-explaining-views-in-backbone-js-learning-backbone-js/
 
 
-define(['app/js/collections', 'app/js/views/loginView', 'app/js/views/registeredUsersView', 'ejs', 'jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
+define(
+    [
+        'app/js/collections',
+        'app/js/views/loginView',
+        'app/js/views/registeredUsersView',
+        'ejs',
+        'jquery',
+        'underscore',
+        'handlebars',
+        'backbone',
+        'backbone-validation'
+    ],
 
 
     function (collections, LoginView, RegisteredUsersView, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
@@ -14,9 +25,11 @@ define(['app/js/collections', 'app/js/views/loginView', 'app/js/views/registered
 
         var IndexView = Backbone.View.extend({
 
+            className: 'IndexView',
+
             el: '#main-div-id',
 
-            template:null,
+            template: null,
 
             model: null,
             collection: collections.users,
@@ -29,11 +42,11 @@ define(['app/js/collections', 'app/js/views/loginView', 'app/js/views/registered
                 'click #accountRecoveryId': 'onAccountRecovery'
             },
 
-            initialize: function () {
-
+            initialize: function (options) {
+                this.options = options || {};
                 _.bindAll(this, 'render');
 
-                this.listenTo(this.collection,'reset',this.render);
+                this.listenTo(this.collection, 'reset', this.render);
                 this.collection.fetch({
                     success: this.onFetchSuccess.bind(this),
                     error: this.onFetchFailure.bind(this)
@@ -47,17 +60,19 @@ define(['app/js/collections', 'app/js/views/loginView', 'app/js/views/registered
 
                 var data = this.collection.models;
 
-                if(this.template == null){
+                var self = this;
 
-                    var self = this;
+                if (IndexView.template == null) {
+
+                    console.log('indexView template is null, retrieving from server.')
 
                     $.ajax({
                         url: 'static/html/ejs/indexTemplate.ejs',
                         type: 'GET',
                         success: function (msg) {
 
-                            self.template = msg;
-                            renderChildren(msg);
+                            IndexView.template = msg;
+                            renderChildren.bind(self)(msg);
 
                         },
                         error: function (err) {
@@ -66,29 +81,31 @@ define(['app/js/collections', 'app/js/views/loginView', 'app/js/views/registered
                     });
 
                 }
-                else{
-                    renderChildren.bind(this)(this.template);
+                else {
+                    renderChildren.bind(self)(IndexView.template);
                 }
 
-                function renderChildren($template){
+
+                function renderChildren($template) {
                     var ret = EJS.render($template, {
                         users: data
                     });
+                    //
 
-                    self.$el.html(ret);
+                    this.$el.html(ret);
 
-                    self.childLoginView = new LoginView({el: self.$('#child-view-login-container')});
-                    //console.log('this.childLoginView.$el', self.childLoginView.$el);
-                    self.childLoginView.render();
-                    self.childLoginView.delegateEvents();
+                    this.childLoginView = new LoginView({el: this.$('#child-view-login-container')});
+                    this.childLoginView.render();
+                    this.childLoginView.delegateEvents();
 
-                    self.childRegisteredUsersView = new RegisteredUsersView({el: self.$('#child-view-registered-users-container')});
-                    //console.log('this.childRegisteredUsersView.$el', self.childRegisteredUsersView.$el);
-                    self.childRegisteredUsersView.render();
-                    self.childRegisteredUsersView.delegateEvents();
+                    this.childRegisteredUsersView = new RegisteredUsersView({el: this.$('#child-view-registered-users-container')});
+                    this.childRegisteredUsersView.render();
+                    this.childRegisteredUsersView.delegateEvents();
+
 
                     console.log('IndexView rendered');
                 }
+
 
                 return this;
 
@@ -107,6 +124,12 @@ define(['app/js/collections', 'app/js/views/loginView', 'app/js/views/registered
         });
 
 
+        IndexView.template = null;
+
         return IndexView;
 
     });
+
+
+
+

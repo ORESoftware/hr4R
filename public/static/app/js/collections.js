@@ -11,11 +11,12 @@ define('app/js/collections',
     [
         'underscore',
         'backbone',
-        'app/js/models'
+        'app/js/models',
+        'async'
 
     ],
 
-    function (_, Backbone, models) {
+    function (_, Backbone, models,async) {
 
         var UsersCollection = Backbone.Collection.extend({
             // Reference to this collection's model.
@@ -26,9 +27,10 @@ define('app/js/collections',
             //    return '/users';
             //},
 
-            url: '/users',
+            url:'/users',
+            //urlRoot: '/users',
 
-            persist: function(cb){
+            persistAsync: function(cb){
                 //Backbone.sync('create', this, {
                 //    success: function() {
                 //        console.log('Saved users collection!');
@@ -39,7 +41,7 @@ define('app/js/collections',
                 //});
 
                this.each(function(user,index){  //iterate through models
-                  user.save({
+                  user.save({},{
                       success:function(msg){
                           console.log('saved user --->',msg);
                       },
@@ -51,14 +53,46 @@ define('app/js/collections',
 
                });
 
-                cb(null,null);
+                cb(null,null); //TODO: this callback is a cheap shortcut, persistAsync has the right idea
 
             },
 
-            initialize: function () {
+            persist: function(cb){
+
+                var saveArray = [];
+
+
+                this.each(function(user,index){  //iterate through models
+                    saveArray.push(
+                        function(callback){
+                            user.save({},{
+                                //wait:null,
+                                success:function(msg){
+                                    console.log('saved user --->',msg);
+                                    callback(null,msg);
+                                },
+
+                                error:function(err){
+                                    throw new Error('error in users.persist function' + err);
+                                    callback(err);
+                                }
+                            });
+                        }
+                    )
+
+                });
+
+                async.parallel(saveArray,function(err,results){
+                    cb(err,results);
+                });
+
+            },
+
+            initialize: function (options) {
 
                 console.log('model for UsersCollection is:', this.model);
 
+                this.options = options || {};
                 //_.bind(this.initialize,undefined);
                 _.bindAll(this, 'persist');
 

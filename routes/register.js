@@ -6,21 +6,6 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 
-/*router.get('/', function (req, res, next) {
-
- var db = req.site.mongoDB;
-
- var UserModel = req.site.models.User;
- var User = UserModel.getNewUser();
- User.find({}, function (err, items) {
- if (err) {
- throw err;
- }
- console.log(items);
- res.json(items);
- });
-
- });*/
 
 router.post('/', function (req, res, next) {
 
@@ -51,9 +36,12 @@ function postRegistrationInfo(req, res, next, justRegistered) {
                 }
 
                 res.json({
-                    user: user._doc,
-                    alreadyRegistered: true,
-                    authorized: true
+                    success: {
+                        user: user._doc,
+                        alreadyRegistered: true,
+                        authorized: true
+                    }
+
                 });
             });
         }
@@ -67,13 +55,18 @@ function loginNewlyRegisteredUser(user, req, res, next) {
     req.logIn(user, function (err) {
 
         if (err) {
+            res.json({
+                error: err
+            });
             return next(err);
         }
 
         res.json({
-            user: user._doc,
-            alreadyRegistered: false,
-            authorized: true
+            success: {
+                user: user._doc,
+                alreadyRegistered: false,
+                authorized: true
+            }
         });
     });
 
@@ -96,22 +89,26 @@ function registerUser(req, res, next) {
 
     var newUser = new User({
         username: username,
-        password: password,
+        passwordHash: 'this value is temporary',
         email: email,
         firstName: firstName,
         lastName: lastName
     });
 
+    newUser.passwordPreHash = password;
+
+
     newUser.save(function (err, result) {
         if (err) {
-            console.log("error in user save method:", err);
-            res.send('database error');
+            res.json({error: err.errors});  //we pass mongoose errors object to front-end
+            return next(err);
         }
         else if (result) {
+            delete result.passwordPreHash;
             loginNewlyRegisteredUser(result, req, res, next)
         }
         else {
-            next(new Error('grave error in newUser.save method in registration'));
+            next(new Error('grave error in user.save() method in /register'));
         }
     });
 }

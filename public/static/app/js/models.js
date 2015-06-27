@@ -12,7 +12,7 @@ define(['underscore', 'backbone'], function (_, Backbone) {
 
         idAttribute: "_id",
 
-        url: '/users',
+        //url: '/users',
         //urlRoot: '/users?user_id=',
         urlRoot: '/users',
 
@@ -24,8 +24,10 @@ define(['underscore', 'backbone'], function (_, Backbone) {
             email: null
         },
 
-        initialize: function(){
-            console.log('User has been intialized');
+        initialize: function(options){
+
+            this.options = options || {};
+
 
             _.bindAll(this,'validate');
 
@@ -37,6 +39,8 @@ define(['underscore', 'backbone'], function (_, Backbone) {
                     console.log('BookName has been changed');
                 }
             });
+
+            console.log('UserModel has been intialized');
         },
 
         constructor: function (attributes, options) {

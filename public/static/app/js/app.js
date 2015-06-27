@@ -18,54 +18,98 @@ window.appGlobal = {
 };
 
 
-window.no_op = function(){};
-window.no_op_err = function(){throw new Error('this no_op function should not have been called.')};
+window.no_op = function () {
+};
+window.no_op_err = function () {
+    throw new Error('this no_op function should not have been called.')
+};
+
+
+define(
+    [
+        'handlebars',
+        'backbone',
+        'ijson',
+        'app/js/collections'
+
+    ],
+
+    function (Handlebars, Backbone, IJSON, collections) {
+
+
+        Backbone.syncCollection = function (collection, cb) {
+
+            collection.persist(function (err, res) {
+                if (err) {
+                    cb(err);
+                }
+                else {
+                    collection.fetch(
+                        {
+                            success: function (msg) {
+                                cb(null,msg);
+                            },
+                            error: function (err) {
+                                cb(err)
+                            }
+                        });
+                }
+            });
+        };
+
+
+        /*    window.onbeforeunload = function() {  //user confirms he wants to leave page
+
+         Object.keys(collections).forEach(function(key){
+         if (collections.hasOwnProperty(key)) {
+
+         var coll = collections[key];
+         coll.persist(function (err, res) {
+         if(err){
+         console.log(err);
+         }
+         });
+         }
+         });
 
 
 
-define(['handlebars', 'backbone','ijson','app/js/collections'], function (Handlebars, Backbone, IJSON,collections) {
+         return "Dude, are you sure you want to leave? Think of the kittens!";
 
-    //window.onbeforeunload = function() {  //user confirms he wants to leave page
-    //
-    //    Object.keys(collections).forEach(function(key){
-    //        if (collections.hasOwnProperty(key)) {
-    //
-    //                var coll = collections[key];
-    //                coll.persist(function (err, res) {
-    //                    if(err){
-    //                        console.log(err);
-    //                    }
-    //                });
-    //        }
-    //    });
-    //
-    //
-    //    return "Dude, are you sure you want to leave? Think of the kittens!";
-    //
-    //};
+         };*/  //TODO: window.onbeforeload
 
-    //var x = IJSON.parse({});
-    //
-    //console.log(x);
+        /*var x = IJSON.parse({});
 
-    //Backbone.Events.listenTo({},'event1',function(msg){
-    //    console.log(msg);
-    //});
+         console.log(x);*/  //TODO: IJSON
 
-    //Backbone.Events.on('event1',function(msg){
-    //    alert(msg);
-    //});
-    //
-    //Backbone.Events.trigger('event1','hiiii');
+        /* Backbone.Events.listenTo({},'event1',function(msg){
+         console.log(msg);
+         });
 
-    var start = function () {
+         Backbone.Events.on('event1',function(msg){
+         alert(msg);
+         });
 
-        require(['app/js/boot'], function (boot) {
-            boot.initialize();
-        });
-    };
+         Backbone.Events.trigger('event1','hiiii');*/ //TODO: backbone events
 
-    return {
-        start: start
-    };
-});
+
+        var start = function () {
+
+            require(['app/js/boot'], function (boot) {
+                boot.initialize();
+            });
+        };
+
+        return {
+            start: start
+        };
+    },
+
+
+    function (error) {  //this is called an "errback"
+        console.log('Custom ERROR handler', error);
+        //error.requireModules : is Array of all failed modules
+        var failedId = error.requireModules && error.requireModules[0];
+        console.log(failedId);
+        console.log(error.message);
+    });

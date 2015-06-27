@@ -5,7 +5,18 @@
 
 console.log('loading headerView');
 
-define(['app/js/routers','app/js/models', 'form2js','ejs','jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
+define(
+    [
+        'app/js/routers',
+        'app/js/models',
+        'form2js',
+        'ejs',
+        'jquery',
+        'underscore',
+        'handlebars',
+        'backbone',
+        'backbone-validation'
+    ],
 
 
     function (routers, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
@@ -13,7 +24,12 @@ define(['app/js/routers','app/js/models', 'form2js','ejs','jquery', 'underscore'
 
         var router = routers(null).bootRouter;
 
+        //var hvTemplate = null; don't need this because header is not recreated - just repopulated
+        //TODO: http://stackoverflow.com/questions/7567404/backbone-js-repopulate-or-recreate-the-view
+
         var HeaderView = Backbone.View.extend({
+
+            className:'HeaderView',
 
             //id: 'HomeViewID',
             //tagName: 'HomeViewTagName',
@@ -31,8 +47,9 @@ define(['app/js/routers','app/js/models', 'form2js','ejs','jquery', 'underscore'
                 'click #logout-button-id': 'onClickLogout'
             },
 
-            initialize: function () {
-                //_.bind(this.initialize,undefined);
+            initialize: function (options) {
+                //_.bind(this.initialize,undefined); //wanted to remove initialize function from the view instance so we don't accidentally 'reinitialize'
+                this.options = options || {};
                 _.bindAll(this, 'render');
             },
 
@@ -42,6 +59,8 @@ define(['app/js/routers','app/js/models', 'form2js','ejs','jquery', 'underscore'
                 var self = this;
 
                 if(self.template == null){
+
+                    console.log('headerView template is null, retrieving from server.')
 
                     $.ajax({
                         url: 'static/html/ejs/header.ejs',
@@ -103,6 +122,8 @@ define(['app/js/routers','app/js/models', 'form2js','ejs','jquery', 'underscore'
 
             }
         });
+
+        HeaderView.template = null;
 
         return HeaderView;
     });
