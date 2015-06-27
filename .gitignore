@@ -1,7 +1,4 @@
 node_modules/
 bower_components/
-<<<<<<< HEAD
 .idea/
-=======
-.idea/
->>>>>>> 1dafd696d98769c5ce15d3378cb8df19e42fe2f9
+.gitignore

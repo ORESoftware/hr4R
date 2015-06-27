@@ -179,11 +179,10 @@ define('app/js/routers',
 
         function continueOn($view) {
 
-<<<<<<< HEAD
+
     //TODO: ejs.update()
     //TODO: http://danhough.com/blog/backbone-view-inheritance/
-=======
->>>>>>> 1dafd696d98769c5ce15d3378cb8df19e42fe2f9
+
 
             if (appGlobal.currentUser == null || appGlobal.authorized === false) {
 

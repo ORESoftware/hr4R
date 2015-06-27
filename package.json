@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "async": "^1.2.1",
+    "bcrypt": "^0.8.3",
     "body-parser": "~1.12.4",
     "colors": "^1.1.0",
     "connect": "^3.3.5",
@@ -25,6 +26,7 @@
     "express-ejs-layouts": "^1.1.0",
     "express-session": "^1.11.3",
     "mongoose": "^4.0.5",
+    "mongoose-validate": "0.0.5",
     "morgan": "~1.5.3",
     "passport": "^0.2.2",
     "passport-custom": "^1.0.1",
