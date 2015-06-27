@@ -6,30 +6,15 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 
-/*router.get('/', function (req, res, next) {
-
- var db = req.site.mongoDB;
-
- var UserModel = req.site.models.User;
- var User = UserModel.getNewUser();
- User.find({}, function (err, items) {
- if (err) {
- throw err;
- }
- console.log(items);
- res.json(items);
- });
-
- });*/
 
 router.post('/', function (req, res, next) {
 
-    postRegistrationAndOrLoginInfo(req, res, next, false);
+    postRegistrationInfo(req, res, next, false);
 
 });
 
 
-function postRegistrationAndOrLoginInfo(req, res, next, justRegistered) {
+function postRegistrationInfo(req, res, next, justRegistered) {
 
     passport.authenticate('local', function (err, user, info) {
         if (err) {
@@ -42,18 +27,7 @@ function postRegistrationAndOrLoginInfo(req, res, next, justRegistered) {
             console.log('no account found, so we will register user as expected...');
             registerUser(req, res, next);
         }
-        else {
-            if (justRegistered) {
-                console.log('user was just registered, and now should be authenticated...');
-            }
-            else {
-                console.log('user already has an account...');
-            }
-
-            //res.render('home',{
-            //    title:'Admin Portal Home View',
-            //    userInfo:user._doc
-            //});
+        else { //the user is already registered, we will log them in
 
             req.logIn(user, function (err) {
 
@@ -61,19 +35,15 @@ function postRegistrationAndOrLoginInfo(req, res, next, justRegistered) {
                     return next(err);
                 }
 
-                //res.locals.app = {};
-                //res.locals.app.currentUser = user._doc;
-                //res.locals.loggedInUser = user._doc;
-
                 res.json({
-                    app: {currentUser: user._doc},
-                    user:user._doc,
-                    alreadyRegistered: !justRegistered,
-                    msg: user._doc
+                    success: {
+                        user: user._doc,
+                        alreadyRegistered: true,
+                        authorized: true
+                    }
+
                 });
             });
-
-
         }
 
     })(req, res, next);
@@ -85,18 +55,18 @@ function loginNewlyRegisteredUser(user, req, res, next) {
     req.logIn(user, function (err) {
 
         if (err) {
+            res.json({
+                error: err
+            });
             return next(err);
         }
 
-        //res.locals.app = {};
-        //res.locals.app.currentUser = user._doc;
-        //res.locals.loggedInUser = user._doc;
-
         res.json({
-            app: {currentUser: user._doc},
-            user:user._doc,
-            alreadyRegistered: true,
-            msg: user._doc
+            success: {
+                user: user._doc,
+                alreadyRegistered: false,
+                authorized: true
+            }
         });
     });
 
@@ -119,24 +89,26 @@ function registerUser(req, res, next) {
 
     var newUser = new User({
         username: username,
-        password: password,
+        passwordHash: 'this value is temporary',
         email: email,
         firstName: firstName,
         lastName: lastName
     });
 
+    newUser.passwordPreHash = password;
+
+
     newUser.save(function (err, result) {
         if (err) {
-            console.log("error in user save method:", err);
-            res.send('database error');
+            res.json({error: err.errors});  //we pass mongoose errors object to front-end
+            return next(err);
         }
         else if (result) {
-            console.log('Added new user: ', result);
-            //postRegistrationAndOrLoginInfo(req,res,next,true);
-            //res.json('successful user registration');
+            delete result.passwordPreHash;
             loginNewlyRegisteredUser(result, req, res, next)
-        } else {
-            next(new Error('grave error in newUser.save method in registration'));
+        }
+        else {
+            next(new Error('grave error in user.save() method in /register'));
         }
     });
 }

@@ -20,16 +20,16 @@ function registerRoutes(app){
         req.user = undefined;
 
         req.logout();
-        //req.session.destroy(function (err) {
-        //    if (err) {
-        //        console.log(err);
-        //    }
-        //    else {
-        //        console.log('req.session.destroy called successfully');
-        //    }
-        //    res.redirect('/login');
-        //});
-        res.json(true);
+        req.session.destroy(function (err) {
+            if (err) {
+                res.json(false);
+                return next(err);
+            }
+            else {
+                console.log('req.session.destroy called successfully');
+                res.json(true);
+            }
+        });
     });
 }
 

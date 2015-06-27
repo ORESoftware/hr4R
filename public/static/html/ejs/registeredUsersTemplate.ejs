@@ -6,8 +6,8 @@
         <tbody>
         <% for(var i=0; i<users.length; i++) { %>
         <tr>
-            <td><%=users[i].firstName%></td>
-            <td><%=users[i].lastName%></td>
+            <td><%=users[i].get('firstName')%></td>
+            <td><%=users[i].get('lastName')%></td>
         </tr>
         <% } %>
         </tbody>

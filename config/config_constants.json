@@ -1,0 +1,4 @@
+{
+  "sessionCookieKey": "connect.sid",
+  "sessionSecret": "foo"
+}

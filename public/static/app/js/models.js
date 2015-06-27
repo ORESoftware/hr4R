@@ -7,47 +7,29 @@ console.log('loading app/js/MODELS.js');
 
 define(['underscore', 'backbone'], function (_, Backbone) {
 
-    'use strict';
-
-    var Todo = Backbone.Model.extend({
-
-        urlRoot: '/todos',
-
-        defaults: {
-            title: '',
-            completed: false
-        },
-
-        // Toggle the `completed` state of thistodo item.
-        toggle: function () {
-            this.save({
-                completed: !this.get('completed')
-            });
-        },
-        validate: function (attr) {
-            if (attr.ID <= 0) {
-                return "Invalid value for ID supplied."
-            }
-        }
-    });
-
     var User = Backbone.Model.extend({
 
 
-        idAttribute: "mongo_ID",
+        idAttribute: "_id",
 
-        urlRoot: '/users?user_id=',
+        //url: '/users',
+        //urlRoot: '/users?user_id=',
+        urlRoot: '/users',
 
         defaults: {
             firstName: null,
             lastName: null,
             username: null,
-            password: null
+            password: null,
+            email: null
         },
 
-        initialize: function(){
-            console.log('User has been intialized');
+        initialize: function(options){
 
+            this.options = options || {};
+
+
+            _.bindAll(this,'validate');
 
             this.on('change',  function() {
                 if(this.hasChanged('ID')){
@@ -57,6 +39,8 @@ define(['underscore', 'backbone'], function (_, Backbone) {
                     console.log('BookName has been changed');
                 }
             });
+
+            console.log('UserModel has been intialized');
         },
 
         constructor: function (attributes, options) {
@@ -68,8 +52,11 @@ define(['underscore', 'backbone'], function (_, Backbone) {
             //    return "Invalid value for ID supplied."
             //}
 
+           //TODO:https://github.com/thedersen/backbone.validation
+
             return true;
         },
+
 
         persist: function(callback){
             this.save({}, {
@@ -79,14 +66,35 @@ define(['underscore', 'backbone'], function (_, Backbone) {
                 },
                 error: function (model, xhr, options) {
                     console.log("Something went wrong while saving the model");
-                    callback(model,response,options);
+                    callback(model,xhr,options);
                 }
             });
+        },
+        validation: {
+            email: {
+                required: true,
+                pattern: 'email',
+                msg: 'Please enter a valid email'
+            }
         }
     });
 
+
+    User.newUser = function($user){
+
+        var user = new User({url:'/users'});
+
+        user.firstName = $user.firstName;
+        user.lastName = $user.lastName;
+        user.username = $user.username;
+        user.password = $user.password;
+        user.email = $user.email;
+
+        return user;
+
+    };
+
     return {
-        TodoModel:Todo,
         UserModel:User
     };
 });

@@ -4,7 +4,7 @@
 
 
 
-define('app/js/currentView',function() {
+define('app/js/viewState',function() {
 
     var view = {
 
