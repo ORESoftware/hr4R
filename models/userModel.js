@@ -35,10 +35,10 @@ var validation = {
         var domain = candidate.substring(candidate.indexOf('@') + 1, candidate.length);
 
 
-        for(var i = 0; i < ACCEPTABLE_EMAIL_DOMAINS.length; i++){
-                if (ACCEPTABLE_EMAIL_DOMAINS[i] === domain) {
-                    return true;
-                }
+        for (var i = 0; i < ACCEPTABLE_EMAIL_DOMAINS.length; i++) {
+            if (ACCEPTABLE_EMAIL_DOMAINS[i] === domain) {
+                return true;
+            }
         }
         return false;
     }
@@ -137,14 +137,14 @@ var registerSchema = function () {
             if (err) {
                 throw err;
             }
-            else if(user){  //we found a user in the DB already, so this username has been taken
+            else if (user) {  //we found a user in the DB already, so this username has been taken
                 cb(false);
             }
-            else{
+            else {
                 cb(true)
             }
         });
-    },'This username is already taken!');
+    }, 'This username is already taken!');
 
     userSchema.path('email').validate(function (value, cb) {
         getNewUser().findOne({email: value}, function (err, user) {
@@ -152,14 +152,14 @@ var registerSchema = function () {
                 //cb(err);
                 throw err;
             }
-            else if(user){  //we found a user in the DB already, so this email has already been registered
+            else if (user) {  //we found a user in the DB already, so this email has already been registered
                 cb(false);
             }
-            else{
+            else {
                 cb(true)
             }
         });
-    },'This email address is already taken!');
+    }, 'This email address is already taken!');
 
 
     userSchema.statics.findByEmailAndPassword = function (email, password, cb) {

@@ -187,6 +187,85 @@ app.use('/testSocketIO', testSocketIORoute);
 require('./lib/controllers/passport_setup')(site.models.User);
 require('./lib/controllers/params')(app);
 
+app.get('*', function(req, res) {
+    console.log('agega');
+});
+
+
+app.post('/users', function (req, res, next) {
+
+    console.log('about to post new user:', req.body);
+
+    var user = req.body;
+    var firstName = user.firstName;
+    var lastName = user.lastName;
+    var username = user.username;
+    var password = user.password;
+    var email = user.email;
+
+    var UserModel = req.site.models.User;
+    var User = UserModel.getNewUser();
+
+    var newUser = new User({
+        username: username,
+        password: password,
+        email: email,
+        firstName: firstName,
+        lastName: lastName
+    });
+
+    newUser.save(function (err, result) {
+        if (err) {
+            console.log("error in user save method:", err);
+            res.send({error:err});
+        }
+        else if (result) {
+            console.log('Added new user: ', result);
+            res.json({success:result});
+        } else {
+            next(new Error('grave error in newUser.save method in registration'));
+        }
+    });
+});
+
+
+
+app.put('/users/:user_id', function (req, res, next) {
+
+    console.log('about to post new user:', req.body);
+
+    var user = req.body;
+    var firstName = user.firstName;
+    var lastName = user.lastName;
+    var username = user.username;
+    var password = user.password;
+    var email = user.email;
+
+    var UserModel = req.site.models.User;
+    var User = UserModel.getNewUser();
+
+    var newUser = new User({
+        username: username,
+        password: password,
+        email: email,
+        firstName: firstName,
+        lastName: lastName
+    });
+
+    newUser.save(function (err, result) {
+        if (err) {
+            console.log("error in user put method:", err);
+            res.send({error:err});
+            return next(err);
+        }
+        else if (result) {
+            console.log('put/updated user: ', result);
+            res.json({success:result});
+        } else {
+            next(new Error('grave error in newUser.save method in registration'));
+        }
+    });
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

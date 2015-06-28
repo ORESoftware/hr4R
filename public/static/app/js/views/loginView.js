@@ -10,7 +10,7 @@ console.log('loading loginView');
 
 define(
     [
-        'app/js/routers',
+        //'app/js/routers',
         'app/js/collections',
         'app/js/models',
         'form2js',
@@ -24,9 +24,9 @@ define(
     ],
 
 
-    function (routers, collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, IJSON) {
+    function (collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, IJSON) {
 
-        var router = routers(null).bootRouter;
+        //var router = routers(null).bootRouter;
 
         var LoginView = Backbone.View.extend({
 
@@ -145,14 +145,16 @@ define(
                             //window.location.hash='home';
                             console.log('user logged in successfully!!');
                             localStorage.setItem('sc_admin_user', JSON.stringify(appGlobal.currentUser.username));
-                            router.navigate('home', {trigger: true});
+                            //router.navigate('home', {trigger: true});
+                            Backbone.Events.trigger('bootRouter','home');
                         });
                     }
                     else {
                         appGlobal.authorized = false;
                         console.log('user did not log in successfully..!');
                         alert('bad login');
-                        router.navigate('index', {trigger: true});
+                        //router.navigate('index', {trigger: true});
+                        Backbone.Events.trigger('bootRouter','index');
                         //TODO:http://stackoverflow.com/questions/19588401/backbone-navigation-callback
                     }
 
@@ -255,7 +257,8 @@ define(
                         throw new Error('null appGlobal.currentUser');
                     } else {
                         appGlobal.authorized = true;
-                        router.navigate('home', {trigger: true});
+                        //router.navigate('home', {trigger: true});
+                        Backbone.Events.trigger('bootRouter','home');
                     }
 
                 });
@@ -272,7 +275,8 @@ define(
                     }
                     else{
                         appGlobal.currentUser = newUser;
-                        router.navigate('home', {trigger: true});
+                        //router.navigate('home', {trigger: true});
+                        Backbone.Events.trigger('bootRouter','home');
                     }
                 });
 

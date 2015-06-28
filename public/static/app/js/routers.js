@@ -5,6 +5,7 @@
 
 //TODO:http://codebeerstartups.com/2012/12/5-explaining-views-in-backbone-js-learning-backbone-js/
 //TODO: http://geeks.bizzabo.com/post/83917692143/7-battle-tested-backbonejs-rules-for-amazing-web-apps
+//TODO: do we need "Backbone.history.loadUrl();" or can we just switch views manually
 
 //this is a completely single-page-app, so there is only one router
 
@@ -17,12 +18,13 @@ define('app/js/routers',
         'async',
         'app/js/collections',
         'app/js/viewState',
-        'ijson'
+        'ijson',
+        'app/js/allViews'
     ],
 
-    function (async, collections, $viewState, IJSON) {
+    function (async, collections, $viewState, IJSON, allViews) {
 
-        var allViews = null;
+        //var allViews = null;
 
         var BootRouter = Backbone.Router.extend({
 
@@ -32,6 +34,7 @@ define('app/js/routers',
 
             routes: {
                 '': 'canonical',
+                "posts/:id": "getPost",
                 'index': 'index',
                 'home': 'home',
                 'login': 'login',
@@ -63,7 +66,7 @@ define('app/js/routers',
                 this.options = options || {};
                 //this.listenTo(Backbone,'bootRouter',this.onToggleViewRequest);
                 //this.listenTo(Backbone,'bootRouter',this.onToggleViewRequest,this);
-                Backbone.Events.on('bootRouter',this.onToggleViewRequest,this);
+                Backbone.Events.on('bootRouter', this.onToggleViewRequest, this);
                 _.bindAll(this, 'changeView');
 
             },
@@ -79,8 +82,8 @@ define('app/js/routers',
 
             },
 
-            onToggleViewRequest: function(viewName){
-                this.navigate(viewName,{trigger:true});
+            onToggleViewRequest: function (viewName) {
+                this.navigate(viewName, {trigger: true});
             },
 
 
@@ -94,14 +97,20 @@ define('app/js/routers',
 
                 Object.keys(collections).forEach(function (key) {
                     if (collections.hasOwnProperty(key)) {
-                        collectionsToSync.push(function (cb) {
-                            var coll = collections[key];
-                            coll.persist(function (err, res) {
-                                coll.fetch().done(function () {
-                                    cb();
+                        collectionsToSync.push(
+                            function (cb) {
+                                var coll = collections[key];
+                                coll.persist(function (err, res) {
+                                    if(err){
+                                        return cb(err);
+                                    }
+                                    coll.fetch().fail(function(err){
+                                       cb(err);
+                                    }).done(function () {
+                                        cb();
+                                    });
                                 });
                             });
-                        })
                     }
                 });
 
@@ -122,55 +131,16 @@ define('app/js/routers',
                     alert('there was an error --->' + err + 'could not change the view.');
                 }
 
-                /*   function continueOn(self) {
-                 if (appGlobal.currentUser == null || appGlobal.authorized === false) {
-
-                 if (this.viewState.get('mainView') != null) {
-                 //this.destroyView(this.viewState.get('mainView'));
-                 }
-                 this.viewState.set('mainView', new allViews.Index());
-                 this.viewState.get('mainView').render();
-                 window.location.hash = 'index';
-                 console.log('current main view was switched to index view because no user was logged in.');
-
-                 if (this.viewState.get('footerView') == null) {
-                 this.viewState.set('footerView', new allViews.Footer());
-                 }
-                 if (this.viewState.get('headerView') == null) {
-                 this.viewState.set('headerView', new allViews.Header());
-                 }
-                 this.viewState.get('footerView').render();
-                 this.viewState.get('headerView').render();
-
-                 }
-                 else { //user is authenticated/authorized
-
-                 //console.log(IJSON.parse(localStorage.getItem('sc_admin_user')));
-
-                 console.log(localStorage.getItem('sc_admin_user'));
-
-                 if (this.viewState.get('mainView') != null) {
-                 //this.destroyView(this.viewState.get('mainView'));
-                 }
-                 this.viewState.set('mainView', view);
-                 console.log('current main view:', view);
-                 this.viewState.get('mainView').render();
-                 if (this.viewState.get('footerView') == null) {
-                 this.viewState.set('footerView', new allViews.Footer());
-                 }
-                 if (this.viewState.get('headerView') == null) {
-                 this.viewState.set('headerView', new allViews.Header());
-                 }
-                 this.viewState.get('footerView').render();
-                 this.viewState.get('headerView').render();
-                 }
-                 }*/
             }
         });
 
-        //TODO: ejs.update()
 
         var bootRouter = new BootRouter();
+
+        bootRouter.on('route:getPost', function (id) {
+            // Note the variable in the route definition being passed in here
+            alert( "Get post number " + id );
+        });
 
         //bootRouter.on('route:defaultRoute', function (actions) {
         //    console.log('default route invoked...' + actions);
@@ -181,18 +151,11 @@ define('app/js/routers',
         //});
 
 
-        //Backbone.Events.on('app_route:home',bootRouter.route('home'){
-        //
-        //});
-
-
-
-
         function continueOn($view) {
 
 
-    //TODO: ejs.update()
-    //TODO: http://danhough.com/blog/backbone-view-inheritance/
+            //TODO: ejs.update()
+            //TODO: http://danhough.com/blog/backbone-view-inheritance/
 
 
             if (appGlobal.currentUser == null || appGlobal.authorized === false) {
@@ -252,20 +215,24 @@ define('app/js/routers',
         }
 
 
-        return function ($allViews) {
+        //return function ($allViews) {
+        //
+        //    if (allViews === null) {
+        //        if ($allViews == null) {
+        //            console.log('null/undefined value to passed routers.js');
+        //        }
+        //        else {
+        //            console.log('initializing routers with allViews');
+        //            allViews = $allViews;
+        //        }
+        //    }
+        //
+        //    return {
+        //        bootRouter: bootRouter
+        //    }
+        //}
 
-            if (allViews === null) {
-                if ($allViews == null) {
-                    console.log('null/undefined value to passed routers.js');
-                }
-                else {
-                    console.log('initializing routers with allViews');
-                    allViews = $allViews;
-                }
-            }
-
-            return {
-                bootRouter: bootRouter
-            }
+        return {
+            bootRouter: bootRouter
         }
     });

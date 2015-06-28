@@ -28,9 +28,9 @@ define('app/js/collections',
             //},
 
             url:'/users',
-            //urlRoot: '/users',
+            urlRoot: '/users',
 
-            persist: function(cb){
+            persistAsync: function(cb){
                 //Backbone.sync('create', this, {
                 //    success: function() {
                 //        console.log('Saved users collection!');
@@ -57,25 +57,28 @@ define('app/js/collections',
 
             },
 
-            persistAsync: function(cb){
+            persist: function(cb){
 
                 var saveArray = [];
 
 
-                this.each(function(user,index){  //iterate through models
+                this.each(function(user,index){  //iterate through models, add/push function to async.parallel
                     saveArray.push(
                         function(callback){
-                            user.save({},{
-                                //wait:null,
-                                success:function(msg){
-                                    console.log('saved user --->',msg);
-                                    callback(null,msg);
-                                },
-
-                                error:function(err){
-                                    throw new Error('error in users.persist function' + err);
-                                    callback(err);
-                                }
+                            //user.save({},{
+                            //    //wait:null,
+                            //    success:function(msg){
+                            //        console.log('saved user --->',msg);
+                            //        callback(null,msg);
+                            //    },
+                            //
+                            //    error:function(err){
+                            //        throw new Error('error in users.persist function' + err);
+                            //        callback(err);
+                            //    }
+                            //});
+                            user.persist(null,function(err,val){
+                               callback();
                             });
                         }
                     )

@@ -63,7 +63,8 @@ define(
 
 
         return {
-            routers: routers(allViews)
+            //routers: routers(allViews)
+            routers:routers
         };
     });
 

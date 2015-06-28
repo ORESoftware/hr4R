@@ -8,7 +8,7 @@ console.log('loading headerView');
 
 define(
     [
-        'app/js/routers',
+        //'app/js/routers',
         'app/js/models',
         'form2js',
         'ejs',
@@ -20,10 +20,10 @@ define(
     ],
 
 
-    function (routers, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
+    function (models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
 
 
-        var router = routers(null).bootRouter;
+        //var router = routers(null).bootRouter;
 
         //var hvTemplate = null; don't need this because header is not recreated - just repopulated
         //TODO: http://stackoverflow.com/questions/7567404/backbone-js-repopulate-or-recreate-the-view

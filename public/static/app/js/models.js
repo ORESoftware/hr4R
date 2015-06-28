@@ -5,6 +5,8 @@
 
 console.log('loading app/js/MODELS.js');
 
+//TODO: In model, urlRoot is used for the Model. url is used for the instance of the Model.
+
 define(
     [
         'underscore',
@@ -18,7 +20,7 @@ define(
 
         idAttribute: "_id",
 
-        //url: '/users',
+        url: '/users',
         //urlRoot: '/users?user_id=',
         urlRoot: '/users',
 
@@ -64,8 +66,10 @@ define(
         },
 
 
-        persist: function(callback){
-            this.save({}, {
+        persist: function(adds,callback){
+            var opts = adds || null;
+            this.save(opts, {
+                wait:true,
                 success: function (model, response, options) {
                     console.log("The model has been saved to the server");
                     callback(model,response,options);

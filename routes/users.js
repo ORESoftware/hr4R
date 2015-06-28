@@ -89,7 +89,7 @@ router.get(':user_id', function (req, res, next) {
 
 
 
-/*router.post('/:user_id', function (req, res, next) {
+router.post(':user_id', function (req, res, next) {
 
     console.log('about to post new user:', req.body);
 
@@ -125,9 +125,9 @@ router.get(':user_id', function (req, res, next) {
             next(new Error('grave error in newUser.save method in registration'));
         }
     });
-});*/
+});
 
-router.put('/:user_id', function (req, res, next) {
+router.put(':user_id', function (req, res, next) {
 
     console.log('about to post new user:', req.body);
 
