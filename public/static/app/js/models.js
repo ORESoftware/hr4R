@@ -5,7 +5,13 @@
 
 console.log('loading app/js/MODELS.js');
 
-define(['underscore', 'backbone'], function (_, Backbone) {
+define(
+    [
+        'underscore',
+        'backbone'
+    ],
+
+    function (_, Backbone) {
 
     var User = Backbone.Model.extend({
 

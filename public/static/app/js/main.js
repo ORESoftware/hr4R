@@ -29,6 +29,7 @@ requirejs.config({
         'handlebars': 'vendor/handlebars',
         'backbone-validation': 'vendor/backbone-validation-amd',
         'socketio': 'https://cdn.socket.io/socket.io-1.3.5'
+        //'_routers_': 'app/js/routers'
     },
     // Shim declaration
     'shim': {

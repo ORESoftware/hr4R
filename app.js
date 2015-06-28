@@ -103,7 +103,7 @@ app.use(function (req, res, next) {
     //console.log(colors.bgYellow('QUERY:'), req.query);
     //console.log(colors.bgYellow('SECRET:'), req.secret);
     //console.log(colors.bgYellow('SESSION:'), req.session);
-    console.log(colors.bgYellow('SESSION_ID:'), req.session.id);
+    console.log(colors.yellow('SESSION_ID:'), req.session.id);
     //console.log(colors.bgYellow('COOKIES:'), req.cookies);
 
     next();
@@ -133,7 +133,7 @@ app.use(function (req, res, next) {
 
         //res.send({msg:'user not authenticated, should be redirected to Backbone index view'});
 
-        console.log(colors.bgYellow('req.user is null...'));
+        console.log(colors.yellow('req.user is null...'));
         if (String(req.originalUrl).indexOf('/ra/') === 0) {
             console.log(colors.bgYellow('user attempted to request /ra/ route, so rendering index page...'));
             res.locals.loggedInUser = null;

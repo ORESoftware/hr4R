@@ -4,14 +4,12 @@
 
 
 //TODO:http://codebeerstartups.com/2012/12/5-explaining-views-in-backbone-js-learning-backbone-js/
+//TODO: http://geeks.bizzabo.com/post/83917692143/7-battle-tested-backbonejs-rules-for-amazing-web-apps
 
 //this is a completely single-page-app, so there is only one router
 
 console.log('loading app/js/ROUTERS.js');
 
-//define(['app/js/currentView'],function($currentView) {
-
-//define('app/js/routers',['require'],function(require) {
 
 define('app/js/routers',
 
@@ -63,8 +61,10 @@ define('app/js/routers',
 
                 //_.bind(this.initialize,undefined);
                 this.options = options || {};
+                //this.listenTo(Backbone,'bootRouter',this.onToggleViewRequest);
+                //this.listenTo(Backbone,'bootRouter',this.onToggleViewRequest,this);
+                Backbone.Events.on('bootRouter',this.onToggleViewRequest,this);
                 _.bindAll(this, 'changeView');
-
 
             },
 
@@ -77,6 +77,10 @@ define('app/js/routers',
                 //view.remove(); //this deletes DOM element from the DOM, and that is bad
                 //Backbone.View.prototype.remove.call(view);
 
+            },
+
+            onToggleViewRequest: function(viewName){
+                this.navigate(viewName,{trigger:true});
             },
 
 
@@ -175,6 +179,13 @@ define('app/js/routers',
         //
         //    continueOn.bind(this)();
         //});
+
+
+        //Backbone.Events.on('app_route:home',bootRouter.route('home'){
+        //
+        //});
+
+
 
 
         function continueOn($view) {

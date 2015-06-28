@@ -30,7 +30,7 @@ define('app/js/collections',
             url:'/users',
             //urlRoot: '/users',
 
-            persistAsync: function(cb){
+            persist: function(cb){
                 //Backbone.sync('create', this, {
                 //    success: function() {
                 //        console.log('Saved users collection!');
@@ -57,7 +57,7 @@ define('app/js/collections',
 
             },
 
-            persist: function(cb){
+            persistAsync: function(cb){
 
                 var saveArray = [];
 
