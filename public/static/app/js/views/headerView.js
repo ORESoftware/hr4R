@@ -2,12 +2,13 @@
  * Created by amills001c on 6/16/15.
  */
 
+//TODO:https://github.com/marionettejs/backbone.marionette/issues/611
 
 console.log('loading headerView');
 
 define(
     [
-        'app/js/routers',
+        //'app/js/routers',
         'app/js/models',
         'form2js',
         'ejs',
@@ -19,10 +20,10 @@ define(
     ],
 
 
-    function (routers, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
+    function (models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
 
 
-        var router = routers(null).bootRouter;
+        //var router = routers(null).bootRouter;
 
         //var hvTemplate = null; don't need this because header is not recreated - just repopulated
         //TODO: http://stackoverflow.com/questions/7567404/backbone-js-repopulate-or-recreate-the-view
@@ -101,8 +102,10 @@ define(
                         if(msg === true){
                             appGlobal.currentUser = null;
                             appGlobal.authorized = false;
-                            router.navigate('index',{trigger:true});
-                            Backbone.history.loadUrl();
+                            //router.navigate('index',{trigger:true});
+                            Backbone.Events.trigger('bootRouter','index');
+                            //TODO:why does log out work even if router.navigate isn't invoked?
+                            //Backbone.history.loadUrl();
                         }
                         else{
                             alert('logout failed.')
@@ -115,8 +118,10 @@ define(
                         alert('internal server error - logout failed.')
                         appGlobal.currentUser = null;
                         appGlobal.authorized = false;
-                        router.navigate('index',{trigger:true});
-                        Backbone.history.loadUrl();
+                        //router.navigate('index',{trigger:true});
+                        //TODO:why does log out work even if router.navigate isn't invoked?
+                        Backbone.Events.trigger('bootRouter','index');
+                        //Backbone.history.loadUrl();
                     }
                 });
 

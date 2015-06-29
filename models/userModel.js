@@ -35,10 +35,10 @@ var validation = {
         var domain = candidate.substring(candidate.indexOf('@') + 1, candidate.length);
 
 
-        for(var i = 0; i < ACCEPTABLE_EMAIL_DOMAINS.length; i++){
-                if (ACCEPTABLE_EMAIL_DOMAINS[i] === domain) {
-                    return true;
-                }
+        for (var i = 0; i < ACCEPTABLE_EMAIL_DOMAINS.length; i++) {
+            if (ACCEPTABLE_EMAIL_DOMAINS[i] === domain) {
+                return true;
+            }
         }
         return false;
     }
@@ -132,37 +132,51 @@ var registerSchema = function () {
     //    return true;
     //});
 
-    //userSchema.path('username').validate(function (value, cb) {
-    //    this.findOne({username: value}, function (err, user) {
-    //        if (err) {
-    //            cb(err);
-    //        }
-    //        else if(user){  //we found a user in the DB already, so this username has been taken
-    //            cb(null,false);
-    //        }
-    //        else{
-    //            cb(null,true)
-    //        }
-    //    });
-    //},'This username is already taken!');
-    //
-    //
-    //userSchema.path('email').validate(function (value, cb) {
-    //    this.findOne({email: value}, function (err, user) {
-    //        if (err) {
-    //            cb(err);
-    //        }
-    //        else if(user){  //we found a user in the DB already, so this email has already been registered
-    //            cb(null,false);
-    //        }
-    //        else{
-    //            cb(null,true)
-    //        }
-    //    });
-    //},'This email address is already taken!');
+    userSchema.path('username').validate(function (value, cb) {
+        var self = this;
+        getNewUser().findOne({username: value}, function (err, user) {
+            if (err) {
+                throw err;
+            }
+            else if (user) {  //we found a user in the DB already, so this username has been taken
+                if(self._doc._id.equals(user._doc._id)){
+                    cb(true);
+                }
+                else{
+                    cb(false);
+                }
+
+            }
+            else {
+                cb(true)
+            }
+        });
+    }, 'This username is already taken!');
+
+    userSchema.path('email').validate(function (value, cb) {
+        var self = this;
+        getNewUser().findOne({email: value}, function (err, user) {
+            if (err) {
+                //cb(err);
+                throw err;
+            }
+            else if (user) {  //we found a user in the DB already, so this email has already been registered
+                if(self._doc._id.equals(user._doc._id)){
+                    cb(true);
+                }
+                else{
+                    cb(false);
+                }
+            }
+            else {
+                cb(true)
+            }
+        });
+    }, 'This email address is already taken!');
 
 
     userSchema.statics.findByEmailAndPassword = function (email, password, cb) {
+
         this.findOne({email: email}, function (err, user) {
             if (err) {
                 return cb(err);

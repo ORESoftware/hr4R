@@ -20,18 +20,16 @@ router.get('/', function (req, res, next) {
                 console.error('user session existed, but no user matched');
                 next(new Error('user session existed, but no user matched'));
                 return;
-            } else {
-                //res.render('home', {
-                //  userInfo:user
-                //});
+            }
+            else {
                 //res.json({msg: user});
-                res.render('index', { title: 'SmartConnect Admin Portal' });
+                res.render('index', {title: 'SmartConnect Admin Portal'});
             }
         });
     } else {
         console.log("no passport session found in index route, rendering index page...");
         //res.redirect('/login');
-        res.render('index', { title: 'SmartConnect Admin Portal' });
+        res.render('index', {title: 'SmartConnect Admin Portal'});
 
         //res.json({});
     }

@@ -62,20 +62,23 @@ define('app/js/collections',
                 var saveArray = [];
 
 
-                this.each(function(user,index){  //iterate through models
+                this.each(function(user,index){  //iterate through models, add/push function to async.parallel
                     saveArray.push(
                         function(callback){
-                            user.save({},{
-                                //wait:null,
-                                success:function(msg){
-                                    console.log('saved user --->',msg);
-                                    callback(null,msg);
-                                },
-
-                                error:function(err){
-                                    throw new Error('error in users.persist function' + err);
-                                    callback(err);
-                                }
+                            //user.save(null,{
+                            //    wait:null,
+                            //    success:function(msg){
+                            //        console.log('saved user --->',msg);
+                            //        callback(null,msg);
+                            //    },
+                            //
+                            //    error:function(err){
+                            //        throw new Error('error in users.persist function' + err);
+                            //        callback(err);
+                            //    }
+                            //});
+                            user.persist(null,function(err,val){
+                               callback();
                             });
                         }
                     )

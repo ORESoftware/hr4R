@@ -2,6 +2,9 @@
  * Created by amills001c on 6/15/15.
  */
 
+//TODO: https://scotch.io/tutorials/learn-to-use-the-new-router-in-expressjs-4
+//TODO: http://bulkan-evcimen.com/using_express_router_instead_of_express_namespace.html
+
 var passport = require('passport');
 var colors = require('colors');
 var path = require('path');
@@ -103,11 +106,17 @@ app.use(function (req, res, next) {
     //console.log(colors.bgYellow('QUERY:'), req.query);
     //console.log(colors.bgYellow('SECRET:'), req.secret);
     //console.log(colors.bgYellow('SESSION:'), req.session);
-    console.log(colors.bgYellow('SESSION_ID:'), req.session.id);
+    console.log(colors.yellow('SESSION_ID:'), req.session.id);
     //console.log(colors.bgYellow('COOKIES:'), req.cookies);
 
     next();
 
+});
+
+router.all('/', function (req, res, next) {
+    console.log('Someone made a request!');
+    console.log(req.method,req.originalUrl);
+    next();
 });
 
 //TODO: why is it user._doc now?
@@ -133,7 +142,7 @@ app.use(function (req, res, next) {
 
         //res.send({msg:'user not authenticated, should be redirected to Backbone index view'});
 
-        console.log(colors.bgYellow('req.user is null...'));
+        console.log(colors.yellow('req.user is null...'));
         if (String(req.originalUrl).indexOf('/ra/') === 0) {
             console.log(colors.bgYellow('user attempted to request /ra/ route, so rendering index page...'));
             res.locals.loggedInUser = null;
@@ -176,17 +185,101 @@ var loginRoute = require('./routes/login');
 var testSocketIORoute = require('./routes/testSocketIO');
 
 app.use('/', indexRoute);
-app.use('/users*', usersRoutes);
+app.use('/users', usersRoutes);
 app.use('/authenticate', authRoute);
 app.use('/register', registerRoute);
 app.use('/login', loginRoute);
 app.use('/testSocketIO', testSocketIORoute);
+
+//router.use('/', indexRoute);
+//router.use('/users*', usersRoutes);
+//router.use('/authenticate', authRoute);
+//router.use('/register', registerRoute);
+//router.use('/login', loginRoute);
+//router.use('/testSocketIO', testSocketIORoute);
 
 
 //require('./routes')(app);
 require('./lib/controllers/passport_setup')(site.models.User);
 require('./lib/controllers/params')(app);
 
+
+
+/*
+app.post('/users', function (req, res, next) {
+
+    console.log('about to post new user:', req.body);
+
+    var user = req.body;
+    var firstName = user.firstName;
+    var lastName = user.lastName;
+    var username = user.username;
+    var password = user.password;
+    var email = user.email;
+
+    var UserModel = req.site.models.User;
+    var User = UserModel.getNewUser();
+
+    var newUser = new User({
+        username: username,
+        password: password,
+        email: email,
+        firstName: firstName,
+        lastName: lastName
+    });
+
+    newUser.save(function (err, result) {
+        if (err) {
+            console.log("error in user save method:", err);
+            res.send({error:err});
+        }
+        else if (result) {
+            console.log('Added new user: ', result);
+            res.json({success:result});
+        } else {
+            next(new Error('grave error in newUser.save method in registration'));
+        }
+    });
+});
+
+
+
+app.put('/users/:user_id', function (req, res, next) {
+
+    console.log('about to post new user:', req.body);
+
+    var user = req.body;
+    var firstName = user.firstName;
+    var lastName = user.lastName;
+    var username = user.username;
+    var password = user.password;
+    var email = user.email;
+
+    var UserModel = req.site.models.User;
+    var User = UserModel.getNewUser();
+
+    var newUser = new User({
+        username: username,
+        password: password,
+        email: email,
+        firstName: firstName,
+        lastName: lastName
+    });
+
+    newUser.save(function (err, result) {
+        if (err) {
+            console.log("error in user put method:", err);
+            res.send({error:err});
+            return next(err);
+        }
+        else if (result) {
+            console.log('put/updated user: ', result);
+            res.json({success:result});
+        } else {
+            next(new Error('grave error in newUser.save method in registration'));
+        }
+    });
+});*/
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

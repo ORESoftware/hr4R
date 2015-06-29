@@ -5,8 +5,16 @@
 
 console.log('loading registeredUsersView');
 
-define(['app/js/collections', 'ejs', 'jquery', 'underscore', 'handlebars', 'backbone', 'backbone-validation'],
-
+define(
+    [
+        'app/js/collections',
+        'ejs',
+        'jquery',
+        'underscore',
+        'handlebars',
+        'backbone',
+        'backbone-validation'
+    ],
 
     function (collections, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
 

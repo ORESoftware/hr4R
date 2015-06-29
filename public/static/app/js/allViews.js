@@ -18,7 +18,7 @@ define('app/js/allViews',
         'exports'
     ],
 
-    function (HeaderView, FooterView, RegisteredUsersView, IndexView, LoginView, HomeView) {
+    function (HeaderView, FooterView, RegisteredUsersView, IndexView, LoginView, HomeView,exports) {
 
 
         //exports.allViews = {

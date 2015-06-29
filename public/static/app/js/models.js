@@ -5,7 +5,16 @@
 
 console.log('loading app/js/MODELS.js');
 
-define(['underscore', 'backbone'], function (_, Backbone) {
+//TODO: In model, urlRoot is used for the Model. url is used for the instance of the Model.
+//TODO: http://beletsky.net/2012/11/baby-steps-to-backbonejs-model.html
+
+define(
+    [
+        'underscore',
+        'backbone'
+    ],
+
+    function (_, Backbone) {
 
     var User = Backbone.Model.extend({
 
@@ -58,8 +67,10 @@ define(['underscore', 'backbone'], function (_, Backbone) {
         },
 
 
-        persist: function(callback){
-            this.save({}, {
+        persist: function(adds,callback){
+            var opts = adds || null;
+            this.save(opts, {
+                wait:true,
                 success: function (model, response, options) {
                     console.log("The model has been saved to the server");
                     callback(model,response,options);
@@ -69,14 +80,14 @@ define(['underscore', 'backbone'], function (_, Backbone) {
                     callback(model,xhr,options);
                 }
             });
-        },
-        validation: {
-            email: {
-                required: true,
-                pattern: 'email',
-                msg: 'Please enter a valid email'
-            }
         }
+        //validation: {
+        //    email: {
+        //        required: true,
+        //        pattern: 'email',
+        //        msg: 'Please enter a valid email'
+        //    }
+        //}
     });
 
 
