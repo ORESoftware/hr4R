@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=development node ./bin/www",
-    "start_windows": "node ./bin/www",
+    "start": "node ./bin/www",
+    "start_windows": "set NODE_ENV=development&&node ./bin/www",
     "start_dev": "NODE_ENV=development node ./bin/www",
-    "start_dev_nodemon": "NODE_ENV=development nodemon ./bin/www",
+    "start_nodemon": "NODE_ENV=development nodemon ./bin/www",
     "build": "r.js -o ./build.js"
   },
   "dependencies": {

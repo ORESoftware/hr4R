@@ -15,6 +15,7 @@ console.log('loading app/js/ROUTERS.js');
 define('app/js/routers',
 
     [
+        'backbone',
         'async',
         'app/js/collections',
         'app/js/viewState',
@@ -22,7 +23,7 @@ define('app/js/routers',
         'app/js/allViews'
     ],
 
-    function (async, collections, $viewState, IJSON, allViews) {
+    function (Backbone,async, collections, $viewState, IJSON, allViews) {
 
         //var allViews = null;
 
@@ -66,8 +67,13 @@ define('app/js/routers',
                 this.options = options || {};
                 //this.listenTo(Backbone,'bootRouter',this.onToggleViewRequest);
                 //this.listenTo(Backbone,'bootRouter',this.onToggleViewRequest,this);
-                Backbone.Events.on('bootRouter', this.onToggleViewRequest, this);
+                var self = this;
+                Backbone.Events.on('bootRouter', onToggleViewRequest.bind(self), this);
                 _.bindAll(this, 'changeView');
+
+                function onToggleViewRequest(viewName) {
+                    this.navigate(viewName, {trigger: true});
+                }
 
             },
 
@@ -82,9 +88,9 @@ define('app/js/routers',
 
             },
 
-            onToggleViewRequest: function (viewName) {
-                this.navigate(viewName, {trigger: true});
-            },
+            //onToggleViewRequest: function (viewName) {
+            //    this.navigate(viewName, {trigger: true});
+            //},
 
 
             changeView: function (view) {

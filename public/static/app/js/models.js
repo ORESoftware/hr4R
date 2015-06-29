@@ -37,16 +37,19 @@ define(
 
             this.options = options || {};
 
-
             _.bindAll(this,'validate');
 
             this.on('change',  function() {
-                if(this.hasChanged('ID')){
-                    console.log('ID has been changed');
+                if(this.hasChanged('_id')){
+                    console.log('uh oh!! _id value for this model has been changed');
                 }
-                if(this.hasChanged('BookName')){
-                    console.log('BookName has been changed');
+                if(this.hasChanged('firstName')){
+                    console.log('firstName has been changed - ', this.toJSON());
                 }
+            });
+
+            this.on('change:username',function(msg){
+                console.log('username for this model:',this,'has changed --->',msg);
             });
 
             console.log('UserModel has been intialized');
@@ -70,7 +73,9 @@ define(
         persist: function(adds,callback){
             var opts = adds || null;
             this.save(opts, {
-                wait:true,
+                //wait:true,
+                dataType:"text",
+                //TODO: is callback is only firing once??
                 success: function (model, response, options) {
                     console.log("The model has been saved to the server");
                     callback(model,response,options);

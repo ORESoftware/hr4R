@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var IJSON = require('idempotent-json');
 
 /* GET usersRoutes listing. */
 
@@ -148,42 +149,6 @@ router.post('/', function (req, res, next) {
 
 
 
-router.post('/', function (req, res, next) {
-
-    console.log('about to post new user:', req.body);
-
-    var user = req.body;
-    var firstName = user.firstName;
-    var lastName = user.lastName;
-    var username = user.username;
-    var password = user.password;
-    var email = user.email;
-
-    var UserModel = req.site.models.User;
-    var User = UserModel.getNewUser();
-
-    var newUser = new User({
-        username: username,
-        password: password,
-        email: email,
-        firstName: firstName,
-        lastName: lastName
-    });
-
-    newUser.save(function (err, result) {
-        if (err) {
-            console.log("error in user save method:", err);
-            return res.send({error:err});
-        }
-        else if (result) {
-            console.log('Added new user: ', result);
-            return res.json({success:result});
-        } else {
-            return next(new Error('grave error in newUser.save method in registration'));
-        }
-    });
-});
-
 router.put('/:user_id', function (req, res, next) {
 
 
@@ -193,7 +158,7 @@ router.put('/:user_id', function (req, res, next) {
         return next(new Error('router params did not pick up user with PUT users/:user_id'));
     }
 
-    console.log('about to PUT new user:', req.body);
+    console.log('about to PUT user:',userToUpdate,'with this info:', req.body);
 
     var user = req.body;
     var firstName = user.firstName;
@@ -216,6 +181,7 @@ router.put('/:user_id', function (req, res, next) {
         }
         else if (result) {
             console.log('put/updated user: ', result);
+            var str = IJSON.stringify({success:result});
             return res.json({success:result});
         } else {
             next(new Error('grave error in newUser.save method in registration'));

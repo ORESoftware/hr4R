@@ -33,7 +33,7 @@ define(
             model: null,
             collection: null,
 
-            className:'LoginView',
+            className: 'LoginView',
 
             template: null,
 
@@ -140,13 +140,13 @@ define(
                                 throw new Error('null appGlobal.currentUser');
                             }
                             else {
-
+                                //window.location.hash='home';
+                                console.log('user logged in successfully!!');
+                                localStorage.setItem('sc_admin_user', JSON.stringify(appGlobal.currentUser.username));
+                                //router.navigate('home', {trigger: true});
+                                Backbone.Events.trigger('bootRouter', 'home');
                             }
-                            //window.location.hash='home';
-                            console.log('user logged in successfully!!');
-                            localStorage.setItem('sc_admin_user', JSON.stringify(appGlobal.currentUser.username));
-                            //router.navigate('home', {trigger: true});
-                            Backbone.Events.trigger('bootRouter','home');
+
                         });
                     }
                     else {
@@ -154,7 +154,7 @@ define(
                         console.log('user did not log in successfully..!');
                         alert('bad login');
                         //router.navigate('index', {trigger: true});
-                        Backbone.Events.trigger('bootRouter','index');
+                        Backbone.Events.trigger('bootRouter', 'index');
                         //TODO:http://stackoverflow.com/questions/19588401/backbone-navigation-callback
                     }
 
@@ -208,11 +208,11 @@ define(
                             self.render();
                             return;
                         }
-                        else if(res.success) {
+                        else if (res.success) {
                             res = res.success;
                             goHome(res);
                         }
-                        else{
+                        else {
                             throw new Error('Unexpected response from server.');
                         }
 
@@ -256,9 +256,9 @@ define(
                     if (appGlobal.currentUser == null) {
                         throw new Error('null appGlobal.currentUser');
                     } else {
-                        appGlobal.authorized = true;
+                        window.appGlobal.authorized = true;
                         //router.navigate('home', {trigger: true});
-                        Backbone.Events.trigger('bootRouter','home');
+                        Backbone.Events.trigger('bootRouter', 'home');
                     }
 
                 });
@@ -269,14 +269,15 @@ define(
 
                 var newUser = models.UserModel.newUser(res.user);
                 collections.users.add(newUser);
-                Backbone.syncCollection(collections.users,function(err,res){
-                    if(err){
+                Backbone.syncCollection(collections.users, function (err, res) {
+                    if (err) {
                         throw err;
                     }
-                    else{
-                        appGlobal.currentUser = newUser;
+                    else {
+                        window.appGlobal.currentUser = newUser;
+                        window.appGlobal.authorized = true;
                         //router.navigate('home', {trigger: true});
-                        Backbone.Events.trigger('bootRouter','home');
+                        Backbone.Events.trigger('bootRouter', 'home');
                     }
                 });
 

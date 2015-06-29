@@ -15,9 +15,9 @@ var bodyParser = require('body-parser');
 var ejs = require('ejs');
 var expressLayouts = require('express-ejs-layouts');
 var express = require('express');
-var expressSession = require('express-session');
 
-// Other
+
+// Config
 var config = require('./config/config_constants.json');
 
 //app
@@ -50,6 +50,8 @@ app.use(express.static(path.join(__dirname, '/bower_components')));
 var session = require('./lib/controllers/session.js');
 app.use(session);
 
+
+//var expressSession = require('express-session');
 //var sessionStore = new expressSession.MemoryStore();
 //
 //app.use(expressSession({
@@ -156,16 +158,14 @@ app.use(function (req, res, next) {
 
 
 //app.locals = {
-//
 //    title:'SmartConnect Admin Portal'
-//
 //};
-
 
 //app.use(function (req, res, next) {
 //    res.locals.loggedInUser = req.user;
 //    next();
 //});
+
 
 var site = require('./lib/site');
 
@@ -176,12 +176,13 @@ app.use(function (req, res, next) {
 });
 
 
-require('./routes/logout')(app);
+//require('./routes/logout')(app);
 var indexRoute = require('./routes/index');
 var usersRoutes = require('./routes/users');
 var registerRoute = require('./routes/register');
 var authRoute = require('./routes/authenticate');
 var loginRoute = require('./routes/login');
+var logoutRoute = require('./routes/logout')
 var testSocketIORoute = require('./routes/testSocketIO');
 
 app.use('/', indexRoute);
@@ -203,83 +204,6 @@ app.use('/testSocketIO', testSocketIORoute);
 require('./lib/controllers/passport_setup')(site.models.User);
 require('./lib/controllers/params')(app);
 
-
-
-/*
-app.post('/users', function (req, res, next) {
-
-    console.log('about to post new user:', req.body);
-
-    var user = req.body;
-    var firstName = user.firstName;
-    var lastName = user.lastName;
-    var username = user.username;
-    var password = user.password;
-    var email = user.email;
-
-    var UserModel = req.site.models.User;
-    var User = UserModel.getNewUser();
-
-    var newUser = new User({
-        username: username,
-        password: password,
-        email: email,
-        firstName: firstName,
-        lastName: lastName
-    });
-
-    newUser.save(function (err, result) {
-        if (err) {
-            console.log("error in user save method:", err);
-            res.send({error:err});
-        }
-        else if (result) {
-            console.log('Added new user: ', result);
-            res.json({success:result});
-        } else {
-            next(new Error('grave error in newUser.save method in registration'));
-        }
-    });
-});
-
-
-
-app.put('/users/:user_id', function (req, res, next) {
-
-    console.log('about to post new user:', req.body);
-
-    var user = req.body;
-    var firstName = user.firstName;
-    var lastName = user.lastName;
-    var username = user.username;
-    var password = user.password;
-    var email = user.email;
-
-    var UserModel = req.site.models.User;
-    var User = UserModel.getNewUser();
-
-    var newUser = new User({
-        username: username,
-        password: password,
-        email: email,
-        firstName: firstName,
-        lastName: lastName
-    });
-
-    newUser.save(function (err, result) {
-        if (err) {
-            console.log("error in user put method:", err);
-            res.send({error:err});
-            return next(err);
-        }
-        else if (result) {
-            console.log('put/updated user: ', result);
-            res.json({success:result});
-        } else {
-            next(new Error('grave error in newUser.save method in registration'));
-        }
-    });
-});*/
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
