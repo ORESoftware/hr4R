@@ -2,6 +2,9 @@
  * Created by amills001c on 6/15/15.
  */
 
+//TODO: https://scotch.io/tutorials/learn-to-use-the-new-router-in-expressjs-4
+//TODO: http://bulkan-evcimen.com/using_express_router_instead_of_express_namespace.html
+
 var passport = require('passport');
 var colors = require('colors');
 var path = require('path');
@@ -110,6 +113,12 @@ app.use(function (req, res, next) {
 
 });
 
+router.all('/', function (req, res, next) {
+    console.log('Someone made a request!');
+    console.log(req.method,req.originalUrl);
+    next();
+});
+
 //TODO: why is it user._doc now?
 
 // Passport auth
@@ -176,22 +185,27 @@ var loginRoute = require('./routes/login');
 var testSocketIORoute = require('./routes/testSocketIO');
 
 app.use('/', indexRoute);
-app.use('/users*', usersRoutes);
+app.use('/users', usersRoutes);
 app.use('/authenticate', authRoute);
 app.use('/register', registerRoute);
 app.use('/login', loginRoute);
 app.use('/testSocketIO', testSocketIORoute);
+
+//router.use('/', indexRoute);
+//router.use('/users*', usersRoutes);
+//router.use('/authenticate', authRoute);
+//router.use('/register', registerRoute);
+//router.use('/login', loginRoute);
+//router.use('/testSocketIO', testSocketIORoute);
 
 
 //require('./routes')(app);
 require('./lib/controllers/passport_setup')(site.models.User);
 require('./lib/controllers/params')(app);
 
-app.get('*', function(req, res) {
-    console.log('agega');
-});
 
 
+/*
 app.post('/users', function (req, res, next) {
 
     console.log('about to post new user:', req.body);
@@ -265,7 +279,7 @@ app.put('/users/:user_id', function (req, res, next) {
             next(new Error('grave error in newUser.save method in registration'));
         }
     });
-});
+});*/
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

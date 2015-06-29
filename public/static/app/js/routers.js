@@ -104,9 +104,7 @@ define('app/js/routers',
                                     if(err){
                                         return cb(err);
                                     }
-                                    coll.fetch().fail(function(err){
-                                       cb(err);
-                                    }).done(function () {
+                                    coll.fetch().done(function () {
                                         cb();
                                     });
                                 });

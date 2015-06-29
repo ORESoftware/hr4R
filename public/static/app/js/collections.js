@@ -28,7 +28,7 @@ define('app/js/collections',
             //},
 
             url:'/users',
-            urlRoot: '/users',
+            //urlRoot: '/users',
 
             persistAsync: function(cb){
                 //Backbone.sync('create', this, {
@@ -65,8 +65,8 @@ define('app/js/collections',
                 this.each(function(user,index){  //iterate through models, add/push function to async.parallel
                     saveArray.push(
                         function(callback){
-                            //user.save({},{
-                            //    //wait:null,
+                            //user.save(null,{
+                            //    wait:null,
                             //    success:function(msg){
                             //        console.log('saved user --->',msg);
                             //        callback(null,msg);

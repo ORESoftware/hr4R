@@ -603,7 +603,7 @@
       if (attrs && !wait) {
         if (!this.set(attrs, options)) return false;
       } else {
-        if (!this._validate(attrs, options)) return false;
+        //if (!this._validate(attrs, options)) return false;
       }
 
       // After a successful server-side save, the client is (optionally)

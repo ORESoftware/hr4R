@@ -6,6 +6,7 @@
 console.log('loading app/js/MODELS.js');
 
 //TODO: In model, urlRoot is used for the Model. url is used for the instance of the Model.
+//TODO: http://beletsky.net/2012/11/baby-steps-to-backbonejs-model.html
 
 define(
     [
@@ -20,7 +21,7 @@ define(
 
         idAttribute: "_id",
 
-        url: '/users',
+        //url: '/users',
         //urlRoot: '/users?user_id=',
         urlRoot: '/users',
 
@@ -79,14 +80,14 @@ define(
                     callback(model,xhr,options);
                 }
             });
-        },
-        validation: {
-            email: {
-                required: true,
-                pattern: 'email',
-                msg: 'Please enter a valid email'
-            }
         }
+        //validation: {
+        //    email: {
+        //        required: true,
+        //        pattern: 'email',
+        //        msg: 'Please enter a valid email'
+        //    }
+        //}
     });
 
 

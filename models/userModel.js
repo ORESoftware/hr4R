@@ -133,12 +133,19 @@ var registerSchema = function () {
     //});
 
     userSchema.path('username').validate(function (value, cb) {
+        var self = this;
         getNewUser().findOne({username: value}, function (err, user) {
             if (err) {
                 throw err;
             }
             else if (user) {  //we found a user in the DB already, so this username has been taken
-                cb(false);
+                if(self._doc._id.equals(user._doc._id)){
+                    cb(true);
+                }
+                else{
+                    cb(false);
+                }
+
             }
             else {
                 cb(true)
@@ -147,13 +154,19 @@ var registerSchema = function () {
     }, 'This username is already taken!');
 
     userSchema.path('email').validate(function (value, cb) {
+        var self = this;
         getNewUser().findOne({email: value}, function (err, user) {
             if (err) {
                 //cb(err);
                 throw err;
             }
             else if (user) {  //we found a user in the DB already, so this email has already been registered
-                cb(false);
+                if(self._doc._id.equals(user._doc._id)){
+                    cb(true);
+                }
+                else{
+                    cb(false);
+                }
             }
             else {
                 cb(true)
@@ -163,6 +176,7 @@ var registerSchema = function () {
 
 
     userSchema.statics.findByEmailAndPassword = function (email, password, cb) {
+
         this.findOne({email: email}, function (err, user) {
             if (err) {
                 return cb(err);
