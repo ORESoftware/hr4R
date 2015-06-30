@@ -7,6 +7,7 @@
 //https://github.com/volojs/create-template
 //http://www.webdeveasy.com/optimize-requirejs-projects/
 //https://github.com/tastejs/todomvc/tree/gh-pages/examples/backbone_require
+//TODO:
 
 console.log('loading app/js/main.js');
 

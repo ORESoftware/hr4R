@@ -176,26 +176,19 @@ app.use(function (req, res, next) {
 });
 
 
-//require('./routes/logout')(app);
-var indexRoute = require('./routes/index');
-var usersRoutes = require('./routes/users');
-var registerRoute = require('./routes/register');
-var authRoute = require('./routes/authenticate');
-var loginRoute = require('./routes/login');
-var logoutRoute = require('./routes/logout')
-var testSocketIORoute = require('./routes/testSocketIO');
-
-app.use('/', indexRoute);
-app.use('/users', usersRoutes);
-app.use('/authenticate', authRoute);
-app.use('/register', registerRoute);
-app.use('/login', loginRoute);
-app.use('/logout', logoutRoute);
-app.use('/testSocketIO', testSocketIORoute);
-
 //require('./routes')(app);
 require('./lib/controllers/passport_setup')(site.models.User);
 require('./lib/controllers/params')(app);
+
+app.use('/', require('./routes/index'));
+app.use('/users', require('./routes/users'));
+app.use('/authenticate', require('./routes/authenticate'));
+app.use('/register', require('./routes/register'));
+app.use('/login', require('./routes/login'));
+app.use('/logout', require('./routes/logout'));
+app.use('/testSocketIO', require('./routes/testSocketIO'));
+
+
 
 
 // catch 404 and forward to error handler
