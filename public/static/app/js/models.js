@@ -39,6 +39,8 @@ define(
 
             _.bindAll(this,'validate');
 
+
+
             this.on('change',  function() {
                 if(this.hasChanged('_id')){
                     console.log('uh oh!! _id value for this model has been changed');
@@ -66,7 +68,7 @@ define(
 
            //TODO:https://github.com/thedersen/backbone.validation
 
-            return true;
+            return undefined;
         },
 
 

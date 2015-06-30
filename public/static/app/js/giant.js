@@ -21,7 +21,6 @@ define(
     function (io, routers, allViews, Backbone) {
 
 
-
         console.log('document.cookie before socketio:',document.cookie);
 
         var socket = io.connect('http://127.0.0.1:3000');
@@ -64,7 +63,7 @@ define(
 
         return {
             //routers: routers(allViews)
-            routers:routers
+            socketio:socket
         };
     });
 

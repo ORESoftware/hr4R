@@ -40,7 +40,7 @@
 var router = require('express').Router();
 
 
-router.get('/logout',function (req, res, next) {
+router.get('/',function (req, res, next) {
     req.session.user_id = undefined;
     req.session.passport.user = null;
     req.user = undefined;
@@ -59,7 +59,7 @@ router.get('/logout',function (req, res, next) {
     });
 });
 
-router.post('/logout',function (req, res, next) {
+router.post('/',function (req, res, next) {
     req.session.user_id = undefined;
     req.session.passport.user = null;
     req.user = undefined;

@@ -39,6 +39,7 @@ define('app/js/routers',
                 'index': 'index',
                 'home': 'home',
                 'login': 'login',
+                ":route/:action": "loadView",
                 "*notFound": "defaultRoute" // Backbone will try to match the routes above first
             },
 
@@ -68,12 +69,27 @@ define('app/js/routers',
                 //this.listenTo(Backbone,'bootRouter',this.onToggleViewRequest);
                 //this.listenTo(Backbone,'bootRouter',this.onToggleViewRequest,this);
                 var self = this;
-                Backbone.Events.on('bootRouter', onToggleViewRequest.bind(self), this);
+                //this.on('route:showThing', this.anything);
+                //Backbone.Events.on('bootRouter', onToggleViewRequest.bind(self), this);
                 _.bindAll(this, 'changeView');
+                this.listenTo(Backbone.Events, 'bootRouter', onToggleViewRequest);
 
                 function onToggleViewRequest(viewName) {
-                    this.navigate(viewName, {trigger: true});
+                    self.navigate(viewName, {trigger: true});
                 }
+
+                this.on('route:loadView', function( route, action ){
+                    alert(route + "_" + action); //
+                });
+
+                this.on('route:home', function(actions) {
+                    alert('Welcome to the SC admin tool.');
+                });
+
+                this.on('route:getPost', function (id) {
+                    // Note the variable in the route definition being passed in here
+                    alert( "Get post number " + id );
+                });
 
             },
 

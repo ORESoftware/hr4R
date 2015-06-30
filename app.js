@@ -90,10 +90,10 @@ app.engine('html', ejs.renderFile);
 //TODO: is it app.use(router) before or after passport?
 //TODO: use redis or mongodb for session store?
 
-app.use(router);
+//app.use(router);
 app.use(passport.initialize());
 app.use(passport.session());
-//app.use(router);
+app.use(router);
 
 
 app.use(function (req, res, next) {
@@ -190,15 +190,8 @@ app.use('/users', usersRoutes);
 app.use('/authenticate', authRoute);
 app.use('/register', registerRoute);
 app.use('/login', loginRoute);
+app.use('/logout', logoutRoute);
 app.use('/testSocketIO', testSocketIORoute);
-
-//router.use('/', indexRoute);
-//router.use('/users*', usersRoutes);
-//router.use('/authenticate', authRoute);
-//router.use('/register', registerRoute);
-//router.use('/login', loginRoute);
-//router.use('/testSocketIO', testSocketIORoute);
-
 
 //require('./routes')(app);
 require('./lib/controllers/passport_setup')(site.models.User);
