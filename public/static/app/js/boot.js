@@ -3,6 +3,8 @@
  */
 
 //var app = app || {};
+//TODO: http://stackoverflow.com/questions/19827912/package-html-templates-in-require-js-optimizer
+//TODO: http://www.webdeveasy.com/optimize-requirejs-projects/
 
 //define(['jquery','backbone','app/js/routers'], function($,Backbone,routers) {
 

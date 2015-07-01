@@ -38,7 +38,7 @@ define(
                 var data = this.collection.models;
                 var self = this;
 
-                if(this.template == null){
+                if(RegisteredUsersView.template == null){
 
                     console.log('registeredUsersView template is null, retrieving from server.')
 

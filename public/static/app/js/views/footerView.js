@@ -14,11 +14,12 @@ define(
         'underscore',
         'handlebars',
         'backbone',
-        'backbone-validation'
+        'backbone-validation',
+        'text!app/templates/footer.ejs'
     ],
 
 
-    function (models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
+    function (models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
 
 
         var FooterView = Backbone.View.extend({
@@ -52,7 +53,7 @@ define(
 
                 var self = this;
 
-                if(self.template == null){
+                if(FooterView.template == null){
 
                     console.log('footerView template is null, retrieving from server.');
 
@@ -60,8 +61,8 @@ define(
                         url: 'static/html/ejs/footer.ejs',
                         type: 'GET',
                         success: function (msg) {
-                            self.template = msg;
-                            var ret = EJS.render(self.template, appGlobal);
+                            FooterView.template = msg;
+                            var ret = EJS.render(FooterView.template, appGlobal);
                             //console.log('login view:', ret);
                             self.$el.html(ret);
                         },
@@ -73,7 +74,7 @@ define(
                 }
                 else{
 
-                    var ret = EJS.render(self.template, appGlobal);
+                    var ret = EJS.render(FooterView.template, appGlobal);
                     self.$el.html(ret);
 
                 }
@@ -100,6 +101,8 @@ define(
 
             }
         });
+
+        FooterView.template = template;
 
         return FooterView;
     });

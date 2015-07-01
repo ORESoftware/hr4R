@@ -3,6 +3,7 @@
  */
 
 //TODO:https://www.safaribooksonline.com/library/view/developing-backbonejs-applications/9781449328535/ch04s03.html
+//TODO: http://www.svlada.com/require-js-optimization-part2/#t2
 
 console.log('loading homeView');
 
@@ -17,7 +18,11 @@ define(
         'handlebars',
         'backbone',
         'backbone-validation',
+        //'text!app/templates/homeTemplate.ejs'
+        //'app/js/allTemplates'
+        //'app/js/optimized_templates'
         'text!app/templates/homeTemplate.ejs'
+        //'text!homeTemplate.html'
     ],
 
 
@@ -25,6 +30,8 @@ define(
 
 
         //var templateHtml = require('text!app/templates/homeTemplate.ejs');  //load the template//
+
+        //var template = allTemplates.HomeTemplate;
 
         var HomeView = Backbone.View.extend({
 

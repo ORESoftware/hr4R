@@ -16,11 +16,12 @@ define(
         'underscore',
         'handlebars',
         'backbone',
-        'backbone-validation'
+        'backbone-validation',
+        'text!app/templates/header.ejs'
     ],
 
 
-    function (models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
+    function (models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation,template) {
 
 
         //var router = routers(null).bootRouter;//
@@ -59,7 +60,7 @@ define(
 
                 var self = this;
 
-                if(self.template == null){
+                if(HeaderView.template == null){
 
                     console.log('headerView template is null, retrieving from server.')
 
@@ -67,8 +68,8 @@ define(
                         url: 'static/html/ejs/header.ejs',
                         type: 'GET',
                         success: function (msg) {
-                            self.template = msg;
-                            var ret = EJS.render(self.template, appGlobal);
+                            HeaderView.template = msg;
+                            var ret = EJS.render(HeaderView.template, appGlobal);
                             self.$el.html(ret);
                         },
                         error: function (err) {
@@ -78,7 +79,7 @@ define(
                 }
                 else{
 
-                    var ret = EJS.render(self.template, appGlobal);
+                    var ret = EJS.render(HeaderView.template, appGlobal);
                     self.$el.html(ret);
 
                 }
@@ -128,7 +129,7 @@ define(
             }
         });
 
-        HeaderView.template = null;
+        HeaderView.template = template;
 
         return HeaderView;
     });

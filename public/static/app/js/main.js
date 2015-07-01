@@ -7,7 +7,10 @@
 //https://github.com/volojs/create-template
 //http://www.webdeveasy.com/optimize-requirejs-projects/
 //https://github.com/tastejs/todomvc/tree/gh-pages/examples/backbone_require
-//TODO:
+//TODO: http://stackoverflow.com/questions/19827912/package-html-templates-in-require-js-optimizer
+//TODO: https://cdnjs.com/libraries/backbone.js/tutorials/organizing-backbone-using-modules
+//TODO: http://code.tutsplus.com/tutorials/game-on-backbone-and-ember--net-26836
+//TODO: http://stackoverflow.com/questions/8780775/text-files-in-the-path-configuration-file
 
 console.log('loading app/js/main.js');
 
@@ -29,11 +32,16 @@ requirejs.config({
         'bootstrap': 'vendor/bootstrap',
         'handlebars': 'vendor/handlebars',
         'backbone-validation': 'vendor/backbone-validation-amd',
-        'socketio': 'https://cdn.socket.io/socket.io-1.3.5'
+        'homeTemplate':'app/templates/homeTemplate.html',
+        'socketio':'vendor/socketio'
+        //'socketio': 'https://cdn.socket.io/socket.io-1.3.5'
         //'_routers_': 'app/js/routers'
     },
-    // Shim declaration
+
     'shim': {
+        'homeTemplate':{
+            'deps': ['text']
+        },
         'underscore': {
             'exports': '_'
         },
