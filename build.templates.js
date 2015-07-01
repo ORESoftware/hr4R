@@ -9,5 +9,5 @@
     "name": "app/js/allTemplates",
     "mainConfigFile": "./public/static/app/js/main.js",
     "out": "./public/static/app/js/optimized_templates.js",
-    "optimize": 'none'
+    //"optimize": 'none'
 })
