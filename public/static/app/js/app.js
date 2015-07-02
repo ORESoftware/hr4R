@@ -3,6 +3,8 @@
  */
 
 
+//TODO: http://webdeveloperpost.com/Articles/10-most-useful-jQuery-functions-for-your-website.aspx
+
 
 console.log('loading app/js/APP.js');
 
@@ -30,11 +32,14 @@ define(
         'handlebars',
         'backbone',
         'ijson',
-        'app/js/collections'
+        'react',
+        'app/js/collections',
+        'app/js/allViews',
+        'app/js/allTemplates'
 
     ],
 
-    function (Handlebars, Backbone, IJSON, collections) {
+    function (Handlebars, Backbone, IJSON, React, collections, allViews, allTemplates) {
 
 
         Backbone.syncCollection = function (collection, cb) {

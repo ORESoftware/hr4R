@@ -19,7 +19,7 @@ define('app/js/boot',
         'app/js/collections'
     ],
 
-    function ($, Backbone, giant,collections) {
+    function ($, Backbone, giant, collections) {
 
 
         //var router = giant.routers.bootRouter;  //we need to load giant NOW because we need routers to get populated with allViews
@@ -39,7 +39,7 @@ define('app/js/boot',
                 success: function (msg) {
                     console.log('authentication message:', msg);
                     appGlobal.env = msg.env;
-                    runApplication(msg.isAuthenticated,msg.user);
+                    runApplication(msg.isAuthenticated, msg.user);
                 },
                 error: function (err) {
                     console.log('server error:', err);
@@ -53,7 +53,7 @@ define('app/js/boot',
         //TODO: effectiveJS not EmbeddedJS...see google for this
         //TODO: create new user with Backbone model
 
-        var runApplication = function (authenticated,user) {
+        var runApplication = function (authenticated, user) {
 
             if (authenticated === true) {
                 //window.location.hash='home';//Backbone.history.navigate('home', true);
@@ -75,7 +75,7 @@ define('app/js/boot',
                     }
                     //window.location.hash='home';
                     //router.navigate('home', {trigger: true});
-                    Backbone.Events.trigger('bootRouter','home');
+                    Backbone.Events.trigger('bootRouter', 'home');
                 });
             }
             else {
@@ -84,7 +84,7 @@ define('app/js/boot',
                 //window.location.hash='index';
                 //Backbone.history.navigate('index', true);
                 //router.navigate('index', {trigger: true});
-                Backbone.Events.trigger('bootRouter','index');
+                Backbone.Events.trigger('bootRouter', 'index');
             }
         };
 

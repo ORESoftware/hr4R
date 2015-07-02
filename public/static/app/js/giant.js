@@ -12,7 +12,7 @@ define(
 
     [
         'socketio',
-        'app/js/routers',
+        'jsx!app/js/routers',
         //'_routers_',
         'app/js/allViews',
         'backbone'

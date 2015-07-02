@@ -12,18 +12,19 @@
 console.log('loading app/js/ROUTERS.js');
 
 
-define('app/js/routers',
-
+define(
     [
+        'react',
         'backbone',
         'async',
         'app/js/collections',
         'app/js/viewState',
         'ijson',
-        'app/js/allViews'
+        'app/js/allViews',
+        'jsx!app/js/views/todoList'
     ],
 
-    function (Backbone,async, collections, $viewState, IJSON, allViews) {
+    function (React, Backbone, async, collections, $viewState, IJSON, allViews, TodoList) {
 
         //var allViews = null;
 
@@ -46,6 +47,8 @@ define('app/js/routers',
             canonical: function () {
                 //this.changeView(new allViews.Index());
                 // this is a no operation function
+
+
             },
 
             home: function () {
@@ -57,9 +60,22 @@ define('app/js/routers',
             },
 
             defaultRoute: function () {
-                //this.changeView(new allViews.Home());
-                this.navigate('home', {trigger: true});
-                //    TODO: fix this so that if user puts in unknown route into address bar, that it goes to home
+
+                var todos = new Backbone.Collection([
+                    {
+                        text: 'Dishes!',
+                        dueDate: new Date()
+                    }
+                ]);
+
+                React.render(<TodoList todos={todos}/>, document.body);
+
+                return;
+
+
+                /* //this.changeView(new allViews.Home());
+                 this.navigate('home', {trigger: true});
+                 //TODO: fix this so that if user puts in unknown route into address bar, that it goes to home*/
             },
 
             initialize: function (options) {
@@ -78,17 +94,17 @@ define('app/js/routers',
                     self.navigate(viewName, {trigger: true});
                 }
 
-                this.on('route:loadView', function( route, action ){
+                this.on('route:loadView', function (route, action) {
                     alert(route + "_" + action); //
                 });
 
-                this.on('route:home', function(actions) {
+                this.on('route:home', function (actions) {
                     alert('Welcome to the SC admin tool.');
                 });
 
                 this.on('route:getPost', function (id) {
                     // Note the variable in the route definition being passed in here
-                    alert( "Get post number " + id );
+                    alert("Get post number " + id);
                 });
 
             },
@@ -123,7 +139,7 @@ define('app/js/routers',
                             function (cb) {
                                 var coll = collections[key];
                                 coll.persist(function (err, res) {
-                                    if(err){
+                                    if (err) {
                                         return cb(err);
                                     }
                                     coll.fetch().done(function () {
@@ -159,7 +175,7 @@ define('app/js/routers',
 
         bootRouter.on('route:getPost', function (id) {
             // Note the variable in the route definition being passed in here
-            alert( "Get post number " + id );
+            alert("Get post number " + id);
         });
 
         //bootRouter.on('route:defaultRoute', function (actions) {

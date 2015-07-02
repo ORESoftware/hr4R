@@ -11,6 +11,8 @@
 //TODO: https://cdnjs.com/libraries/backbone.js/tutorials/organizing-backbone-using-modules
 //TODO: http://code.tutsplus.com/tutorials/game-on-backbone-and-ember--net-26836
 //TODO: http://stackoverflow.com/questions/8780775/text-files-in-the-path-configuration-file
+//TODO: http://blog.mayflower.de/3937-Backbone-React.html
+//TODO: https://github.com/philix/jsx-requirejs-plugin
 
 console.log('loading app/js/main.js');
 
@@ -33,6 +35,9 @@ requirejs.config({
         'handlebars': 'vendor/handlebars',
         'backbone-validation': 'vendor/backbone-validation-amd',
         'homeTemplate':'app/templates/homeTemplate.html',
+        'jsx': "vendor/jsx",
+        'JSXTransformer': 'vendor/JSXTransformer',
+        'react':'vendor/react-with-addons',
         'socketio':'vendor/socketio'
         //'socketio': 'https://cdn.socket.io/socket.io-1.3.5'
         //'_routers_': 'app/js/routers'
@@ -66,16 +71,3 @@ require(['app/js/app'], function (Application) {
         var app = Application.start();//
     });
 });
-
-//require(['app/js/commonjs'], function(value) {
-//    //var app = new Application();
-//    //app.start(); // or whatever startup logic your app uses.
-//    console.log(value);
-//});
-//
-//
-//require(['app/js/commonjs2'], function(value) {
-//    //var app = new Application();
-//    //app.start(); // or whatever startup logic your app uses.
-//    console.log(value);
-//});
