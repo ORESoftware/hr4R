@@ -4,6 +4,8 @@
 
 
 //TODO: http://webdeveloperpost.com/Articles/10-most-useful-jQuery-functions-for-your-website.aspx
+//TODO: http://alfredkam.com/goodbye-marionette-hello-react/
+
 
 
 console.log('loading app/js/APP.js');
@@ -35,12 +37,19 @@ define(
         'react',
         'app/js/collections',
         'app/js/allViews',
-        'app/js/allTemplates'
+        'app/js/allTemplates',
+        'jsx!app/js/views/todoList',
+        'app/js/giant'
 
     ],
 
-    function (Handlebars, Backbone, IJSON, React, collections, allViews, allTemplates) {
+    function (Handlebars, Backbone, IJSON, React, collections, allViews, allTemplates,todoList,giant) {
 
+
+        /*
+        we don't use the majority of these files, but they are loaded here so that r.js can build
+        the optimized file
+        */
 
         Backbone.syncCollection = function (collection, cb) {
 

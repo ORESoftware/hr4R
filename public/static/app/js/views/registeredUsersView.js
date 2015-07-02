@@ -13,10 +13,11 @@ define(
         'underscore',
         'handlebars',
         'backbone',
-        'backbone-validation'
+        'backbone-validation',
+        'text!app/templates/registeredUsersTemplate.ejs'
     ],
 
-    function (collections, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
+    function (collections, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
 
 
         var RegisteredUsersView = Backbone.View.extend({
@@ -73,7 +74,7 @@ define(
             }
         });
 
-        RegisteredUsersView.template = null;
+        RegisteredUsersView.template = template;
 
         return RegisteredUsersView;
 

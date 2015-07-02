@@ -16,11 +16,12 @@ define(
         'underscore',
         'handlebars',
         'backbone',
-        'backbone-validation'
+        'backbone-validation',
+        'text!app/templates/indexTemplate.ejs'
     ],
 
 
-    function (collections, LoginView, RegisteredUsersView, EJS, $, _, Handlebars, Backbone, BackboneValidation) {
+    function (collections, LoginView, RegisteredUsersView, EJS, $, _, Handlebars, Backbone, BackboneValidation,template) {
 
 
         var IndexView = Backbone.View.extend({
@@ -124,7 +125,7 @@ define(
         });
 
 
-        IndexView.template = null;
+        IndexView.template = template;
 
         return IndexView;
 

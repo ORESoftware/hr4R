@@ -20,11 +20,12 @@ define(
         'handlebars',
         'backbone',
         'backbone-validation',
-        'ijson'
+        'ijson',
+        'text!app/templates/loginTemplate.ejs'
     ],
 
 
-    function (collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, IJSON) {
+    function (collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, IJSON, template) {
 
         //var router = routers(null).bootRouter;
 
@@ -285,7 +286,7 @@ define(
 
         }
 
-        LoginView.template = null;
+        LoginView.template = template;
 
         return LoginView;
 
