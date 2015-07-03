@@ -11,6 +11,7 @@ console.log('loading app/js/giant.js');
 define(
 
     [
+        '#appState',
         'socketio',
         'jsx!app/js/routers',
         //'_routers_',
@@ -18,7 +19,7 @@ define(
         'backbone'
     ],
 
-    function (io, routers, allViews, Backbone) {
+    function (appState, io, routers, allViews, Backbone) {
 
 
         console.log('document.cookie before socketio:',document.cookie);
@@ -42,7 +43,7 @@ define(
             var parsed = JSON.parse(msg);
 
             for (var prop in msg) {
-                appGlobal['prop'] = msg['prop'];
+                //appGlobal['prop'] = msg['prop'];
             }
 
             socket.emit('appGlobal_info_received_on_client');

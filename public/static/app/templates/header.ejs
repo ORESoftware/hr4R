@@ -1,8 +1,8 @@
 <header>
     <div>
         <div id="header-div-id">
-            <% if(typeof appGlobal !== 'undefined' && appGlobal.currentUser != null) { %>
-            <div>Logged In As: <%= appGlobal.currentUser.get('firstName') + " " + appGlobal.currentUser.get('lastName') %>(<%= appGlobal.currentUser.get('username')%>)</div>
+            <% if(appState.get('currentUser') !== null) { %>
+            <div>Logged In As: <%= appState.getV('currentUser').get('firstName') + " " + appState.getV('currentUser').get('lastName') %>(<%= appState.getV('currentUser').get('username')%>)</div>
             <button id="logout-button-id">Logout</button>
             <% } else { %>
             <div>You need to either register or login.</div>

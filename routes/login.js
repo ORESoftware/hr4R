@@ -2,9 +2,7 @@
  * Created by amills001c on 6/18/15.
  */
 
-
-var express = require('express');
-var router = express.Router();
+var router = require('express').Router();
 var passport = require('passport');
 
 

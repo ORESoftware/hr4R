@@ -5,11 +5,12 @@
 
 //TODO: http://webdeveloperpost.com/Articles/10-most-useful-jQuery-functions-for-your-website.aspx
 //TODO: http://alfredkam.com/goodbye-marionette-hello-react/
-
+//TODO: http://www.toptal.com/front-end/simple-data-flow-in-react-applications-using-flux-and-backbone
 
 
 console.log('loading app/js/APP.js');
 
+/*
 window.appGlobal = {
 
 //unfortunately, can't really avoid global variables,
@@ -20,12 +21,25 @@ window.appGlobal = {
     env: null    //object
 
 };
+*/
 
 
 window.no_op = function () {
 };
 window.no_op_err = function () {
     throw new Error('this no_op function should not have been called.')
+};
+
+
+window.saveToLocalStorage = function (key, val) {
+    var str = JSON.stringify(val);
+    localStorage.setItem(key, str);
+};
+
+
+window.readFromLocalStorage = function (key) {
+    var val = localStorage.getItem(key);
+    return JSON.parse(val);
 };
 
 
@@ -43,13 +57,13 @@ define(
 
     ],
 
-    function (Handlebars, Backbone, IJSON, React, collections, allViews, allTemplates,todoList,giant) {
+    function (Handlebars, Backbone, IJSON, React, collections, allViews, allTemplates, todoList, giant) {
 
 
         /*
-        we don't use the majority of these files, but they are loaded here so that r.js can build
-        the optimized file
-        */
+         we don't use the majority of these files, but they are loaded here so that r.js can build
+         the optimized file
+         */
 
         Backbone.syncCollection = function (collection, cb) {
 
@@ -61,7 +75,7 @@ define(
                     collection.fetch(
                         {
                             success: function (msg) {
-                                cb(null,msg);
+                                cb(null, msg);
                             },
                             error: function (err) {
                                 cb(err)

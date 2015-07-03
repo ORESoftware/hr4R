@@ -7,6 +7,7 @@ console.log('loading footerView');
 
 define(
     [
+        '#appState',
         'app/js/models',
         'form2js',
         'ejs',
@@ -19,7 +20,7 @@ define(
     ],
 
 
-    function (models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
+    function (appState, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
 
 
         var FooterView = Backbone.View.extend({
@@ -62,7 +63,7 @@ define(
                         type: 'GET',
                         success: function (msg) {
                             FooterView.template = msg;
-                            var ret = EJS.render(FooterView.template, appGlobal);
+                            var ret = EJS.render(FooterView.template, appState.value);
                             //console.log('login view:', ret);
                             self.$el.html(ret);
                         },
@@ -74,7 +75,7 @@ define(
                 }
                 else{
 
-                    var ret = EJS.render(FooterView.template, appGlobal);
+                    var ret = EJS.render(FooterView.template, appState.value);
                     self.$el.html(ret);
 
                 }

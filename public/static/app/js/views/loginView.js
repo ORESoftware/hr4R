@@ -10,7 +10,7 @@ console.log('loading loginView');
 
 define(
     [
-        //'app/js/routers',
+        '#appState',
         'app/js/collections',
         'app/js/models',
         'form2js',
@@ -25,7 +25,7 @@ define(
     ],
 
 
-    function (collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, IJSON, template) {
+    function (appState, collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, IJSON, template) {
 
         //var router = routers(null).bootRouter;
 
@@ -117,12 +117,10 @@ define(
                     dataType: "json",
                     data: userData
                 }).done(function (msg) {
-                    console.log('authentication message:', msg);
 
-                    appGlobal.authorized = msg.isAuthenticated;
-                    appGlobal.env = msg.env;
+                    appState.set('env', msg.env);
 
-                    if (appGlobal.authorized === true) {
+                    if (msg.isAuthenticated === true) {
 
                         var user = msg.user
 
@@ -131,30 +129,26 @@ define(
                             for (var i = 0; i < collections.users.models.length; i++) {
 
                                 if (user.username === collections.users.models[i].get('username')) {
-                                    appGlobal.currentUser = collections.users.models[i];
+                                    //appGlobal.currentUser = collections.users.models[i];
+                                    appState.set('currentUser', collections.users.models[i]);
                                     break;
                                 }
 
                             }
 
-                            if (appGlobal.currentUser === null) {
-                                throw new Error('null appGlobal.currentUser');
+                            if (appState.get('currentUser') == null) {
+                                throw new Error('null or undefined currentUser');
                             }
                             else {
-                                //window.location.hash='home';
                                 console.log('user logged in successfully!!');
-                                localStorage.setItem('sc_admin_user', JSON.stringify(appGlobal.currentUser.username));
-                                //router.navigate('home', {trigger: true});
                                 Backbone.Events.trigger('bootRouter', 'home');
                             }
 
                         });
                     }
                     else {
-                        appGlobal.authorized = false;
+                        appState.set('currentUser', null);
                         console.log('user did not log in successfully..!');
-                        alert('bad login');
-                        //router.navigate('index', {trigger: true});
                         Backbone.Events.trigger('bootRouter', 'index');
                         //TODO:http://stackoverflow.com/questions/19588401/backbone-navigation-callback
                     }
@@ -209,7 +203,7 @@ define(
                             self.render();
                             return;
                         }
-                        else if (res.success) {
+                        else if (res.success) { //TODO: I like this convention
                             res = res.success;
                             goHome(res);
                         }
@@ -228,8 +222,6 @@ define(
 
                     });
             }
-
-
         });
 
 
@@ -248,42 +240,35 @@ define(
                         if (user.username === collections.users.models[i].get('username') &&
                             user._id == collections.users.models[i].get('_id')
                         ) {
-                            appGlobal.currentUser = collections.users.models[i];
+                            appState.set('currentUser',collections.users.models[i]);
                             break;
                         }
 
                     }
 
-                    if (appGlobal.currentUser == null) {
-                        throw new Error('null appGlobal.currentUser');
-                    } else {
-                        window.appGlobal.authorized = true;
-                        //router.navigate('home', {trigger: true});
+                    if (appState.get('currentUser') == null) {
+                        throw new Error('null or undefined currentUser');
+                    }
+                    else {
                         Backbone.Events.trigger('bootRouter', 'home');
                     }
 
                 });
-
-
             }
             else {
 
                 var newUser = models.UserModel.newUser(res.user);
                 collections.users.add(newUser);
-                Backbone.syncCollection(collections.users, function (err, res) {
+                Backbone.syncCollection(collections.users, function (err, res) {  //TODO: should just save UserModel, not whole collection here
                     if (err) {
                         throw err;
                     }
                     else {
-                        window.appGlobal.currentUser = newUser;
-                        window.appGlobal.authorized = true;
-                        //router.navigate('home', {trigger: true});
+                        appState.set('currentUser',newUser);
                         Backbone.Events.trigger('bootRouter', 'home');
                     }
                 });
-
             }
-
         }
 
         LoginView.template = template;

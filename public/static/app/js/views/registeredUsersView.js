@@ -7,6 +7,7 @@ console.log('loading registeredUsersView');
 
 define(
     [
+        '#appState',
         'app/js/collections',
         'ejs',
         'jquery',
@@ -17,7 +18,7 @@ define(
         'text!app/templates/registeredUsersTemplate.ejs'
     ],
 
-    function (collections, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
+    function (appState, collections, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
 
 
         var RegisteredUsersView = Backbone.View.extend({

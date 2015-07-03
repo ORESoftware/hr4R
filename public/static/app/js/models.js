@@ -100,13 +100,17 @@ define(
 
     User.newUser = function($user){
 
-        var user = new User({url:'/users'});
+        $user.url = '/users';
 
-        user.firstName = $user.firstName;
-        user.lastName = $user.lastName;
-        user.username = $user.username;
-        user.password = $user.password;
-        user.email = $user.email;
+        //var user = new User($user);
+
+        var user = new User($user);
+
+        //user.attributes.firstName = $user.firstName;
+        //user.attributes.lastName = $user.lastName;
+        //user.attributes.username = $user.username;
+        //user.attributes.password = $user.password;
+        //user.attributes.email = $user.email;
 
         return user;
 

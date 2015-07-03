@@ -8,7 +8,7 @@ console.log('loading headerView');
 
 define(
     [
-        //'app/js/routers',
+        '#appState',
         'app/js/models',
         'form2js',
         'ejs',
@@ -21,7 +21,7 @@ define(
     ],
 
 
-    function (models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation,template) {
+    function (appState, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
 
 
         //var router = routers(null).bootRouter;//
@@ -31,13 +31,13 @@ define(
 
         var HeaderView = Backbone.View.extend({
 
-            className:'HeaderView',
+            className: 'HeaderView',
 
             //id: 'HomeViewID',
             //tagName: 'HomeViewTagName',
             //className: 'HomeViewClassName',
 
-            model:null,
+            model: null,
 
             template: null,
 
@@ -60,7 +60,7 @@ define(
 
                 var self = this;
 
-                if(HeaderView.template == null){
+                if (HeaderView.template == null) {
 
                     console.log('headerView template is null, retrieving from server.')
 
@@ -69,7 +69,7 @@ define(
                         type: 'GET',
                         success: function (msg) {
                             HeaderView.template = msg;
-                            var ret = EJS.render(HeaderView.template, appGlobal);
+                            var ret = EJS.render(HeaderView.template, {appState: appState});
                             self.$el.html(ret);
                         },
                         error: function (err) {
@@ -77,9 +77,10 @@ define(
                         }
                     });
                 }
-                else{
+                else {
 
-                    var ret = EJS.render(HeaderView.template, appGlobal);
+                    //var ret = EJS.render(HeaderView.template, {appState:appState});
+                    var ret = EJS.render(HeaderView.template, {appState: appState});
                     self.$el.html(ret);
 
                 }
@@ -89,7 +90,7 @@ define(
                 return this;
             },
 
-            onClickLogout: function(event){
+            onClickLogout: function (event) {
                 event.preventDefault();
 
                 console.log('attempting to log out...');
@@ -100,32 +101,23 @@ define(
                     dataType: 'json',
                     type: 'POST',
                     success: function (msg) {
-                        if(msg === true){
-                            appGlobal.currentUser = null;
-                            appGlobal.authorized = false;
-                            //router.navigate('index',{trigger:true});
-                            Backbone.Events.trigger('bootRouter','index');
+                        if (msg === true) {
+                            appState.set('currentUser', null);
+                            Backbone.Events.trigger('bootRouter', 'index');
                             //TODO:why does log out work even if router.navigate isn't invoked?
                             //Backbone.history.loadUrl();
                         }
-                        else{
-                            alert('logout failed.')
+                        else {
+                            alert('logout failed on server, please try again.')
                         }
-
 
                     },
                     error: function (err) {
                         console.log('error:', err);
                         alert('internal server error - logout failed.')
-                        appGlobal.currentUser = null;
-                        appGlobal.authorized = false;
-                        //router.navigate('index',{trigger:true});
-                        //TODO:why does log out work even if router.navigate isn't invoked?
-                        Backbone.Events.trigger('bootRouter','index');
                         //Backbone.history.loadUrl();
                     }
                 });
-
             }
         });
 
