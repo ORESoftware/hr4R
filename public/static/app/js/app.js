@@ -11,17 +11,17 @@
 console.log('loading app/js/APP.js');
 
 /*
-window.appGlobal = {
+ window.appGlobal = {
 
-//unfortunately, can't really avoid global variables,
-// because templates need to access certain variables without have to re-inject variable values into templates
+ //unfortunately, can't really avoid global variables,
+ // because templates need to access certain variables without have to re-inject variable values into templates
 
-    authorized: null,  //boolean
-    currentUser: null, //Backbone.Model
-    env: null    //object
+ authorized: null,  //boolean
+ currentUser: null, //Backbone.Model
+ env: null    //object
 
-};
-*/
+ };
+ */
 
 
 window.no_op = function () {
@@ -66,6 +66,63 @@ define(
          */
 
         Backbone.syncCollection = function (collection, cb) {
+
+            collection.persist(function (err, res) {
+                if (err) {
+                    cb(err);
+                }
+                else {
+                    collection.fetch(
+                        {
+                            success: function (msg) {
+                                cb(null, msg);
+                            },
+                            error: function (err) {
+                                cb(err)
+                            }
+                        });
+                }
+            });
+        };
+
+        Backbone.batchSyncCollection = function (collection, cb) {
+
+            var batchData = {create: [], destroy: [], update: []};
+
+            for (var i = 0; i < collection.models.length; i++) {
+
+                var model = collection.models[i];
+                batchData.update.push[model.toJSON()];
+            }
+
+            $.ajax({
+                type: "POST",
+                url: collection.batchURL,
+                dataType: "json",
+                data: batchData
+            }).done(function (msg) {
+
+               console.log(msg);
+               cb(msg);
+
+            }).fail(function (msg) {
+
+                console.log(msg);
+                cb(msg);
+
+            }).always(function(msg){
+
+                console.log(msg);
+                cb(msg);
+
+            });
+        };
+
+        Backbone.batchSyncCollection(collections.users,function(msg){
+                 console.log(msg+'!!!!!');
+        });
+
+        Backbone.batchSaveCollection = function (collection, cb) {
 
             collection.persist(function (err, res) {
                 if (err) {

@@ -93,7 +93,7 @@ app.engine('html', ejs.renderFile);
 //app.use(router);
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(router);
+//app.use(router);
 
 
 app.use(function (req, res, next) {
@@ -181,7 +181,7 @@ require('./lib/controllers/passport_setup')(site.models.User);
 require('./lib/controllers/params')(app);
 
 app.use('/', require('./routes/index'));
-app.use('/users', require('./routes/users'));
+app.use('/users*', require('./routes/users'));
 app.use('/authenticate', require('./routes/authenticate'));
 app.use('/register', require('./routes/register'));
 app.use('/login', require('./routes/login'));
