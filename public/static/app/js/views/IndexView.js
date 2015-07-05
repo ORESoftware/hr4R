@@ -8,6 +8,7 @@
 
 define(
     [
+        '#appState',
         'app/js/collections',
         'app/js/views/loginView',
         'app/js/views/registeredUsersView',
@@ -21,7 +22,7 @@ define(
     ],
 
 
-    function (collections, LoginView, RegisteredUsersView, EJS, $, _, Handlebars, Backbone, BackboneValidation,template) {
+    function (appState, collections, LoginView, RegisteredUsersView, EJS, $, _, Handlebars, Backbone, BackboneValidation,template) {
 
 
         var IndexView = Backbone.View.extend({

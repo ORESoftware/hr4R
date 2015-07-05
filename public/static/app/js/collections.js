@@ -28,6 +28,8 @@ define('app/js/collections',
             //},
 
             url:'/users',
+
+            batchURL: '/usersBatch',
             //urlRoot: '/users',
 
             persistAsync: function(cb){

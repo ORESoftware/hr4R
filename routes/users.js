@@ -154,6 +154,12 @@ router.post('/', function (req, res, next) {
 });
 
 
+router.post('Batch', function (req, res, next) {
+
+    console.log('!!!!!',req.body,'!!!!!');
+     res.send({hi:'bye'});
+});
+
 
 router.put('/:user_id', function (req, res, next) {
 

@@ -13,13 +13,14 @@ console.log('loading app/js/BOOT.js');
 define('app/js/boot',
 
     [
+        '#appState',
         'jquery',
         'backbone',
         'app/js/giant',
         'app/js/collections'
     ],
 
-    function ($, Backbone, giant, collections) {
+    function (appState, $, Backbone, giant, collections) {
 
 
         //var router = giant.routers.bootRouter;  //we need to load giant NOW because we need routers to get populated with allViews
@@ -38,7 +39,8 @@ define('app/js/boot',
                 dataType: 'json',
                 success: function (msg) {
                     console.log('authentication message:', msg);
-                    appGlobal.env = msg.env;
+                    //appGlobal.env = msg.env;
+                    appState.set('env',msg.env);
                     runApplication(msg.isAuthenticated, msg.user);
                 },
                 error: function (err) {
@@ -57,21 +59,22 @@ define('app/js/boot',
 
             if (authenticated === true) {
                 //window.location.hash='home';//Backbone.history.navigate('home', true);
-                console.log('authenticated!!');
+                //console.log('authenticated!!');
 
                 collections.users.fetch().done(function () {
 
                     for (var i = 0; i < collections.users.models.length; i++) {
 
                         if (user.username === collections.users.models[i].get('username')) {
-                            appGlobal.currentUser = collections.users.models[i];
+                            //appGlobal.currentUser = collections.users.models[i];
+                            appState.set('currentUser',collections.users.models[i]);
                             break;
                         }
 
                     }
 
-                    if (appGlobal.currentUser === null) {
-                        throw new Error('null appGlobal.currentUser');
+                    if (appState.get('currentUser') === null) {
+                        throw new Error('null currentUser');
                     }
                     //window.location.hash='home';
                     //router.navigate('home', {trigger: true});
@@ -79,11 +82,9 @@ define('app/js/boot',
                 });
             }
             else {
-                //window.location.hash='login';
+
                 console.log('not authenticated..!');
-                //window.location.hash='index';
-                //Backbone.history.navigate('index', true);
-                //router.navigate('index', {trigger: true});
+                appState.set('currentUser',null);
                 Backbone.Events.trigger('bootRouter', 'index');
             }
         };

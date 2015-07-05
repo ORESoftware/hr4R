@@ -14,6 +14,7 @@ console.log('loading app/js/ROUTERS.js');
 
 define(
     [
+        '#appState',
         'react',
         'backbone',
         'async',
@@ -24,7 +25,7 @@ define(
         'jsx!app/js/views/todoList'
     ],
 
-    function (React, Backbone, async, collections, $viewState, IJSON, allViews, TodoList) {
+    function (appState, React, Backbone, async, collections, $viewState, IJSON, allViews, TodoList) {
 
         //var allViews = null;
 
@@ -99,7 +100,7 @@ define(
                 });
 
                 this.on('route:home', function (actions) {
-                    alert('Welcome to the SC admin tool.');
+                    //alert('Welcome to the SC admin tool.');
                 });
 
                 this.on('route:getPost', function (id) {
@@ -194,7 +195,9 @@ define(
             //TODO: http://danhough.com/blog/backbone-view-inheritance/
 
 
-            if (appGlobal.currentUser == null || appGlobal.authorized === false) {
+            //if (appGlobal.currentUser == null || appGlobal.authorized === false) {
+
+            if(appState.get('authorized') !== true){
 
                 if (this.viewState.get('mainView') != null) {
                     this.destroyView(this.viewState.get('mainView'));
@@ -218,16 +221,13 @@ define(
             }
             else { //user is authenticated/authorized
 
-                //console.log(IJSON.parse(localStorage.getItem('sc_admin_user')));
-
                 var view = null;
                 if ($view == null) {
                     throw new Error('null view in router');
-                } else {
+                }
+                else {
                     view = $view;
                 }
-
-                console.log(localStorage.getItem('sc_admin_user'));
 
                 if (this.viewState.get('mainView') != null) {
                     this.destroyView(this.viewState.get('mainView'));
@@ -245,28 +245,25 @@ define(
                 this.viewState.get('mainView').render();
                 this.viewState.get('footerView').render();
 
-
             }
-            //}
         }
 
+       /* return function ($allViews) {
 
-        //return function ($allViews) {
-        //
-        //    if (allViews === null) {
-        //        if ($allViews == null) {
-        //            console.log('null/undefined value to passed routers.js');
-        //        }
-        //        else {
-        //            console.log('initializing routers with allViews');
-        //            allViews = $allViews;
-        //        }
-        //    }
-        //
-        //    return {
-        //        bootRouter: bootRouter
-        //    }
-        //}
+            if (allViews === null) {
+                if ($allViews == null) {
+                    console.log('null/undefined value to passed routers.js');
+                }
+                else {
+                    console.log('initializing routers with allViews');
+                    allViews = $allViews;
+                }
+            }
+
+            return {
+                bootRouter: bootRouter
+            }
+        }*/
 
         return {
             bootRouter: bootRouter

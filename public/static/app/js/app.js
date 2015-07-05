@@ -5,27 +5,41 @@
 
 //TODO: http://webdeveloperpost.com/Articles/10-most-useful-jQuery-functions-for-your-website.aspx
 //TODO: http://alfredkam.com/goodbye-marionette-hello-react/
-
+//TODO: http://www.toptal.com/front-end/simple-data-flow-in-react-applications-using-flux-and-backbone
 
 
 console.log('loading app/js/APP.js');
 
-window.appGlobal = {
+/*
+ window.appGlobal = {
 
-//unfortunately, can't really avoid global variables,
-// because templates need to access certain variables without have to re-inject variable values into templates
+ //unfortunately, can't really avoid global variables,
+ // because templates need to access certain variables without have to re-inject variable values into templates
 
-    authorized: null,  //boolean
-    currentUser: null, //Backbone.Model
-    env: null    //object
+ authorized: null,  //boolean
+ currentUser: null, //Backbone.Model
+ env: null    //object
 
-};
+ };
+ */
 
 
 window.no_op = function () {
 };
 window.no_op_err = function () {
     throw new Error('this no_op function should not have been called.')
+};
+
+
+window.saveToLocalStorage = function (key, val) {
+    var str = JSON.stringify(val);
+    localStorage.setItem(key, str);
+};
+
+
+window.readFromLocalStorage = function (key) {
+    var val = localStorage.getItem(key);
+    return JSON.parse(val);
 };
 
 
@@ -43,13 +57,13 @@ define(
 
     ],
 
-    function (Handlebars, Backbone, IJSON, React, collections, allViews, allTemplates,todoList,giant) {
+    function (Handlebars, Backbone, IJSON, React, collections, allViews, allTemplates, todoList, giant) {
 
 
         /*
-        we don't use the majority of these files, but they are loaded here so that r.js can build
-        the optimized file
-        */
+         we don't use the majority of these files, but they are loaded here so that r.js can build
+         the optimized file
+         */
 
         Backbone.syncCollection = function (collection, cb) {
 
@@ -61,7 +75,64 @@ define(
                     collection.fetch(
                         {
                             success: function (msg) {
-                                cb(null,msg);
+                                cb(null, msg);
+                            },
+                            error: function (err) {
+                                cb(err)
+                            }
+                        });
+                }
+            });
+        };
+
+        Backbone.batchSyncCollection = function (collection, cb) {
+
+            var batchData = {create: [], destroy: [], update: []};
+
+            for (var i = 0; i < collection.models.length; i++) {
+
+                var model = collection.models[i];
+                batchData.update.push[model.toJSON()];
+            }
+
+            $.ajax({
+                type: "POST",
+                url: collection.batchURL,
+                dataType: "json",
+                data: batchData
+            }).done(function (msg) {
+
+               console.log(msg);
+               cb(msg);
+
+            }).fail(function (msg) {
+
+                console.log(msg);
+                cb(msg);
+
+            }).always(function(msg){
+
+                console.log(msg);
+                cb(msg);
+
+            });
+        };
+
+        Backbone.batchSyncCollection(collections.users,function(msg){
+                 console.log(msg+'!!!!!');
+        });
+
+        Backbone.batchSaveCollection = function (collection, cb) {
+
+            collection.persist(function (err, res) {
+                if (err) {
+                    cb(err);
+                }
+                else {
+                    collection.fetch(
+                        {
+                            success: function (msg) {
+                                cb(null, msg);
                             },
                             error: function (err) {
                                 cb(err)

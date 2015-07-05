@@ -9,6 +9,7 @@ console.log('loading homeView');
 
 define(
     [
+        '#appState',
         'app/js/models',
         'app/js/collections',
         'form2js',
@@ -26,7 +27,7 @@ define(
     ],
 
 
-    function (models, collections, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
+    function (appState, models, collections, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
 
 
         //var templateHtml = require('text!app/templates/homeTemplate.ejs');  //load the template//
