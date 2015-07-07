@@ -181,7 +181,12 @@ require('./lib/controllers/passport_setup')(site.models.User);
 require('./lib/controllers/params')(app);
 
 app.use('/', require('./routes/index'));
-app.use('/users*', require('./routes/users'));
+app.use('/users', require('./routes/users'));
+app.use('/users_batch', require('./routes/batch'));
+//app.use(new RegExp('//(users|usersBatch)/'), require('./routes/users'));
+
+//app.use('(users|usersBatch)', require('./routes/users'));
+
 app.use('/authenticate', require('./routes/authenticate'));
 app.use('/register', require('./routes/register'));
 app.use('/login', require('./routes/login'));

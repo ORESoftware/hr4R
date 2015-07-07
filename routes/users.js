@@ -13,6 +13,9 @@ var IJSON = require('idempotent-json');
 //    next();
 //});
 
+//TODO: nested router
+//TODO: http://forbeslindesay.github.io/express-route-tester/
+
 router.param('user_id', function (req, res, next, user_id) {
     // typically we might sanity check that user_id is of the right format
     if (user_id == undefined || user_id == null) {
@@ -154,7 +157,7 @@ router.post('/', function (req, res, next) {
 });
 
 
-router.post('Batch', function (req, res, next) {
+router.post('/', function (req, res, next) {
 
     console.log('!!!!!',req.body,'!!!!!');
      res.send({hi:'bye'});
