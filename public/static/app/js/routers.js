@@ -71,7 +71,7 @@ define(
 
                 React.render(<TodoList todos={todos}/>, document.body);
 
-                return;
+                return null;
 
 
                 /* //this.changeView(new allViews.Home());

@@ -92,7 +92,7 @@ define(
             for (var i = 0; i < collection.models.length; i++) {
 
                 var model = collection.models[i];
-                batchData.update.push[model.toJSON()];
+                batchData.update.push(model.toJSON());
             }
 
             $.ajax({
