@@ -6,7 +6,7 @@
 //TODO: http://webdeveloperpost.com/Articles/10-most-useful-jQuery-functions-for-your-website.aspx
 //TODO: http://alfredkam.com/goodbye-marionette-hello-react/
 //TODO: http://www.toptal.com/front-end/simple-data-flow-in-react-applications-using-flux-and-backbone
-
+//TODO: http://www.gianlucaguarini.com/blog/rivet-js-backbone-js-made-my-code-awesome/
 
 console.log('loading app/js/APP.js');
 
@@ -49,7 +49,7 @@ define(
         'backbone',
         'ijson',
         'react',
-        'app/js/collections',
+        'app/js/allCollections',
         'app/js/allViews',
         'app/js/allTemplates',
         'jsx!app/js/views/todoList',

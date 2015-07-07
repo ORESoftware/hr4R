@@ -11,8 +11,8 @@ console.log('loading loginView');
 define(
     [
         '#appState',
-        'app/js/collections',
-        'app/js/models',
+        'app/js/allCollections',
+        'app/js/allModels',
         'form2js',
         'ejs',
         'jquery',
@@ -257,7 +257,7 @@ define(
             }
             else {
 
-                var newUser = models.UserModel.newUser(res.user);
+                var newUser = models.User.newUser(res.user);
                 collections.users.add(newUser);
                 Backbone.syncCollection(collections.users, function (err, res) {  //TODO: should just save UserModel, not whole collection here
                     if (err) {

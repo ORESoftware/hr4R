@@ -18,7 +18,7 @@ define(
         'react',
         'backbone',
         'async',
-        'app/js/collections',
+        'app/js/allCollections',
         'app/js/viewState',
         'ijson',
         'app/js/allViews',

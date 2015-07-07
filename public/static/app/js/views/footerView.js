@@ -8,7 +8,7 @@ console.log('loading footerView');
 define(
     [
         '#appState',
-        'app/js/models',
+        'app/js/allModels',
         'form2js',
         'ejs',
         'jquery',
