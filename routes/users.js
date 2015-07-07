@@ -203,7 +203,20 @@ router.put('/:user_id', function (req, res, next) {
 
 
 router.delete('/:user_id', function (req, res, next) {
-    res.send('respond with a resource');
+
+    var UserModel = req.site.models.User;
+    var User = UserModel.getNewUser();
+
+    var userToDelete = req.specialParams.user_model;
+
+    User.remove({_id:userToDelete._id},function(err){
+        if(err){
+            return next(err);
+        }
+        else{
+            res.send(userToDelete);
+        }
+    });
 });
 
 

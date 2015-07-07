@@ -33,7 +33,7 @@ var allowCrossDomain = function (req, res, next) {
 };
 
 app.use(allowCrossDomain);
-var router = express.Router();
+//var router = express.Router();
 
 
 app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -115,11 +115,11 @@ app.use(function (req, res, next) {
 
 });
 
-router.all('/', function (req, res, next) {
-    console.log('Someone made a request!');
-    console.log(req.method,req.originalUrl);
-    next();
-});
+//router.all('/', function (req, res, next) {
+//    console.log('Someone made a request!');
+//    console.log(req.method,req.originalUrl);
+//    next();
+//});
 
 //TODO: why is it user._doc now?
 
@@ -181,14 +181,12 @@ require('./lib/controllers/passport_setup')(site.models.User);
 require('./lib/controllers/params')(app);
 
 app.use('/', require('./routes/index'));
-app.use('/users*', require('./routes/users'));
+app.use('/users', require('./routes/users'));
 app.use('/authenticate', require('./routes/authenticate'));
 app.use('/register', require('./routes/register'));
 app.use('/login', require('./routes/login'));
 app.use('/logout', require('./routes/logout'));
 app.use('/testSocketIO', require('./routes/testSocketIO'));
-
-
 
 
 // catch 404 and forward to error handler

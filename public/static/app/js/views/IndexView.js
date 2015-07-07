@@ -9,7 +9,7 @@
 define(
     [
         '#appState',
-        'app/js/collections',
+        'app/js/allCollections',
         'app/js/views/loginView',
         'app/js/views/registeredUsersView',
         'ejs',

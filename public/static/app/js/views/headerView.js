@@ -9,7 +9,8 @@ console.log('loading headerView');
 define(
     [
         '#appState',
-        'app/js/models',
+        'app/js/allCollections',
+        'app/js/allModels',
         'form2js',
         'ejs',
         'jquery',
@@ -21,7 +22,7 @@ define(
     ],
 
 
-    function (appState, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
+    function (appState, collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
 
 
         //var router = routers(null).bootRouter;//
@@ -46,13 +47,16 @@ define(
             el: '#index_header_div_id',
 
             events: {
-                'click #logout-button-id': 'onClickLogout'
+                'click #logout-button-id': 'onClickLogout',
+                'click #reset-all-button-id': 'onClickResetAll',
+                'click #reset-front-end-button-id': 'onClickResetFrontEnd',
+                'click #reset-back-end-button-id': 'onClickResetBackEnd'
             },
 
             initialize: function (options) {
                 //_.bind(this.initialize,undefined); //wanted to remove initialize function from the view instance so we don't accidentally 'reinitialize'
                 this.options = options || {};
-                _.bindAll(this, 'render');
+                _.bindAll(this, 'render', 'onClickResetAll', 'onClickResetFrontEnd', 'onClickResetBackEnd');
             },
 
             render: function () {
@@ -118,6 +122,46 @@ define(
                         //Backbone.history.loadUrl();
                     }
                 });
+            },
+            onClickResetAll: function (event) {
+                event.preventDefault();
+
+                Object.keys(collections).forEach(function (key) {
+                    if (collections.hasOwnProperty(key)) {
+
+                        var coll = collections[key];
+
+                        for (var i = 0; i < coll.models.length; i++) {
+
+                               coll.models[i].deleteModel(function(err,resp,x){
+
+                                   console.log(err,resp,x)
+
+                               });
+                        }
+                    }
+                });
+
+
+
+            },
+            onClickResetFrontEnd: function (event) {
+                event.preventDefault();
+                console.log('clicked onClickResetFrontEnd');
+                Object.keys(collections).forEach(function (key) {
+                    if (collections.hasOwnProperty(key)) {
+                        collections[key].reset();
+                        console.log(collections[key].givenName,'has been reset.');
+                    }
+                });
+
+            },
+            onClickResetBackEnd: function (event) {
+                event.preventDefault();
+
+
+
+
             }
         });
 

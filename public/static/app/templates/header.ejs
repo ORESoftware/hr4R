@@ -1,12 +1,23 @@
 <header>
     <div>
-        <div id="header-div-id">
+        <div id="header-div-id" class="page-header">
+            <div class="col-md-2">
             <% if(appState.get('currentUser') !== null) { %>
-            <div>Logged In As: <%= appState.getV('currentUser').get('firstName') + " " + appState.getV('currentUser').get('lastName') %>(<%= appState.getV('currentUser').get('username')%>)</div>
+            <div>Logged In As: <%= appState.get('currentUser').get('firstName') + " " + appState.get('currentUser').get('lastName') %>(<%= appState.get('currentUser').get('username')%>)</div>
             <button id="logout-button-id">Logout</button>
             <% } else { %>
             <div>You need to either register or login.</div>
             <% } %>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-default" id="reset-all-button-id">Reset-All</button>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-default" id="reset-front-end-button-id">Reset-Front-End</button>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-default" id="reset-back-end-button-id">Reset-Backend</button>
+            </div>
         </div>
     </div>
 </header>

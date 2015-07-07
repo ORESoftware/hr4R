@@ -8,7 +8,7 @@ console.log('loading registeredUsersView');
 define(
     [
         '#appState',
-        'app/js/collections',
+        'app/js/allCollections',
         'ejs',
         'jquery',
         'underscore',

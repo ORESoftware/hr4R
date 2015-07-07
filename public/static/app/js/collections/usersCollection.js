@@ -3,36 +3,37 @@
  */
 
 
-console.log('loading app/js/COLLECTIONS.js');
+console.log('loading app/js/collections/usersCollection.js');
 
 
-define('app/js/collections',
-
+define(
     [
         'underscore',
         'backbone',
-        'app/js/models',
+        'app/js/allModels',
         'async'
 
     ],
 
-    function (_, Backbone, models,async) {
+    function (_, Backbone, models, async) {
 
         var UsersCollection = Backbone.Collection.extend({
             // Reference to this collection's model.
-            model: models.UserModel,
+            model: models.User,
+
+            givenName: 'Users-Collection',
 
             //url: function () {
             //    //return '/users?user_id=' + this.options.user_id;
             //    return '/users';
             //},
 
-            url:'/users',
+            url: '/users',
 
             batchURL: '/usersBatch',
             //urlRoot: '/users',
 
-            persistAsync: function(cb){
+            persistAsync: function (cb) {
                 //Backbone.sync('create', this, {
                 //    success: function() {
                 //        console.log('Saved users collection!');
@@ -42,41 +43,41 @@ define('app/js/collections',
                 //    }
                 //});
 
-               this.each(function(user,index){  //iterate through models
-                  user.save({},{
-                      success:function(msg){
-                          console.log('saved user --->',msg);
-                      },
+                this.each(function (user, index) {  //iterate through models
+                    user.save({}, {
+                        success: function (msg) {
+                            console.log('saved user --->', msg);
+                        },
 
-                      error:function(err){
-                       throw new Error('error in users.persist function' + err);
-                      }
-                  })
+                        error: function (err) {
+                            throw new Error('error in users.persist function' + err);
+                        }
+                    })
 
-               });
+                });
 
-                cb(null,null); //TODO: this callback is a cheap shortcut, persistAsync has the right idea
+                cb(null, null); //TODO: this callback is a cheap shortcut, persistAsync has the right idea
 
             },
 
-            persist: function(cb){
+            persist: function (cb) {
 
                 var saveArray = [];
 
-                this.each(function(user,index){  //iterate through models, add/push function to async.parallel
+                this.each(function (user, index) {  //iterate through models, add/push function to async.parallel
                     saveArray.push(
-                        function(callback){
+                        function (callback) {
 
-                            user.persist(null,function(err,val){
-                               callback();
+                            user.persist(null, function (err, val) {
+                                callback();
                             });
                         }
                     )
 
                 });
 
-                async.parallel(saveArray,function(err,results){
-                    cb(err,results);
+                async.parallel(saveArray, function (err, results) {
+                    cb(err, results);
                 });
 
             },
@@ -107,7 +108,9 @@ define('app/js/collections',
             comparator: 'order'
         });
 
-        return {
-            users: new UsersCollection()
-        };
+        //return {
+        //    users: new UsersCollection()
+        //};
+
+        return new UsersCollection();
     });
