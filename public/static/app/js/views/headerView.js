@@ -9,6 +9,7 @@ console.log('loading headerView');
 define(
     [
         '#appState',
+        'async',
         'app/js/allCollections',
         'app/js/allModels',
         'form2js',
@@ -22,7 +23,7 @@ define(
     ],
 
 
-    function (appState, collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
+    function (appState, async, collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
 
 
         //var router = routers(null).bootRouter;//
@@ -126,22 +127,47 @@ define(
             onClickResetAll: function (event) {
                 event.preventDefault();
 
+                var deletes = [];
+
                 Object.keys(collections).forEach(function (key) {
                     if (collections.hasOwnProperty(key)) {
 
+
                         var coll = collections[key];
 
-                        for (var i = 0; i < coll.models.length; i++) {
+                        //for (var i = 0; i < coll.models.length; i++) {
 
-                               coll.models[i].deleteModel(function(err,resp,x){
+                        coll.each(function(model, i) {
+                            deletes.push(function (callback) {
 
-                                   console.log(err,resp,x)
+                                console.log(model.givenName);
 
-                               });
-                        }
+                                model.deleteModel(function (err, resp, x) {
+
+                                    console.log(err, resp, x);
+
+                                    if (err) {
+                                        callback(err);
+                                    }
+                                    else {
+                                        callback(null, null);
+                                    }
+
+                                });
+                            });
+
+
+                            //}
+
+                        });
                     }
                 });
 
+                async.parallel(deletes,function(err,results){
+
+                    Backbone.Events.trigger('bootRouter', '+refreshCurrentPage');
+
+                });
 
 
             },
@@ -151,15 +177,13 @@ define(
                 Object.keys(collections).forEach(function (key) {
                     if (collections.hasOwnProperty(key)) {
                         collections[key].reset();
-                        console.log(collections[key].givenName,'has been reset.');
+                        console.log(collections[key].givenName, 'has been reset.');
                     }
                 });
 
             },
             onClickResetBackEnd: function (event) {
                 event.preventDefault();
-
-
 
 
             }

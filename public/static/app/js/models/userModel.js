@@ -23,6 +23,9 @@ define(
 
             //url: '/users',
             //urlRoot: '/users?user_id=',
+
+            givenName: 'UserModel',
+
             urlRoot: '/users',
 
             defaults: {
@@ -89,13 +92,15 @@ define(
             },
             deleteModel: function (callback) {
                 this.destroy({
+                    wait:true, //prevents optimistic destroy
                     success: function (model, response, options) {
                         console.log("The model has been destroyed/deleted on/from the server");
-                        callback(model, response, options);
+                        callback(null,model, response, options);
                     },
                     error: function (model, xhr, options) {
                         console.log("Something went wrong while attempting to delete model");
-                        callback(model, xhr, options);
+                        var err = new Error('error destroying model');
+                        callback(err,model, xhr, options);
                     }
                 });
             }

@@ -7,6 +7,7 @@
 //TODO: http://alfredkam.com/goodbye-marionette-hello-react/
 //TODO: http://www.toptal.com/front-end/simple-data-flow-in-react-applications-using-flux-and-backbone
 //TODO: http://www.gianlucaguarini.com/blog/rivet-js-backbone-js-made-my-code-awesome/
+//TODO: http://kwilson.me.uk/blog/inject-css-from-your-requirejs-module-into-the-main-app/
 
 console.log('loading app/js/APP.js');
 

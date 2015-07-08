@@ -40,7 +40,9 @@ define(
             //tagName: 'HomeViewTagName',
             //className: 'HomeViewClassName',
 
-            className:'HomeView',
+            //className:'HomeView',
+
+            givenName: 'HomeView',
 
             model: null,
             collection: collections.users,

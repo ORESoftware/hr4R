@@ -34,7 +34,9 @@ define(
             model: null,
             collection: null,
 
-            className: 'LoginView',
+            //className: 'LoginView',
+
+            givenName:'LoginView',
 
             template: null,
 

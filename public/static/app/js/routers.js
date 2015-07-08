@@ -37,6 +37,7 @@ define(
 
             routes: {
                 '': 'canonical',
+                "+refreshCurrentPage":"refreshCurrentPage",
                 "posts/:id": "getPost",
                 'index': 'index',
                 'home': 'home',
@@ -46,10 +47,17 @@ define(
             },
 
             canonical: function () {
-                //this.changeView(new allViews.Index());
                 // this is a no operation function
+            },
 
+            refreshCurrentPage: function () {
 
+                //TODO:refresh current page
+
+                var currentView = this.viewState.get('mainView').givenName;
+                currentView = currentView.replace('View','');
+
+                this.changeView(new allViews[currentView]());
             },
 
             home: function () {

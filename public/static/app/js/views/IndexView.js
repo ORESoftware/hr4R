@@ -27,7 +27,9 @@ define(
 
         var IndexView = Backbone.View.extend({
 
-            className: 'IndexView',
+            //className: 'IndexView',
+
+            givenName:'IndexView',
 
             el: '#main-div-id',
 
