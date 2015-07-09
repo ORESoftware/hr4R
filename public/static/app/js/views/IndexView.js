@@ -22,113 +22,121 @@ define(
     ],
 
 
-    function (appState, collections, LoginView, RegisteredUsersView, EJS, $, _, Handlebars, Backbone, BackboneValidation,template) {
+    function (appState, collections, LoginView, RegisteredUsersView, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
 
 
         var IndexView = Backbone.View.extend({
 
-            //className: 'IndexView',
 
-            givenName:'IndexView',
+                givenName: '@IndexView',
 
-            el: '#main-div-id',
+                el: '#main-div-id',
 
-            template: null,
-
-            model: null,
-            collection: collections.users,
-
-            childLoginView: null,
-            childRegisteredUsersView: null,
-
-            events: {
-                'click #loginAsGuest': 'onLoginAsGuest',
-                'click #accountRecoveryId': 'onAccountRecovery'
-            },
-
-            initialize: function (options) {
-                this.options = options || {};
-                _.bindAll(this, 'render');
-
-                this.listenTo(this.collection, 'reset', this.render);
-                this.collection.fetch({
-                    success: this.onFetchSuccess.bind(this),
-                    error: this.onFetchFailure.bind(this)
-                });
-            },
-
-            //http://stackoverflow.com/questions/7113049/backbone-js-nesting-views-through-templating
-
-            render: function () {
-                console.log('attempting to render IndexView.');
-
-                var data = this.collection.models;
-
-                var self = this;
-
-                if (IndexView.template == null) {
-
-                    console.log('indexView template is null, retrieving from server.')
-
-                    $.ajax({
-                        url: 'static/html/ejs/indexTemplate.ejs',
-                        type: 'GET',
-                        success: function (msg) {
-
-                            IndexView.template = msg;
-                            renderChildren.bind(self)(msg);
-
-                        },
-                        error: function (err) {
-                            console.log('error:', err);
+                defaults: function(){
+                    return{
+                        model: null,
+                        collection: collections.users,
+                        childViews:{
+                            childLoginView: null,
+                            childRegisteredUsersView: null
                         }
+                    }
+                },
+
+                //TODO: should events also be a function to prevent all instances sharing same events?
+
+                events: {
+                    'click #loginAsGuest': 'onLoginAsGuest',
+                    'click #accountRecoveryId': 'onAccountRecovery'
+                },
+
+                initialize: function (opts) {
+
+                    Backbone.setViewProps(this,opts); //has side effects
+                    _.bindAll(this, 'render', 'onFetchSuccess', 'onFetchFailure');
+                    this.listenTo(this.collection, 'add remove reset', this.render);
+                    this.collection.fetch({
+                        success: this.onFetchSuccess.bind(this),
+                        error: this.onFetchFailure.bind(this)
                     });
+                },
 
+                //http://stackoverflow.com/questions/7113049/backbone-js-nesting-views-through-templating
+
+                render: function () {
+                    console.log('attempting to render IndexView.');
+
+
+                    var data = this.collection.models;
+
+                    var self = this;
+
+                    if (IndexView.template == null) {
+
+                        console.log('indexView template is null, retrieving from server.')
+
+                        $.ajax({
+                            url: 'static/html/ejs/indexTemplate.ejs',
+                            type: 'GET',
+                            success: function (msg) {
+
+                                IndexView.template = msg;
+                                renderChildren.bind(self)(msg);
+
+                            },
+                            error: function (err) {
+                                console.log('error:', err);
+                            }
+                        });
+
+                    }
+                    else {
+                        renderChildren.bind(self)(IndexView.template);
+                    }
+
+
+                    function renderChildren($template) {
+                        var ret = EJS.render($template, {
+                            users: data
+                        });
+                        //
+
+                        this.$el.html(ret);
+
+                        this.childLoginView = new LoginView({el: this.$('#child-view-login-container')});
+                        this.childLoginView.render();
+                        this.childLoginView.delegateEvents();
+
+                        this.childRegisteredUsersView = new RegisteredUsersView({el: this.$('#child-view-registered-users-container')});
+                        this.childRegisteredUsersView.render();
+                        this.childRegisteredUsersView.delegateEvents();
+
+
+                        console.log('IndexView rendered');
+                    }
+
+
+                    return this;
+
+                },
+
+                onFetchSuccess: function () {
+                    console.log('Successfully fetched IndexView collection (users).');
+                    //console.log('this.collection:', this.collection);
+                    //console.log('this.collection.models:', this.collection.models);
+                    //this.render();
+                },
+
+                onFetchFailure: function () {
+                    alert('failed to fetch IndexView collection.');
                 }
-                else {
-                    renderChildren.bind(self)(IndexView.template);
-                }
-
-
-                function renderChildren($template) {
-                    var ret = EJS.render($template, {
-                        users: data
-                    });
-                    //
-
-                    this.$el.html(ret);
-
-                    this.childLoginView = new LoginView({el: this.$('#child-view-login-container')});
-                    this.childLoginView.render();
-                    this.childLoginView.delegateEvents();
-
-                    this.childRegisteredUsersView = new RegisteredUsersView({el: this.$('#child-view-registered-users-container')});
-                    this.childRegisteredUsersView.render();
-                    this.childRegisteredUsersView.delegateEvents();
-
-
-                    console.log('IndexView rendered');
-                }
-
-
-                return this;
-
             },
-
-            onFetchSuccess: function () {
-                console.log('Successfully fetched IndexView collection (users).');
-                //console.log('this.collection:', this.collection);
-                //console.log('this.collection.models:', this.collection.models);
-                //this.render();
-            },
-
-            onFetchFailure: function () {
-                alert('failed to fetch IndexView collection.');
-            }
-        });
+            { //classProperties
+                template:template
+            });
 
 
-        IndexView.template = template;
+        //IndexView.template = template;
 
         return IndexView;
 

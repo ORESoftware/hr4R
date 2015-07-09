@@ -54,10 +54,11 @@ define(
 
                 //TODO:refresh current page
 
-                var currentView = this.viewState.get('mainView').givenName;
-                currentView = currentView.replace('View','');
-
-                this.changeView(new allViews[currentView]());
+                var currentView = this.viewState.get('mainView');
+                var currentViewName = currentView.givenName;
+                currentViewName = currentViewName.replace('View','').replace('@','');
+                //TODO: need to fix url of this page
+                this.changeView(new allViews[currentViewName]());
             },
 
             home: function () {
@@ -65,6 +66,7 @@ define(
             },
 
             index: function () {
+                //this.changeView(new allViews.Index({collection:collections.users}));
                 this.changeView(new allViews.Index());
             },
 

@@ -23,13 +23,14 @@ define(
 
         var RegisteredUsersView = Backbone.View.extend({
 
-            className:'RegisteredUsersView',
+            //className:'RegisteredUsersView',
 
             model: null,
             collection: collections.users,
 
-            initialize: function () {
+            initialize: function (opts) {
                 //_.bind(this.initialize,undefined);
+                this.options = opts || {};
                 _.bindAll(this, 'render');
                this.listenTo(this.collection,'change',this.render);
             },
@@ -73,9 +74,13 @@ define(
 
                 return this;
             }
-        });
+        },
+            {
+             template:template
+            }
+        );
 
-        RegisteredUsersView.template = template;
+        //RegisteredUsersView.template = template;
 
         return RegisteredUsersView;
 

@@ -18,7 +18,7 @@ console.log('loading app/js/main.js');
 
 requirejs.config({
     enforceDefine: false,
-    waitSeconds: 5,
+    waitSeconds: 7,
     baseUrl: '/static',
     paths: {
         //'app': 'app/js',

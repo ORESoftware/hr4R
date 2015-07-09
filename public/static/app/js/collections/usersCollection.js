@@ -34,15 +34,15 @@ define(
             //urlRoot: '/users',
 
             persistAsync: function (cb) {
-                //Backbone.sync('create', this, {
-                //    success: function() {
-                //        console.log('Saved users collection!');
-                //    },
-                //    error: function(){
-                //        alert('error syncing users collection');
-                //    }
-                //});
-
+           /*     Backbone.sync('create', this, {
+                    success: function() {
+                        console.log('Saved users collection!');
+                    },
+                    error: function(){
+                        alert('error syncing users collection');
+                    }
+                });
+*/
                 this.each(function (user, index) {  //iterate through models
                     user.save({}, {
                         success: function (msg) {
@@ -82,11 +82,11 @@ define(
 
             },
 
-            initialize: function (options) {
+            initialize: function (models,opts) {
 
                 console.log('model for UsersCollection is:', this.model);
 
-                this.options = options || {};
+                this.options = opts || {};
                 //_.bind(this.initialize,undefined);
                 _.bindAll(this, 'persist');
 

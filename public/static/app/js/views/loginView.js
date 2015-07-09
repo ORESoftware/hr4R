@@ -31,30 +31,23 @@ define(
 
         var LoginView = Backbone.View.extend({
 
-            model: null,
-            collection: null,
-
-            //className: 'LoginView',
-
-            givenName:'LoginView',
-
-            template: null,
+            givenName:'@LoginView',
 
             el: '#child-view-login-container',
-
-            initialize: function (options) {
-
-                this.options = options || {};
-                _.bindAll(this, 'render', 'onSubmitLogin', 'onSubmitRegistration');
-
-
-                //this.model = new models.UserModel();
-            },
 
             events: {
                 'click #submit-login-button-id': 'onSubmitLogin',
                 'click #submit-registration-button-id': 'onSubmitRegistration',
                 'click #accountRecoveryId': 'showAccountRecoveryView'
+            },
+
+            initialize: function (opts) {
+
+                Backbone.setViewProps(this,opts); //has side effects
+                _.bindAll(this, 'render', 'onSubmitLogin', 'onSubmitRegistration');
+                this.listenTo(this.collection, 'add remove', this.render);
+
+                //this.model = new models.UserModel();
             },
 
 
@@ -63,7 +56,6 @@ define(
                 console.log('attempting to render LoginView.');
 
                 var self = this;
-
 
                 if (LoginView.template == null) {
 
@@ -124,7 +116,7 @@ define(
 
                     if (msg.isAuthenticated === true) {
 
-                        var user = msg.user
+                        var user = msg.user;
 
                         collections.users.fetch().done(function () {
 
@@ -224,6 +216,8 @@ define(
 
                     });
             }
+        },{
+            template:template
         });
 
 
@@ -273,7 +267,7 @@ define(
             }
         }
 
-        LoginView.template = template;
+        //LoginView.template = template;
 
         return LoginView;
 

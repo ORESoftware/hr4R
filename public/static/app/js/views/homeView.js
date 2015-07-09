@@ -36,82 +36,92 @@ define(
 
         var HomeView = Backbone.View.extend({
 
-            //id: 'HomeViewID',
-            //tagName: 'HomeViewTagName',
-            //className: 'HomeViewClassName',
+                //id: 'HomeViewID',
+                //tagName: 'HomeViewTagName',
+                //className: 'HomeViewClassName',
 
-            //className:'HomeView',
+                givenName: '@HomeView',
 
-            givenName: 'HomeView',
+                defaults: function(){
+                    return{
+                        collection: collections.users,
+                        model:null
+                    }
+                },
 
-            model: null,
-            collection: collections.users,
+                el: '#main-div-id',
 
-            template: null,
+                initialize: function (opts) {
 
-            el: '#main-div-id',
-
-            initialize: function (options) {
-
-                this.options = options || {};
-                _.bindAll(this, 'render', 'show', 'handleModelSyncSuccess', 'handleModelError');
-                this.listenTo(this.collection, 'reset', this.render);
-                this.listenTo(this.collection, 'add', this.addOne);
-                this.listenTo(this.model, 'sync', this.handleModelSyncSuccess);
-                this.listenTo(this.model, 'error', this.handleModelError);
-                this.listenTo(Backbone, 'books:created', this.show);
-            },
-
-
-            show: function () {
-                console.log('heard about BOOKS:CREATED: this:', this);
-            },
+                    Backbone.setViewProps(this,opts);
+                    _.bindAll(this, 'render', 'show', 'onChange', 'handleModelSyncSuccess', 'handleModelError');
+                    this.listenTo(this.collection, 'add reset', this.render);
+                    this.listenTo(this.collection, 'change', this.onChange, this);
+                    this.listenTo(this.model, 'sync', this.handleModelSyncSuccess);
+                    this.listenTo(this.model, 'error', this.handleModelError);
+                    this.listenTo(Backbone, 'books:created', this.show);
+                },
 
 
-            render: function () {
-                console.log('attempting to render HomeView.');
+                show: function () {
+                    console.log('heard about BOOKS:CREATED: this:', this);
+                },
 
-                var self = this;
+                onChange: function (msg) {
 
-                if (HomeView.template == null) {
+                    console.log(msg);
+                },
 
-                    console.log('homeView template is null, retrieving from server.')
 
-                    $.ajax({
-                        url: 'static/html/ejs/homeTemplate.ejs',
-                        type: 'GET',
-                        success: function (msg) {
-                            HomeView.template = msg;
-                            renderThis.bind(self)(msg);
-                        },
-                        error: function (err) {
-                            console.log('error:', err);
-                        }
-                    });
+                render: function () {
+                    console.log('attempting to render HomeView.');
+
+                    var self = this;
+
+                    if (HomeView.template == null) {
+
+                        console.log('homeView template is null, retrieving from server.')
+
+                        $.ajax({
+                            url: 'static/html/ejs/homeTemplate.ejs',
+                            type: 'GET',
+                            success: function (msg) {
+                                HomeView.template = msg;
+                                renderThis.bind(self)(msg);
+                            },
+                            error: function (err) {
+                                console.log('error:', err);
+                            }
+                        });
+                    }
+                    else {
+                        renderThis.bind(self)(HomeView.template);
+                    }
+
+                    function renderThis($template) {
+
+                        var ret = EJS.render($template, {});
+
+                        self.$el.html(ret);
+                        console.log('HomeView (re)rendered');
+                    }
+
+                    return this;
+                },
+                handleModelSyncSuccess: function () {
+                    console.log('model sync success');
+                },
+                handleModelError: function () {
+                    console.log('model error!! in this:', this);
                 }
-                else {
-                    renderThis.bind(self)(HomeView.template);
-                }
-
-                function renderThis($template) {
-
-                    var ret = EJS.render($template, {});
-
-                    self.$el.html(ret);
-                    console.log('HomeView (re)rendered');
-                }
-
-                return this;
             },
-            handleModelSyncSuccess: function () {
-                console.log('model sync success');
-            },
-            handleModelError: function () {
-                console.log('model error!! in this:', this);
+
+            { //classProperties
+                template:template
             }
-        });
+        );
 
-        HomeView.template = template;
+        //HomeView.template = template;
 
         return HomeView;
 

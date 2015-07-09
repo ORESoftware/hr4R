@@ -5,6 +5,8 @@
 
 console.log('loading allViews');
 
+//var viewOptions = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
+
 
 define('app/js/allViews',
 
