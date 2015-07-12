@@ -31,194 +31,199 @@ define(
 
         var LoginView = Backbone.View.extend({
 
-            givenName:'@LoginView',
+                el: '#child-view-login-container',
 
-            el: '#child-view-login-container',
+                events: {
+                    'click #submit-login-button-id': 'onSubmitLogin',
+                    'click #submit-registration-button-id': 'onSubmitRegistration',
+                    'click #accountRecoveryId': 'showAccountRecoveryView'
+                },
 
-            events: {
-                'click #submit-login-button-id': 'onSubmitLogin',
-                'click #submit-registration-button-id': 'onSubmitRegistration',
-                'click #accountRecoveryId': 'showAccountRecoveryView'
-            },
+                constructor: function () {
+                    this.givenName = '@LoginView';
+                    Backbone.View.apply(this, arguments);
+                },
 
-            initialize: function (opts) {
+                initialize: function (opts) {
 
-                Backbone.setViewProps(this,opts); //has side effects
-                _.bindAll(this, 'render', 'onSubmitLogin', 'onSubmitRegistration');
-                this.listenTo(this.collection, 'add remove', this.render);
+                    Backbone.setViewProps(this, opts); //has side effects
+                    _.bindAll(this, 'render', 'onSubmitLogin', 'onSubmitRegistration');
+                    this.listenTo(this.collection, 'add remove', this.render);
 
-                //this.model = new models.UserModel();
-            },
-
-
-            render: function () {
-
-                console.log('attempting to render LoginView.');
-
-                var self = this;
-
-                if (LoginView.template == null) {
-
-                    console.log('loginView template is null, retrieving from server.')
-
-                    $.ajax({
-                        url: 'static/html/ejs/loginTemplate.ejs',
-                        type: 'GET',
-                        success: function (msg) {
-                            LoginView.template = msg;
-                            renderThis.bind(self)(LoginView.template);
-                        },
-                        error: function (err) {
-                            console.log('error:', err);
-                        }
-                    });
-                }
-                else {
-
-                    renderThis.bind(self)(LoginView.template);
-                }
-
-                function renderThis($template) {
-                    var ret = EJS.render($template, {});
-                    self.$el.html(ret);
-                    console.log('loginView rendered');
-                }
+                    //this.model = new models.UserModel();
+                },
 
 
-                return this;
-            },
+                render: function () {
 
-            onSubmitLogin: function (event) {
-                event.preventDefault();
+                    console.log('attempting to render LoginView.');
 
+                    var self = this;
 
-                var self = this;
+                    if (LoginView.template == null) {
 
-                var data = form2js('login-form-id', '.', true);
+                        console.log('loginView template is null, retrieving from server.')
 
-                console.log('registration data:', data);
-
-                //var userData = JSON.stringify(data.user);
-
-                var userData = data.user;
-
-                //TODO: use socket.io to get server data
-                //TODO: localstorage vs cookies //encrypt user on front-end
-
-                $.ajax({
-                    type: "POST",
-                    url: '/login',
-                    dataType: "json",
-                    data: userData
-                }).done(function (msg) {
-
-                    appState.set('env', msg.env);
-
-                    if (msg.isAuthenticated === true) {
-
-                        var user = msg.user;
-
-                        collections.users.fetch().done(function () {
-
-                            for (var i = 0; i < collections.users.models.length; i++) {
-
-                                if (user.username === collections.users.models[i].get('username')) {
-                                    //appGlobal.currentUser = collections.users.models[i];
-                                    appState.set('currentUser', collections.users.models[i]);
-                                    break;
-                                }
-
+                        $.ajax({
+                            url: 'static/html/ejs/loginTemplate.ejs',
+                            type: 'GET',
+                            success: function (msg) {
+                                LoginView.template = msg;
+                                renderThis.bind(self)(LoginView.template);
+                            },
+                            error: function (err) {
+                                console.log('error:', err);
                             }
-
-                            if (appState.get('currentUser') == null) {
-                                throw new Error('null or undefined currentUser');
-                            }
-                            else {
-                                console.log('user logged in successfully!!');
-                                Backbone.Events.trigger('bootRouter', 'home');
-                            }
-
                         });
                     }
                     else {
-                        appState.set('currentUser', null);
-                        console.log('user did not log in successfully..!');
-                        Backbone.Events.trigger('bootRouter', 'index');
-                        //TODO:http://stackoverflow.com/questions/19588401/backbone-navigation-callback
+
+                        renderThis.bind(self)(LoginView.template);
+                    }
+
+                    function renderThis($template) {
+                        var ret = EJS.render($template, {});
+                        self.$el.html(ret);
+                        console.log('loginView rendered');
                     }
 
 
-                })
-                    .fail(function (msg) {
-                        setTimeout(function () {
-                            //TODO get validator error from mongoose by submitting bad registration info (missing firstname/username etc)
-                            alert("Server error during user login/registration - " + IJSON.parse(msg));//
-                        }, 200);
-                        self.render();
-                    })
-                    .always(function () {
+                    return this;
+                },
 
-                    });
+                onSubmitLogin: function (event) {
+                    event.preventDefault();
 
 
-            },
+                    var self = this;
 
-            onSubmitRegistration: function (event) {
-                event.preventDefault();
+                    var data = form2js('login-form-id', '.', true);
 
+                    console.log('registration data:', data);
 
-                var self = this;
+                    //var userData = JSON.stringify(data.user);
 
-                var data = form2js('register-form-id', '.', true);
+                    var userData = data.user;
 
-                console.log('registration data:', data);
+                    //TODO: use socket.io to get server data
+                    //TODO: localstorage vs cookies //encrypt user on front-end
 
-                //var userData = JSON.stringify(data.user);
+                    $.ajax({
+                        type: "POST",
+                        url: '/login',
+                        dataType: "json",
+                        data: userData
+                    }).done(function (msg) {
 
-                var userData = data.user;
+                        appState.set('env', msg.env);
 
-                //TODO: userdata is not in json format or what??
-                //TODO: use socket.io to get server data
-                //TODO: localstorage vs cookies
+                        if (msg.isAuthenticated === true) {
 
-                $.ajax({
-                    type: "POST",
-                    url: '/register',
-                    dataType: "json",
-                    data: userData
-                })
+                            var user = msg.user;
 
-                    .done(function (res) {
+                            collections.users.fetch().done(function () {
 
-                        if (res.error) {
-                            setTimeout(function () {
-                                alert("Very Bad login" + IJSON.parse(res.error));
-                            }, 200);
-                            self.render();
-                            return;
-                        }
-                        else if (res.success) { //TODO: I like this convention
-                            res = res.success;
-                            goHome(res);
+                                for (var i = 0; i < collections.users.models.length; i++) {
+
+                                    if (user.username === collections.users.models[i].get('username')) {
+                                        //appGlobal.currentUser = collections.users.models[i];
+                                        appState.set('currentUser', collections.users.models[i]);
+                                        break;
+                                    }
+
+                                }
+
+                                if (appState.get('currentUser') == null) {
+                                    throw new Error('null or undefined currentUser');
+                                }
+                                else {
+                                    console.log('user logged in successfully!!');
+                                    Backbone.Events.trigger('bootRouter', 'home');
+                                }
+
+                            });
                         }
                         else {
-                            throw new Error('Unexpected response from server.');
+                            appState.set('currentUser', null);
+                            console.log('user did not log in successfully..!');
+                            Backbone.Events.trigger('bootRouter', 'index');
+                            //TODO:http://stackoverflow.com/questions/19588401/backbone-navigation-callback
                         }
 
-                    })
-                    .fail(function (msg) {
-                        setTimeout(function () {
-                            alert("Server error during user login/registration - " + msg);
-                        }, 200);
-                        self.render();
-                    })
-                    .always(function () {
 
-                    });
+                    })
+                        .fail(function (msg) {
+                            setTimeout(function () {
+                                //TODO get validator error from mongoose by submitting bad registration info (missing firstname/username etc)
+                                alert("Server error during user login/registration - " + IJSON.parse(msg));//
+                            }, 200);
+                            self.render();
+                        })
+                        .always(function () {
+
+                        });
+
+
+                },
+
+                onSubmitRegistration: function (event) {
+                    event.preventDefault();
+
+
+                    var self = this;
+
+                    var data = form2js('register-form-id', '.', true);
+
+                    console.log('registration data:', data);
+
+                    //var userData = JSON.stringify(data.user);
+
+                    var userData = data.user;
+
+                    //TODO: userdata is not in json format or what??
+                    //TODO: use socket.io to get server data
+                    //TODO: localstorage vs cookies
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/register',
+                        dataType: "json",
+                        data: userData
+                    })
+
+                        .done(function (res) {
+
+                            if (res.error) {
+                                setTimeout(function () {
+                                    alert("Very Bad login" + IJSON.parse(res.error));
+                                }, 200);
+                                self.render();
+                                return;
+                            }
+                            else if (res.success) { //TODO: I like this convention
+                                res = res.success;
+                                goHome(res);
+                            }
+                            else {
+                                throw new Error('Unexpected response from server.');
+                            }
+
+                        })
+                        .fail(function (msg) {
+                            setTimeout(function () {
+                                alert("Server error during user login/registration - " + msg);
+                            }, 200);
+                            self.render();
+                        })
+                        .always(function () {
+
+                        });
+                }
+            },
+            {//class properties
+                template: template
             }
-        },{
-            template:template
-        });
+        );
 
 
         function goHome(res) {
@@ -236,7 +241,7 @@ define(
                         if (user.username === collections.users.models[i].get('username') &&
                             user._id == collections.users.models[i].get('_id')
                         ) {
-                            appState.set('currentUser',collections.users.models[i]);
+                            appState.set('currentUser', collections.users.models[i]);
                             break;
                         }
 
@@ -260,7 +265,7 @@ define(
                         throw err;
                     }
                     else {
-                        appState.set('currentUser',newUser);
+                        appState.set('currentUser', newUser);
                         Backbone.Events.trigger('bootRouter', 'home');
                     }
                 });

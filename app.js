@@ -146,7 +146,7 @@ app.use(function (req, res, next) {
 
         console.log(colors.yellow('req.user is null...'));
         if (String(req.originalUrl).indexOf('/ra/') === 0) {
-            console.log(colors.bgYellow('user attempted to request /ra/ route, so rendering index page...'));
+            console.log(colors.bgYellow('unauthorized user attempted to request /ra/ route, so rendering index page...'));
             res.locals.loggedInUser = null;
             res.render('index', {title: 'SmartConnect Admin Portal'});
         }

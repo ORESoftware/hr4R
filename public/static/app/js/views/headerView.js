@@ -33,8 +33,6 @@ define(
 
         var HeaderView = Backbone.View.extend({
 
-                givenName: '@HeaderView',
-
                 defaults: function () {
                     return {
                         model: null,
@@ -52,7 +50,13 @@ define(
                     'click #logout-button-id': 'onClickLogout',
                     'click #reset-all-button-id': 'onClickResetAll',
                     'click #reset-front-end-button-id': 'onClickResetFrontEnd',
-                    'click #reset-back-end-button-id': 'onClickResetBackEnd'
+                    'click #reset-back-end-button-id': 'onClickResetBackEnd',
+                    'click #go-to-portal-button-id' : 'onClickGoToPortal'
+                },
+
+                constructor: function () {
+                    this.givenName = '@HeaderView';
+                    Backbone.View.apply(this, arguments);
                 },
 
                 initialize: function (opts) {
@@ -101,6 +105,8 @@ define(
 
                     console.log('attempting to log out...');
 
+                    var self = this;
+
                     $.ajax({
                         url: '/logout',
                         data: {},
@@ -122,6 +128,9 @@ define(
                             console.log('error:', err);
                             alert('internal server error - logout failed.')
                             //Backbone.history.loadUrl();
+                        },
+                        always:function(){
+                            self.render();
                         }
                     });
                 },
@@ -166,7 +175,7 @@ define(
 
                     async.parallel(deletes, function (err, results) {
 
-                        Backbone.Events.trigger('bootRouter', '+refreshCurrentPage');
+                        //Backbone.Events.trigger('bootRouter', '+refreshCurrentPage');
 
                     });
 
@@ -187,9 +196,12 @@ define(
                     event.preventDefault();
 
 
+                },
+                onClickGoToPortal: function(event){
+                    Backbone.Events.trigger('bootRouter', 'portal');
                 }
             },
-            { //classProperties
+            { //class properties
                 template: template
             });
 

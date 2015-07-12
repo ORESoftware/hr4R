@@ -46,6 +46,11 @@ define(
                     'click #footer-button-id': 'onClickFooter'
                 },
 
+                constructor: function () {
+                    this.givenName = '@FooterView';
+                    Backbone.View.apply(this, arguments);
+                },
+
                 initialize: function (opts) {
 
                     Backbone.setViewProps(this, opts); //has side effects
@@ -107,7 +112,7 @@ define(
 
                 }
             },
-            {//classProperties
+            {//class properties
                 template: template
 
             });

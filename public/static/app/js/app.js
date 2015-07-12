@@ -120,16 +120,17 @@ define(
 
         };
 
-        Backbone.setViewProps = function(model,options){
+        Backbone.setViewProps = function(view,options){
 
             var opts = options || {};
 
-            var temp = _.defaults({}, opts, _.result(model, 'defaults'));
+            var temp = _.defaults({}, opts, _.result(view, 'defaults'));
 
             for(var prop in temp){
                 if(temp.hasOwnProperty(prop)){
                     if(temp[prop]!==undefined){
-                        model[prop] = temp[prop];
+                        view[prop] = temp[prop];
+                        console.log('new view property:',view[prop]);
                     }
                 }
             }

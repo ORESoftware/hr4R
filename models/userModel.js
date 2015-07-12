@@ -9,11 +9,15 @@
 
 // dependencies
 var mongoose = require('mongoose');
+var colors = require('colors');
 var validator = require('mongoose-validate');
 var bcrypt = require('bcrypt');
 var SALT_WORK_FACTOR = 10;
 var REQUIRED_PASSWORD_LENGTH = 8;
 var ACCEPTABLE_EMAIL_DOMAINS = ['temp.com', 'cable.comcast.com', 'comcast.com'];
+
+//stuff
+var eventBus = require('../events/eventBus.js');
 
 // variables
 var mongoDB = null;
@@ -89,7 +93,10 @@ var registerSchema = function () {
             type: Date,
             default: Date.now
         }
-    });
+    },
+        {
+            autoIndex:false
+        });
 
     userSchema.pre('save', function (next) {
 
@@ -134,43 +141,53 @@ var registerSchema = function () {
 
     userSchema.path('username').validate(function (value, cb) {
         var self = this;
-        getNewUser().findOne({username: value}, function (err, user) {
-            if (err) {
-                throw err;
-            }
-            else if (user) {  //we found a user in the DB already, so this username has been taken
-                if(self._doc._id.equals(user._doc._id)){
-                    cb(true);
+        get(function(err,User){
+            User.findOne({username: value}, function (err, user) {
+                if (err) {
+                    throw err;
                 }
-                else{
-                    cb(false);
-                }
+                else if (user) {  //we found a user in the DB already, so this username has been taken
+                    if(self._doc._id.equals(user._doc._id)){
+                        cb(true);
+                    }
+                    else{
+                        cb(false);
+                    }
 
-            }
-            else {
-                cb(true)
-            }
+                }
+                else {
+                    cb(true)
+                }
+            });
         });
     }, 'This username is already taken!');
 
     userSchema.path('email').validate(function (value, cb) {
         var self = this;
-        getNewUser().findOne({email: value}, function (err, user) {
-            if (err) {
-                //cb(err);
+        get(function(err,User){
+
+            if(err){
                 throw err;
             }
-            else if (user) {  //we found a user in the DB already, so this email has already been registered
-                if(self._doc._id.equals(user._doc._id)){
-                    cb(true);
+
+            User.findOne({email: value}, function (err, user) {
+                if (err) {
+                    //cb(err);
+                    throw err;
                 }
-                else{
-                    cb(false);
+                else if (user) {  //we found a user in the DB already, so this email has already been registered
+                    if(self._doc._id.equals(user._doc._id)){
+                        cb(true);
+                    }
+                    else{
+                        cb(false);
+                    }
                 }
-            }
-            else {
-                cb(true)
-            }
+                else {
+                    cb(true)
+                }
+            });
+
         });
     }, 'This email address is already taken!');
 
@@ -207,14 +224,48 @@ var registerSchema = function () {
 
     userSchema.post('save', function (doc) {
         console.log('%s has been saved', doc._id);
-    })
+    });
+
+
 
 
 };
 
 
-var getNewUser = function () {
-    return mongoDB.model('users', userSchema);
+var UserModel = null;
+
+
+//var get = function () {
+//
+//    if(UserModel === null){
+//        UserModel = mongoDB.model('users', userSchema);
+//        UserModel.ensureIndexes(function(err,msg){
+//
+//            console.log(err,msg);
+//
+//        });
+//    }
+//    else{
+//        return UserModel;
+//    }
+//};
+
+var get = function (cb) {
+
+    eventBus.emit('userModel',this);
+
+    if(UserModel === null){
+        UserModel = mongoDB.model('users', userSchema);
+        UserModel.ensureIndexes(function(err){
+            if(err){
+                console.log(colors.bgRed(err));
+            }
+            cb(err,UserModel);
+        });
+    }
+    else{
+        cb(null,UserModel);
+    }
 };
 
 
@@ -226,6 +277,6 @@ module.exports = function (mongo) {
     // return model methods
     return {
         registerSchema: registerSchema,
-        getNewUser: getNewUser
+        get: get
     }
 };

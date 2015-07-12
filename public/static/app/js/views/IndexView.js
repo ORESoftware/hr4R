@@ -28,8 +28,6 @@ define(
         var IndexView = Backbone.View.extend({
 
 
-                givenName: '@IndexView',
-
                 el: '#main-div-id',
 
                 defaults: function(){
@@ -48,6 +46,12 @@ define(
                 events: {
                     'click #loginAsGuest': 'onLoginAsGuest',
                     'click #accountRecoveryId': 'onAccountRecovery'
+                },
+
+
+                constructor: function () {
+                    this.givenName = '@IndexView';
+                    Backbone.View.apply(this, arguments);
                 },
 
                 initialize: function (opts) {
@@ -103,13 +107,13 @@ define(
 
                         this.$el.html(ret);
 
-                        this.childLoginView = new LoginView({el: this.$('#child-view-login-container')});
-                        this.childLoginView.render();
-                        this.childLoginView.delegateEvents();
+                        this.childViews.childLoginView = new LoginView({el: this.$('#child-view-login-container')});
+                        this.childViews.childLoginView.render();
+                        this.childViews.childLoginView.delegateEvents();
 
-                        this.childRegisteredUsersView = new RegisteredUsersView({el: this.$('#child-view-registered-users-container')});
-                        this.childRegisteredUsersView.render();
-                        this.childRegisteredUsersView.delegateEvents();
+                        this.childViews.childRegisteredUsersView = new RegisteredUsersView({el: this.$('#child-view-registered-users-container')});
+                        this.childViews.childRegisteredUsersView.render();
+                        this.childViews.childRegisteredUsersView.delegateEvents();
 
 
                         console.log('IndexView rendered');
@@ -131,7 +135,7 @@ define(
                     alert('failed to fetch IndexView collection.');
                 }
             },
-            { //classProperties
+            { //class properties
                 template:template
             });
 

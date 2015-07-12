@@ -1,11 +1,9 @@
 /**
- * Created by amills001c on 6/11/15.
+ * Created by amills001c on 7/9/15.
  */
 
-//TODO:https://www.safaribooksonline.com/library/view/developing-backbonejs-applications/9781449328535/ch04s03.html
-//TODO: http://www.svlada.com/require-js-optimization-part2/#t2
 
-console.log('loading homeView');
+console.log('loading portalView');
 
 define(
     [
@@ -19,26 +17,18 @@ define(
         'handlebars',
         'backbone',
         'backbone-validation',
-        //'text!app/templates/homeTemplate.ejs'
-        //'app/js/allTemplates'
-        //'app/js/optimized_templates'
-        'text!app/templates/homeTemplate.ejs'
-        //'text!homeTemplate.html'
+        'text!app/templates/portal.ejs'
     ],
 
 
     function (appState, models, collections, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
 
 
-        //var templateHtml = require('text!app/templates/homeTemplate.ejs');  //load the template//
+        var PortalView = Backbone.View.extend({
 
-        //var template = allTemplates.HomeTemplate;
-
-        var HomeView = Backbone.View.extend({
-
-                //id: 'HomeViewID',
-                //tagName: 'HomeViewTagName',
-                //className: 'HomeViewClassName',
+                //id: 'PortalViewID',
+                //tagName: 'PortalViewTagName',
+                //className: 'PortalViewClassName',
 
 
                 defaults: function(){
@@ -51,7 +41,7 @@ define(
                 el: '#main-div-id',
 
                 constructor: function () {
-                    this.givenName = '@HomeView';
+                    this.givenName = '@PortalView';
                     Backbone.View.apply(this, arguments);
                 },
 
@@ -78,19 +68,19 @@ define(
 
 
                 render: function () {
-                    console.log('attempting to render HomeView.');
+                    console.log('attempting to render PortalView.');
 
                     var self = this;
 
-                    if (HomeView.template == null) {
+                    if (PortalView.template == null) {
 
-                        console.log('homeView template is null, retrieving from server.')
+                        console.log('PortalView template is null, retrieving from server.')
 
                         $.ajax({
-                            url: 'static/html/ejs/homeTemplate.ejs',
+                            url: 'static/html/ejs/portal.ejs',
                             type: 'GET',
                             success: function (msg) {
-                                HomeView.template = msg;
+                                PortalView.template = msg;
                                 renderThis.bind(self)(msg);
                             },
                             error: function (err) {
@@ -99,7 +89,7 @@ define(
                         });
                     }
                     else {
-                        renderThis.bind(self)(HomeView.template);
+                        renderThis.bind(self)(PortalView.template);
                     }
 
                     function renderThis($template) {
@@ -107,7 +97,7 @@ define(
                         var ret = EJS.render($template, {});
 
                         self.$el.html(ret);
-                        console.log('HomeView (re)rendered');
+                        console.log('PortalView (re)rendered');
                     }
 
                     return this;
@@ -125,9 +115,8 @@ define(
             }
         );
 
-        //HomeView.template = template;
 
-        return HomeView;
+        return PortalView;
 
     });
 

@@ -85,32 +85,35 @@ function registerUser(req, res, next) {
     var email = user.email;
 
     var UserModel = req.site.models.User;
-    var User = UserModel.getNewUser();
+    UserModel.get(function(err,User){
 
-    var newUser = new User({
-        username: username,
-        passwordHash: 'this value is temporary',
-        email: email,
-        firstName: firstName,
-        lastName: lastName
+        var newUser = new User({
+            username: username,
+            passwordHash: 'this value is temporary',
+            email: email,
+            firstName: firstName,
+            lastName: lastName
+        });
+
+        newUser.passwordPreHash = password;
+
+
+        newUser.save(function (err, result) {
+            if (err) {
+                res.json({error: err.errors});  //we pass mongoose errors object to front-end
+                return next(err);
+            }
+            else if (result) {
+                delete result.passwordPreHash;
+                loginNewlyRegisteredUser(result, req, res, next)
+            }
+            else {
+                next(new Error('grave error in user.save() method in /register'));
+            }
+        });
     });
 
-    newUser.passwordPreHash = password;
 
-
-    newUser.save(function (err, result) {
-        if (err) {
-            res.json({error: err.errors});  //we pass mongoose errors object to front-end
-            return next(err);
-        }
-        else if (result) {
-            delete result.passwordPreHash;
-            loginNewlyRegisteredUser(result, req, res, next)
-        }
-        else {
-            next(new Error('grave error in user.save() method in /register'));
-        }
-    });
 }
 
 exports.changePassword = function (req, res, next) {

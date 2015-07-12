@@ -7,6 +7,15 @@
 var app = require('../app');
 var debug = require('debug')('sc-ui-express:server');
 var http = require('http');
+var eventBus = require('../events/eventBus.js');
+
+
+eventBus.on('userModel',function(msg){
+
+  console.log('eventBus message!:',msg);
+
+});
+
 
 /**
  * Get port from environment and store in Express.

@@ -41,6 +41,7 @@ define(
                 "posts/:id": "getPost",
                 'index': 'index',
                 'home': 'home',
+                'portal':'portal',
                 'login': 'login',
                 ":route/:action": "loadView",
                 "*notFound": "defaultRoute" // Backbone will try to match the routes above first
@@ -48,11 +49,12 @@ define(
 
             canonical: function () {
                 // this is a no operation function
+                console.log('hit the canonical route.');
             },
 
             refreshCurrentPage: function () {
 
-                //TODO:refresh current page
+                //TODO:refresh current page when user calls reset-all or whatever
 
                 var currentView = this.viewState.get('mainView');
                 var currentViewName = currentView.givenName;
@@ -64,10 +66,13 @@ define(
             home: function () {
                 this.changeView(new allViews.Home());
             },
+            portal: function () {
+                this.changeView(new allViews.Portal());
+            },
 
             index: function () {
-                //this.changeView(new allViews.Index({collection:collections.users}));
-                this.changeView(new allViews.Index());
+                this.changeView(new allViews.Index({collection:collections.users}));
+                //this.changeView(new allViews.Index());
             },
 
             defaultRoute: function () {
