@@ -14,6 +14,7 @@ define(['react'],function(React){
         }
     });
 
+    /** @jsx React.DOM */
     var TodoList = React.createClass({
         getInitialState: function () {
             // @TODO: Listen for changes on the underlying model and call

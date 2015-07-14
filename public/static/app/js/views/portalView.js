@@ -53,7 +53,7 @@ define(
                     this.listenTo(this.collection, 'change', this.onChange, this);
                     this.listenTo(this.model, 'sync', this.handleModelSyncSuccess);
                     this.listenTo(this.model, 'error', this.handleModelError);
-                    this.listenTo(Backbone, 'books:created', this.show);
+                    this.listenTo(Backbone.Events, 'books:created', this.show);
                 },
 
 
@@ -63,7 +63,7 @@ define(
 
                 onChange: function (msg) {
 
-                    console.log(msg);
+                    //console.log(msg);
                 },
 
 

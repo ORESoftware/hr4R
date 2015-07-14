@@ -39,7 +39,8 @@ requirejs.config({
         'JSXTransformer': 'vendor/JSXTransformer',
         'react':'vendor/react-with-addons',
         'socketio':'vendor/socketio',
-        '#appState':'app/js/appState'
+        '#appState':'app/js/appState',
+        '#viewState':'app/js/viewState'
         //'socketio': 'https://cdn.socket.io/socket.io-1.3.5'
         //'_routers_': 'app/js/routers'
     },

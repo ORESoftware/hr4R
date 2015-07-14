@@ -24,8 +24,17 @@ define(
         var RegisteredUsersView = Backbone.View.extend({
 
 
-                model: null,
-                collection: collections.users,
+                defaults: function () {
+                    return {
+                        model: null,
+                        collection: collections.users,
+                        childViews: {
+                        }
+                    }
+                },
+                events: {
+
+                },
 
                 constructor: function () {
                     this.givenName = '@RegisteredUsersView';
@@ -33,8 +42,8 @@ define(
                 },
 
                 initialize: function (opts) {
-                    //_.bind(this.initialize,undefined);
-                    this.options = opts || {};
+
+                    Backbone.setViewProps(this, opts); //has side effects
                     _.bindAll(this, 'render');
                     //this.listenTo(this.collection, 'change', this.render);
                     //this.listenTo(this.collection, 'add remove reset', this.render);

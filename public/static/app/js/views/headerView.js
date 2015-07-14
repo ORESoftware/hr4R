@@ -9,6 +9,7 @@ console.log('loading headerView');
 define(
     [
         '#appState',
+        '#viewState',
         'async',
         'app/js/allCollections',
         'app/js/allModels',
@@ -23,7 +24,7 @@ define(
     ],
 
 
-    function (appState, async, collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
+    function (appState, viewState, async, collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
 
 
         //var router = routers(null).bootRouter;//
@@ -51,7 +52,7 @@ define(
                     'click #reset-all-button-id': 'onClickResetAll',
                     'click #reset-front-end-button-id': 'onClickResetFrontEnd',
                     'click #reset-back-end-button-id': 'onClickResetBackEnd',
-                    'click #go-to-portal-button-id' : 'onClickGoToPortal'
+                    'click #go-to-portal-button-id': 'onClickGoToPortal'
                 },
 
                 constructor: function () {
@@ -90,7 +91,7 @@ define(
                     else {
 
                         //var ret = EJS.render(HeaderView.template, {appState:appState});
-                        var ret = EJS.render(HeaderView.template, {appState: appState});
+                        var ret = EJS.render(HeaderView.template, {appState: appState, viewState: viewState});
                         self.$el.html(ret);
 
                     }
@@ -111,27 +112,35 @@ define(
                         url: '/logout',
                         data: {},
                         dataType: 'json',
-                        type: 'POST',
-                        success: function (msg) {
-                            if (msg === true) {
-                                appState.set('currentUser', null);
-                                Backbone.Events.trigger('bootRouter', 'index');
-                                //TODO:why does log out work even if router.navigate isn't invoked?
-                                //Backbone.history.loadUrl();
-                            }
-                            else {
-                                alert('logout failed on server, please try again.')
-                            }
-
-                        },
-                        error: function (err) {
-                            console.log('error:', err);
-                            alert('internal server error - logout failed.')
+                        type: 'POST'
+                        //success: function (msg) {
+                        //
+                        //
+                        //},
+                        //error: function (err) {
+                        //
+                        //    //Backbone.history.loadUrl();
+                        //}
+                        ////always:function(){
+                        ////    self.render();
+                        ////}
+                    }).done(function (msg, textStatus, jqXHR) {
+                        if (msg === true) {
+                            appState.set('currentUser', null);
+                            Backbone.Events.trigger('bootRouter', 'index');
+                            //TODO:why does log out work even if router.navigate isn't invoked?
                             //Backbone.history.loadUrl();
-                        },
-                        always:function(){
-                            self.render();
                         }
+                        else {
+                            alert('logout failed on server, please try again.')
+                        }
+
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        console.log('error:', err);
+                        alert('internal server error - logout failed.')
+
+                    }).always(function (a, textStatus, b) {
+                        self.render();
                     });
                 },
                 onClickResetAll: function (event) {
@@ -197,7 +206,7 @@ define(
 
 
                 },
-                onClickGoToPortal: function(event){
+                onClickGoToPortal: function (event) {
                     Backbone.Events.trigger('bootRouter', 'portal');
                 }
             },

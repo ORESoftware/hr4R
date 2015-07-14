@@ -15,17 +15,17 @@ console.log('loading app/js/ROUTERS.js');
 define(
     [
         '#appState',
+        '#viewState',
         'react',
         'backbone',
         'async',
         'app/js/allCollections',
-        'app/js/viewState',
         'ijson',
         'app/js/allViews',
         'jsx!app/js/views/todoList'
     ],
 
-    function (appState, React, Backbone, async, collections, $viewState, IJSON, allViews, TodoList) {
+    function (appState, viewState, React, Backbone, async, collections, IJSON, allViews, TodoList) {
 
         //var allViews = null;
 
@@ -33,7 +33,7 @@ define(
 
             //currentView: require('app/js/currentView'),
 
-            viewState: $viewState,
+            viewState: viewState,
 
             routes: {
                 '': 'canonical',
@@ -64,15 +64,23 @@ define(
             },
 
             home: function () {
-                this.changeView(new allViews.Home());
+                this.changeView({
+                    view:new allViews.Home({el: '#main-content-id'}),
+                    useSidebar:true
+                });
             },
             portal: function () {
-                this.changeView(new allViews.Portal());
+                this.changeView({
+                    view:new allViews.Portal(),
+                    useSidebar:true
+                });
             },
 
             index: function () {
-                this.changeView(new allViews.Index({collection:collections.users}));
-                //this.changeView(new allViews.Index());
+                this.changeView({
+                    view:new allViews.Index({collection:collections.users}),
+                    useSidebar:false
+                });
             },
 
             defaultRoute: function () {
@@ -80,7 +88,7 @@ define(
                 var todos = new Backbone.Collection([
                     {
                         text: 'Dishes!',
-                        dueDate: new Date()
+                        dueDate: new Date().toISOString()
                     }
                 ]);
 
@@ -94,6 +102,11 @@ define(
                  //TODO: fix this so that if user puts in unknown route into address bar, that it goes to home*/
             },
 
+            constructor: function () {
+                this.givenName = '@BootRouter';
+                Backbone.Router.apply(this, arguments);
+            },
+
             initialize: function (options) {
 
                 //_.bind(this.initialize,undefined);
@@ -101,7 +114,7 @@ define(
                 //this.listenTo(Backbone,'bootRouter',this.onToggleViewRequest);
                 //this.listenTo(Backbone,'bootRouter',this.onToggleViewRequest,this);
                 var self = this;
-                //this.on('route:showThing', this.anything);
+
                 //Backbone.Events.on('bootRouter', onToggleViewRequest.bind(self), this);
                 _.bindAll(this, 'changeView');
                 this.listenTo(Backbone.Events, 'bootRouter', onToggleViewRequest);
@@ -110,18 +123,22 @@ define(
                     self.navigate(viewName, {trigger: true});
                 }
 
-                this.on('route:loadView', function (route, action) {
-                    alert(route + "_" + action); //
+                this.listenTo(this,'all',function(route,action){
+                    console.log('router was invoked, route:',route,'action:',action);
                 });
 
-                this.on('route:home', function (actions) {
-                    //alert('Welcome to the SC admin tool.');
-                });
-
-                this.on('route:getPost', function (id) {
-                    // Note the variable in the route definition being passed in here
-                    alert("Get post number " + id);
-                });
+                //this.on('route:loadView', function (route, action) {
+                //    alert(route + "_" + action); //
+                //});
+                //
+                //this.on('route:home', function (actions) {
+                //    //alert('Welcome to the SC admin tool.');
+                //});
+                //
+                //this.on('route:getPost', function (id) {
+                //    // Note the variable in the route definition being passed in here
+                //    alert("Get post number " + id);
+                //});
 
             },
 
@@ -130,10 +147,10 @@ define(
                 view.undelegateEvents();
                 view.$el.removeData().unbind();
                 view.stopListening();
+                view = undefined;
                 //TODO: remove children here
                 //view.remove(); //this deletes DOM element from the DOM, and that is bad
                 //Backbone.View.prototype.remove.call(view);
-
             },
 
             //onToggleViewRequest: function (viewName) {
@@ -141,7 +158,7 @@ define(
             //},
 
 
-            changeView: function (view) {
+            changeView: function (opts) {
 
                 //we should sync all collections here before switching views
 
@@ -153,6 +170,7 @@ define(
                     if (collections.hasOwnProperty(key)) {
                         collectionsToSync.push(
                             function (cb) {
+                                //TODO: this will be incorrect with more than one collection because key will be wrong
                                 var coll = collections[key];
                                 coll.persist(function (err, res) {
                                     if (err) {
@@ -173,7 +191,7 @@ define(
                         }
                         else {
                             //continueOn(self);//continueOn().bind(self);//var func = continueOn.bind(self);//func();
-                            continueOn.bind(self)(view); //bind continueOn function self and then call continueOn()
+                            continueOn.bind(self)(opts); //bind continueOn function self and then call continueOn()
                         }
 
                     }
@@ -203,7 +221,7 @@ define(
         //});
 
 
-        function continueOn($view) {
+        function continueOn(opts) {
 
 
             //TODO: ejs.update()
@@ -216,6 +234,9 @@ define(
 
                 if (this.viewState.get('mainView') != null) {
                     this.destroyView(this.viewState.get('mainView'));
+                }
+                if (this.viewState.get('mainParentView') != null) {
+                    this.destroyView(this.viewState.get('mainParentView'));
                 }
                 this.viewState.set('mainView', new allViews.Index());
                 //this.viewState.get('mainView').render();
@@ -236,19 +257,32 @@ define(
             }
             else { //user is authenticated/authorized
 
-                var view = null;
-                if ($view == null) {
+                var view = opts.view;
+                if (view == null) {
                     throw new Error('null view in router');
                 }
-                else {
-                    view = $view;
+
+                if(opts.useSidebar === true){
+                    //if(this.viewState.get('mainParentView') === null || this.viewState.get('mainParentView').givenName !== '@PortalView'){
+                        this.viewState.set('mainParentView',new allViews.Portal());
+                        var temp = this.viewState.get('mainParentView');
+                        temp.render();
+                    //}
+                    //else{
+                    //    console.log('sidebar was not re-rendered');
+                    //}
                 }
+                else{
+                    this.destroyView(this.viewState.get('mainParentView'));
+                    this.viewState.set('mainParentView',null);
+                }
+
 
                 if (this.viewState.get('mainView') != null) {
                     this.destroyView(this.viewState.get('mainView'));
                 }
                 this.viewState.set('mainView', view);
-                console.log('current main view:', view);
+                console.log('current main view:', view.givenName);
 
                 if (this.viewState.get('footerView') == null) {
                     this.viewState.set('footerView', new allViews.Footer());

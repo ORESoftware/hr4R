@@ -30,7 +30,7 @@ define('#appState',function() {
         },
         setV: function(prop,val){
             if(prop in appState){
-                console.log('application state from this :',appState);
+                console.log('application state changed from this :',appState);
                 if(prop === 'currentUser' && val instanceof window.Backbone.Model){
                     appState['authorized'] = true;
                 }

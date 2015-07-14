@@ -63,62 +63,16 @@ define(
 
 
         /*
-         we don't use the majority of these files, but they are loaded here so that r.js can build
+         we don't use the majority of these dependencies in this file, but they are loaded here so that r.js can build
          the optimized file
          */
 
-        Backbone.setModelOptions = function(model,options){
-
-            var ret = {};
-            var opts = options || {};
-
-            //ret = _.extend(ret,opts);
-
-            if(opts.collection !== undefined){
-                ret.collection = opts.collection;
-            }
-
-        };
-
-        Backbone.assignModelOptions = function(model,options){
-
-            for(var opt in options){
-                if(options.hasOwnProperty(opt)){
-
-                    model[opt] = options[opt];
-                }
-
-            }
-
-        };
 
         Backbone.setCollectionOptions = function(model,options){
 
 
         };
 
-        Backbone.setViewProps1 = function(model,options,defaults){
-
-            var ret = {};
-            var opts = options || {};
-
-            //we only set values if they are sent in defined
-            //this allows us to override existing values if we pass in null, but not undefined
-            if(opts.collection !== undefined){
-                ret.collection = opts.collection;
-                delete opts.collection;
-            }
-            if(opts.model !== undefined){
-                ret.model = opts.model;
-                delete opts.model;
-            }
-
-            console.log('unused options for',model.givenName,':',opts);
-
-            ret = _.extend(ret,opts);
-            return ret;
-
-        };
 
         Backbone.setViewProps = function(view,options){
 
@@ -127,14 +81,13 @@ define(
             var temp = _.defaults({}, opts, _.result(view, 'defaults'));
 
             for(var prop in temp){
-                if(temp.hasOwnProperty(prop)){
+                if(temp.hasOwnProperty(prop) && prop !== undefined){
                     if(temp[prop]!==undefined){
                         view[prop] = temp[prop];
                         console.log('new view property:',view[prop]);
                     }
                 }
             }
-
         };
 
         Backbone.syncCollection = function (collection, cb) {
@@ -191,7 +144,7 @@ define(
         };
 
         Backbone.batchSyncCollection(collections.users,function(msg){
-                 console.log(msg+'!!!!!');
+                 console.log(IJSON.parse(msg));
         });
 
         Backbone.batchSaveCollection = function (collection, cb) {

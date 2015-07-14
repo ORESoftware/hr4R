@@ -5,6 +5,17 @@
             <% if(appState.get('currentUser') !== null) { %>
             <div>Logged In As: <%= appState.get('currentUser').get('firstName') + " " + appState.get('currentUser').get('lastName') %>(<%= appState.get('currentUser').get('username')%>)</div>
             <button id="logout-button-id">Logout</button>
+            <% if(viewState.get('mainParentView') !== null && viewState.get('mainParentView').givenName === '@PortalView') {%>
+                <div>
+                    <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
+                    <script>
+                        $("#menu-toggle").click(function(e) {
+                            e.preventDefault();
+                            $("#wrapper").toggleClass("toggled");
+                        });
+                    </script>
+                </div>
+                <% } %>
             <% } else { %>
             <div>You need to either register or login.</div>
             <% } %>
