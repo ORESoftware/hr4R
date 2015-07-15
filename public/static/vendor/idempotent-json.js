@@ -30,7 +30,7 @@ define(function (require, exports, module) {
                 }
                 else {
                     if (error) {
-                        throw error;
+                        console.error(error.toString());
                     }
                     return ret;
                 }

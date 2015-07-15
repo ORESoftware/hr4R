@@ -17,10 +17,11 @@ define('app/js/boot',
         'jquery',
         'backbone',
         'app/js/giant',
+        'app/js/allModels',
         'app/js/allCollections'
     ],
 
-    function (appState, $, Backbone, giant, collections) {
+    function (appState, $, Backbone, giant, models, collections) {
 
 
         //var router = giant.routers.bootRouter;  //we need to load giant NOW because we need routers to get populated with allViews
@@ -57,37 +58,74 @@ define('app/js/boot',
 
         var runApplication = function (authenticated, user) {
 
-            if (authenticated === true) {
-                //window.location.hash='home';//Backbone.history.navigate('home', true);
-                //console.log('authenticated!!');
+            function run(){
+                if (authenticated === true) {
 
-                collections.users.fetch().done(function () {
 
-                    for (var i = 0; i < collections.users.models.length; i++) {
+                    //iterate through all users to find already registered user
+                    collections.users.fetch().done(function () {
 
-                        if (user.username === collections.users.models[i].get('username')) {
-                            //appGlobal.currentUser = collections.users.models[i];
-                            appState.set('currentUser',collections.users.models[i]);
-                            break;
+                        for (var i = 0; i < collections.users.models.length; i++) {
+
+                            if (user.username === collections.users.models[i].get('username')) {
+                                //appGlobal.currentUser = collections.users.models[i];
+                                appState.set('currentUser',collections.users.models[i]);
+                                break;
+                            }
+
                         }
 
-                    }
+                        if (appState.get('currentUser') === null) {
+                            throw new Error('null currentUser');
+                        }
+                        //window.location.hash='home';
+                        //router.navigate('home', {trigger: true});
+                        Backbone.Events.trigger('bootRouter', 'home');
+                    });
+                }
+                else {
 
-                    if (appState.get('currentUser') === null) {
-                        throw new Error('null currentUser');
-                    }
-                    //window.location.hash='home';
-                    //router.navigate('home', {trigger: true});
-                    Backbone.Events.trigger('bootRouter', 'home');
-                });
+                    console.log('not authenticated..!');
+                    appState.set('currentUser',null);
+                    Backbone.Events.trigger('bootRouter', 'index');
+                }
             }
-            else {
 
-                console.log('not authenticated..!');
-                appState.set('currentUser',null);
-                Backbone.Events.trigger('bootRouter', 'index');
+            if(appState.get('env') === 'development'){
+                loadDefaultUsers(run);
             }
+            else{
+                run();
+            }
+
+
         };
+
+        function loadDefaultUsers(callback){
+
+            var newUser = models.User.newUser({
+                firstName:'default-first-name',
+                lastName:'default-last-name',
+                username:'default',
+                password:'default',
+                email:'default@temp.com'
+            });
+
+            newUser.persistModel({},{},function(err,model,res,options){
+                if(err){
+                    throw err;
+                }
+                else if(res.error){
+                    //throw res.error;
+                    console.error(res.error);
+                }
+                else{
+                    collections.users.add(model);
+                }
+                callback();
+
+            });
+        }
 
         return {
             initialize: initialize

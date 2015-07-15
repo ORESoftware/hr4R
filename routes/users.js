@@ -137,19 +137,22 @@ router.post('/', function (req, res, next) {
 
         var newUser = new User({
             username: username,
-            password: password,
+            passwordHash: 'this value is temporary',
             email: email,
             firstName: firstName,
             lastName: lastName
         });
 
+        newUser.passwordPreHash = password;
+
         newUser.save(function (err, result) {
             if (err) {
                 console.log("error in user save method:", err);
-                res.send({error: err});
+                res.send({error: err.errors});
             }
             else if (result) {
                 console.log('Added new user: ', result);
+                delete result.passwordPreHash;
                 res.json({success: result});
             }
             else {
@@ -222,10 +225,11 @@ router.delete('/:user_id', function (req, res, next) {
 
         User.remove({_id: userToDelete._id}, function (err) {
             if (err) {
+                res.send({error:err.toString()})
                 return next(err);
             }
             else {
-                res.send(userToDelete);
+                res.send({success:userToDelete});
             }
         });
     });

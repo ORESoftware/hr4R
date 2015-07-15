@@ -7,14 +7,16 @@ console.log('loading app/js/models/userModel.js');
 
 //TODO: In model, urlRoot is used for the Model. url is used for the instance of the Model.
 //TODO: http://beletsky.net/2012/11/baby-steps-to-backbonejs-model.html
+//TODO: http://christianalfoni.github.io/javascript/2014/10/22/nailing-that-validation-with-reactjs.html
 
 define(
     [
         'underscore',
-        'backbone'
+        'backbone',
+        'ijson'
     ],
 
-    function (_, Backbone) {
+    function (_, Backbone,IJSON) {
 
         var User = Backbone.Model.extend({
 
@@ -40,7 +42,7 @@ define(
 
                     this.options = opts || {};
 
-                    _.bindAll(this, 'deleteModel', 'persist', 'validate');
+                    _.bindAll(this, 'deleteModel', 'persistModel', 'validate');
                     //
 
                     this.on('change', function () {
@@ -75,25 +77,28 @@ define(
                 },
 
 
-                persist: function (adds, callback) {
-                    var opts = adds || null;
-                    this.save(opts, {
-                        //wait:true,
-                        dataType: "text",
-                        //TODO: is callback is only firing once??
+                persistModel: function (attributes, opts, callback) {
+                    //TODO: add opts to object below
+                    this.save(attributes, {
+                        wait: true, //prevents optimistic destroy
+                        dataType: "json",
+                        //TODO:  model.trigger('sync', model, resp, options);
                         success: function (model, response, options) {
                             console.log("The model has been saved to the server");
-                            callback(model, response, options);
+                            callback(null,model, IJSON.parse(response), options);
                         },
                         error: function (model, xhr, options) {
-                            console.log("Something went wrong while saving the model");
-                            callback(model, xhr, options);
+                            var err = new Error("Something went wrong while saving the model");
+                            callback(err, model, xhr, options);
                         }
                     });
                 },
-                deleteModel: function (callback) {
+                deleteModel: function (opts,callback) {
+                    //TODO: add opts to object below
+                    //TODO: turn this into https://www.dropbox.com/s/lzzgg2wanjlguf5/Screenshot%202015-07-14%2016.54.57.png?dl=0
                     this.destroy({
                         wait: true, //prevents optimistic destroy
+                        dataType: "json",
                         success: function (model, response, options) {
                             console.log("The model has been destroyed/deleted on/from the server");
                             callback(null, model, response, options);
@@ -123,13 +128,9 @@ define(
                 //}
             },
 
-            { //classProperties
+            { //class properties
 
                 newUser: function ($user) {
-
-                    $user.url = '/users';
-
-                    //var user = new User($user);
 
                     var user = new User($user);
 

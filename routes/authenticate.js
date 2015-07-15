@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 
     var env = process.env.NODE_ENV;
 
-    if (req.isAuthenticated()) {
+    if (req.isAuthenticated() && req.user) {
         res.json({isAuthenticated:true, user:req.user, env:env});
     } else {
         res.json({isAuthenticated:false, user:null ,env:env});

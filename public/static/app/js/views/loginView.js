@@ -141,6 +141,10 @@ define(
                                     Backbone.Events.trigger('bootRouter', 'home');
                                 }
 
+                            }).fail(function (err) {
+                                throw err;
+                            }).always(function () {
+
                             });
                         }
                         else {
@@ -157,10 +161,9 @@ define(
                                 //TODO get validator error from mongoose by submitting bad registration info (missing firstname/username etc)
                                 alert("Server error during user login/registration - " + IJSON.parse(msg));//
                             }, 200);
-                            self.render();
                         })
                         .always(function () {
-
+                            self.render();
                         });
 
 
@@ -213,10 +216,9 @@ define(
                             setTimeout(function () {
                                 alert("Server error during user login/registration - " + msg);
                             }, 200);
-                            self.render();
                         })
                         .always(function () {
-
+                            self.render();
                         });
                 }
             },

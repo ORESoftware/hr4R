@@ -27,9 +27,6 @@ define(
     function (appState, viewState, async, collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
 
 
-        //var router = routers(null).bootRouter;//
-
-        //var hvTemplate = null; don't need this because header is not recreated - just repopulated
         //TODO: http://stackoverflow.com/questions/7567404/backbone-js-repopulate-or-recreate-the-view
 
         var HeaderView = Backbone.View.extend({
@@ -146,6 +143,8 @@ define(
                 onClickResetAll: function (event) {
                     event.preventDefault();
 
+                    var self = this;
+
                     var deletes = [];
 
                     Object.keys(collections).forEach(function (key) {
@@ -161,14 +160,13 @@ define(
 
                                     console.log(model.givenName);
 
-                                    model.deleteModel(function (err, resp, x) {
-
-                                        console.log(err, resp, x);
+                                    model.deleteModel({},function (err, model,resp, opts) {
 
                                         if (err) {
                                             callback(err);
                                         }
                                         else {
+                                            model = null;
                                             callback(null, null);
                                         }
 
@@ -184,8 +182,13 @@ define(
 
                     async.parallel(deletes, function (err, results) {
 
-                        //Backbone.Events.trigger('bootRouter', '+refreshCurrentPage');
-
+                        if(err){
+                            throw err;
+                        }
+                        else{
+                            Backbone.Events.trigger('bootRouter', 'index');
+                            //self.render();
+                        }
                     });
 
 

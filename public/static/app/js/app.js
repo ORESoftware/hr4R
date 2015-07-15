@@ -46,12 +46,14 @@ window.readFromLocalStorage = function (key) {
 
 define(
     [
+        'd3',
         'handlebars',
         'backbone',
         'underscore',
         'ijson',
         'react',
         'app/js/allCollections',
+        'app/js/allModels',
         'app/js/allViews',
         'app/js/allTemplates',
         'jsx!app/js/views/todoList',
@@ -59,13 +61,18 @@ define(
 
     ],
 
-    function (Handlebars, Backbone, _, IJSON, React, collections, allViews, allTemplates, todoList, giant) {
+    function (d3, Handlebars, Backbone, _, IJSON, React, collections, models, allViews, allTemplates, todoList, giant) {
 
 
         /*
          we don't use the majority of these dependencies in this file, but they are loaded here so that r.js can build
          the optimized file
          */
+
+        //d3.select("body").transition().delay(1750)
+        //    .style("background-color", "#919191");
+
+      
 
 
         Backbone.setCollectionOptions = function(model,options){
@@ -92,7 +99,7 @@ define(
 
         Backbone.syncCollection = function (collection, cb) {
 
-            collection.persist(function (err, res) {
+            collection.persistCollection({},function (err, res) {
                 if (err) {
                     cb(err);
                 }

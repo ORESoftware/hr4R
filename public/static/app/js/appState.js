@@ -4,7 +4,7 @@
 
 
 
-define('#appState',function() {
+define('#appState',['backbone'],function(Backbone) {
 
     /*
     * here we store the application state, everything that will go into localStorage will come from here
@@ -23,27 +23,16 @@ define('#appState',function() {
 
     };
 
+    function setCurrentUserOnEvent(user){
+        Backbone.Events.listenTo(user,'destroy',function(model,modelCollection,opts){
+            var user = appState.currentUser;
+            console.log('dddd');
+            appState.currentUser = null;
+        });
+    }
+
     return {
         value: appState,
-        getV: function(val){
-            return appState[val];
-        },
-        setV: function(prop,val){
-            if(prop in appState){
-                console.log('application state changed from this :',appState);
-                if(prop === 'currentUser' && val instanceof window.Backbone.Model){
-                    appState['authorized'] = true;
-                }
-                else{
-                    appState['authorized'] = false;
-                }
-                appState[prop] = val;
-                console.log('application state changed to :',appState);
-            }
-            else{
-                throw new Error('no appState property matched.');
-            }
-        },
         get: function(val){
             return appState[val];
         },
@@ -51,6 +40,7 @@ define('#appState',function() {
             if(prop in appState){
                 console.log('application state from this :',appState);
                 if(prop === 'currentUser' && val !== null){
+                    setCurrentUserOnEvent(val);
                     appState['authorized'] = true;
                 }
                 else{

@@ -77,6 +77,8 @@ function registerUser(req, res, next) {
 
     console.log('about to register user:', req.body);
 
+    //TODO: meld this with users.post
+
     var user = req.body;
     var firstName = user.firstName;
     var lastName = user.lastName;

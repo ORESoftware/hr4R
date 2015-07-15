@@ -37,11 +37,11 @@ define(
 
             routes: {
                 '': 'canonical',
-                "+refreshCurrentPage":"refreshCurrentPage",
+                "+refreshCurrentPage": "refreshCurrentPage",
                 "posts/:id": "getPost",
                 'index': 'index',
                 'home': 'home',
-                'portal':'portal',
+                'portal': 'portal',
                 'login': 'login',
                 ":route/:action": "loadView",
                 "*notFound": "defaultRoute" // Backbone will try to match the routes above first
@@ -58,28 +58,28 @@ define(
 
                 var currentView = this.viewState.get('mainView');
                 var currentViewName = currentView.givenName;
-                currentViewName = currentViewName.replace('View','').replace('@','');
+                currentViewName = currentViewName.replace('View', '').replace('@', '');
                 //TODO: need to fix url of this page
                 this.changeView(new allViews[currentViewName]());
             },
 
             home: function () {
                 this.changeView({
-                    view:new allViews.Home({el: '#main-content-id'}),
-                    useSidebar:true
+                    view: new allViews.Home({el: '#main-content-id'}),
+                    useSidebar: true
                 });
             },
             portal: function () {
                 this.changeView({
-                    view:new allViews.Portal(),
-                    useSidebar:true
+                    view: new allViews.Portal(),
+                    useSidebar: true
                 });
             },
 
             index: function () {
                 this.changeView({
-                    view:new allViews.Index({collection:collections.users}),
-                    useSidebar:false
+                    view: new allViews.Index({collection: collections.users}),
+                    useSidebar: false
                 });
             },
 
@@ -116,15 +116,15 @@ define(
                 var self = this;
 
                 //Backbone.Events.on('bootRouter', onToggleViewRequest.bind(self), this);
-                _.bindAll(this, 'changeView');
+                _.bindAll(this, 'changeView', 'destroyView');
                 this.listenTo(Backbone.Events, 'bootRouter', onToggleViewRequest);
 
                 function onToggleViewRequest(viewName) {
                     self.navigate(viewName, {trigger: true});
                 }
 
-                this.listenTo(this,'all',function(route,action){
-                    console.log('router was invoked, route:',route,'action:',action);
+                this.listenTo(this, 'all', function (route, action) {
+                    console.log('router was invoked, route:', route, 'action:', action);
                 });
 
                 //this.on('route:loadView', function (route, action) {
@@ -147,7 +147,15 @@ define(
                 view.undelegateEvents();
                 view.$el.removeData().unbind();
                 view.stopListening();
-                view = undefined;
+
+                var cv = view.childViews;
+
+
+                Object.keys(cv || {}).forEach(function (key) {
+                    this.destroyView(cv[key]);
+                }.bind(this));
+
+
                 //TODO: remove children here
                 //view.remove(); //this deletes DOM element from the DOM, and that is bad
                 //Backbone.View.prototype.remove.call(view);
@@ -172,7 +180,7 @@ define(
                             function (cb) {
                                 //TODO: this will be incorrect with more than one collection because key will be wrong
                                 var coll = collections[key];
-                                coll.persist(function (err, res) {
+                                coll.persistCollection({}, function (err, res) {
                                     if (err) {
                                         return cb(err);
                                     }
@@ -230,7 +238,7 @@ define(
 
             //if (appGlobal.currentUser == null || appGlobal.authorized === false) {
 
-            if(appState.get('authorized') !== true){
+            if (appState.get('authorized') !== true) {
 
                 if (this.viewState.get('mainView') != null) {
                     this.destroyView(this.viewState.get('mainView'));
@@ -262,19 +270,19 @@ define(
                     throw new Error('null view in router');
                 }
 
-                if(opts.useSidebar === true){
+                if (opts.useSidebar === true) {
                     //if(this.viewState.get('mainParentView') === null || this.viewState.get('mainParentView').givenName !== '@PortalView'){
-                        this.viewState.set('mainParentView',new allViews.Portal());
-                        var temp = this.viewState.get('mainParentView');
-                        temp.render();
+                    this.viewState.set('mainParentView', new allViews.Portal());
+                    var temp = this.viewState.get('mainParentView');
+                    temp.render();
                     //}
                     //else{
                     //    console.log('sidebar was not re-rendered');
                     //}
                 }
-                else{
+                else {
                     this.destroyView(this.viewState.get('mainParentView'));
-                    this.viewState.set('mainParentView',null);
+                    this.viewState.set('mainParentView', null);
                 }
 
 
@@ -297,22 +305,22 @@ define(
             }
         }
 
-       /* return function ($allViews) {
+        /* return function ($allViews) {
 
-            if (allViews === null) {
-                if ($allViews == null) {
-                    console.log('null/undefined value to passed routers.js');
-                }
-                else {
-                    console.log('initializing routers with allViews');
-                    allViews = $allViews;
-                }
-            }
+         if (allViews === null) {
+         if ($allViews == null) {
+         console.log('null/undefined value to passed routers.js');
+         }
+         else {
+         console.log('initializing routers with allViews');
+         allViews = $allViews;
+         }
+         }
 
-            return {
-                bootRouter: bootRouter
-            }
-        }*/
+         return {
+         bootRouter: bootRouter
+         }
+         }*/
 
         return {
             bootRouter: bootRouter
