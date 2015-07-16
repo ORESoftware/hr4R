@@ -38,11 +38,17 @@ define(
                     }
                 },
 
+                constructor: function () {
+                    this.givenName = '@UserModel';
+                    Backbone.Model.apply(this, arguments);
+                },
+
+
                 initialize: function (attributes, opts) {
 
                     this.options = opts || {};
 
-                    _.bindAll(this, 'deleteModel', 'persistModel', 'validate');
+                    _.bindAll(this, 'deleteModel', 'persistModel', 'validate','parse');
                     //
 
                     this.on('change', function () {
@@ -61,10 +67,6 @@ define(
                     console.log('UserModel has been intialized');
                 },
 
-                constructor: function () {
-                    this.givenName = '@UserModel';
-                    Backbone.Model.apply(this, arguments);
-                },
 
                 validate: function (attr) {
                     //if (attr.ID <= 0) {
@@ -115,8 +117,16 @@ define(
                      parse converts a response into the hash of attributes to be set on the model.
                      The default implementation is just to pass the response along.
                      */
-
-                    return resp;
+                    if(resp.success){
+                        return resp.success;
+                    }
+                    else if(resp.error){
+                        return this.attributes;
+                    }
+                    else{
+                        return resp;
+                    }
+                    //return resp;
                 }
 
                 //validation: {

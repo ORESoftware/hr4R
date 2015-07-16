@@ -58,6 +58,18 @@ define(
                 });
             },
 
+            parse: function(resp) {
+                if(resp.success){
+                    return resp.success;
+                }
+                else if(resp.error){
+                    return this.models;
+                }
+                else{
+                    return resp;
+                }
+            },
+
             persistCollection: function (opts,cb) {
 
                 //TODO: use opts to set same value for all models

@@ -93,6 +93,7 @@ define('app/js/boot',
 
             if(appState.get('env') === 'development'){
                 loadDefaultUsers(run);
+                //run();
             }
             else{
                 run();
@@ -116,11 +117,18 @@ define('app/js/boot',
                     throw err;
                 }
                 else if(res.error){
-                    //throw res.error;
-                    console.error(res.error);
+                    if(typeof res.error === 'object'){
+                        Object.keys(res.error).forEach(function(key){
+                           console.error('error:',res.error[key]);
+                        });
+                    }
+                    else{
+                        console.error('error passed in persistModel callback',res.error);
+                    }
                 }
                 else{
-                    collections.users.add(model);
+                    //collections.users.add(model);
+                    collections.users.add(newUser);
                 }
                 callback();
 

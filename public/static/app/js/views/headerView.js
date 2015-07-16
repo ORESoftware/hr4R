@@ -166,6 +166,7 @@ define(
                                             callback(err);
                                         }
                                         else {
+                                            model.clear();
                                             model = null;
                                             callback(null, null);
                                         }

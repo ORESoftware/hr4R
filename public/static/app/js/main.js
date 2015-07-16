@@ -37,6 +37,7 @@ requirejs.config({
         'homeTemplate':'app/templates/homeTemplate.html',
         'jsx': "vendor/jsx",
         'JSXTransformer': 'vendor/JSXTransformer',
+        'observe':'vendor/observe',
         'react':'vendor/react-with-addons',
         'socketio':'vendor/socketio',
         '#appState':'app/js/appState',

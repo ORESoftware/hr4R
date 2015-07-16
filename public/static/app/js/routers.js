@@ -144,16 +144,23 @@ define(
 
             destroyView: function (view) {
 
-                view.undelegateEvents();
-                view.$el.removeData().unbind();
-                view.stopListening();
+                if(view == null){
+                    console.log('null view sent to destroyView function');
+                }
+                else{
+                    view.undelegateEvents();
+                    view.$el.removeData().unbind();
+                    view.stopListening();
 
-                var cv = view.childViews;
+                    var cv = view.childViews;
 
 
-                Object.keys(cv || {}).forEach(function (key) {
-                    this.destroyView(cv[key]);
-                }.bind(this));
+                    Object.keys(cv || {}).forEach(function (key) {
+                        this.destroyView(cv[key]);
+                    }.bind(this));
+
+                }
+
 
 
                 //TODO: remove children here
@@ -238,8 +245,9 @@ define(
 
             //if (appGlobal.currentUser == null || appGlobal.authorized === false) {
 
-            if (appState.get('authorized') !== true) {
+            //if (appState.get('authorized') !== true) {
 
+            if(!appState.currentUserSessionIsOK()){
                 if (this.viewState.get('mainView') != null) {
                     this.destroyView(this.viewState.get('mainView'));
                 }

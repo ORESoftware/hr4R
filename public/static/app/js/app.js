@@ -47,6 +47,7 @@ window.readFromLocalStorage = function (key) {
 define(
     [
         'd3',
+        'observe',
         'handlebars',
         'backbone',
         'underscore',
@@ -61,8 +62,10 @@ define(
 
     ],
 
-    function (d3, Handlebars, Backbone, _, IJSON, React, collections, models, allViews, allTemplates, todoList, giant) {
+    function (d3, Observe, Handlebars, Backbone, _, IJSON, React, collections, models, allViews, allTemplates, todoList, giant) {
 
+
+        console.log(Observe);
 
         /*
          we don't use the majority of these dependencies in this file, but they are loaded here so that r.js can build
@@ -99,7 +102,7 @@ define(
 
         Backbone.syncCollection = function (collection, cb) {
 
-            collection.persistCollection({},function (err, res) {
+            collection.persistCollection({},function (err, results) {
                 if (err) {
                     cb(err);
                 }
@@ -170,6 +173,7 @@ define(
                                 cb(err)
                             }
                         });
+                    //TODO: convert this to done,fail,always
                 }
             });
         };

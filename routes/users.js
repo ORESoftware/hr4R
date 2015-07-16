@@ -79,10 +79,11 @@ router.get('/', function (req, res, next) {
     UserModel.get(function (err, User) {
         User.find({}, function (err, items) {
             if (err) {
+                res.json({error:{}});
                 return next(err);
             }
             //console.log(items);
-            res.json(items);
+            res.json({success:items});
         });
     });
 });
@@ -163,11 +164,6 @@ router.post('/', function (req, res, next) {
 });
 
 
-router.post('/', function (req, res, next) {
-
-    console.log('!!!!!', req.body, '!!!!!');
-    res.json({hi: 'bye'});
-});
 
 
 router.put('/:user_id', function (req, res, next) {

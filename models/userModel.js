@@ -252,7 +252,7 @@ var UserModel = null;
 
 var get = function (cb) {
 
-    eventBus.emit('userModel',this);
+    eventBus.emit('userModel','message from user model via eventBus!');
 
     if(UserModel === null){
         UserModel = mongoDB.model('users', userSchema);

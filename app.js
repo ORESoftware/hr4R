@@ -82,7 +82,7 @@ app.use(expressLayouts);
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.set('layout', 'layout');
+app.set('layout', 'layoutx');
 app.engine('html', ejs.renderFile);
 
 
