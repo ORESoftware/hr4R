@@ -1,11 +1,13 @@
 /**
+ * Created by amills001c on 7/16/15.
+ */
+
+/**
  * Created by amills001c on 6/15/15.
  */
 
 
-console.log('loading registeredUsersView');
-
-//TODO: http://hackflow.com/blog/2015/03/08/boiling-react-down-to-few-lines-in-jquery/
+console.log('loading userProfileView');
 
 define(
     [
@@ -17,20 +19,21 @@ define(
         'handlebars',
         'backbone',
         'backbone-validation',
-        'text!app/templates/registeredUsersTemplate.ejs'
+        'text!app/templates/userProfileTemplate.ejs'
     ],
 
     function (appState, collections, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
 
 
-        var RegisteredUsersView = Backbone.View.extend({
+        var UserProfileView = Backbone.View.extend({
 
 
                 defaults: function () {
                     return {
                         model: null,
                         collection: collections.users,
-                        childViews: {}
+                        childViews: {
+                        }
                     }
                 },
                 events: {
@@ -38,7 +41,7 @@ define(
                 },
 
                 constructor: function () {
-                    this.givenName = '@RegisteredUsersView';
+                    this.givenName = '@UserProfileView';
                     Backbone.View.apply(this, arguments);
                 },
 
@@ -51,20 +54,20 @@ define(
                 },
                 render: function () {
 
-                    console.log('attempting to render registeredUsersView.');
+                    console.log('attempting to render userProfileView.');
 
                     var data = this.collection.models;
                     var self = this;
 
-                    if (RegisteredUsersView.template == null) {
+                    if (UserProfileView.template == null) {
 
-                        console.log('registeredUsersView template is null, retrieving from server.')
+                        console.log('userProfileView template is null, retrieving from server.')
 
                         $.ajax({
-                            url: 'static/html/ejs/registeredUsersTemplate.ejs',
+                            url: 'static/html/ejs/userProfileTemplate.ejs',
                             type: 'GET',
                             success: function (msg) {
-                                RegisteredUsersView.template = msg;
+                                UserProfileView.template = msg;
                                 renderThis.bind(self)(msg);
                             },
                             error: function (err) {
@@ -73,7 +76,7 @@ define(
                         });
                     }
                     else {
-                        renderThis.bind(this)(RegisteredUsersView.template);
+                        renderThis.bind(this)(UserProfileView.template);
                     }
 
                     function renderThis($template) {
@@ -81,9 +84,13 @@ define(
                             users: data
                         });
 
-                        self.$el.html(ret);
+                        //self.$el.append(ret);
+                        //console.log(ret);
+                        self.$el.append(ret);
 
-                        console.log('registeredUsersView rendered');
+                        $(self.el).append(ret);
+
+                        console.log('userProfileView (re)-rendered');
                     }
 
 
@@ -95,6 +102,6 @@ define(
             }
         );
 
-        return RegisteredUsersView;
+        return UserProfileView;
 
     });

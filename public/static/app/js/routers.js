@@ -41,6 +41,7 @@ define(
                 "posts/:id": "getPost",
                 'index': 'index',
                 'home': 'home',
+                'userProfile':'userProfile',
                 'portal': 'portal',
                 'login': 'login',
                 ":route/:action": "loadView",
@@ -75,6 +76,14 @@ define(
                     useSidebar: true
                 });
             },
+
+            userProfile: function () {
+                this.changeView({
+                    view: new allViews.UserProfile({el: '#main-content-id',collection: collections.users}),
+                    useSidebar: true
+                });
+            },
+
 
             index: function () {
                 this.changeView({
@@ -160,10 +169,6 @@ define(
                     }.bind(this));
 
                 }
-
-
-
-                //TODO: remove children here
                 //view.remove(); //this deletes DOM element from the DOM, and that is bad
                 //Backbone.View.prototype.remove.call(view);
             },
