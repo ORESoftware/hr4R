@@ -10,13 +10,15 @@ define(
 
     [
         'app/js/models/userModel',
+        'app/js/models/jobModel',
         'exports'
     ],
 
-    function (UserModel,exports) {
+    function (UserModel, JobModel, exports) {
 
 
         return {
-            User:UserModel
+            User:UserModel,
+            Job: JobModel
         };
     });

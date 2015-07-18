@@ -46,7 +46,7 @@ define(
 
                 initialize: function (opts) {
 
-                    Backbone.setViewProps(this, opts); //has side effects
+                    this.setViewProps(opts); //has side effects
                     _.bindAll(this, 'render', 'onSubmitLogin', 'onSubmitRegistration');
                     this.listenTo(this.collection, 'add remove', this.render);
 

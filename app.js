@@ -176,15 +176,18 @@ app.use(function (req, res, next) {
 });
 
 
-//require('./routes')(app);
+//passport setup
 require('./lib/controllers/passport_setup')(site.models.User);
+
+//params setup
 require('./lib/controllers/params')(app);
 
+//routes
 app.use('/', require('./routes/index'));
+app.use('/updateUserInfo', require('./routes/updateUserInfo'));
 app.use('/users', require('./routes/users'));
+app.use('/jobs', require('./routes/jobs'));
 app.use('/users_batch', require('./routes/batch'));
-//app.use(new RegExp('//(users|usersBatch)/'), require('./routes/users'));
-//app.use('(users|usersBatch)', require('./routes/users'));
 app.use('/authenticate', require('./routes/authenticate'));
 app.use('/register', require('./routes/register'));
 app.use('/login', require('./routes/login'));

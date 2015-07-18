@@ -53,7 +53,7 @@ define(
 
                 initialize: function (opts) {
 
-                    Backbone.setViewProps(this, opts); //has side effects
+                    this.setViewProps(opts); //has side effects
                     _.bindAll(this, 'render');
                     this.listenTo(this.model, 'change', this.render);
                     this.listenTo(this.collection, 'reset', this.render);

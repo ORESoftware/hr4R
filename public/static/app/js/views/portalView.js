@@ -47,7 +47,7 @@ define(
 
                 initialize: function (opts) {
 
-                    Backbone.setViewProps(this,opts);
+                    this.setViewProps(opts);
                     _.bindAll(this, 'render', 'show', 'onChange', 'handleModelSyncSuccess', 'handleModelError');
                     this.listenTo(this.collection, 'add reset', this.render);
                     this.listenTo(this.collection, 'change', this.onChange, this);

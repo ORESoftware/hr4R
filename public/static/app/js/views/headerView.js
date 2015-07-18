@@ -59,7 +59,7 @@ define(
 
                 initialize: function (opts) {
 
-                    Backbone.setViewProps(this, opts); //has side effects
+                    this.setViewProps(opts); //has side effects
                     _.bindAll(this, 'render', 'onClickResetAll', 'onClickResetFrontEnd', 'onClickResetBackEnd');
                 },
 

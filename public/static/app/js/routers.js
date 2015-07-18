@@ -41,7 +41,7 @@ define(
                 "posts/:id": "getPost",
                 'index': 'index',
                 'home': 'home',
-                'userProfile':'userProfile',
+                'userProfile': 'userProfile',
                 'portal': 'portal',
                 'login': 'login',
                 ":route/:action": "loadView",
@@ -79,7 +79,13 @@ define(
 
             userProfile: function () {
                 this.changeView({
-                    view: new allViews.UserProfile({el: '#main-content-id',collection: collections.users}),
+                    view: new allViews.UserProfile(
+                        {
+                            el:'#main-content-id',
+                            model: appState.get('currentUser'),
+                            collection: collections.users
+                        }
+                    ),
                     useSidebar: true
                 });
             },
@@ -118,13 +124,10 @@ define(
 
             initialize: function (options) {
 
-                //_.bind(this.initialize,undefined);
                 this.options = options || {};
-                //this.listenTo(Backbone,'bootRouter',this.onToggleViewRequest);
-                //this.listenTo(Backbone,'bootRouter',this.onToggleViewRequest,this);
+
                 var self = this;
 
-                //Backbone.Events.on('bootRouter', onToggleViewRequest.bind(self), this);
                 _.bindAll(this, 'changeView', 'destroyView');
                 this.listenTo(Backbone.Events, 'bootRouter', onToggleViewRequest);
 
@@ -153,10 +156,10 @@ define(
 
             destroyView: function (view) {
 
-                if(view == null){
+                if (view == null) {
                     console.log('null view sent to destroyView function');
                 }
-                else{
+                else {
                     view.undelegateEvents();
                     view.$el.removeData().unbind();
                     view.stopListening();
@@ -252,7 +255,7 @@ define(
 
             //if (appState.get('authorized') !== true) {
 
-            if(!appState.currentUserSessionIsOK()){
+            if (!appState.currentUserSessionIsOK()) {
                 if (this.viewState.get('mainView') != null) {
                     this.destroyView(this.viewState.get('mainView'));
                 }

@@ -75,20 +75,38 @@ define(
         //d3.select("body").transition().delay(1750)
         //    .style("background-color", "#919191");
 
-      
 
-
-        Backbone.setCollectionOptions = function(model,options){
+        Backbone.setCollectionOptions = function (model, options) {
 
 
         };
 
 
-        Backbone.setViewProps = function(view,options){
+        //Backbone.setViewProps = function(view,options){
+        //
+        //    var opts = options || {};
+        //
+        //    var temp = _.defaults({}, opts, _.result(view, 'defaults'));
+        //
+        //    for(var prop in temp){
+        //        if(temp.hasOwnProperty(prop) && prop !== undefined){
+        //            if(temp[prop]!==undefined){
+        //                view[prop] = temp[prop];
+        //                console.log('new view property:',view[prop]);
+        //            }
+        //        }
+        //    }
+        //};
+
+        Backbone.View.prototype.setViewProps = function (options) {
 
             var opts = options || {};
 
-            var temp = _.defaults({}, opts, _.result(view, 'defaults'));
+            var temp = _.defaults({}, opts, _.result(this, 'defaults'));
+
+            //_.defaults(this, _.result(this, 'defaults'));
+            //
+            //console.log(this);
 
            //_.defaults(view, opts, _.result(view, 'defaults'));
            //
@@ -97,8 +115,8 @@ define(
             for(var prop in temp){
                 if(temp.hasOwnProperty(prop) && prop !== undefined){
                     if(temp[prop]!==undefined){
-                        view[prop] = temp[prop];
-                        console.log('new view property:',view[prop]);
+                        this[prop] = temp[prop];
+                        console.log('new view property:',this[prop]);
                     }
                 }
             }
@@ -106,7 +124,7 @@ define(
 
         Backbone.syncCollection = function (collection, cb) {
 
-            collection.persistCollection({},function (err, results) {
+            collection.persistCollection({}, function (err, results) {
                 if (err) {
                     cb(err);
                 }
@@ -141,15 +159,15 @@ define(
                 data: batchData
             }).done(function (msg) {
 
-               console.log(msg);
-               cb(msg);
+                console.log(msg);
+                cb(msg);
 
             }).fail(function (msg) {
 
                 console.log(msg);
                 cb(msg);
 
-            }).always(function(msg){
+            }).always(function (msg) {
 
                 console.log(msg);
                 cb(msg);
@@ -157,8 +175,8 @@ define(
             });
         };
 
-        Backbone.batchSyncCollection(collections.users,function(msg){
-                 console.log(IJSON.parse(msg));
+        Backbone.batchSyncCollection(collections.users, function (msg) {
+            console.log(IJSON.parse(msg));
         });
 
         Backbone.batchSaveCollection = function (collection, cb) {
@@ -196,7 +214,6 @@ define(
          });
          }
          });
-
 
 
          return "Dude, are you sure you want to leave? Think of the kittens!";

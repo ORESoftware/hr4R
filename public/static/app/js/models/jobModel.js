@@ -1,9 +1,14 @@
 /**
+ * Created by amills001c on 7/17/15.
+ */
+
+
+/**
  * Created by amills001c on 6/9/15.
  */
 
 
-console.log('loading app/js/models/userModel.js');
+console.log('loading app/js/models/jobModel.js');
 
 //TODO: In model, urlRoot is used for the Model. url is used for the instance of the Model.
 //TODO: http://beletsky.net/2012/11/baby-steps-to-backbonejs-model.html
@@ -18,28 +23,24 @@ define(
 
     function (_, Backbone,IJSON) {
 
-        var User = Backbone.Model.extend({
+        var Job = Backbone.Model.extend({
 
 
                 idAttribute: "_id",
 
-                //url: '/users',
-                //urlRoot: '/users?user_id=',
+                //url: '/jobs',
+                //urlRoot: '/jobs?job_id=',
 
-                urlRoot: '/users',
+                urlRoot: '/jobs',
 
-                defaults: function () { //prevents copying default attributes to all instances of UserModel
+                defaults: function () { //prevents copying default attributes to all instances of JobModel
                     return {
-                        firstName: null,
-                        lastName: null,
-                        username: null,
-                        password: null,
-                        email: null
+                        jobname: null,
                     }
                 },
 
                 constructor: function (attributes,opts) {
-                    this.givenName = '@UserModel';
+                    this.givenName = '@JobModel';
                     Backbone.Model.apply(this, arguments);
                 },
 
@@ -60,11 +61,11 @@ define(
                         }
                     });
 
-                    this.on('change:username', function (msg) {
-                        console.log('username for this model:', this, 'has changed --->', msg);
+                    this.on('change:jobname', function (msg) {
+                        console.log('jobname for this model:', this, 'has changed --->', msg);
                     });
 
-                    console.log('UserModel has been intialized');
+                    console.log('JobModel has been intialized');
                 },
 
 
@@ -140,22 +141,13 @@ define(
 
             { //class properties
 
-                newUser: function ($user) {
+                newJob: function ($job) {
 
-                    var user = new User($user);
-
-                    //user.attributes.firstName = $user.firstName;
-                    //user.attributes.lastName = $user.lastName;
-                    //user.attributes.username = $user.username;
-                    //user.attributes.password = $user.password;
-                    //user.attributes.email = $user.email;
-
-                    return user;
-
+                    var job = new Job($job);
+                    return job;
                 }
-
             });
 
 
-        return User;
+        return Job;
     });

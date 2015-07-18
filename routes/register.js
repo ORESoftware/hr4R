@@ -118,18 +118,6 @@ function registerUser(req, res, next) {
 
 }
 
-exports.changePassword = function (req, res, next) {
 
-    // APP render as opposed to res.render???
-
-    var shasum = crypto.createHash('sha256');
-    shaSum.update(req.body.newPassword);
-    var hashedPassword = shaSum.digest('hex');
-    var Model = req.site.models.User;
-    Model.update({_id: req.user._id}, {$set: {password: hashedPassword}}, {upsert: false}),
-        function changePasswordCallback(err) {
-            console.log('change password complete');
-        }
-};
 
 module.exports = router;
