@@ -90,6 +90,10 @@ define(
 
             var temp = _.defaults({}, opts, _.result(view, 'defaults'));
 
+           //_.defaults(view, opts, _.result(view, 'defaults'));
+           //
+           // console.log(view);
+
             for(var prop in temp){
                 if(temp.hasOwnProperty(prop) && prop !== undefined){
                     if(temp[prop]!==undefined){

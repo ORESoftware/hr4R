@@ -40,14 +40,18 @@ define(
 
                 },
 
-                constructor: function () {
+                constructor: function (opts) {
                     this.givenName = '@UserProfileView';
-                    Backbone.View.apply(this, arguments);
+                    //this.cid = _.uniqueId('view');
+                    Backbone.setViewProps(this, opts); //has side effects
+                    this._ensureElement();
+                    this.initialize.apply(this, arguments);
+                    //Backbone.View.apply(this, arguments);
                 },
 
                 initialize: function (opts) {
 
-                    Backbone.setViewProps(this, opts); //has side effects
+                    //Backbone.setViewProps(this, opts); //has side effects
                     _.bindAll(this, 'render');
                     //this.listenTo(this.collection, 'change', this.render);
                     //this.listenTo(this.collection, 'add remove reset', this.render);
@@ -86,13 +90,12 @@ define(
 
                         //self.$el.append(ret);
                         //console.log(ret);
-                        self.$el.append(ret);
+                        self.$el.html(ret);
 
-                        $(self.el).append(ret);
+                        //$(self.el).append(ret);
 
                         console.log('userProfileView (re)-rendered');
                     }
-
 
                     return this;
                 }
