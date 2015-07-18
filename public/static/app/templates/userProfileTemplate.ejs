@@ -1,33 +1,37 @@
 <div>
-    <div>aageagoeagoagegeega
-    </div>
-<form role="form">
+    <div class="col-lg-6">
+        <form role="form" id="user-profile-update-form-id" action="javascript:void(0);">
 
-    <div class="form-group input-group">
-        <span class="input-group-addon">@</span>
-        <input type="text" class="form-control" placeholder="Username">
-    </div>
+            <div class="form-group input-group">
+                <span class="input-group-addon user-profile-update-form">Email</span>
+                <input type="text" class="form-control">
+            </div>
 
-    <div class="form-group input-group">
-        <input type="text" class="form-control">
-        <span class="input-group-addon">.00</span>
-    </div>
+            <div class="form-group input-group">
+                <span class="input-group-addon user-profile-update-form">Username</span>
+                <input type="text" class="form-control" name="user.username" placeholder="Username">
+            </div>
 
-    <div class="form-group input-group">
-        <span class="input-group-addon"><i class="fa fa-eur"></i></span>
-        <input type="text" class="form-control" placeholder="Font Awesome Icon">
-    </div>
+            <div class="form-group input-group">
+                <span class="input-group-addon user-profile-update-form">Old Password</span>
+                <input type="text" class="form-control" name="user.old_password" placeholder="Old Password">
+            </div>
 
-    <div class="form-group input-group">
-        <span class="input-group-addon">$</span>
-        <input type="text" class="form-control">
-        <span class="input-group-addon">.00</span>
-    </div>
+            <div class="form-group input-group">
+                <span class="input-group-addon user-profile-update-form">New Password</span>
+                <input type="text" class="form-control" name="user.new_password" placeholder="New Password">
+            </div>
 
-    <div class="form-group input-group">
-        <input type="text" class="form-control">
-        <span class="input-group-btn"><button class="btn btn-default" type="button"><i class="fa fa-search"></i></button></span>
-    </div>
 
-</form>
+            <div class="form-group input-group">
+                <span class="input-group-addon user-profile-update-form">Confirm New Password</span>
+                <input type="text" class="form-control" name="user.new_confirmed_password" placeholder="New Password">
+            </div>
+
+            <button type="submit" id="submit-user-profile-update-form-id" class="btn btn-default">
+                Update Your Info
+            </button>
+
+        </form>
+    </div>
 </div>

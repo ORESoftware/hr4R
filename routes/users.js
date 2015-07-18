@@ -1,3 +1,8 @@
+/**
+ * Created by amills001c on 6/15/15.
+ */
+
+
 var express = require('express');
 var router = express.Router();
 var IJSON = require('idempotent-json');
@@ -79,11 +84,12 @@ router.get('/', function (req, res, next) {
     UserModel.get(function (err, User) {
         User.find({}, function (err, items) {
             if (err) {
-                res.json({error:{}});
+                res.json({error: {}});
                 return next(err);
             }
-            //console.log(items);
-            res.json({success:items});
+            else {
+                res.json({success: items});
+            }
         });
     });
 });
@@ -164,8 +170,6 @@ router.post('/', function (req, res, next) {
 });
 
 
-
-
 router.put('/:user_id', function (req, res, next) {
 
 
@@ -216,18 +220,25 @@ router.delete('/:user_id', function (req, res, next) {
         if (err) {
             throw err;
         }
+        else {
 
-        var userToDelete = req.specialParams.user_model;
+            var userToDelete = req.specialParams.user_model;
 
-        User.remove({_id: userToDelete._id}, function (err) {
-            if (err) {
-                res.send({error:err.toString()})
-                return next(err);
+            if (!userToDelete) {
+                return next(new Error('no user matched'));
             }
             else {
-                res.send({success:userToDelete});
+                User.remove({_id: userToDelete._id}, function (err) {
+                    if (err) {
+                        res.send({error: err.toString()})
+                        return next(err);
+                    }
+                    else {
+                        res.send({success: userToDelete});
+                    }
+                });
             }
-        });
+        }
     });
 });
 

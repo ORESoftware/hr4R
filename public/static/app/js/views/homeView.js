@@ -50,14 +50,14 @@ define(
 
                 //el: '#main-div-id',
 
-                constructor: function () {
+                constructor: function (opts) {
                     this.givenName = '@HomeView';
                     Backbone.View.apply(this, arguments);
                 },
 
                 initialize: function (opts) {
 
-                    Backbone.setViewProps(this,opts);
+                    this.setViewProps(opts);
                     _.bindAll(this, 'render', 'show', 'onChange', 'handleModelSyncSuccess', 'handleModelError');
                     this.listenTo(this.collection, 'add reset', this.render);
                     this.listenTo(this.collection, 'change', this.onChange, this);

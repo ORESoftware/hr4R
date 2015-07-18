@@ -8,8 +8,8 @@ define(function (require, exports, module) {
 
         if (typeof obj !== 'string') {
             //console.error('looks like you have called IdempotentJSON.parse on an object that was already parsed\n', new Error().stack);
-            var err = new Error('looks like you have called IdempotentJSON.parse on an object that was already parsed');
-            console.error(err.message.concat('\n'),err.stack);
+            //var err = new Error('looks like you have called IdempotentJSON.parse on an object that was already parsed');
+            //console.error(err.message.concat('\n'),err.stack);
             if (typeof cb === 'function') {
                 return cb(null, obj);
             }

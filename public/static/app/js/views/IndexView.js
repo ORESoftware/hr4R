@@ -56,7 +56,7 @@ define(
 
                 initialize: function (opts) {
 
-                    Backbone.setViewProps(this,opts); //has side effects
+                    this.setViewProps(opts); //has side effects
                     _.bindAll(this, 'render', 'onFetchSuccess', 'onFetchFailure');
                     this.listenTo(this.collection, 'add remove reset', this.render);
                     this.collection.fetch({
