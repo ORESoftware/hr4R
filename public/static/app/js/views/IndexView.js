@@ -28,7 +28,7 @@ define(
         var IndexView = Backbone.View.extend({
 
 
-                el: '#main-div-id',
+                //el: '#main-div-id',
 
                 defaults: function(){
                     return{
@@ -107,11 +107,15 @@ define(
 
                         this.$el.html(ret);
 
+                        //$('#main-div-id').html(ret);
+
                         this.childViews.childLoginView = new LoginView({el: this.$('#child-view-login-container')});
+                        //this.childViews.childLoginView = new LoginView({el: $('#child-view-login-container')});
                         this.childViews.childLoginView.render();
                         this.childViews.childLoginView.delegateEvents();
 
                         this.childViews.childRegisteredUsersView = new RegisteredUsersView({el: this.$('#child-view-registered-users-container')});
+                        //this.childViews.childRegisteredUsersView = new RegisteredUsersView({el: $('#child-view-registered-users-container')});
                         this.childViews.childRegisteredUsersView.render();
                         this.childViews.childRegisteredUsersView.delegateEvents();
 

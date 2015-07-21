@@ -6,6 +6,7 @@
 //TODO:http://codebeerstartups.com/2012/12/5-explaining-views-in-backbone-js-learning-backbone-js/
 //TODO: http://geeks.bizzabo.com/post/83917692143/7-battle-tested-backbonejs-rules-for-amazing-web-apps
 //TODO: do we need "Backbone.history.loadUrl();" or can we just switch views manually
+//TODO: http://stackoverflow.com/questions/17796750/why-is-it-considered-bad-practice-to-call-trigger-true-in-the-navigate-function
 
 //this is a completely single-page-app, so there is only one router
 
@@ -27,11 +28,8 @@ define(
 
     function (appState, viewState, React, Backbone, async, collections, IJSON, allViews, TodoList) {
 
-        //var allViews = null;
 
         var BootRouter = Backbone.Router.extend({
-
-            //currentView: require('app/js/currentView'),
 
             viewState: viewState,
 
@@ -39,6 +37,7 @@ define(
                 '': 'canonical',
                 "+refreshCurrentPage": "refreshCurrentPage",
                 "posts/:id": "getPost",
+                'books/:id': 'bookScreen',
                 'index': 'index',
                 'home': 'home',
                 'userProfile': 'userProfile',
@@ -65,15 +64,18 @@ define(
             },
 
             home: function () {
+
                 this.changeView({
+                    //view:allViews.Home,
                     //view: new allViews.Home({el: '#main-content-id'}),
-                    //view: new allViews.Home(),
-                    view: allViews.Home,
+                    view: new allViews.Home(),
                     useSidebar: true
                 });
             },
             portal: function () {
+
                 this.changeView({
+                    //view: allViews.Portal,
                     view: new allViews.Portal(),
                     useSidebar: true
                 });
@@ -81,14 +83,14 @@ define(
 
             userProfile: function () {
                 this.changeView({
-                    //view: new allViews.UserProfile(
-                    //    {
-                    //        //el:'#main-content-id',
-                    //        model: appState.get('currentUser'),
-                    //        collection: collections.users
-                    //    }
-                    //),
-                    view: allViews.UserProfile,
+                    //view: allViews.UserProfile,
+                    view: new allViews.UserProfile(
+                        {
+                            //el:'#main-content-id',
+                            model: appState.get('currentUser'),
+                            collection: collections.users
+                        }
+                    ),
                     useSidebar: true
                 });
             },
@@ -96,10 +98,14 @@ define(
 
             index: function () {
                 this.changeView({
-                    //view: new allViews.Index({collection: collections.users}),
-                    view: allViews.Index,
+                    //view:allViews.Index,
+                    view: new allViews.Index({collection: collections.users}),
                     useSidebar: false
                 });
+            },
+
+            bookScreen: function(id) {
+                // Fetch book with `id` and render it.
             },
 
             defaultRoute: function () {
@@ -203,19 +209,9 @@ define(
                                     if (err) {
                                         return cb(err);
                                     }
-                                    else {
-                                        coll.fetch()
-                                            .done(function (msg) {
-                                                cb(null, msg);
-                                            })
-                                            .fail(function (err) {
-                                                cb(err)
-                                            })
-                                            .always(function () {
-                                                alert('always! :)' + res);
-                                            });
-                                    }
-
+                                    coll.fetch().done(function () {
+                                        cb();
+                                    });
                                 });
                             });
                     }
@@ -277,69 +273,77 @@ define(
                     this.destroyView(this.viewState.get('mainParentView'));
                 }
                 this.viewState.set('mainView', new allViews.Index());
-                //this.viewState.get('mainView').render();
-                window.location.hash = 'index';
-                console.log('current main view was switched to index view because no user was logged in.');
+                window.location.hash = 'index'; //TODO why do we need this line?
 
                 if (this.viewState.get('footerView') == null) {
-                    this.viewState.set('footerView', new allViews.Footer({el: '#index_footer_div_id'}));
+                    this.viewState.set('footerView', new allViews.Footer());
                 }
                 if (this.viewState.get('headerView') == null) {
-                    this.viewState.set('headerView', new allViews.Header({el: '#index_header_div_id'}));
+                    this.viewState.set('headerView', new allViews.Header());
                 }
                 this.viewState.get('headerView').render();
-                this.viewState.get('mainView').render();
+                //this.viewState.get('mainView').render();
+                $('#main-div-id').html(this.viewState.get('mainView').render().el);
                 this.viewState.get('footerView').render();
+
 
             }
             else { //user is authenticated/authorized
 
-                //var view = opts.view;
-                //if (view == null) {
-                //    throw new Error('null view in router');
-                //}
+                var view = opts.view;
+                if (view == null) {
+                    throw new Error('null view in router');
+                }
+
 
                 if (opts.useSidebar === true) {
-                    //if(this.viewState.get('mainParentView') === null || this.viewState.get('mainParentView').givenName !== '@PortalView'){
+                    //this.destroyView(this.viewState.get('mainParentView'));
                     this.viewState.set('mainParentView', new allViews.Portal());
                     var temp = this.viewState.get('mainParentView');
                     temp.render();
-                    //}
-                    //else{
-                    //    console.log('sidebar was not re-rendered');
-                    //}
                 }
                 else {
                     this.destroyView(this.viewState.get('mainParentView'));
                     this.viewState.set('mainParentView', null);
                 }
 
-                var view = opts.view;
-                if (view == null) {
-                    throw new Error('null view in router');
-                }
-                else{
-                    view = new view();
-                }
+                //var view = opts.view;
+                //if (view == null) {
+                //    throw new Error('null view in router');
+                //}
+                //else{
+                //    view = new view();
+                //}
+
 
                 if (this.viewState.get('mainView') != null) {
-                    this.destroyView(this.viewState.get('mainView'));
+                    //this.destroyView(this.viewState.get('mainView'));
+                    this.viewState.get('mainView').remove();
                 }
                 this.viewState.set('mainView', view);
                 console.log('current main view:', view.givenName);
 
                 if (this.viewState.get('footerView') == null) {
-                    this.viewState.set('footerView', new allViews.Footer({el: '#index_footer_div_id'}));
+                    this.viewState.set('footerView', new allViews.Footer());
                 }
                 if (this.viewState.get('headerView') == null) {
-                    this.viewState.set('headerView', new allViews.Header({el: '#index_header_div_id'}));
+                    this.viewState.set('headerView', new allViews.Header());
                 }
                 this.viewState.get('headerView').render();
-                this.viewState.get('mainView').render();
+                //this.viewState.get('mainView').render();
+                if(this.viewState.get('mainView').givenName !== '@IndexView'){
+                    $('#main-content-id').html(this.viewState.get('mainView').render().el);
+                }
+                else{
+                    //this.viewState.get('mainView').render();
+                    $('#main-div-id').html(this.viewState.get('mainView').render().el);
+                }
+
                 this.viewState.get('footerView').render();
 
             }
         }
+
 
         return {
             bootRouter: bootRouter
