@@ -28,11 +28,9 @@ define(
 
         var UserProfileView = Backbone.View.extend({
 
-                //el: '#main-content-id',
-
                 defaults: function () {
                     return {
-                        model: null,
+                        model: appState.get('currentUser'),
                         collection: collections.jobs,
                         childViews: {}
                     }
@@ -43,16 +41,16 @@ define(
                     'click #submit-user-profile-update-form-id': 'onClickSubmitForm'
                 },
 
-                //constructor: function (opts) {
-                //    this.givenName = '@UserProfileView';
-                //    //Backbone.View.apply(this, arguments);
-                //
-                //    this.cid = _.uniqueId('view');
-                //    //_.extend(this, _.pick(options, viewOptions));
-                //    //_.extend(this,opts);
-                //    this._ensureElement();
-                //    this.initialize.apply(this, arguments);
-                //},
+                constructor: function (opts) {
+                    this.givenName = '@UserProfileView';
+                    Backbone.View.apply(this, arguments);
+
+                    //this.cid = _.uniqueId('view');
+                    ////_.extend(this, _.pick(options, viewOptions));
+                    ////_.extend(this,opts);
+                    //this._ensureElement();
+                    //this.initialize.apply(this, arguments);
+                },
 
                 initialize: function (opts) {
 
@@ -60,10 +58,16 @@ define(
                     _.bindAll(this, 'render', 'onClickSubmitForm');
                     //this.listenTo(this.collection, 'change', this.render);
                     //this.listenTo(this.collection, 'add remove reset', this.render);
+
+                    //this.el = $('#main-content-id');
+                    //this._ensureElement();
                 },
                 render: function () {
 
-                    console.log('attempting to render userProfileView.');
+                    console.log('ATTEMPTING to render userProfileView.');
+
+                    //this.el = $('#main-content-id');
+                    //this._ensureElement();
 
                     var data = this.collection.models;
                     var self = this;
@@ -93,11 +97,13 @@ define(
                             users: data
                         });
 
-                        //self.$el.append(ret);
+                        self.$el.html(ret);
                         //console.log(ret);
                         //self.$el.append(ret);
 
-                        $(self.el).html(ret);
+                        //$(self.el).html(ret);
+
+                        //$('#main-content-id').html(ret);
 
                         console.log('userProfileView (re)-rendered');
                     }
@@ -148,6 +154,8 @@ define(
 
 
                     function doUserProfile() {
+
+                        alert('do user profile!');
 
                     }
 

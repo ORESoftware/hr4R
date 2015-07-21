@@ -38,7 +38,7 @@ define(
                     }
                 },
 
-                el: '#main-div-id',
+                //el: '#main-div-id',
 
                 constructor: function () {
                     this.givenName = '@PortalView';
@@ -54,6 +54,9 @@ define(
                     this.listenTo(this.model, 'sync', this.handleModelSyncSuccess);
                     this.listenTo(this.model, 'error', this.handleModelError);
                     this.listenTo(Backbone.Events, 'books:created', this.show);
+
+                    //this.el = $('#main-content-id');
+                    //this._ensureElement();
                 },
 
 
@@ -96,7 +99,8 @@ define(
 
                         var ret = EJS.render($template, {});
 
-                        self.$el.html(ret);
+                        //self.$el.html(ret);
+                        $('#main-div-id').html(ret);
                         console.log('PortalView (re)rendered');
                     }
 

@@ -30,10 +30,6 @@ define(
     function (appState, models, collections, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
 
 
-        //var templateHtml = require('text!app/templates/homeTemplate.ejs');  //load the template//
-
-        //var template = allTemplates.HomeTemplate;
-
         var HomeView = Backbone.View.extend({
 
                 //id: 'HomeViewID',
@@ -107,6 +103,7 @@ define(
                         var ret = EJS.render($template, {});
 
                         self.$el.html(ret);
+                        //$('#main-content-id').html(ret);
                         console.log('HomeView (re)rendered');
                     }
 
@@ -124,8 +121,6 @@ define(
                 template:template
             }
         );
-
-        //HomeView.template = template;
 
         return HomeView;
 
