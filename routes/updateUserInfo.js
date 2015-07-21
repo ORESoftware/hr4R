@@ -35,7 +35,7 @@ router.param('user_id', function (req, res, next, user_id) {
     });
 });
 
-router.post('/', function (req, res, next) {
+router.post('/:user_id', function (req, res, next) {
 
     if(req.specialParams.user_model == null){
         console.log('updating password for a user thats null...');

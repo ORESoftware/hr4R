@@ -66,7 +66,9 @@ define(
 
             home: function () {
                 this.changeView({
-                    view: new allViews.Home({el: '#main-content-id'}),
+                    //view: new allViews.Home({el: '#main-content-id'}),
+                    //view: new allViews.Home(),
+                    view: allViews.Home,
                     useSidebar: true
                 });
             },
@@ -79,13 +81,14 @@ define(
 
             userProfile: function () {
                 this.changeView({
-                    view: new allViews.UserProfile(
-                        {
-                            el:'#main-content-id',
-                            model: appState.get('currentUser'),
-                            collection: collections.users
-                        }
-                    ),
+                    //view: new allViews.UserProfile(
+                    //    {
+                    //        //el:'#main-content-id',
+                    //        model: appState.get('currentUser'),
+                    //        collection: collections.users
+                    //    }
+                    //),
+                    view: allViews.UserProfile,
                     useSidebar: true
                 });
             },
@@ -93,7 +96,8 @@ define(
 
             index: function () {
                 this.changeView({
-                    view: new allViews.Index({collection: collections.users}),
+                    //view: new allViews.Index({collection: collections.users}),
+                    view: allViews.Index,
                     useSidebar: false
                 });
             },
@@ -199,9 +203,19 @@ define(
                                     if (err) {
                                         return cb(err);
                                     }
-                                    coll.fetch().done(function () {
-                                        cb();
-                                    });
+                                    else {
+                                        coll.fetch()
+                                            .done(function (msg) {
+                                                cb(null, msg);
+                                            })
+                                            .fail(function (err) {
+                                                cb(err)
+                                            })
+                                            .always(function () {
+                                                alert('always! :)' + res);
+                                            });
+                                    }
+
                                 });
                             });
                     }
@@ -268,23 +282,22 @@ define(
                 console.log('current main view was switched to index view because no user was logged in.');
 
                 if (this.viewState.get('footerView') == null) {
-                    this.viewState.set('footerView', new allViews.Footer());
+                    this.viewState.set('footerView', new allViews.Footer({el: '#index_footer_div_id'}));
                 }
                 if (this.viewState.get('headerView') == null) {
-                    this.viewState.set('headerView', new allViews.Header());
+                    this.viewState.set('headerView', new allViews.Header({el: '#index_header_div_id'}));
                 }
                 this.viewState.get('headerView').render();
                 this.viewState.get('mainView').render();
                 this.viewState.get('footerView').render();
 
-
             }
             else { //user is authenticated/authorized
 
-                var view = opts.view;
-                if (view == null) {
-                    throw new Error('null view in router');
-                }
+                //var view = opts.view;
+                //if (view == null) {
+                //    throw new Error('null view in router');
+                //}
 
                 if (opts.useSidebar === true) {
                     //if(this.viewState.get('mainParentView') === null || this.viewState.get('mainParentView').givenName !== '@PortalView'){
@@ -301,6 +314,13 @@ define(
                     this.viewState.set('mainParentView', null);
                 }
 
+                var view = opts.view;
+                if (view == null) {
+                    throw new Error('null view in router');
+                }
+                else{
+                    view = new view();
+                }
 
                 if (this.viewState.get('mainView') != null) {
                     this.destroyView(this.viewState.get('mainView'));
@@ -309,10 +329,10 @@ define(
                 console.log('current main view:', view.givenName);
 
                 if (this.viewState.get('footerView') == null) {
-                    this.viewState.set('footerView', new allViews.Footer());
+                    this.viewState.set('footerView', new allViews.Footer({el: '#index_footer_div_id'}));
                 }
                 if (this.viewState.get('headerView') == null) {
-                    this.viewState.set('headerView', new allViews.Header());
+                    this.viewState.set('headerView', new allViews.Header({el: '#index_header_div_id'}));
                 }
                 this.viewState.get('headerView').render();
                 this.viewState.get('mainView').render();
@@ -320,23 +340,6 @@ define(
 
             }
         }
-
-        /* return function ($allViews) {
-
-         if (allViews === null) {
-         if ($allViews == null) {
-         console.log('null/undefined value to passed routers.js');
-         }
-         else {
-         console.log('initializing routers with allViews');
-         allViews = $allViews;
-         }
-         }
-
-         return {
-         bootRouter: bootRouter
-         }
-         }*/
 
         return {
             bootRouter: bootRouter

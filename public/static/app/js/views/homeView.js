@@ -40,6 +40,8 @@ define(
                 //tagName: 'HomeViewTagName',
                 //className: 'HomeViewClassName',
 
+                specialEl: '#main-content-id',
+
 
                 defaults: function(){
                     return{
@@ -106,7 +108,8 @@ define(
 
                         var ret = EJS.render($template, {});
 
-                        self.$el.html(ret);
+                        //self.$el.html(ret);
+                        $(this.specialEl).html(ret);
                         console.log('HomeView (re)rendered');
                     }
 

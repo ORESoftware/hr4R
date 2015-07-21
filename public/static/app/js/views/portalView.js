@@ -31,6 +31,7 @@ define(
                 //className: 'PortalViewClassName',
 
 
+
                 defaults: function(){
                     return{
                         collection: collections.users,
@@ -38,7 +39,7 @@ define(
                     }
                 },
 
-                el: '#main-div-id',
+                specialEl: '#main-div-id',
 
                 constructor: function () {
                     this.givenName = '@PortalView';
@@ -54,6 +55,7 @@ define(
                     this.listenTo(this.model, 'sync', this.handleModelSyncSuccess);
                     this.listenTo(this.model, 'error', this.handleModelError);
                     this.listenTo(Backbone.Events, 'books:created', this.show);
+                    this.delegateEvents();
                 },
 
 
@@ -96,8 +98,11 @@ define(
 
                         var ret = EJS.render($template, {});
 
-                        self.$el.html(ret);
+                        this.delegateEvents();
+                        //self.$el.html(ret);
+                        $(this.specialEl).html(ret);
                         console.log('PortalView (re)rendered');
+                        this.delegateEvents();
                     }
 
                     return this;

@@ -81,11 +81,10 @@ define(
                         function (callback) {
 
                             user.persistModel(null, null, function (err, val) {
-                                callback(err);
+                                callback(err,val);
                             });
                         }
                     )
-
                 });
 
                 async.parallel(saveArray, function (err, results) {

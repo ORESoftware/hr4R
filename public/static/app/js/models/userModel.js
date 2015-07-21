@@ -82,7 +82,7 @@ define(
                 persistModel: function (attributes, opts, callback) {
                     //TODO: add opts to object below
                     this.save(attributes, {
-                        wait: true, //prevents optimistic destroy
+                        wait: true, //prevents optimistic persist
                         dataType: "json",
                         //TODO:  model.trigger('sync', model, resp, options);
                         success: function (model, response, options) {

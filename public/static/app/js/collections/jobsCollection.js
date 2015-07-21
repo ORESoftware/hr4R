@@ -32,9 +32,8 @@ define(
             //},
 
             url: '/jobs',
-
-            batchURL: '/jobs_batch',
             //urlRoot: '/jobs',
+            batchURL: '/jobs_batch',
 
             constructor: function () {
                 this.givenName = '@JobsCollection';
@@ -86,7 +85,7 @@ define(
                         function (callback) {
 
                             job.persistModel(null, null, function (err, val) {
-                                callback(err);
+                                callback(err,val);
                             });
                         }
                     )
