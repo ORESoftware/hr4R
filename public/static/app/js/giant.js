@@ -13,7 +13,7 @@ define(
     [
         '#appState',
         'socketio',
-        'jsx!app/js/routers',
+        'jsx!app/js/routers/router',
         //'_routers_',
         'app/js/allViews',
         'backbone'

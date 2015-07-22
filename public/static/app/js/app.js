@@ -57,15 +57,24 @@ define(
         'app/js/allModels',
         'app/js/allViews',
         'app/js/allTemplates',
-        'jsx!app/js/views/todoList',
+        'jsx!app/js/views/reactViews/todoList',
         'app/js/giant'
 
     ],
 
-    function (d3, Observe, Handlebars, Backbone, _, IJSON, React, collections, models, allViews, allTemplates, todoList, giant) {
+    function (d3, Observe, Handlebars, Backbone, _, IJSON, React, collections, models, allViews, allTemplates, TodoList, giant) {
 
 
         console.log(Observe);
+
+        //var todos = new Backbone.Collection([
+        //    {
+        //        text: 'Dishes!',
+        //        dueDate: new Date().toISOString()
+        //    }
+        //]);
+        //
+        //React.render(<TodoList todos={todos}/>, document.body);
 
         /*
          we don't use the majority of these dependencies in this file, but they are loaded here so that r.js can build

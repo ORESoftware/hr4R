@@ -23,7 +23,7 @@ define(
         'app/js/allCollections',
         'ijson',
         'app/js/allViews',
-        'jsx!app/js/views/todoList'
+        'jsx!app/js/views/reactViews/todoList'
     ],
 
     function (appState, viewState, React, Backbone, async, collections, IJSON, allViews, TodoList) {

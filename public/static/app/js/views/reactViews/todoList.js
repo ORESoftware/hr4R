@@ -4,7 +4,12 @@
 
 
 
-define(['react'],function(React){
+define(
+    [
+        'react'
+    ],
+
+    function(React){
 
 
     /** @jsx React.DOM */

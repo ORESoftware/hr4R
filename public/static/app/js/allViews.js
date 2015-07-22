@@ -16,7 +16,7 @@ define('app/js/allViews',
         'app/js/views/registeredUsersView',
         'app/js/views/indexView',
         'app/js/views/loginView',
-        'app/js/views/homeView',
+        'jsx!app/js/views/homeView',
         'app/js/views/portalView',
         'app/js/views/userProfileView',
         'exports'

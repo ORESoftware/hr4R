@@ -2,6 +2,9 @@
   "name": "sc-admin-ui-express",
   "version": "0.0.0",
   "private": true,
+  "config": {
+    "if-present": false
+  },
   "scripts": {
     "start": "node ./bin/www",
     "start_windows": "set NODE_ENV=development&&node ./bin/www",

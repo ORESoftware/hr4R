@@ -39,11 +39,11 @@ router.post('/:user_id', function (req, res, next) {
 
     if(req.specialParams.user_model == null){
         console.log('updating password for a user thats null...');
-        return res.send({error:'errrror'});
+        return res.json({error:'errrror1'});
     }
-    else if(req.specialParams.user_model._doc._id !== req.user._doc._id){
+    else if(!(req.specialParams.user_model._doc._id.equals(req.user._doc._id))){
         console.log('updating password for a user thats not logged in...');
-        return res.send({error:'errrror'});
+        return res.json({error:'errrror2'});
     }
     else{
 
@@ -51,7 +51,8 @@ router.post('/:user_id', function (req, res, next) {
         var firstName = userData.firstName;
         var lastName = userData.lastName;
         var username = userData.username;
-        var password = userData.password;
+        var password = userData.old_password;
+        var new_password = userData.new_password;
 
         var UserModel = req.site.models.User;
         UserModel.get(function(err,User){
@@ -63,15 +64,15 @@ router.post('/:user_id', function (req, res, next) {
                     return done(err);
                 }
                 else if (!user) {
-                    return res.send({error:'incorrect username'});
+                    return res.json({error:'incorrect username'});
                 }
                 else{
                     user.validatePassword(password, function (err, isValid) {
                         if (err) {
-                            return res.send({error:err});
+                            return res.json({error:err});
                         }
                         else if (!isValid) {
-                            return res.send({error:'incorrect password'});
+                            return res.json({error:'incorrect password'});
                         }
                         else {
 
@@ -85,7 +86,7 @@ router.post('/:user_id', function (req, res, next) {
             function update(User,user,userData,req,res,next){
 
 
-                bcrypt.hash(userData.passwordPreHash, SALT_WORK_FACTOR, function (err, hash) {
+                bcrypt.hash(new_password, SALT_WORK_FACTOR, function (err, hash) {
                     if (err) {
                         return next(err);
                     }
@@ -97,10 +98,10 @@ router.post('/:user_id', function (req, res, next) {
                         User.update({ _id: user._id }, { $set: { passwordHash: hash }}, function(err,user){
 
                             if(err){
-                                return res.send({error:'error'});
+                                return res.json({error:'error3'});
                             }
                             else{
-                                return res.send({success:user});
+                                return res.json({success:user});
                             }
 
                         });

@@ -5,6 +5,8 @@
 //TODO:https://www.safaribooksonline.com/library/view/developing-backbonejs-applications/9781449328535/ch04s03.html
 //TODO: http://www.svlada.com/require-js-optimization-part2/#t2
 
+//TODO: http://tutorialzine.com/2014/07/5-practical-examples-for-learning-facebooks-react-framework/
+
 console.log('loading homeView');
 
 define(
@@ -19,15 +21,15 @@ define(
         'handlebars',
         'backbone',
         'backbone-validation',
-        //'text!app/templates/homeTemplate.ejs'
-        //'app/js/allTemplates'
-        //'app/js/optimized_templates'
+        'react',
+        'jsx!app/js/views/reactViews/TimerExample',
+        'jsx!app/js/views/reactViews/MenuExample',
+        //'jsx!app/js/views/reactViews/todoList',
         'text!app/templates/homeTemplate.ejs'
-        //'text!homeTemplate.html'
     ],
 
 
-    function (appState, models, collections, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
+    function (appState, models, collections, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, React, TimerExample, MenuExample, template) {
 
 
         var HomeView = Backbone.View.extend({
@@ -103,7 +105,21 @@ define(
                         var ret = EJS.render($template, {});
 
                         self.$el.html(ret);
-                        //$('#main-content-id').html(ret);
+
+                        React.render(
+                            <TimerExample start={Date.now()} />,
+                            self.el
+                            //$('#react-timer-example-div-id')[0]
+
+                        );
+
+                        //React.render(
+                        //    <MenuExample items={ ['Home', 'Services', 'About', 'Contact us'] } />,
+                        //    //$('#react-menu-example-div-id')[0]
+                        //    document.getElementById('react-menu-example-div-id')
+                        //);
+
+
                         console.log('HomeView (re)rendered');
                     }
 

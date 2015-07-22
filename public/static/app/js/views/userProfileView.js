@@ -20,10 +20,11 @@ define(
         'backbone',
         'backbone-validation',
         'form2js',
+        'ijson',
         'text!app/templates/userProfileTemplate.ejs'
     ],
 
-    function (appState, collections, EJS, $, _, Handlebars, Backbone, BackboneValidation, form2js, template) {
+    function (appState, collections, EJS, $, _, Handlebars, Backbone, BackboneValidation, form2js, IJSON, template) {
 
 
         var UserProfileView = Backbone.View.extend({
@@ -37,7 +38,6 @@ define(
                 },
 
                 events: {
-                    //'click #logout-button-id': 'onClickLogout',
                     'click #submit-user-profile-update-form-id': 'onClickSubmitForm'
                 },
 
@@ -98,12 +98,6 @@ define(
                         });
 
                         self.$el.html(ret);
-                        //console.log(ret);
-                        //self.$el.append(ret);
-
-                        //$(self.el).html(ret);
-
-                        //$('#main-content-id').html(ret);
 
                         console.log('userProfileView (re)-rendered');
                     }
@@ -120,32 +114,35 @@ define(
 
                     console.log('registration data:', data);
 
-                    $.ajax({
+                    var userData = data.user;
+
+                    var deferred = $.ajax({
                         type: "POST",
-                        url: '/updateUserInfo/' + this.model._id,
+                        url: '/updateUserInfo/' + this.model.get('_id'),
                         dataType: "json",
-                        data: data
+                        data: userData
+                    });
+
+
+                    deferred.done(function (res) {
+
+                        if (res.error) {
+                            setTimeout(function () {
+                                alert(IJSON.stringify(res));
+                            }, 200);
+                        }
+                        else if (res.success) { //TODO: I like this convention
+                            res = res.success;
+                            doUserProfile.bind(self)(res);
+                        }
+                        else {
+                            throw new Error('Unexpected response from server - ' + res);
+                        }
+
                     })
-
-                        .done(function (res) {
-
-                            if (res.error) {
-                                setTimeout(function () {
-                                    alert(res);
-                                }, 200);
-                            }
-                            else if (res.success) { //TODO: I like this convention
-                                res = res.success;
-                                doUserProfile.bind(self)(res);
-                            }
-                            else {
-                                throw new Error('Unexpected response from server - ' + res);
-                            }
-
-                        })
                         .fail(function (msg) {
                             setTimeout(function () {
-                                alert("Server error during user login/registration - " + msg);
+                                alert("Server error during user login/registration - " + IJSON.stringify(msg));
                             }, 200);
                         })
                         .always(function () {
