@@ -48,6 +48,7 @@ define(
     [
         'd3',
         'observe',
+        'app/js/rivetsConfig',
         'handlebars',
         'backbone',
         'underscore',
@@ -62,10 +63,12 @@ define(
 
     ],
 
-    function (d3, Observe, Handlebars, Backbone, _, IJSON, React, collections, models, allViews, allTemplates, TodoList, giant) {
+    function (d3, Observe, RivetsConfig, Handlebars, Backbone, _, IJSON, React, collections, models, allViews, allTemplates, TodoList, giant) {
 
 
-        console.log(Observe);
+        //console.log(Observe);
+
+        window.beck = {"hi":"hello"};
 
         //var todos = new Backbone.Collection([
         //    {
@@ -229,9 +232,6 @@ define(
 
          };*/  //TODO: window.onbeforeload
 
-        /*var x = IJSON.parse({});
-
-         console.log(x);*/  //TODO: IJSON
 
         /* Backbone.Events.listenTo({},'event1',function(msg){
          console.log(msg);
@@ -241,7 +241,7 @@ define(
          alert(msg);
          });
 
-         Backbone.Events.trigger('event1','hiiii');*/ //TODO: backbone events
+         Backbone.Events.trigger('event1','hiiii');*/
 
 
         var start = function () {

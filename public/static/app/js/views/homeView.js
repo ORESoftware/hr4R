@@ -25,11 +25,12 @@ define(
         'jsx!app/js/views/reactViews/TimerExample',
         'jsx!app/js/views/reactViews/MenuExample',
         //'jsx!app/js/views/reactViews/todoList',
+        'rivets',
         'text!app/templates/homeTemplate.ejs'
     ],
 
 
-    function (appState, models, collections, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, React, TimerExample, MenuExample, template) {
+    function (appState, models, collections, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, React, TimerExample, MenuExample, Rivets, template) {
 
 
         var HomeView = Backbone.View.extend({
@@ -108,16 +109,21 @@ define(
 
                         React.render(
                             <TimerExample start={Date.now()} />,
-                            self.el
+                            //self.el
                             //$('#react-timer-example-div-id')[0]
+                            $(self.el).find('#react-timer-example-div-id')[0]
 
                         );
 
-                        //React.render(
-                        //    <MenuExample items={ ['Home', 'Services', 'About', 'Contact us'] } />,
-                        //    //$('#react-menu-example-div-id')[0]
-                        //    document.getElementById('react-menu-example-div-id')
-                        //);
+                        React.render(
+                            <MenuExample items={ ['Home', 'Services', 'About', 'Contact us'] } />,
+                            //$('#react-menu-example-div-id')[0]
+                            //document.getElementById('react-menu-example-div-id')
+                            $(self.el).find('#react-menu-example-div-id')[0]
+                        );
+
+
+                        Rivets.bind( $(self.el).find('#auction')[0], {auction: window.beck})
 
 
                         console.log('HomeView (re)rendered');

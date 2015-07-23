@@ -58,6 +58,8 @@ define(
                         if (this.hasChanged('firstName')) {
                             console.log('firstName has been changed - ', this.toJSON());
                         }
+
+                        console.log('this model has changed:',this.attributes);
                     });
 
                     this.on('change:username', function (msg) {

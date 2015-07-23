@@ -39,20 +39,27 @@ requirejs.config({
         'JSXTransformer': 'vendor/JSXTransformer',
         'observe':'vendor/observe',
         'react':'vendor/react-with-addons',
+        'rivets':'vendor/rivets',
+        'sightglass':'vendor/sightglass',
         'socketio':'vendor/socketio',
         '#appState':'app/js/appState',
         '#viewState':'app/js/viewState',
         'd3':'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min'
-        //'socketio': 'https://cdn.socket.io/socket.io-1.3.5'
-        //'_routers_': 'app/js/routers'
     },
 
     'shim': {
-        'homeTemplate':{
-            'deps': ['text']
-        },
+        //'homeTemplate':{
+        //    'deps': ['text']
+        //},
         'underscore': {
             'exports': '_'
+        },
+        'sightglass' : {
+            'exports': 'sightglass'
+        },
+        'rivets': {
+            'deps': ['sightglass'],
+            'exports': 'rivets'
         },
         'backbone': {
             'deps': ['jquery', 'underscore'],
