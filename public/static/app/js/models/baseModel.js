@@ -1,4 +1,9 @@
 /**
+ * Created by amills001c on 7/23/15.
+ */
+
+
+/**
  * Created by amills001c on 7/17/15.
  */
 
@@ -18,69 +23,15 @@ define(
     [
         'underscore',
         'backbone',
-        'ijson',
-        'app/js/models/BaseModel'
+        'ijson'
     ],
 
-    function (_, Backbone,IJSON, BaseModel) {
+    function (_, Backbone,IJSON) {
 
-        var Job = BaseModel.extend({
-
-
-                idAttribute: "_id",
-
-                //url: '/jobs',
-                //urlRoot: '/jobs?job_id=',
-
-                urlRoot: '/jobs',
-
-                defaults: function () { //prevents copying default attributes to all instances of JobModel
-                    return {
-                        jobname: null,
-                    }
-                },
-
-                constructor: function (attributes,opts) {
-                    this.givenName = '@JobModel';
-                    Backbone.Model.apply(this, arguments);
-                },
+        var BaseModel = Backbone.Model.extend({
 
 
-                initialize: function (attributes, opts) {
-
-                    this.options = opts || {};
-
-                    _.bindAll(this, 'deleteModel', 'persistModel', 'validate','parse');
-                    //
-
-                    this.on('change', function () {
-                        if (this.hasChanged('_id')) {
-                            console.log('uh oh!! _id value for this model has been changed');
-                        }
-                        if (this.hasChanged('firstName')) {
-                            console.log('firstName has been changed - ', this.toJSON());
-                        }
-                    });
-
-                    this.on('change:jobname', function (msg) {
-                        console.log('jobname for this model:', this, 'has changed --->', msg);
-                    });
-
-                    console.log('JobModel has been intialized');
-                },
-
-
-                validate: function (attr) {
-                    //if (attr.ID <= 0) {
-                    //    return "Invalid value for ID supplied."
-                    //}
-
-                    //TODO:https://github.com/thedersen/backbone.validation
-
-                    return undefined;
-                }
-
-             /*   persistModel: function (attributes, opts, callback) {
+                persistModel: function (attributes, opts, callback) {
                     //TODO: add opts to object below
                     this.save(attributes, {
                         wait: true, //prevents optimistic destroy
@@ -114,10 +65,10 @@ define(
                     });
                 },
                 parse: function (resp, options) {
-                    /!*
+                    /*
                      parse converts a response into the hash of attributes to be set on the model.
                      The default implementation is just to pass the response along.
-                     *!/
+                     */
                     if(resp.success){
                         return resp.success;
                     }
@@ -128,26 +79,13 @@ define(
                         return resp;
                     }
                     //return resp;
-                }*/
-
-                //validation: {
-                //    email: {
-                //        required: true,
-                //        pattern: 'email',
-                //        msg: 'Please enter a valid email'
-                //    }
-                //}
+                }
             },
 
             { //class properties
 
-                newJob: function ($job) {
-
-                    var job = new Job($job);
-                    return job;
-                }
             });
 
 
-        return Job;
+        return BaseModel;
     });

@@ -21,18 +21,20 @@ define(
         'backbone-validation',
         'form2js',
         'ijson',
-        'rivets',
+        'app/js/Adhesive',
         'text!app/templates/userProfileTemplate.ejs'
     ],
 
-    function (appState, collections, EJS, $, _, Handlebars, Backbone, BackboneValidation, form2js, IJSON, Rivets, template) {
+    function (appState, collections, EJS, $, _, Handlebars, Backbone, BackboneValidation, form2js, IJSON, Adhesive, template) {
 
 
         var UserProfileView = Backbone.View.extend({
 
                 defaults: function () {
+
+                    window.currentUser = appState.get('currentUser');
                     return {
-                        model: appState.get('currentUser'),
+                        model: window.currentUser,
                         collection: collections.jobs,
                         childViews: {}
                     }
@@ -57,6 +59,20 @@ define(
 
                     this.setViewProps(opts); //has side effects
                     _.bindAll(this, 'render', 'onClickSubmitForm');
+
+                    this.adhesive = new Adhesive(this, {});
+
+                    //this.adhesive.bind('user',this.model,null,this.$el,'keyup');
+
+                    this.adhesive.bind({
+                        keyName: 'user',
+                        model: this.model,
+                        property: null,
+                        domElement: this.$el,
+                        eventType: 'keyup',
+                        callback: null
+                    });
+
                     //this.listenTo(this.collection, 'change', this.render);
                     //this.listenTo(this.collection, 'add remove reset', this.render);
 
@@ -95,36 +111,11 @@ define(
 
                     function renderThis($template) {
                         var ret = EJS.render($template, {
-                            users: data
+                            user: self.model
                         });
 
                         self.$el.html(ret);
 
-                        Rivets.binders.value = {
-                            bind: function(el) {
-                                var adapter = Rivets.adapters[':'];
-                                var model = self.model;
-                                var keypath = ':';
-
-                                this.callback = function() {
-                                    var value = adapter.get(model, keypath);
-                                    adapter.set(model, keypath, !value);
-                                    console.log('bind called!');
-                                };
-
-                                $(self.el).on('click', this.callback);
-                            },
-
-                            unbind: function(el) {
-                                $(self.el).off('click', this.callback);
-                            },
-
-                            routine: function(el, value) {
-                                $(self.el)[value ? 'addClass' : 'removeClass']('enabled')
-                            }
-                        };
-
-                        Rivets.bind($(self.el).find('#user-view'),{user:self.model});
 
                         console.log('userProfileView (re)-rendered');
                     }

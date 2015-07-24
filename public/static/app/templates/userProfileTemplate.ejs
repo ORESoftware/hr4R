@@ -14,7 +14,7 @@
 
                 <div class="form-group input-group">
                     <span class="input-group-addon user-profile-update-form">Username</span>
-                    <input type="text" class="form-control" rv-value="user:username" name="user.username" placeholder="Username">
+                    <input type="text" class="form-control" adhesive-get="user:username" name="user.username" placeholder="Username">
                 </div>
 
                 <div class="form-group input-group">
@@ -42,8 +42,8 @@
         <div class="col-lg-4">
             <b><i>there should be something here</i></b>
             <div id="user-view">
-                <p>username:<span rv-value="user:username">{*{ user:username }*}</span></p>
-                <p>email:<span>{*{ user:email }*}</span></p>
+                <p>username:<span adhesive-value="user:username"><%= user.get('username') %></span></p>
+                <p>email:<span><%= user.get('email') %></span></p>
             </div>
         </div>
     </div>

@@ -13,15 +13,17 @@ define(
     [
         'underscore',
         'backbone',
-        'ijson'
+        'ijson',
+        'app/js/models/BaseModel'
     ],
 
-    function (_, Backbone,IJSON) {
+    function (_, Backbone,IJSON, BaseModel) {
 
-        var User = Backbone.Model.extend({
-
+        var User = BaseModel.extend({
 
                 idAttribute: "_id",
+
+                needsPersisting: true,
 
                 //url: '/users',
                 //urlRoot: '/users?user_id=',
@@ -52,15 +54,20 @@ define(
                     //
 
                     this.on('change', function () {
-                        if (this.hasChanged('_id')) {
-                            console.log('uh oh!! _id value for this model has been changed');
-                        }
-                        if (this.hasChanged('firstName')) {
-                            console.log('firstName has been changed - ', this.toJSON());
-                        }
 
-                        console.log('this model has changed:',this.attributes);
-                    });
+                        this.needsPersisting = true;
+
+
+                        //if (this.hasChanged('_id')) {
+                        //    console.log('uh oh!! _id value for this model has been changed');
+                        //}
+                        //if (this.hasChanged('firstName')) {
+                        //    console.log('firstName has been changed - ', this.toJSON());
+                        //}
+
+                        //console.log('this model has changed:',this.attributes);
+
+                    }.bind(this));
 
                     this.on('change:username', function (msg) {
                         console.log('username for this model:', this, 'has changed --->', msg);
@@ -81,21 +88,29 @@ define(
                 },
 
 
-                persistModel: function (attributes, opts, callback) {
-                    //TODO: add opts to object below
-                    this.save(attributes, {
-                        wait: true, //prevents optimistic persist
-                        dataType: "json",
-                        //TODO:  model.trigger('sync', model, resp, options);
-                        success: function (model, response, options) {
-                            console.log("The model has been saved to the server");
-                            callback(null,model, IJSON.parse(response), options);
-                        },
-                        error: function (model, xhr, options) {
-                            var err = new Error("Something went wrong while saving the model");
-                            callback(err, model, xhr, options);
-                        }
-                    });
+               /* persistModel: function (attributes, opts, callback) {
+
+                    if(this.needsPersisting){
+                        var self = this;
+                        //TODO: add opts to object below
+                        self.save(attributes, {
+                            wait: true, //prevents optimistic persist
+                            dataType: "json",
+                            //TODO:  model.trigger('sync', model, resp, options);
+                            success: function (model, response, options) {
+                                self.needsPersisting = false;
+                                callback(null,model, IJSON.parse(response), options);
+                            },
+                            error: function (model, xhr, options) {
+                                var err = new Error("Something went wrong while saving the model");
+                                callback(err, model, xhr, options);
+                            }
+                        });
+                    }
+                    else{
+                        callback(null,this,null,null);
+                    }
+
                 },
                 deleteModel: function (opts,callback) {
                     //TODO: add opts to object below
@@ -115,10 +130,10 @@ define(
                     });
                 },
                 parse: function (resp, options) {
-                    /*
+                    /!*
                      parse converts a response into the hash of attributes to be set on the model.
                      The default implementation is just to pass the response along.
-                     */
+                     *!/
                     if(resp.success){
                         return resp.success;
                     }
@@ -129,7 +144,7 @@ define(
                         return resp;
                     }
                     //return resp;
-                }
+                }*/
 
                 //validation: {
                 //    email: {
