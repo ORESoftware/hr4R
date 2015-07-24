@@ -113,13 +113,17 @@ define(
                                 };
 
                                 $(self.el).on('click', this.callback);
+
+                                //$(el).on('click', this.callback);
                             },
 
                             unbind: function(el) {
+                                //$(el).on('click', this.callback);
                                 $(self.el).off('click', this.callback);
                             },
 
                             routine: function(el, value) {
+                                //$(el).on('click', this.callback);
                                 $(self.el)[value ? 'addClass' : 'removeClass']('enabled')
                             }
                         };
