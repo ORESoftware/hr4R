@@ -18,14 +18,10 @@ define(
 
             this.view = view;
             _.extend(this, Backbone.Events);
-            this.bind = bind.bind(this); //just to fuck with you, yw
-
+            this.bind = bind.bind(this); //just to fuck with you, yw, this format is needed in order to debug with Mozilla
         }
 
-        Adhesive.prototype.observe = function () {
-
-
-        };
+        Adhesive.prototype.observe = function () {};
 
         function bind(opts) {
 
@@ -47,14 +43,9 @@ define(
                 updateDOM(domKeyName, model, domElement, event);
             });
 
-
-            //We only take action if domElement is actually in the DOM! Will need to be optimized later
-            //$(domElement).on(eventType, function(event){
-
             domElement.on(eventType, function (event) { //click will only be registered in html is in DOM anyway so...assume it is there
 
                 //event.preventDefault();
-
                 if (typeof callback === 'function') {
                     callback(event);
                 }
@@ -110,12 +101,6 @@ define(
         function updateBackboneModel(domKeyName, domElement, model, event) {
 
             console.log('updateBackboneModel:', model, event);
-
-            console.log(event.target);
-            console.log(event.relatedTarget);
-            console.log(event.type);
-            console.log(event.which);
-            console.log(event.result);
 
             domElement.find('*').each(function () {
 
