@@ -35,14 +35,18 @@ var allowCrossDomain = function (req, res, next) {
 app.use(allowCrossDomain);
 //var router = express.Router();
 
+app.disable('etag');
 
 app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser('foo'));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, '/bower_components')));
+//app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), {
+    etag: false
+}));
+//app.use(express.static(path.join(__dirname, '/bower_components')));
 //app.use(express.static('bower_components'));
 //app.use('/bower_components', express.static( root +'/bower_components'));
 
