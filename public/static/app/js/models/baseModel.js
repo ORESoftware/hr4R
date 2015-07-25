@@ -30,23 +30,45 @@ define(
 
         var BaseModel = Backbone.Model.extend({
 
+                needsPersisting: false,
+
+                constructor: function () {
+                    var self = this;
+                    this.on('change',function(model,something){
+                        self.needsPersisting = true;
+                    });
+                    this.on('sync',function(){
+                        self.needsPersisting = false;
+                    });
+                    Backbone.Model.apply(this, arguments);
+                },
 
                 persistModel: function (attributes, opts, callback) {
-                    //TODO: add opts to object below
-                    this.save(attributes, {
-                        wait: true, //prevents optimistic destroy
-                        dataType: "json",
-                        //TODO:  model.trigger('sync', model, resp, options);
-                        success: function (model, response, options) {
-                            console.log("The model has been saved to the server");
-                            callback(null,model, IJSON.parse(response), options);
-                        },
-                        error: function (model, xhr, options) {
-                            var err = new Error("Something went wrong while saving the model");
-                            callback(err, model, xhr, options);
-                        }
-                    });
+
+                    if(this.needsPersisting){
+                        var self = this;
+                        //TODO: add opts to object below
+                        self.save(attributes, {
+                            wait: true, //prevents optimistic persist
+                            dataType: "json",
+                            //TODO:  model.trigger('sync', model, resp, options);
+                            success: function (model, response, options) {
+                                self.needsPersisting = false;
+                                callback(null,model, IJSON.parse(response), options);
+                            },
+                            error: function (model, xhr, options) {
+                                var err = new Error("Something went wrong while saving the model");
+                                callback(err, model, xhr, options);
+                            }
+                        });
+                    }
+                    else{
+                        console.log('avoided unnecessarily saving model to server:',this);
+                        callback(null,this,null,null);
+                    }
+
                 },
+
                 deleteModel: function (opts,callback) {
                     //TODO: add opts to object below
                     //TODO: turn this into https://www.dropbox.com/s/lzzgg2wanjlguf5/Screenshot%202015-07-14%2016.54.57.png?dl=0
@@ -55,6 +77,7 @@ define(
                         dataType: "json",
                         success: function (model, response, options) {
                             console.log("The model has been destroyed/deleted on/from the server");
+                            self.needsPersisting = false;
                             callback(null, model, response, options);
                         },
                         error: function (model, xhr, options) {

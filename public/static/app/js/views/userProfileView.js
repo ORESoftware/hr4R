@@ -74,8 +74,10 @@ define(
                             modelEvent: 'change'
                         },
                         collections: {
-                            listenTo: [self.collection],
-                            update: [self.collection],
+                            //listenTo: [self.collection],
+                            //update: [self.collection],
+                            listenTo: [],
+                            update: [],
                             collectionEvent: 'model-change',
                             where: {
 

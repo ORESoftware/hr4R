@@ -40,6 +40,14 @@ define(
                 }
             },
 
+            saveCollection: function(){
+                Backbone.sync('create', this, {
+                    success: function() {
+                        console.log('Saved!');
+                    }
+                });
+            },
+
             persistCollection: function (opts, cb) {
 
                 //TODO: use opts to set same value for all models

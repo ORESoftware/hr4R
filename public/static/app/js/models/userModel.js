@@ -23,10 +23,6 @@ define(
 
                 idAttribute: "_id",
 
-                 givenName: '@UserModel',
-
-                needsPersisting: true,
-
                 //url: '/users',
                 //urlRoot: '/users?user_id=',
 
@@ -54,27 +50,7 @@ define(
                     this.options = opts || {};
 
                     _.bindAll(this, 'deleteModel', 'persistModel', 'validate','parse');
-                    //
 
-                    this.on('change', function () {
-
-                        this.needsPersisting = true;
-
-
-                        //if (this.hasChanged('_id')) {
-                        //    console.log('uh oh!! _id value for this model has been changed');
-                        //}
-                        //if (this.hasChanged('firstName')) {
-                        //    console.log('firstName has been changed - ', this.toJSON());
-                        //}
-
-                        //console.log('this model has changed:',this.attributes);
-
-                    }.bind(this));
-
-                    this.on('change:username', function (msg) {
-                        console.log('username for this model:', this, 'has changed --->', msg);
-                    });
 
                     console.log('UserModel has been intialized');
                 },
@@ -88,74 +64,7 @@ define(
                     //TODO:https://github.com/thedersen/backbone.validation
 
                     return undefined;
-                },
-
-
-               /* persistModel: function (attributes, opts, callback) {
-
-                    if(this.needsPersisting){
-                        var self = this;
-                        //TODO: add opts to object below
-                        self.save(attributes, {
-                            wait: true, //prevents optimistic persist
-                            dataType: "json",
-                            //TODO:  model.trigger('sync', model, resp, options);
-                            success: function (model, response, options) {
-                                self.needsPersisting = false;
-                                callback(null,model, IJSON.parse(response), options);
-                            },
-                            error: function (model, xhr, options) {
-                                var err = new Error("Something went wrong while saving the model");
-                                callback(err, model, xhr, options);
-                            }
-                        });
-                    }
-                    else{
-                        callback(null,this,null,null);
-                    }
-
-                },
-                deleteModel: function (opts,callback) {
-                    //TODO: add opts to object below
-                    //TODO: turn this into https://www.dropbox.com/s/lzzgg2wanjlguf5/Screenshot%202015-07-14%2016.54.57.png?dl=0
-                    this.destroy({
-                        wait: true, //prevents optimistic destroy
-                        dataType: "json",
-                        success: function (model, response, options) {
-                            console.log("The model has been destroyed/deleted on/from the server");
-                            callback(null, model, response, options);
-                        },
-                        error: function (model, xhr, options) {
-                            console.log("Something went wrong while attempting to delete model");
-                            var err = new Error('error destroying model');
-                            callback(err, model, xhr, options);
-                        }
-                    });
-                },
-                parse: function (resp, options) {
-                    /!*
-                     parse converts a response into the hash of attributes to be set on the model.
-                     The default implementation is just to pass the response along.
-                     *!/
-                    if(resp.success){
-                        return resp.success;
-                    }
-                    else if(resp.error){
-                        return this.attributes;
-                    }
-                    else{
-                        return resp;
-                    }
-                    //return resp;
-                }*/
-
-                //validation: {
-                //    email: {
-                //        required: true,
-                //        pattern: 'email',
-                //        msg: 'Please enter a valid email'
-                //    }
-                //}
+                }
             },
 
             { //class properties
@@ -163,15 +72,7 @@ define(
                 newUser: function ($user) {
 
                     var user = new User($user);
-
-                    //user.attributes.firstName = $user.firstName;
-                    //user.attributes.lastName = $user.lastName;
-                    //user.attributes.username = $user.username;
-                    //user.attributes.password = $user.password;
-                    //user.attributes.email = $user.email;
-
                     return user;
-
                 }
 
             });

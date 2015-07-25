@@ -56,7 +56,9 @@ define(
 
                 _.each(modelsToListenTo, function (model, index) {
                     self.listenTo(model, modelEvent, function (event) {
-                        updateDOMViaModelChange(domKeyName, model, domElement, event);
+                        //if(!event._changing){
+                            updateDOMViaModelChange(domKeyName, model, domElement, event);
+                        //}
                     });
                 });
 

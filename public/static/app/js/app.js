@@ -109,9 +109,12 @@ define(
                     cb(err);
                 }
                 else {
+                    //TODO: fire events here to signify that collection has been persisted, needsPersistence is false
+
                     collection.fetch(
                         {
                             success: function (msg) {
+                                //TODO: fire events here to signify to adhesive views to update DOM elements
                                 cb(null, msg);
                             },
                             error: function (err) {

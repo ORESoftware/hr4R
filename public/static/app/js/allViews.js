@@ -22,7 +22,7 @@ define('app/js/allViews',
         'exports'
     ],
 
-    function (HeaderView, FooterView, RegisteredUsersView, IndexView, LoginView, HomeView,PortalView, UserProfileView, exports) {
+    function (HeaderView, FooterView, RegisteredUsersView, IndexView, LoginView, HomeView, PortalView, UserProfileView, exports) {
 
 
         //exports.allViews = {
@@ -42,7 +42,7 @@ define('app/js/allViews',
             Index: IndexView,
             Login: LoginView,
             Home: HomeView,
-            Portal:PortalView,
+            Portal: PortalView,
             UserProfile: UserProfileView,
             RegisteredUsers: RegisteredUsersView
         };
