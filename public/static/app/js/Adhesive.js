@@ -18,41 +18,92 @@ define(
 
             this.view = view;
             _.extend(this, Backbone.Events);
-            this.bind = bind.bind(this); //just to fuck with you, yw, this format is needed in order to debug with Mozilla
+            this.bind = bind.bind(this); //just to f*$k with you, this format is needed in order to debug with Mozilla
+            this.jQueryBinds = []; //TODO: do we need to unbind any elements or since we are using 'this.el' Backbone might take care of this already..?
         }
 
-        Adhesive.prototype.observe = function () {};
+        Adhesive.prototype.unStick = function () {
+            this.stopListening();
+            _.each(this.jQueryBinds, function (el, index) {
+                el.unbind();
+                el.off();
+            });
+        };
+
+        Adhesive.prototype.observe = function () {
+        };
 
         function bind(opts) {
 
             var domKeyName = opts.keyName;
-            var model = opts.model;
-            var property = opts.property;
+            //var property = opts.property;
             var domElement = opts.domElement;
-            var eventType = opts.eventType;
+            var domEventType = opts.domEventType;
             var callback = opts.callback;
 
+            this.jQueryBinds.push(domElement);
 
-            var eventName = 'change';
 
-            if (property != null) {
-                eventName = eventName.concat(':').concat(property);
+            var self = this;
+
+            var models = opts.models;
+
+            if (models) {
+
+                var modelsToListenTo = models.listenTo;
+                var modelEvent = models.modelEvent;
+                var modelsToUpdate = models.update;
+
+                _.each(modelsToListenTo, function (model, index) {
+                    self.listenTo(model, modelEvent, function (event) {
+                        updateDOMViaModelChange(domKeyName, model, domElement, event);
+                    });
+                });
+
+
+                domElement.on(domEventType, function (event) { //click will only be registered in html is in DOM anyway so...assume it is there
+
+                    //event.preventDefault();
+                    if (typeof callback === 'function') {
+                        callback(event);
+                    }
+                    else {
+                        updateBackboneModels(domKeyName, domElement, modelsToUpdate, event);
+                    }
+                });
+
             }
 
-            this.listenTo(model, eventName, function (event) {
-                updateDOM(domKeyName, model, domElement, event);
-            });
+            var collections = opts.collections;
 
-            domElement.on(eventType, function (event) { //click will only be registered in html is in DOM anyway so...assume it is there
+            if (collections) {
 
-                //event.preventDefault();
-                if (typeof callback === 'function') {
-                    callback(event);
-                }
-                else {
-                    updateBackboneModel(domKeyName, domElement, model, event);
-                }
-            });
+                var collectionsToListenTo = collections.listenTo;
+                var collectionEvent = collections.collectionEvent;
+                var collectionsToUpdate = collections.update;
+
+
+                _.each(collectionsToListenTo, function (coll, index) {
+                    self.listenTo(coll, collectionEvent, function (model, changes) {
+                        updateDOMViaCollectionChange(domKeyName, coll, domElement, model, changes);
+                    });
+                });
+
+                domElement.on(domEventType, function (event) { //click will only be registered in html is in DOM anyway so...assume it is there
+
+                    //event.preventDefault();
+                    if (typeof callback === 'function') {
+                        callback(event);
+                    }
+                    else {
+                        updateBackboneCollections(domKeyName, domElement, collectionsToUpdate, event);
+                    }
+                });
+
+            }
+
+
+            return this;
         }
 
         Adhesive.prototype.bindMany = function () {
@@ -60,9 +111,9 @@ define(
         };
 
 
-        function updateDOM(domKeyName, model, domElement, event) {
+        function updateDOMViaModelChange(domKeyName, model, domElement, event) {
 
-            console.log('updateDOM:', domElement, event);
+            console.log('update-DOM-Via-Model-Change:', domElement, event);
 
             //if (!document.contains(domElement)) {
             //    console.log('visible document does not contain element, so why update it');
@@ -84,12 +135,8 @@ define(
 
                         if (String(value).startsWith(str)) {
 
-                            //var index = String(value).indexOf(str);
-
                             var propName = String(value).substring(str.length);
-
                             var prop = model.get(propName);
-
                             $(self).html(String(prop));
 
                         }
@@ -98,9 +145,45 @@ define(
             });
         }
 
-        function updateBackboneModel(domKeyName, domElement, model, event) {
 
-            console.log('updateBackboneModel:', model, event);
+        function updateDOMViaCollectionChange(domKeyName, collection, domElement, model, changes) {
+
+            console.log('update-DOM-Via-Collection-Change:', domElement, 'model:', model, 'changes:', changes);
+
+            //if (!document.contains(domElement)) {
+            //    console.log('visible document does not contain element, so why update it');
+            //    return;
+            //}
+
+            domElement.find('*').each(function () {
+
+                //console.log(this);
+
+                var self = this;
+                $.each(this.attributes, function (i, attrib) {
+                    var name = attrib.name;
+                    var value = attrib.value;
+
+                    if (name === 'adhesive-value') {
+
+                        var str = String(domKeyName).concat(':');
+
+                        if (String(value).startsWith(str)) {
+
+                            var propName = String(value).substring(str.length);
+                            var prop = model.get(propName);
+                            $(self).html(String(prop));
+
+                        }
+                    }
+                });
+            });
+        }
+
+
+        function updateBackboneModels(domKeyName, domElement, models, event) {
+
+            console.log('update-Backbone-Models:', models, event);
 
             domElement.find('*').each(function () {
 
@@ -117,9 +200,44 @@ define(
                         if (String(value).startsWith(str)) {
                             var propName = String(value).substring(str.length);
                             var val = self.value;
-                            var prop = model.set(propName, val);
 
-                            console.log('backbone model property:', propName, 'set to:', val, 'result of setting model:', prop);
+                            _.each(models, function (model, index) {
+                                model.set(propName, val);
+                                console.log('backbone model property:', propName, 'set to:', val);
+                            });
+                        }
+                    }
+                });
+            });
+        }
+
+
+        function updateBackboneCollections(domKeyName, domElement, collections, event) {
+
+            console.log('updateBackboneModel:', collections, event);
+
+            domElement.find('*').each(function () {
+
+                var self = this;
+
+                $.each(this.attributes, function (i, attrib) {
+                    var name = attrib.name;
+                    var value = attrib.value;
+
+                    if (name === 'adhesive-get') {
+
+                        var str = String(domKeyName).concat(':');
+
+                        if (String(value).startsWith(str)) {
+                            var propName = String(value).substring(str.length);
+                            var val = self.value;
+
+                            _.each(collections, function (coll, index) {
+                                coll.each(function (model) {
+                                    model.set(propName, val);
+                                    console.log('backbone model property:', propName, 'set to:', val);
+                                })
+                            });
                         }
                     }
                 });

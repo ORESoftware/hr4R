@@ -170,6 +170,9 @@ define(
                     console.log('null view sent to destroyView function');
                 }
                 else {
+                    if(view.adhesive){
+                        view.adhesive.unStick();
+                    }
                     view.undelegateEvents();
                     view.$el.removeData().unbind();
                     view.stopListening();
@@ -317,7 +320,7 @@ define(
 
 
                 if (this.viewState.get('mainView') != null) {
-                    //this.destroyView(this.viewState.get('mainView'));
+                    this.destroyView(this.viewState.get('mainView'));
                     this.viewState.get('mainView').remove();
                 }
                 this.viewState.set('mainView', view);
@@ -330,7 +333,8 @@ define(
                     this.viewState.set('headerView', new allViews.Header());
                 }
                 this.viewState.get('headerView').render();
-                //this.viewState.get('mainView').render();
+
+
                 if(this.viewState.get('mainView').givenName !== '@IndexView'){
                     $('#main-content-id').html(this.viewState.get('mainView').render().el);
                 }

@@ -21,8 +21,6 @@ requirejs.config({
     waitSeconds: 7,
     baseUrl: '/static',
     paths: {
-        //'app': 'app/js',
-        // define vendor paths
         'async': 'vendor/async',
         'jquery': 'vendor/jquery',
         'ejs': 'vendor/ejs',
@@ -34,13 +32,10 @@ requirejs.config({
         'bootstrap': 'vendor/bootstrap',
         'handlebars': 'vendor/handlebars',
         'backbone-validation': 'vendor/backbone-validation-amd',
-        'homeTemplate':'app/templates/homeTemplate.html',
         'jsx': "vendor/jsx",
         'JSXTransformer': 'vendor/JSXTransformer',
         'observe':'vendor/observe',
         'react':'vendor/react-with-addons',
-        'rivets':'vendor/rivets',
-        'sightglass':'vendor/sightglass',
         'socketio':'vendor/socketio',
         '#appState':'app/js/appState',
         '#viewState':'app/js/viewState',
@@ -53,13 +48,6 @@ requirejs.config({
         //},
         'underscore': {
             'exports': '_'
-        },
-        'sightglass' : {
-            'exports': 'sightglass'
-        },
-        'rivets': {
-            'deps': ['sightglass'],
-            'exports': 'rivets'
         },
         'backbone': {
             'deps': ['jquery', 'underscore'],
@@ -77,8 +65,10 @@ requirejs.config({
 require(['app/js/app'], function (Application) {
 
     console.log('about to register document.ready call...');
-    $(document).ready(function () {
-        console.log('document.ready fired, starting application...');
-        var app = Application.start();//
-    });
+    var app = Application.start();//
+
+    //$(document).ready(function () {
+    //    console.log('document.ready fired, starting application...');
+    //    var app = Application.start();//
+    //});
 });

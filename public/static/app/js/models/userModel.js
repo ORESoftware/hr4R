@@ -23,6 +23,8 @@ define(
 
                 idAttribute: "_id",
 
+                 givenName: '@UserModel',
+
                 needsPersisting: true,
 
                 //url: '/users',
@@ -40,14 +42,15 @@ define(
                     }
                 },
 
-                constructor: function (attributes,opts) {
-                    this.givenName = '@UserModel';
-                    Backbone.Model.apply(this, arguments);
-                },
+                //constructor: function (attributes,opts) {
+                //    this.givenName = '@UserModel';
+                //    Backbone.Model.apply(this, arguments);
+                //},
 
 
                 initialize: function (attributes, opts) {
 
+                    this.givenName = '@UserModel';
                     this.options = opts || {};
 
                     _.bindAll(this, 'deleteModel', 'persistModel', 'validate','parse');
