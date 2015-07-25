@@ -12,30 +12,29 @@ var router = express.Router();
 // middleware specific to this router
 router.use(function matchBatchURL(req, res, next) {
 
-    var origURLWithoutSlashes =  String(req.originalUrl).replace(/^\/|\/$/g, '');
+    var origURLWithoutSlashes = String(req.originalUrl).replace(/^\/|\/$/g, '');
 
-    if(typeof batch[origURLWithoutSlashes] === 'function'){ //replace all slashes
-        batch[origURLWithoutSlashes](req,res,next);
+    if (typeof batch[origURLWithoutSlashes] === 'function') { //replace all slashes
+        batch[origURLWithoutSlashes](req, res, next);
     }
-    else{
+    else {
         next();
     }
 });
 
-router.use(function(req, res, next) {
+router.use(function (req, res, next) {
 
-  console.log('no route matched for users batch?!?!');
+    console.log('no route matched for users batch?!?!');
 
     next();
 });
-
 
 
 var batch = {
 
     users_batch: function (req, res, next) {
 
-      res.json({});
+        res.json({});
     },
 
     buggers_batch: function (req, res, next) {

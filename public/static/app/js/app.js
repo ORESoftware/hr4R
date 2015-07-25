@@ -48,7 +48,6 @@ define(
     [
         'd3',
         'observe',
-        'app/js/rivetsConfig',
         'handlebars',
         'backbone',
         'underscore',
@@ -63,21 +62,7 @@ define(
 
     ],
 
-    function (d3, Observe, RivetsConfig, Handlebars, Backbone, _, IJSON, React, collections, models, allViews, allTemplates, TodoList, giant) {
-
-
-        //console.log(Observe);
-
-        window.beck = {"hi":"hello"};
-
-        //var todos = new Backbone.Collection([
-        //    {
-        //        text: 'Dishes!',
-        //        dueDate: new Date().toISOString()
-        //    }
-        //]);
-        //
-        //React.render(<TodoList todos={todos}/>, document.body);
+    function (d3, Observe, Handlebars, Backbone, _, IJSON, React, collections, models, allViews, allTemplates, TodoList, giant) {
 
         /*
          we don't use the majority of these dependencies in this file, but they are loaded here so that r.js can build
@@ -92,23 +77,6 @@ define(
 
 
         };
-
-
-        //Backbone.setViewProps = function(view,options){
-        //
-        //    var opts = options || {};
-        //
-        //    var temp = _.defaults({}, opts, _.result(view, 'defaults'));
-        //
-        //    for(var prop in temp){
-        //        if(temp.hasOwnProperty(prop) && prop !== undefined){
-        //            if(temp[prop]!==undefined){
-        //                view[prop] = temp[prop];
-        //                console.log('new view property:',view[prop]);
-        //            }
-        //        }
-        //    }
-        //};
 
         Backbone.View.prototype.setViewProps = function (options) {
 
@@ -141,9 +109,12 @@ define(
                     cb(err);
                 }
                 else {
+                    //TODO: fire events here to signify that collection has been persisted, needsPersistence is false
+
                     collection.fetch(
                         {
                             success: function (msg) {
+                                //TODO: fire events here to signify to adhesive views to update DOM elements
                                 cb(null, msg);
                             },
                             error: function (err) {
@@ -247,7 +218,9 @@ define(
         var start = function () {
 
             require(['app/js/boot'], function (boot) {
-                boot.initialize();
+                $(function() {  //DOM is ready
+                    boot.initialize();
+                });
             });
         };
 

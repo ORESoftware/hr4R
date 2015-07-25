@@ -16,13 +16,13 @@ define(
         'underscore',
         'backbone',
         'app/js/allModels',
-        'async'
+        'app/js/collections/BaseCollection'
 
     ],
 
-    function (_, Backbone, models, async) {
+    function (_, Backbone, models, BaseCollection) {
 
-        var JobsCollection = Backbone.Collection.extend({
+        var JobsCollection = BaseCollection.extend({
             // Reference to this collection's model.
             model: models.Job,
 
@@ -35,11 +35,10 @@ define(
             //urlRoot: '/jobs',
             batchURL: '/jobs_batch',
 
-            constructor: function () {
-                this.givenName = '@JobsCollection';
-                Backbone.Collection.apply(this, arguments);
-            },
-
+            //constructor: function () {
+            //    this.givenName = '@JobsCollection';
+            //    Backbone.Collection.apply(this, arguments);
+            //},
 
             initialize: function (models,opts) {
 
@@ -56,47 +55,9 @@ define(
                 this.on('remove', function (model) {
                     console.log('something got removed');
                 });
-                // This will be called when an item is updated
-                this.on('change', function (model) {
-                    console.log('something got changed');
-                });
-            },
-
-            parse: function(resp) {
-                if(resp.success){
-                    return resp.success;
-                }
-                else if(resp.error){
-                    return this.models;
-                }
-                else{
-                    return resp;
-                }
-            },
-
-            persistCollection: function (opts,cb) {
-
-                //TODO: use opts to set same value for all models
-
-                var saveArray = [];
-
-                this.each(function (job, index) {  //iterate through models, add/push function to async.parallel
-                    saveArray.push(
-                        function (callback) {
-
-                            job.persistModel(null, null, function (err, val) {
-                                callback(err,val);
-                            });
-                        }
-                    )
-
-                });
-
-                async.parallel(saveArray, function (err, results) {
-                    cb(err, results);
-                });
 
             },
+
 
             // Todos are sorted by their original insertion order.
             comparator: 'order'

@@ -64,20 +64,34 @@ define(
 
                     //this.adhesive.bind('user',this.model,null,this.$el,'keyup');
 
+                    var self = this;
+
                     this.adhesive.bind({
                         keyName: 'user',
-                        model: this.model,
-                        property: null,
-                        domElement: this.$el,
-                        eventType: 'keyup',
+                        models: {
+                            listenTo: [self.model],
+                            update: [self.model],
+                            modelEvent: 'change'
+                        },
+                        collections: {
+                            //listenTo: [self.collection],
+                            //update: [self.collection],
+                            listenTo: [],
+                            update: [],
+                            collectionEvent: 'model-change',
+                            where: {
+
+                            }
+                        },
+
+                        domElement: self.$el,
+                        domEventType: 'keyup',
                         callback: null
                     });
 
                     //this.listenTo(this.collection, 'change', this.render);
                     //this.listenTo(this.collection, 'add remove reset', this.render);
 
-                    //this.el = $('#main-content-id');
-                    //this._ensureElement();
                 },
                 render: function () {
 
