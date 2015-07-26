@@ -72,6 +72,13 @@ define(
         //d3.select("body").transition().delay(1750)
         //    .style("background-color", "#919191");
 
+        if (typeof String.prototype.startsWith !== 'function') {
+            // see below for better implementation!
+            String.prototype.startsWith = function (str){
+                return this.indexOf(str) === 0;
+            };
+        }
+
 
         Backbone.setCollectionOptions = function (model, options) {
 

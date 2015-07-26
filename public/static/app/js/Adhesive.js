@@ -35,6 +35,7 @@ define(
             var domElementListen = opts.domElementListen;
             var domElementUpdate = opts.domElementUpdate;
             var domEventType = opts.domEventType;
+            var limitToEventTarget = opts.limitToEventTarget;
             var callback = opts.callback;
 
             this.jQueryBinds.push(domElementListen);
@@ -66,7 +67,7 @@ define(
                         callback(event);
                     }
                     else {
-                        updateBackboneModels(domKeyName, domElementListen, modelsToUpdate, event);
+                        updateBackboneModels(domKeyName, domElementListen, modelsToUpdate, event, limitToEventTarget);
                     }
                 });
             }
@@ -93,7 +94,7 @@ define(
                         callback(event);
                     }
                     else {
-                        updateBackboneCollections(domKeyName, domElementListen, collectionsToUpdate, event);
+                        //updateBackboneCollections(domKeyName, domElementListen, collectionsToUpdate, event, limitToEventTarget);
                     }
                 });
             }
@@ -165,15 +166,16 @@ define(
         }
 
 
-        function updateBackboneModels(domKeyName, domElement, models, event) {
+        function updateBackboneModels(domKeyName, domElement, models, event, limitToEventTarget) {
 
             console.log('update-Backbone-Models:', models, event);
 
-            domElement.find('*').each(function () {
+            if (limitToEventTarget) {
 
-                var self = this;
+                var element = event.target;
+                var attributes = element.attributes;
 
-                $.each(this.attributes, function (i, attrib) {
+                $.each(attributes, function (i, attrib) {
                     var name = attrib.name;
                     var value = attrib.value;
 
@@ -182,7 +184,7 @@ define(
                     switch (name) {
                         case 'adhesive-get':
                             func = function (element) {
-                                return element.value;
+                                return $(element).val();
                             };
                             break;
                         case 'fart':
@@ -195,7 +197,7 @@ define(
 
                     if (String(value).startsWith(str)) {
                         var propName = String(value).substring(str.length);
-                        var val = func(self);
+                        var val = func(element);
 
                         _.each(models, function (model, index) {
                             model.set(propName, val);
@@ -204,19 +206,61 @@ define(
                     }
 
                 });
-            });
+
+            } else {
+
+
+                domElement.find('*').each(function () {
+
+                    var self = this;
+                    var attributes = self.attributes;
+
+                    $.each(this.attributes, function (i, attrib) {
+                        var name = attrib.name;
+                        var value = attrib.value;
+
+                        var func = null;
+
+                        switch (name) {
+                            case 'adhesive-get':
+                                func = function (element) {
+                                    return $(element).text();
+                                };
+                                break;
+                            case 'fart':
+                                break;
+                            default:
+                                return true;
+                        }
+
+                        var str = String(domKeyName).concat(':');
+
+                        if (String(value).startsWith(str)) {
+                            var propName = String(value).substring(str.length);
+                            var val = func(self);
+
+                            _.each(models, function (model, index) {
+                                model.set(propName, val);
+                                console.log('backbone model property:', propName, 'set to:', val);
+                            });
+                        }
+
+                    });
+                });
+            }
         }
 
 
-        function updateBackboneCollections(domKeyName, domElement, collections, event) {
+        function updateBackboneCollections(domKeyName, domElement, collections, event, limitToEventTarget) {
 
             console.log('updateBackboneModel:', collections, event);
 
-            domElement.find('*').each(function () {
+            if(limitToEventTarget){
 
-                var self = this;
+                var element = event.target;
+                var attributes = element.attributes;
 
-                $.each(this.attributes, function (i, attrib) {
+                $.each(attributes, function (i, attrib) {
                     var name = attrib.name;
                     var value = attrib.value;
 
@@ -237,7 +281,37 @@ define(
                         }
                     }
                 });
-            });
+            }
+            else {
+
+
+                domElement.find('*').each(function () {
+
+                    var self = this;
+
+                    $.each(this.attributes, function (i, attrib) {
+                        var name = attrib.name;
+                        var value = attrib.value;
+
+                        if (name === 'adhesive-get') {
+
+                            var str = String(domKeyName).concat(':');
+
+                            if (String(value).startsWith(str)) {
+                                var propName = String(value).substring(str.length);
+                                var val = self.value;
+
+                                _.each(collections, function (coll, index) {
+                                    coll.each(function (model) {
+                                        model.set(propName, val);
+                                        console.log('backbone model property:', propName, 'set to:', val);
+                                    })
+                                });
+                            }
+                        }
+                    });
+                });
+            }
         }
 
 

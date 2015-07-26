@@ -81,7 +81,7 @@ define(
                             collectionEvent: 'model-change',
                             where: {}
                         },
-
+                        limitToEventTarget:true,
                         domElementListen: self.$el,
                         domElementUpdate: $(document),
                         domEventType: 'keyup',
