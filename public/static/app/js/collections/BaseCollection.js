@@ -11,7 +11,6 @@ define(
         'underscore',
         'backbone',
         'async'
-
     ],
 
     function (_, Backbone, async) {
@@ -22,7 +21,6 @@ define(
             constructor: function () {
                 var self = this;
                 this.on('change',function(model,something){
-                    var args = arguments;
                     self.trigger('model-change',model,model.changed);
                 });
                 Backbone.Collection.apply(this, arguments);

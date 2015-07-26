@@ -15,7 +15,6 @@ define(
 
 
         function Adhesive(view, opts) {
-
             this.view = view;
             _.extend(this, Backbone.Events);
             this.bind = bind.bind(this); //just to f*$k with you, this format is needed in order to debug with Mozilla
@@ -30,21 +29,18 @@ define(
             });
         };
 
-        Adhesive.prototype.observe = function () {
-        };
-
         function bind(opts) {
 
             var domKeyName = opts.keyName;
-            //var property = opts.property;
-            var domElement = opts.domElement;
+            var domElementListen = opts.domElementListen;
+            var domElementUpdate = opts.domElementUpdate;
             var domEventType = opts.domEventType;
             var callback = opts.callback;
 
-            this.jQueryBinds.push(domElement);
-
+            this.jQueryBinds.push(domElementListen);
 
             var self = this;
+
 
             var models = opts.models;
 
@@ -57,23 +53,22 @@ define(
                 _.each(modelsToListenTo, function (model, index) {
                     self.listenTo(model, modelEvent, function (event) {
                         //if(!event._changing){
-                            updateDOMViaModelChange(domKeyName, model, domElement, event);
+                        updateDOMViaModelChange(domKeyName, model, domElementUpdate, event);
                         //}
                     });
                 });
 
 
-                domElement.on(domEventType, function (event) { //click will only be registered in html is in DOM anyway so...assume it is there
-
+                domElementListen.on(domEventType, function (event) { //click will only be registered in html is in DOM anyway so...assume it is there
                     //event.preventDefault();
+
                     if (typeof callback === 'function') {
                         callback(event);
                     }
                     else {
-                        updateBackboneModels(domKeyName, domElement, modelsToUpdate, event);
+                        updateBackboneModels(domKeyName, domElementListen, modelsToUpdate, event);
                     }
                 });
-
             }
 
             var collections = opts.collections;
@@ -87,44 +82,33 @@ define(
 
                 _.each(collectionsToListenTo, function (coll, index) {
                     self.listenTo(coll, collectionEvent, function (model, changes) {
-                        updateDOMViaCollectionChange(domKeyName, coll, domElement, model, changes);
+                        updateDOMViaCollectionChange(domKeyName, coll, domElementUpdate, model, changes);
                     });
                 });
 
-                domElement.on(domEventType, function (event) { //click will only be registered in html is in DOM anyway so...assume it is there
+                domElementListen.on(domEventType, function (event) { //click will only be registered in html is in DOM anyway so...assume it is there
 
                     //event.preventDefault();
                     if (typeof callback === 'function') {
                         callback(event);
                     }
                     else {
-                        updateBackboneCollections(domKeyName, domElement, collectionsToUpdate, event);
+                        updateBackboneCollections(domKeyName, domElementListen, collectionsToUpdate, event);
                     }
                 });
-
             }
-
 
             return this;
         }
-
-        Adhesive.prototype.bindMany = function () {
-
-        };
 
 
         function updateDOMViaModelChange(domKeyName, model, domElement, event) {
 
             console.log('update-DOM-Via-Model-Change:', domElement, event);
 
-            //if (!document.contains(domElement)) {
-            //    console.log('visible document does not contain element, so why update it');
-            //    return;
-            //}
+            //TODO: this function won't get called once the listeners are removed, so no need to check if this is still in the DOM
 
             domElement.find('*').each(function () {
-
-                //console.log(this);
 
                 var self = this;
                 $.each(this.attributes, function (i, attrib) {
@@ -158,8 +142,6 @@ define(
             //}
 
             domElement.find('*').each(function () {
-
-                //console.log(this);
 
                 var self = this;
                 $.each(this.attributes, function (i, attrib) {
@@ -195,20 +177,32 @@ define(
                     var name = attrib.name;
                     var value = attrib.value;
 
-                    if (name === 'adhesive-get') {
+                    var func = null;
 
-                        var str = String(domKeyName).concat(':');
-
-                        if (String(value).startsWith(str)) {
-                            var propName = String(value).substring(str.length);
-                            var val = self.value;
-
-                            _.each(models, function (model, index) {
-                                model.set(propName, val);
-                                console.log('backbone model property:', propName, 'set to:', val);
-                            });
-                        }
+                    switch (name) {
+                        case 'adhesive-get':
+                            func = function (element) {
+                                return element.value;
+                            };
+                            break;
+                        case 'fart':
+                            break;
+                        default:
+                            return true;
                     }
+
+                    var str = String(domKeyName).concat(':');
+
+                    if (String(value).startsWith(str)) {
+                        var propName = String(value).substring(str.length);
+                        var val = func(self);
+
+                        _.each(models, function (model, index) {
+                            model.set(propName, val);
+                            console.log('backbone model property:', propName, 'set to:', val);
+                        });
+                    }
+
                 });
             });
         }

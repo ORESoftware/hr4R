@@ -79,12 +79,11 @@ define(
                             listenTo: [],
                             update: [],
                             collectionEvent: 'model-change',
-                            where: {
-
-                            }
+                            where: {}
                         },
 
-                        domElement: self.$el,
+                        domElementListen: self.$el,
+                        domElementUpdate: $(document),
                         domEventType: 'keyup',
                         callback: null
                     });
@@ -97,42 +96,14 @@ define(
 
                     console.log('ATTEMPTING to render userProfileView.');
 
-                    //this.el = $('#main-content-id');
-                    //this._ensureElement();
-
-                    var data = this.collection.models;
                     var self = this;
 
-                    if (UserProfileView.template == null) {
+                    var ret = EJS.render(UserProfileView.template, {
+                        user: self.model
+                    });
 
-                        console.log('userProfileView template is null, retrieving from server.');
-
-                        $.ajax({
-                            url: 'static/html/ejs/userProfileTemplate.ejs',
-                            type: 'GET',
-                            success: function (msg) {
-                                UserProfileView.template = msg;
-                                renderThis.bind(self)(msg);
-                            },
-                            error: function (err) {
-                                throw err;
-                            }
-                        });
-                    }
-                    else {
-                        renderThis.bind(this)(UserProfileView.template);
-                    }
-
-                    function renderThis($template) {
-                        var ret = EJS.render($template, {
-                            user: self.model
-                        });
-
-                        self.$el.html(ret);
-
-                        console.log('userProfileView (re)-rendered');
-                    }
-
+                    self.$el.html(ret);
+                    console.log('userProfileView (re)-rendered');
 
                     return this;
                 },
