@@ -11,18 +11,21 @@ console.log('loading allViews');
 define('app/js/allViews',
 
     [
+        'jsx!app/js/views/dashboardView',
         'app/js/views/headerView',
         'app/js/views/footerView',
         'app/js/views/registeredUsersView',
         'app/js/views/indexView',
         'app/js/views/loginView',
         'jsx!app/js/views/homeView',
+        'jsx!app/js/views/pictureView',
         'app/js/views/portalView',
         'app/js/views/userProfileView',
+        'jsx!app/js/views/overviewView',
         'exports'
     ],
 
-    function (HeaderView, FooterView, RegisteredUsersView, IndexView, LoginView, HomeView, PortalView, UserProfileView, exports) {
+    function (DashboardView, HeaderView, FooterView, RegisteredUsersView, IndexView, LoginView, HomeView, PictureView, PortalView, UserProfileView, OverviewView, exports) {
 
 
         //exports.allViews = {
@@ -37,12 +40,15 @@ define('app/js/allViews',
 
 
         return {
+            Dashboard: DashboardView,
             Header: HeaderView,
             Footer: FooterView,
             Index: IndexView,
             Login: LoginView,
+            Picture: PictureView,
             Home: HomeView,
             Portal: PortalView,
+            Overview: OverviewView,
             UserProfile: UserProfileView,
             RegisteredUsers: RegisteredUsersView
         };

@@ -1,0 +1,54 @@
+* {
+    padding:0;
+    margin:0;
+}
+
+html{
+    font:14px normal Arial, sans-serif;
+    color:#626771;
+    background-color:#fff;
+}
+
+body{
+    padding:20px;
+    text-align: center;
+}
+
+h1{
+    font-size: 18px;
+    margin-bottom: 30px;
+    padding-top: 20px;
+}
+
+div.picture{
+    display: inline-block;
+    margin: 5px;
+    cursor:pointer;
+    position: relative;
+}
+
+div.picture.favorite:after{
+    content: '?';
+    position: absolute;
+    font-size: 80px;
+    line-height: 200px;
+    color: #FF224D;
+    width: 100%;
+    text-align: center;
+    left: 0;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+    font-weight: bold;
+}
+
+.pictures, .favorites{
+    white-space: nowrap;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    height: 230px;
+    background-color: #F3F3F3;
+}
+
+.pictures p, .favorites p {
+    padding-top: 100px;
+    font-size: 13px;
+}

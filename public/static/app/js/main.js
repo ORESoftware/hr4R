@@ -64,11 +64,8 @@ requirejs.config({
 
 require(['app/js/app'], function (Application) {
 
-    console.log('about to register document.ready call...');
-    var app = Application.start();//
-
-    //$(document).ready(function () {
-    //    console.log('document.ready fired, starting application...');
-    //    var app = Application.start();//
-    //});
+    $(document).ready(function () {
+        console.log('document.ready fired, starting application...');
+        Application.start();//
+    });
 });

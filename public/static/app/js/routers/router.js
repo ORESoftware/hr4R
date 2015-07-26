@@ -39,8 +39,11 @@ define(
                 "posts/:id": "getPost",
                 'books/:id': 'bookScreen',
                 'index': 'index',
+                'overview': 'overview',
                 'home': 'home',
                 'userProfile': 'userProfile',
+                'pictures': 'pictures',
+                'dashboard': 'dashboard',
                 'portal': 'portal',
                 'login': 'login',
                 ":route/:action": "loadView",
@@ -64,7 +67,6 @@ define(
             },
 
             home: function () {
-
                 this.changeView({
                     //view:allViews.Home,
                     //view: new allViews.Home({el: '#main-content-id'}),
@@ -72,11 +74,10 @@ define(
                     useSidebar: true
                 });
             },
-            portal: function () {
 
+            pictures: function () {
                 this.changeView({
-                    //view: allViews.Portal,
-                    view: new allViews.Portal(),
+                    view: new allViews.Picture(),
                     useSidebar: true
                 });
             },
@@ -101,6 +102,22 @@ define(
                     //view:allViews.Index,
                     view: new allViews.Index({collection: collections.users}),
                     useSidebar: false
+                });
+            },
+
+            dashboard: function () {
+                this.changeView({
+                    //view:allViews.Index,
+                    view: new allViews.Dashboard({}),
+                    useSidebar: true
+                });
+            },
+
+            overview: function () {
+                this.changeView({
+                    //view:allViews.Index,
+                    view: new allViews.Overview(),
+                    useSidebar: true
                 });
             },
 
@@ -298,7 +315,6 @@ define(
                     throw new Error('null view in router');
                 }
 
-
                 if (opts.useSidebar === true) {
                     //this.destroyView(this.viewState.get('mainParentView'));
                     this.viewState.set('mainParentView', new allViews.Portal());
@@ -310,21 +326,11 @@ define(
                     this.viewState.set('mainParentView', null);
                 }
 
-                //var view = opts.view;
-                //if (view == null) {
-                //    throw new Error('null view in router');
-                //}
-                //else{
-                //    view = new view();
-                //}
-
-
                 if (this.viewState.get('mainView') != null) {
                     this.destroyView(this.viewState.get('mainView'));
                     this.viewState.get('mainView').remove();
                 }
                 this.viewState.set('mainView', view);
-                console.log('current main view:', view.givenName);
 
                 if (this.viewState.get('footerView') == null) {
                     this.viewState.set('footerView', new allViews.Footer());
@@ -332,17 +338,18 @@ define(
                 if (this.viewState.get('headerView') == null) {
                     this.viewState.set('headerView', new allViews.Header());
                 }
+                //**render header**
                 this.viewState.get('headerView').render();
 
-
+                //**render mainView**
                 if(this.viewState.get('mainView').givenName !== '@IndexView'){
                     $('#main-content-id').html(this.viewState.get('mainView').render().el);
                 }
                 else{
-                    //this.viewState.get('mainView').render();
                     $('#main-div-id').html(this.viewState.get('mainView').render().el);
                 }
 
+                //**render footer**
                 this.viewState.get('footerView').render();
 
             }

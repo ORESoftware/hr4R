@@ -14,7 +14,6 @@ define(
         '#appState',
         'socketio',
         'jsx!app/js/routers/router',
-        //'_routers_',
         'app/js/allViews',
         'backbone'
     ],
@@ -32,7 +31,7 @@ define(
         socket.on('burger', function (msg) {
             console.log('server sent a message to the client,', msg);
 
-            var parsed = JSON.parse(msg);
+            //var parsed = JSON.parse(msg);
 
             socket.emit('sent info to client');
         });
@@ -40,11 +39,7 @@ define(
         socket.on('appGlobal_info_from_server', function (msg) {
             console.log('server sent a message to the client,', msg);
 
-            var parsed = JSON.parse(msg);
-
-            for (var prop in msg) {
-                //appGlobal['prop'] = msg['prop'];
-            }
+            //var parsed = JSON.parse(msg);
 
             socket.emit('appGlobal_info_received_on_client');
         });
@@ -56,7 +51,7 @@ define(
         });
 
         socket.on('connect', function () {
-            Backbone.trigger('books:created', this);
+            //Backbone.trigger('books:created', this);
             console.log('document.cookie after socketio connection:',document.cookie);
             console.info('successfully established a working and authorized connection'.toUpperCase());
         });

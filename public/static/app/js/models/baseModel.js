@@ -30,7 +30,7 @@ define(
 
         var BaseModel = Backbone.Model.extend({
 
-                needsPersisting: false,
+                needsPersisting: true,
 
                 constructor: function () {
                     var self = this;

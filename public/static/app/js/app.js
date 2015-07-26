@@ -158,9 +158,9 @@ define(
             });
         };
 
-        Backbone.batchSyncCollection(collections.users, function (msg) {
-            console.log(IJSON.parse(msg));
-        });
+        //Backbone.batchSyncCollection(collections.users, function (msg) {
+        //    console.log(IJSON.parse(msg));
+        //});
 
         Backbone.batchSaveCollection = function (collection, cb) {
 
@@ -185,42 +185,16 @@ define(
 
 
         /*    window.onbeforeunload = function() {  //user confirms he wants to leave page
-
-         Object.keys(collections).forEach(function(key){
-         if (collections.hasOwnProperty(key)) {
-
-         var coll = collections[key];
-         coll.persist(function (err, res) {
-         if(err){
-         console.log(err);
-         }
-         });
-         }
-         });
-
-
          return "Dude, are you sure you want to leave? Think of the kittens!";
-
-         };*/  //TODO: window.onbeforeload
-
-
-        /* Backbone.Events.listenTo({},'event1',function(msg){
-         console.log(msg);
-         });
-
-         Backbone.Events.on('event1',function(msg){
-         alert(msg);
-         });
-
-         Backbone.Events.trigger('event1','hiiii');*/
+         };*/  //TODO: window.onbeforeload, persist all connections
 
 
         var start = function () {
 
             require(['app/js/boot'], function (boot) {
-                $(function() {  //DOM is ready
+                //$(function() {  //DOM is ready
                     boot.initialize();
-                });
+                //});
             });
         };
 
