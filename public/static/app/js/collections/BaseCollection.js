@@ -17,11 +17,20 @@ define(
 
         var BaseCollection = Backbone.Collection.extend({
 
+            collNeedsPersisting: false,
 
             constructor: function () {
                 var self = this;
                 this.on('change',function(model,something){
+                    self.collNeedsPersisting = true;
                     self.trigger('model-change',model,model.changed);
+                });
+                this.on('add',function(model,something){
+                    self.collNeedsPersisting = true;
+                    //self.trigger('model-change',model,model.changed);
+                });
+                this.on('sync',function(){
+                    self.collNeedsPersisting = false;
                 });
                 Backbone.Collection.apply(this, arguments);
             },

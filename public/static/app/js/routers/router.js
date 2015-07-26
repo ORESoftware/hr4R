@@ -121,7 +121,7 @@ define(
                 });
             },
 
-            bookScreen: function(id) {
+            bookScreen: function (id) {
                 // Fetch book with `id` and render it.
             },
 
@@ -187,7 +187,7 @@ define(
                     console.log('null view sent to destroyView function');
                 }
                 else {
-                    if(view.adhesive){
+                    if (view.adhesive) {
                         view.adhesive.unStick();
                     }
                     view.undelegateEvents();
@@ -221,19 +221,29 @@ define(
 
                 Object.keys(collections).forEach(function (key) {
                     if (collections.hasOwnProperty(key)) {
-                        collectionsToSync.push(
-                            function (cb) {
-                                //TODO: this will be incorrect with more than one collection because key will be wrong
-                                var coll = collections[key];
-                                coll.persistCollection({}, function (err, res) {
-                                    if (err) {
-                                        return cb(err);
-                                    }
-                                    coll.fetch().done(function () {
-                                        cb();
+                        var coll = collections[key];
+
+                        if (coll.collNeedsPersisting) {
+                            collectionsToSync.push(
+                                function (cb) {
+                                    //TODO: this will be incorrect with more than one collection because key will be wrong
+
+                                    coll.persistCollection({}, function (err, res) {
+                                        if (err) {
+                                            return cb(err);
+                                        }
+                                        coll.fetch()
+                                            .done(function () {
+                                                cb();
+                                            }).fail(function (err) {
+                                                cb(err);
+                                            });
                                     });
                                 });
-                            });
+                        }
+                        else {
+                            console.log('avoiding persisting collection with no changes:', coll);
+                        }
                     }
                 });
 
@@ -342,10 +352,10 @@ define(
                 this.viewState.get('headerView').render();
 
                 //**render mainView**
-                if(this.viewState.get('mainView').givenName !== '@IndexView'){
+                if (this.viewState.get('mainView').givenName !== '@IndexView') {
                     $('#main-content-id').html(this.viewState.get('mainView').render().el);
                 }
-                else{
+                else {
                     $('#main-div-id').html(this.viewState.get('mainView').render().el);
                 }
 

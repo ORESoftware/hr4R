@@ -118,9 +118,10 @@ define('app/js/boot',
                 }
                 else if(res.error){
                     if(typeof res.error === 'object'){
-                        Object.keys(res.error).forEach(function(key){
-                           console.error('error:',res.error[key]);
-                        });
+                        //Object.keys(res.error).forEach(function(key){
+                        //   console.error('error:',res.error[key]);
+                        //});
+                        console.log('error:',res.error);
                     }
                     else{
                         console.error('error passed in persistModel callback',res.error);

@@ -103,7 +103,7 @@ define(
                 if(temp.hasOwnProperty(prop) && prop !== undefined){
                     if(temp[prop]!==undefined){
                         this[prop] = temp[prop];
-                        console.log('new view property:',this[prop]);
+                        //console.log('new view property:',this[prop]);
                     }
                 }
             }
