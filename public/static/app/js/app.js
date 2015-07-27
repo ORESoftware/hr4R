@@ -79,6 +79,15 @@ define(
             };
         }
 
+        if(window.location.hash && String(window.location.hash).length > 1 && String(window.location.hash).charAt(0) ==='#'){
+            var hash = String(window.location.hash).substring(1);
+            console.log('original_hash_request:',hash);
+            saveToLocalStorage('original_hash_request',hash);
+        }
+        else{
+            console.log('no hash in URL seen, setting desired hash to "home"');
+            saveToLocalStorage('original_hash_request','home');
+        }
 
         Backbone.setCollectionOptions = function (model, options) {
 

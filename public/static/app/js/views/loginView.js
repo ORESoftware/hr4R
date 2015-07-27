@@ -138,7 +138,9 @@ define(
                                 }
                                 else {
                                     console.log('user logged in successfully!!');
-                                    Backbone.Events.trigger('bootRouter', 'home');
+                                    //Backbone.Events.trigger('bootRouter', 'home');
+                                    var hash = readFromLocalStorage('original_hash_request');
+                                    Backbone.Events.trigger('bootRouter', hash);
                                 }
 
                             }).fail(function (err) {
@@ -246,14 +248,18 @@ define(
                             appState.set('currentUser', collections.users.models[i]);
                             break;
                         }
-
                     }
 
                     if (appState.get('currentUser') == null) {
                         throw new Error('null or undefined currentUser');
                     }
                     else {
-                        Backbone.Events.trigger('bootRouter', 'home');
+                        //Backbone.Events.trigger('bootRouter', 'home');
+                        var hash = readFromLocalStorage('router_hash_request');
+                        if(hash == null){
+                            hash = readFromLocalStorage('original_hash_request');
+                        }
+                        Backbone.Events.trigger('bootRouter', hash);
                     }
 
                 });
@@ -274,7 +280,6 @@ define(
             }
         }
 
-        //LoginView.template = template;
 
         return LoginView;
 

@@ -60,9 +60,6 @@ var registerSchema = function () {
         console.log('%s has been saved', doc._id);
     });
 
-
-
-
 };
 
 

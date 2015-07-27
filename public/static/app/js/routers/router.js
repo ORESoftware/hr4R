@@ -127,21 +127,13 @@ define(
 
             defaultRoute: function () {
 
-                var todos = new Backbone.Collection([
-                    {
-                        text: 'Dishes!',
-                        dueDate: new Date().toISOString()
-                    }
-                ]);
-
-                React.render(<TodoList todos={todos}/>, document.body);
-
-                return null;
-
-
-                /* //this.changeView(new allViews.Home());
-                 this.navigate('home', {trigger: true});
-                 //TODO: fix this so that if user puts in unknown route into address bar, that it goes to home*/
+                alert('route not found so navigating to home view');
+                this.changeView({
+                    //view:allViews.Home,
+                    //view: new allViews.Home({el: '#main-content-id'}),
+                    view: new allViews.Home(),
+                    useSidebar: true
+                });
             },
 
             constructor: function () {
@@ -159,6 +151,17 @@ define(
                 this.listenTo(Backbone.Events, 'bootRouter', onToggleViewRequest);
 
                 function onToggleViewRequest(viewName) {
+
+                    if(window.location.hash && String(window.location.hash).length > 1 && String(window.location.hash).charAt(0) ==='#'){
+                        var hash = String(window.location.hash).substring(1);
+                        console.log('router_hash_request:',hash);
+                        saveToLocalStorage('router_hash_request',hash);
+                    }
+                    else{
+                        console.log('no hash in URL seen, setting desired hash to "home"');
+                        saveToLocalStorage('router_hash_request','home');
+                    }
+
                     self.navigate(viewName, {trigger: true});
                 }
 
