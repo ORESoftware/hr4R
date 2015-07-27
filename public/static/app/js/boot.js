@@ -23,9 +23,6 @@ define('app/js/boot',
 
     function (appState, $, Backbone, giant, models, collections) {
 
-
-        //var router = giant.routers.bootRouter;  //we need to load giant NOW because we need routers to get populated with allViews
-
         //TODO: might need to figure out how to set ENV before socket.io tries to make connection to server
 
         var initialize = function () {

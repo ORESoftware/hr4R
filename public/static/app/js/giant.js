@@ -21,6 +21,8 @@ define(
     function (appState, io, routers, allViews, Backbone) {
 
 
+        //TODO: perhaps wait to make socket.io connection after logging in
+
         console.log('document.cookie before socketio:',document.cookie);
 
         var socket = io.connect('http://127.0.0.1:3000');
@@ -58,7 +60,6 @@ define(
 
 
         return {
-            //routers: routers(allViews)
             socketio:socket
         };
     });
