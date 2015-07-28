@@ -17,15 +17,6 @@ router.get('/', function(req, res, next) {
     }
 });
 
-/*router.post('/', function(req, res, next) {
 
-    var env = process.env.NODE_ENV;
-
-    if (req.isAuthenticated()) {
-        res.json({isAuthenticated:true, user:req.user, env:env});
-    } else {
-        res.json({isAuthenticated:false, user:null ,env:env});
-    }
-});*/
 
 module.exports = router;
