@@ -8,7 +8,7 @@
  */
 
 
-console.log('loading allViews');
+console.log('loading allTemplates');
 
 
 define(

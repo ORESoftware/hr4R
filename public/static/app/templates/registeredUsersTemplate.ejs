@@ -6,8 +6,8 @@
         <tbody>
         <% for(var i=0; i<users.length; i++) { %>
         <tr>
-            <td><%=users[i].get('firstName')%></td>
-            <td><%=users[i].get('lastName')%></td>
+            <td adhesive-value="user:firstName" adhesive-cid="<%= users[i].cid %>"><%=users[i].get('firstName')%></td>
+            <td adhesive-value="user:lastName" adhesive-cid="<%= users[i].cid %>"><%=users[i].get('lastName')%></td>
         </tr>
         <% } %>
         </tbody>

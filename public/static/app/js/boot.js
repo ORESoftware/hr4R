@@ -78,6 +78,7 @@ define('app/js/boot',
                         //window.location.hash='home';
                         //router.navigate('home', {trigger: true});
                         //Backbone.Events.trigger('bootRouter', 'home');
+                        giant.getSocketIOConn();
                         var hash = readFromLocalStorage('original_hash_request');
                         Backbone.Events.trigger('bootRouter', hash);
                     });

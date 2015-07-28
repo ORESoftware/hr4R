@@ -52,9 +52,9 @@ define(
                 var modelsToUpdate = models.update;
 
                 _.each(modelsToListenTo, function (model, index) {
-                    self.listenTo(model, modelEvent, function (event) {
+                    self.listenTo(model, modelEvent, function (model) {
                         //if(!event._changing){
-                        updateDOMViaModelChange(domKeyName, model, domElementUpdate, event);
+                        updateDOMViaModelChange(domKeyName, model, domElementUpdate, model.changed);
                         //}
                     });
                 });
@@ -103,29 +103,52 @@ define(
         }
 
 
-        function updateDOMViaModelChange(domKeyName, model, domElement, event) {
+        function updateDOMViaModelChange(domKeyName, model, domElement, changes) {
 
-            console.log('update-DOM-Via-Model-Change:', domElement, event);
+            console.log('update-DOM-Via-Model-Change:', domElement, changes);
 
             //TODO: this function won't get called once the listeners are removed, so no need to check if this is still in the DOM
 
+            var props = Object.keys(changes);
+            var maxChanges = Object.keys(changes).length;
+            var exitLoop = false;
+            var numChanges = 0;
+
             domElement.find('*').each(function () {
 
+                if(exitLoop){
+                    return false;
+                }
+
                 var self = this;
+
                 $.each(this.attributes, function (i, attrib) {
                     var name = attrib.name;
                     var value = attrib.value;
 
                     if (name === 'adhesive-value') {
 
-                        var str = String(domKeyName).concat(':');
+                        var split = String(value).split(':');
 
-                        if (String(value).startsWith(str)) {
+                        var modelName = split[0];
+                        var modelProp = split[1];
 
-                            var propName = String(value).substring(str.length);
-                            var prop = model.get(propName);
-                            $(self).html(String(prop));
+                        if (domKeyName == modelName && _.contains(props,modelProp)) {
 
+                            var cid = $(self).attr('adhesive-cid');
+
+                            if (cid && String(cid) == model.cid) {
+
+                                var prop = model.get(modelProp);
+                                $(self).html(String(prop));
+
+                                numChanges++;
+
+                                if (numChanges >= maxChanges) {
+                                    exitLoop = true;
+                                    return false; //break from each loop, we are done updating DOM for this model
+                                }
+                            }
                         }
                     }
                 });
@@ -137,28 +160,52 @@ define(
 
             console.log('update-DOM-Via-Collection-Change:', domElement, 'model:', model, 'changes:', changes);
 
+            //TODO: this function should be combined with the ModelChange function
+
             //if (!document.contains(domElement)) {
             //    console.log('visible document does not contain element, so why update it');
             //    return;
-            //}
+            //} //TODO: listeners should be removed once the view is removed
+
+            var props = Object.keys(changes);
+            var maxChanges = Object.keys(changes).length;
+            var exitLoop = false;
+            var numChanges = 0;
 
             domElement.find('*').each(function () {
 
+                if(exitLoop){
+                    return false;
+                }
+
                 var self = this;
+
                 $.each(this.attributes, function (i, attrib) {
                     var name = attrib.name;
                     var value = attrib.value;
 
                     if (name === 'adhesive-value') {
 
-                        var str = String(domKeyName).concat(':');
+                        var split = String(value).split(':');
 
-                        if (String(value).startsWith(str)) {
+                        var modelName = split[0];
+                        var modelProp = split[1];
 
-                            var propName = String(value).substring(str.length);
-                            var prop = model.get(propName);
-                            $(self).html(String(prop));
+                        if (domKeyName == modelName && _.contains(props,modelProp)) {
 
+                            var cid = $(self).attr('adhesive-cid');
+
+                            if (cid && String(cid) == model.cid) {
+
+                                var prop = model.get(modelProp);
+                                $(self).html(String(prop));
+                                numChanges++;
+
+                                if(numChanges >= maxChanges){
+                                    exitLoop = true;
+                                    return false; //break from each loop, we are done updating DOM for this model
+                                }
+                            }
                         }
                     }
                 });
@@ -170,7 +217,7 @@ define(
 
             console.log('update-Backbone-Models:', models, event);
 
-            if (limitToEventTarget) {
+            if (limitToEventTarget) { //we only get info from the one target element clicked or keyed
 
                 var element = event.target;
                 var attributes = element.attributes;
@@ -186,8 +233,6 @@ define(
                             func = function (element) {
                                 return $(element).val();
                             };
-                            break;
-                        case 'fart':
                             break;
                         default:
                             return true;
@@ -207,7 +252,8 @@ define(
 
                 });
 
-            } else {
+            }
+            else {
 
 
                 domElement.find('*').each(function () {
@@ -226,8 +272,6 @@ define(
                                 func = function (element) {
                                     return $(element).text();
                                 };
-                                break;
-                            case 'fart':
                                 break;
                             default:
                                 return true;
@@ -255,7 +299,7 @@ define(
 
             console.log('updateBackboneModel:', collections, event);
 
-            if(limitToEventTarget){
+            if (limitToEventTarget) {
 
                 var element = event.target;
                 var attributes = element.attributes;
@@ -283,7 +327,6 @@ define(
                 });
             }
             else {
-
 
                 domElement.find('*').each(function () {
 

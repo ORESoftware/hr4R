@@ -48,7 +48,6 @@ define(
     [
         'd3',
         'observe',
-        'handlebars',
         'backbone',
         'underscore',
         'ijson',
@@ -56,13 +55,14 @@ define(
         'app/js/allCollections',
         'app/js/allModels',
         'app/js/allViews',
-        'app/js/allTemplates',
-        'jsx!app/js/views/reactViews/todoList',
-        'app/js/giant'
+        'app/js/routers/router',
+        'app/js/allTemplates'
+        //'app/js/giant'
+
 
     ],
 
-    function (d3, Observe, Handlebars, Backbone, _, IJSON, React, collections, models, allViews, allTemplates, TodoList, giant) {
+    function (d3, Observe, Backbone, _, IJSON, React, collections, models, allViews, router, allTemplates) {
 
         /*
          we don't use the majority of these dependencies in this file, but they are loaded here so that r.js can build

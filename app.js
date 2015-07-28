@@ -196,7 +196,7 @@ app.use('/authenticate', require('./routes/authenticate'));
 app.use('/register', require('./routes/register'));
 app.use('/login', require('./routes/login'));
 app.use('/logout', require('./routes/logout'));
-app.use('/testSocketIO', require('./routes/testSocketIO'));
+//app.use('/testSocketIO', require('./routes/testSocketIO'));
 
 
 // catch 404 and forward to error handler

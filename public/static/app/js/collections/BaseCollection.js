@@ -35,6 +35,18 @@ define(
                 Backbone.Collection.apply(this, arguments);
             },
 
+            updateModel: function(_id,updateInfo){
+
+                for(var i =0; i < this.models.length; i++){
+                    var model = this.models[i];
+                    if(String(model.get('_id')) == String(_id)){
+                    //if(model.get('._id') ==_id){
+                        model.set(updateInfo);
+                        break;
+                    }
+                }
+            },
+
             parse: function (resp) {
                 if (resp.success) {
                     return resp.success;

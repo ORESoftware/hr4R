@@ -42,8 +42,8 @@
         <div class="col-lg-4">
             <b><i>there should be something here</i></b>
             <div id="user-view">
-                <p>username:<span adhesive-value="user:username"><%= user.get('username') %></span></p>
-                <p>email:<span adhesive-value="user:email"><%= user.get('email') %></span></p>
+                <p>username:<span adhesive-value="user:username" adhesive-cid="<%= user.cid %>"><%= user.get('username') %></span></p>
+                <p>email:<span adhesive-value="user:email" adhesive-cid="<%= user.cid %>"><%= user.get('email') %></span></p>
             </div>
         </div>
     </div>

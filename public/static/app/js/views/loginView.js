@@ -17,15 +17,15 @@ define(
         'ejs',
         'jquery',
         'underscore',
-        'handlebars',
         'backbone',
         'backbone-validation',
         'ijson',
+        'app/js/giant',
         'text!app/templates/loginTemplate.ejs'
     ],
 
 
-    function (appState, collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, IJSON, template) {
+    function (appState, collections, models, form2js, EJS, $, _, Backbone, BackboneValidation, IJSON, giant, template) {
 
         //var router = routers(null).bootRouter;
 
@@ -140,6 +140,7 @@ define(
                                     console.log('user logged in successfully!!');
                                     //Backbone.Events.trigger('bootRouter', 'home');
                                     var hash = readFromLocalStorage('original_hash_request');
+                                    createSocketConnection();
                                     Backbone.Events.trigger('bootRouter', hash);
                                 }
 
@@ -203,7 +204,6 @@ define(
                                     alert("Very Bad login" + IJSON.parse(res.error));
                                 }, 200);
                                 self.render();
-                                return;
                             }
                             else if (res.success) { //TODO: I like this convention
                                 res = res.success;
@@ -229,6 +229,11 @@ define(
             }
         );
 
+        function createSocketConnection() {
+
+            giant.getSocketIOConn();
+
+        }
 
         function goHome(res) {
 
@@ -238,31 +243,35 @@ define(
 
                 var user = res.user;
 
-                collections.users.fetch().done(function () {
+                collections.users.fetch()
+                    .done(function () {
 
-                    for (var i = 0; i < collections.users.models.length; i++) {
+                        for (var i = 0; i < collections.users.models.length; i++) {
 
-                        if (user.username === collections.users.models[i].get('username') &&
-                            user._id == collections.users.models[i].get('_id')
-                        ) {
-                            appState.set('currentUser', collections.users.models[i]);
-                            break;
+                            if (user.username === collections.users.models[i].get('username') &&
+                                user._id == collections.users.models[i].get('_id')
+                            ) {
+                                appState.set('currentUser', collections.users.models[i]);
+                                break;
+                            }
                         }
-                    }
 
-                    if (appState.get('currentUser') == null) {
-                        throw new Error('null or undefined currentUser');
-                    }
-                    else {
-                        //Backbone.Events.trigger('bootRouter', 'home');
-                        var hash = readFromLocalStorage('router_hash_request');
-                        if(hash == null){
-                            hash = readFromLocalStorage('original_hash_request');
+                        if (appState.get('currentUser') == null) {
+                            throw new Error('null or undefined currentUser');
                         }
-                        Backbone.Events.trigger('bootRouter', hash);
-                    }
+                        else {
+                            //Backbone.Events.trigger('bootRouter', 'home');
+                            var hash = readFromLocalStorage('router_hash_request');
+                            if (hash == null) {
+                                hash = readFromLocalStorage('original_hash_request');
+                            }
+                            createSocketConnection();
+                            Backbone.Events.trigger('bootRouter', hash);
+                        }
 
-                });
+                    }).fail(function (err) {
+                        alert('failed to fetch users collection in loginView');
+                    });
             }
             else {
 
@@ -274,6 +283,7 @@ define(
                     }
                     else {
                         appState.set('currentUser', newUser);
+                        createSocketConnection();
                         Backbone.Events.trigger('bootRouter', 'home');
                     }
                 });

@@ -17,10 +17,11 @@ define(
         'handlebars',
         'backbone',
         'backbone-validation',
+        'app/js/Adhesive',
         'text!app/templates/registeredUsersTemplate.ejs'
     ],
 
-    function (appState, collections, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
+    function (appState, collections, EJS, $, _, Handlebars, Backbone, BackboneValidation, Adhesive, template) {
 
 
         var RegisteredUsersView = Backbone.View.extend({
@@ -48,6 +49,37 @@ define(
                     _.bindAll(this, 'render');
                     //this.listenTo(this.collection, 'change', this.render);
                     //this.listenTo(this.collection, 'add remove reset', this.render);
+
+                    this.adhesive = new Adhesive(this, {});
+
+                    //this.adhesive.bind('user',this.model,null,this.$el,'keyup');
+
+                    var self = this;
+
+                    this.adhesive.bind({
+                        keyName: 'user',
+                        models: {
+                            //listenTo: [self.model],
+                            //update: [self.model],
+                            listenTo: [],
+                            update: [],
+                            modelEvent: 'change'
+                        },
+                        collections: {
+                            listenTo: [self.collection],
+                            update: [self.collection],
+                            //listenTo: [],
+                            //update: [],
+                            collectionEvent: 'model-change',
+                            where: {}
+                        },
+                        limitToEventTarget:true,
+                        domElementListen: self.$el,
+                        domElementUpdate: $(document),
+                        domEventType: 'keyup',
+                        callback: null
+                    });
+
                 },
                 render: function () {
 

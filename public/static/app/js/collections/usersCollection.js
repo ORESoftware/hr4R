@@ -38,16 +38,10 @@ define(
 
             initialize: function (models, opts) {
 
-
-                console.log('model for UsersCollection is:', this.model);
+                this.uniqueName = 'users';
 
                 this.options = opts || {};
                 _.bindAll(this, 'persistCollection');
-
-                //var self = this;
-                //this.on('change',function(model,property){
-                //    self.trigger('model-change',model,property);
-                //});
 
                 // This will be called when an item is added. pushed or unshifted
                 this.on('add', function (model) {

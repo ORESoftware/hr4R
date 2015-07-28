@@ -22,11 +22,10 @@ define(
         'async',
         'app/js/allCollections',
         'ijson',
-        'app/js/allViews',
-        'jsx!app/js/views/reactViews/todoList'
+        'app/js/allViews'
     ],
 
-    function (appState, viewState, React, Backbone, async, collections, IJSON, allViews, TodoList) {
+    function (appState, viewState, React, Backbone, async, collections, IJSON, allViews) {
 
 
         var BootRouter = Backbone.Router.extend({

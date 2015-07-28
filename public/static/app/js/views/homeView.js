@@ -56,11 +56,11 @@ define(
 
                     this.setViewProps(opts);
                     _.bindAll(this, 'render', 'show', 'onChange', 'handleModelSyncSuccess', 'handleModelError');
-                    this.listenTo(this.collection, 'add reset', this.render);
-                    this.listenTo(this.collection, 'change', this.onChange, this);
+                    //this.listenTo(this.collection, 'add reset', this.render);
+                    //this.listenTo(this.collection, 'change', this.onChange, this);
                     this.listenTo(this.model, 'sync', this.handleModelSyncSuccess);
                     this.listenTo(this.model, 'error', this.handleModelError);
-                    this.listenTo(Backbone.Events, 'books:created', this.show);
+                    //this.listenTo(Backbone.Events, 'books:created', this.show);
                 },
 
 
