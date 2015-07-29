@@ -68,30 +68,8 @@ define(
 
                     var self = this;
 
-                    if (HeaderView.template == null) {
-
-                        console.log('headerView template is null, retrieving from server.')
-
-                        $.ajax({
-                            url: 'static/html/ejs/header.ejs',
-                            type: 'GET',
-                            success: function (msg) {
-                                HeaderView.template = msg;
-                                var ret = EJS.render(HeaderView.template, {appState: appState});
-                                self.$el.html(ret);
-                            },
-                            error: function (err) {
-                                alert(err.toString());
-                            }
-                        });
-                    }
-                    else {
-
-                        //var ret = EJS.render(HeaderView.template, {appState:appState});
-                        var ret = EJS.render(HeaderView.template, {appState: appState, viewState: viewState});
-                        self.$el.html(ret);
-
-                    }
+                    var ret = EJS.render(HeaderView.template, {appState: appState, viewState: viewState});
+                    self.$el.html(ret);
 
                     console.log('re-rendered headerView.');
 
@@ -110,17 +88,7 @@ define(
                         data: {},
                         dataType: 'json',
                         type: 'POST'
-                        //success: function (msg) {
-                        //
-                        //
-                        //},
-                        //error: function (err) {
-                        //
-                        //    //Backbone.history.loadUrl();
-                        //}
-                        ////always:function(){
-                        ////    self.render();
-                        ////}
+
                     }).done(function (msg, textStatus, jqXHR) {
                         if (msg === true) {
                             appState.set('currentUser', null);
@@ -151,19 +119,20 @@ define(
                         if (collections.hasOwnProperty(key)) {
 
 
-                            var coll = collections[key];
+                            //TODO: make this use async.each instead of async.parallel
 
-                            //for (var i = 0; i < coll.models.length; i++) {
+                            var coll = collections[key];
 
                             coll.each(function (model, i) {
                                 deletes.push(function (callback) {
 
                                     console.log(model.givenName);
 
-                                    model.deleteModel({},function (err, model,resp, opts) {
+                                    model.deleteModel({}, function (err, model, resp, opts) {
 
                                         if (err) {
-                                            callback(err);
+                                            console.error(err);
+                                            callback(null);
                                         }
                                         else {
                                             model.clear();
@@ -173,20 +142,16 @@ define(
 
                                     });
                                 });
-
-
-                                //}
-
                             });
                         }
                     });
 
                     async.parallel(deletes, function (err, results) {
 
-                        if(err){
-                            throw err;
+                        if (err) {
+                            console.error(err);
                         }
-                        else{
+                        else {
                             Backbone.Events.trigger('bootRouter', 'index');
                             //self.render();
                         }

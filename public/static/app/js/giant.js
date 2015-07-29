@@ -34,11 +34,10 @@ define(
                     var coll = collections[collection];
                     if(coll.uniqueName == name){
                         ret = coll;
-                        //return false;
                         break;
                     }
                 }
-            };
+            }
             return ret;
         }
 
@@ -62,7 +61,6 @@ define(
                     socket.emit('sent info to client');
                 });
 
-                //socket.emit('chat message', 'this is the user talking to the server');
 
 
                 socket.on('update', function (data) {
@@ -119,6 +117,8 @@ define(
                 });
 
             }
+
+            appState.set('socketConnection',socket);
             return socket;
         }
 

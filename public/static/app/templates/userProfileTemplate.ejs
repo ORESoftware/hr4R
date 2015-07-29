@@ -9,17 +9,27 @@
 
                 <div class="form-group input-group">
                     <span class="input-group-addon user-profile-update-form">Email</span>
-                    <input type="text" class="form-control" adhesive-get="user:email" placeholder="Email">
+                    <input type="text" class="form-control" adhesive-get="user:email" adhesive-cid="<%= user.cid %>" placeholder="Email">
                 </div>
 
                 <div class="form-group input-group">
                     <span class="input-group-addon user-profile-update-form">Username</span>
-                    <input type="text" class="form-control" adhesive-get="user:username" name="user.username" placeholder="Username">
+                    <input type="text" class="form-control" adhesive-get="user:username" adhesive-cid="<%= user.cid %>" name="user.username" placeholder="Username">
                 </div>
 
                 <div class="form-group input-group">
-                    <span class="input-group-addon user-profile-update-form">Old Password</span>
-                    <input type="password" class="form-control" name="user.old_password" placeholder="Old Password">
+                    <span class="input-group-addon user-profile-update-form">First Name</span>
+                    <input type="text" class="form-control" adhesive-get="user:firstName" adhesive-cid="<%= user.cid %>" name="user.firstName" placeholder="First Name">
+                </div>
+
+                <div class="form-group input-group">
+                    <span class="input-group-addon user-profile-update-form">Last Name</span>
+                    <input type="text" class="form-control" adhesive-get="user:lastName" adhesive-cid="<%= user.cid %>" name="user.lastName" placeholder="Last Name">
+                </div>
+
+                <div class="form-group input-group">
+                    <span class="input-group-addon user-profile-update-form">Current Password</span>
+                    <input type="password" class="form-control" adhesive-get="user:current_password" adhesive-cid="<%= user.cid %>" name="user.current_password" placeholder="Current Password">
                 </div>
 
                 <div class="form-group input-group">
@@ -44,6 +54,9 @@
             <div id="user-view">
                 <p>username:<span adhesive-value="user:username" adhesive-cid="<%= user.cid %>"><%= user.get('username') %></span></p>
                 <p>email:<span adhesive-value="user:email" adhesive-cid="<%= user.cid %>"><%= user.get('email') %></span></p>
+                <p>first name:<span adhesive-value="user:firstName" adhesive-cid="<%= user.cid %>"><%= user.get('firstName') %></span></p>
+                <p>last name:<span adhesive-value="user:lastName" adhesive-cid="<%= user.cid %>"><%= user.get('lastname') %></span></p>
+                <p>Current password:<span adhesive-value="user:current_password" adhesive-cid="<%= user.cid %>"><%= user.get('current_password') %></span></p>
             </div>
         </div>
     </div>

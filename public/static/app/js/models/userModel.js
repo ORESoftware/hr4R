@@ -34,7 +34,9 @@ define(
                         lastName: null,
                         username: null,
                         password: null,
-                        email: null
+                        email: null,
+                        old_password: null,
+                        new_password: null
                     }
                 },
 

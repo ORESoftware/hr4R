@@ -100,27 +100,13 @@ router.get('/:user_id', function (req, res, next) {
     var user_id = req.params.user_id;
     var user = req.specialParams.user_model;
 
-    //user.save(function (err, result) {
-    //    if (err) {
-    //        console.log("error in user save method:", err);
-    //        res.send('database error');
-    //    }
-    //    else if (result) {
-    //        res.send(user);
-    //    }
-    //    else {
-    //        next(new Error('grave error in newUser.save method in users'));
-    //    }
-    //});
-
     if (user) {
         res.json(user);
     }
     else {
-        res.json({error: 'no user found'});
+        res.json({error: {errorMessage:'no user found for GET operation, probably deleted from DB'}});
         return next(new Error('no user found.'));
     }
-
 });
 
 
@@ -176,6 +162,7 @@ router.put('/:user_id', function (req, res, next) {
     var userToUpdate = req.specialParams.user_model;
 
     if (userToUpdate == null) {
+        res.json({error: {errorMessage:'no user found for PUT operation, probably deleted from DB'}});
         return next(new Error('router params did not pick up user with PUT users/:user_id'));
     }
 
@@ -202,7 +189,6 @@ router.put('/:user_id', function (req, res, next) {
         }
         else if (result) {
             console.log('put/updated user: ', result);
-            var str = IJSON.stringify({success: result});
             return res.json({success: result});
         }
         else {
@@ -225,12 +211,13 @@ router.delete('/:user_id', function (req, res, next) {
             var userToDelete = req.specialParams.user_model;
 
             if (!userToDelete) {
+                res.json({error: {errorMessage:'no user found for DELETE operation, probably already deleted from DB'}});
                 return next(new Error('no user matched'));
             }
             else {
                 User.remove({_id: userToDelete._id}, function (err) {
                     if (err) {
-                        res.send({error: err.toString()})
+                        res.send({error: err.toString()});
                         return next(err);
                     }
                     else {

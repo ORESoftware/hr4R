@@ -24,9 +24,9 @@ eventBus.on('userModel',function(msg){
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
-/**
- * Create HTTP server.
- */
+if(typeof global.gc === 'function'){
+  global.gc(); //garbage collect just for the heck of it
+}
 
 var server = http.createServer(app).listen(port); //var server = http.Server(app);
 //var io = require('socket.io').listen(server);  //we need to bind socket.io to the http server

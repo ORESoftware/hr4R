@@ -4,7 +4,15 @@
 
 
 
-define('#appState', ['observe','backbone','underscore'], function (Observe,Backbone,_) {
+define('#appState',
+
+    [
+        'observe',
+        'backbone',
+        'underscore'
+    ],
+
+    function (Observe,Backbone,_) {
 
     /*
      * here we store the application state, everything that will go into localStorage will come from here
@@ -19,7 +27,8 @@ define('#appState', ['observe','backbone','underscore'], function (Observe,Backb
         currentUser: null,
         authorized: null,
         hasSession: null,
-        env: null
+        env: null,
+        socketConnection:null
 
     };
 
@@ -37,7 +46,6 @@ define('#appState', ['observe','backbone','underscore'], function (Observe,Backb
     function setCurrentUserOnEvent(user) {
         Backbone.Events.listenTo(user, 'destroy', function (model, modelCollection, opts) {
             var user = $_appState.currentUser;
-            console.log('dddd');
             $_appState.currentUser = null;
         });
     }

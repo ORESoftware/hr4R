@@ -7,6 +7,7 @@ var router = express.Router();
 var IJSON = require('idempotent-json');
 var bcrypt = require('bcrypt');
 var SALT_WORK_FACTOR = 10;
+var _ = require('underscore');
 
 router.param('user_id', function (req, res, next, user_id) {
     // typically we might sanity check that user_id is of the right format
@@ -37,25 +38,29 @@ router.param('user_id', function (req, res, next, user_id) {
 
 router.post('/:user_id', function (req, res, next) {
 
-    if(req.specialParams.user_model == null){
-        console.log('updating password for a user thats null...');
-        return res.json({error:'errrror1'});
+    if (req.specialParams.user_model == null) {
+        console.error('updating password for a user thats null...');
+        return res.json({error: 'updating password for a user thats null...'});
     }
-    else if(!(req.specialParams.user_model._doc._id.equals(req.user._doc._id))){
-        console.log('updating password for a user thats not logged in...');
-        return res.json({error:'errrror2'});
+    else if (!(req.specialParams.user_model._doc._id.equals(req.user._doc._id))) {
+        console.error('updating password for a user thats not logged in...');
+        return res.json({error: 'updating password for a user thats not logged in...'});
     }
-    else{
+    else {
 
         var userData = req.body;
-        var firstName = userData.firstName;
-        var lastName = userData.lastName;
+
+        var updates = {
+            firstName: userData.firstName,
+            lastName: userData.lastName
+        };
+
         var username = userData.username;
-        var password = userData.old_password;
+        var password = userData.current_password;
         var new_password = userData.new_password;
 
         var UserModel = req.site.models.User;
-        UserModel.get(function(err,User){
+        UserModel.get(function (err, User) {
 
             User.findOne({
                 username: username
@@ -64,65 +69,81 @@ router.post('/:user_id', function (req, res, next) {
                     return done(err);
                 }
                 else if (!user) {
-                    return res.json({error:'incorrect username'});
+                    return res.json({error: 'incorrect username'});
                 }
-                else{
+                else {
                     user.validatePassword(password, function (err, isValid) {
                         if (err) {
-                            return res.json({error:err});
+                            return res.json({error: err});
                         }
                         else if (!isValid) {
-                            return res.json({error:'incorrect password'});
+                            return res.json({error: 'incorrect password'});
                         }
                         else {
 
-                            return update(User,user,userData,req,res,next);
+                            return update(User, user, userData, req, res, next);
                         }
 
                     });
                 }
             });
 
-            function update(User,user,userData,req,res,next){
+            function update(User, user, userData, req, res, next) {
 
+                if (new_password) {
+                    bcrypt.hash(new_password, SALT_WORK_FACTOR, function (err, hash) {
+                        if (err) {
+                            return next(err);
+                        }
+                        else if (hash == null) {
+                            return next(new Error('null/undefined hash'));
+                        }
+                        else {
 
-                bcrypt.hash(new_password, SALT_WORK_FACTOR, function (err, hash) {
-                    if (err) {
-                        return next(err);
-                    }
-                    else if (hash == null) {
-                        return next(new Error('null/undefined hash'));
-                    }
-                    else {
-                        //user.passwordHash = hash;
-                        User.update({ _id: user._id }, { $set: { passwordHash: hash }}, function(err,user){
+                            var pwdUpdates = {
+                                passwordHash: hash,
+                                old_password: userData.passwordHash,
+                                password: null,
+                                new_password: null
+                            };
 
-                            if(err){
-                                return res.json({error:'error3'});
-                            }
-                            else{
-                                return res.json({success:user});
-                            }
+                            updates = _.extend({},updates,pwdUpdates);
 
-                        });
-                    }
-                });
+                            User.update({_id: user._id}, {
+                                $set: updates
+                            }, function (err, user) {
 
+                                if (err) {
+                                    return res.json({error: err});
+                                }
+                                else {
+                                    return res.json({success: user});
+                                }
 
+                            });
+                        }
+                    });
+                }
+                else {
 
+                    User.update({_id: user._id}, {
+                        $set: updates
+                    }, function (err, user) {
+
+                        if (err) {
+                            return res.json({error: err});
+                        }
+                        else {
+                            return res.json({success: user});
+                        }
+
+                    });
+
+                }
             }
 
         });
     }
-
-    //var shasum = crypto.createHash('sha256');
-    //shaSum.update(req.body.newPassword);
-    //var hashedPassword = shaSum.digest('hex');
-    //var Model = req.site.models.User;
-    //Model.update({_id: req.user._id}, {$set: {password: hashedPassword}}, {upsert: false}),
-    //    function changePasswordCallback(err) {
-    //        console.log('change password complete');
-    //    }
 });
 
 

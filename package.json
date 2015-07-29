@@ -13,7 +13,10 @@
     "start_nodemon_windows": "set NODE_ENV=development&&nodemon ./bin/www",
     "build": "r.js -o ./build_old.js",
     "build_windows": "r.js.cmd -o ./build_old.js",
-    "mocha_run_test": "mocha --grep $TEST_NAME"
+    "mocha_run_test": "mocha --grep $TEST_NAME",
+    "start_expose_gc": "node --expose-gc ./bin/www",
+    "eslint_nodejs": "eslint --config ./node.eslintrc --ignore-path ./node.eslintignore .",
+    "eslint_browser": "eslint --config ./browser.eslintrc --ignore-path ./browser.eslintignore ./public"
   },
   "dependencies": {
     "async": "^1.4.0",
@@ -41,7 +44,8 @@
     "redis": "^0.12.1",
     "request": "^2.60.0",
     "serve-favicon": "^2.3.0",
-    "socket.io": "^1.3.5"
+    "socket.io": "^1.3.5",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "mocha": "^2.2.5"

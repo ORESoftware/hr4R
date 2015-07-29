@@ -35,7 +35,7 @@ define(
                     window.currentUser = appState.get('currentUser');
                     return {
                         model: window.currentUser,
-                        collection: collections.jobs,
+                        collection: collections.users,
                         childViews: {}
                     }
                 },
@@ -68,23 +68,34 @@ define(
 
                     this.adhesive.bind({
                         keyName: 'user',
+                        plainObjects:[],
                         models: {
-                            listenTo: [self.model],
-                            update: [self.model],
-                            modelEvent: 'change'
-                        },
-                        collections: {
-                            //listenTo: [self.collection],
-                            //update: [self.collection],
+                            //listenTo: [self.model],
+                            //update: [self.model],
                             listenTo: [],
                             update: [],
-                            collectionEvent: 'model-change',
+                            modelEvent: 'change',
                             where: {}
+                        },
+                        collections: {
+                            listenTo: [self.collection],
+                            update: [self.collection],
+                            //listenTo: [],
+                            //update: [],
+                            collectionEvent: 'model-change',
+                            //where: {cid:self.model.cid},
+                            filterUpdate: function(model){
+                                return model.cid == self.model.cid;
+                            },
+                            filterListenTo: function(model){
+                                return model.cid == self.model.cid;
+                            }
                         },
                         limitToEventTarget:true,
                         domElementListen: self.$el,
                         domElementUpdate: $(document),
                         domEventType: 'keyup',
+                        propagateChangesToServerImmediately:false,
                         callback: null
                     });
 
@@ -112,17 +123,19 @@ define(
 
                     var self = this;
 
-                    var data = form2js('user-profile-update-form-id', '.', true);
+                    //var data = form2js('user-profile-update-form-id', '.', true);
+                    //
+                    //console.log('registration data:', data);
+                    //
+                    //var userData = data.user;
 
-                    console.log('registration data:', data);
-
-                    var userData = data.user;
+                    var data = this.model.attributes;
 
                     var deferred = $.ajax({
                         type: "POST",
                         url: '/updateUserInfo/' + this.model.get('_id'),
                         dataType: "json",
-                        data: userData
+                        data: data
                     });
 
 

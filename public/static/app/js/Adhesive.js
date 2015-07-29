@@ -42,7 +42,6 @@ define(
 
             var self = this;
 
-
             var models = opts.models;
 
             if (models) {
@@ -79,6 +78,7 @@ define(
                 var collectionsToListenTo = collections.listenTo;
                 var collectionEvent = collections.collectionEvent;
                 var collectionsToUpdate = collections.update;
+                var filterFunction = collections.filter || function(){return true};
 
 
                 _.each(collectionsToListenTo, function (coll, index) {
@@ -94,7 +94,7 @@ define(
                         callback(event);
                     }
                     else {
-                        //updateBackboneCollections(domKeyName, domElementListen, collectionsToUpdate, event, limitToEventTarget);
+                        updateBackboneCollections(domKeyName, domElementListen, collectionsToUpdate, event, limitToEventTarget, filterFunction);
                     }
                 });
             }
@@ -116,7 +116,7 @@ define(
 
             domElement.find('*').each(function () {
 
-                if(exitLoop){
+                if (exitLoop) {
                     return false;
                 }
 
@@ -133,7 +133,7 @@ define(
                         var modelName = split[0];
                         var modelProp = split[1];
 
-                        if (domKeyName == modelName && _.contains(props,modelProp)) {
+                        if (domKeyName == modelName && _.contains(props, modelProp)) {
 
                             var cid = $(self).attr('adhesive-cid');
 
@@ -174,7 +174,7 @@ define(
 
             domElement.find('*').each(function () {
 
-                if(exitLoop){
+                if (exitLoop) {
                     return false;
                 }
 
@@ -191,7 +191,7 @@ define(
                         var modelName = split[0];
                         var modelProp = split[1];
 
-                        if (domKeyName == modelName && _.contains(props,modelProp)) {
+                        if (domKeyName == modelName && _.contains(props, modelProp)) {
 
                             var cid = $(self).attr('adhesive-cid');
 
@@ -201,7 +201,7 @@ define(
                                 $(self).html(String(prop));
                                 numChanges++;
 
-                                if(numChanges >= maxChanges){
+                                if (numChanges >= maxChanges) {
                                     exitLoop = true;
                                     return false; //break from each loop, we are done updating DOM for this model
                                 }
@@ -238,15 +238,22 @@ define(
                             return true;
                     }
 
-                    var str = String(domKeyName).concat(':');
+                    //var str = String(domKeyName).concat(':');
 
-                    if (String(value).startsWith(str)) {
-                        var propName = String(value).substring(str.length);
+                    var split = String(value).split(':');
+
+                    var modelName = split[0];
+                    var modelProp = split[1];
+
+                    if (domKeyName == modelName) {
+
+                        //TODO: don't need to check CID because we might be updating multiple models from the same element?
                         var val = func(element);
 
                         _.each(models, function (model, index) {
-                            model.set(propName, val);
-                            console.log('backbone model property:', propName, 'set to:', val);
+                            model.set(modelProp, val);
+                            model.save();
+                            console.log('backbone model property:', modelProp, 'set to:', val);
                         });
                     }
 
@@ -274,30 +281,33 @@ define(
                                 };
                                 break;
                             default:
-                                return true;
+                                return true; //could be return false if 'adhesive-get' was always first attribute
                         }
 
-                        var str = String(domKeyName).concat(':');
+                        var split = String(value).split(':');
 
-                        if (String(value).startsWith(str)) {
-                            var propName = String(value).substring(str.length);
+                        var modelName = split[0];
+                        var modelProp = split[1];
+
+                        if (domKeyName == modelName) {
+
                             var val = func(self);
 
                             _.each(models, function (model, index) {
-                                model.set(propName, val);
-                                console.log('backbone model property:', propName, 'set to:', val);
+                                model.set(modelProp, val);
+                                model.save();
+                                console.log('backbone model property:', modelProp, 'set to:', val);
                             });
                         }
-
                     });
                 });
             }
         }
 
 
-        function updateBackboneCollections(domKeyName, domElement, collections, event, limitToEventTarget) {
+        function updateBackboneCollections(domKeyName, domElement, collections, event, limitToEventTarget, filterFunction) {
 
-            console.log('updateBackboneModel:', collections, event);
+            console.log('update-Backbone-Collections:', collections, event);
 
             if (limitToEventTarget) {
 
@@ -308,21 +318,39 @@ define(
                     var name = attrib.name;
                     var value = attrib.value;
 
-                    if (name === 'adhesive-get') {
+                    var func = null;
 
-                        var str = String(domKeyName).concat(':');
+                    switch (name) {
+                        case 'adhesive-get':
+                            func = function (element) {
+                                //return $(element).text();
+                                return $(element).val();
+                            };
+                            break;
+                        default:
+                            return true; //could be return false if 'adhesive-get' was always first attribute
+                    }
 
-                        if (String(value).startsWith(str)) {
-                            var propName = String(value).substring(str.length);
-                            var val = self.value;
+                    var split = String(value).split(':');
 
-                            _.each(collections, function (coll, index) {
-                                coll.each(function (model) {
-                                    model.set(propName, val);
-                                    console.log('backbone model property:', propName, 'set to:', val);
-                                })
-                            });
-                        }
+                    var modelName = split[0];
+                    var modelProp = split[1];
+
+                    if (domKeyName == modelName) {
+
+                        var val = func(element);
+
+                        _.each(collections, function (coll, index) {
+
+                            coll = coll.filter(filterFunction);
+
+                            //coll.each(function (model) {
+                            _.each(coll,function (model,index) {
+                                model.set(modelProp, val);
+                                model.save();
+                                console.log('backbone model property:', modelProp, 'set to:', val);
+                            })
+                        });
                     }
                 });
             }
@@ -336,22 +364,39 @@ define(
                         var name = attrib.name;
                         var value = attrib.value;
 
-                        if (name === 'adhesive-get') {
+                        var func = null;
 
-                            var str = String(domKeyName).concat(':');
-
-                            if (String(value).startsWith(str)) {
-                                var propName = String(value).substring(str.length);
-                                var val = self.value;
-
-                                _.each(collections, function (coll, index) {
-                                    coll.each(function (model) {
-                                        model.set(propName, val);
-                                        console.log('backbone model property:', propName, 'set to:', val);
-                                    })
-                                });
-                            }
+                        switch (name) {
+                            case 'adhesive-get':
+                                func = function (element) {
+                                    return $(element).text();
+                                };
+                                break;
+                            default:
+                                return true; //could be return false if 'adhesive-get' was always first attribute
                         }
+
+                        var split = String(value).split(':');
+
+                        var modelName = split[0];
+                        var modelProp = split[1];
+
+                        if (domKeyName == modelName) {
+
+                            var val = func(self);
+
+                            _.each(collections, function (coll, index) {
+
+                                coll = coll.filter(filterFunction);
+
+                                coll.each(function (model) {
+                                    model.set(modelProp, val);
+                                    model.save();
+                                    console.log('backbone model property:', modelProp, 'set to:', val);
+                                })
+                            });
+                        }
+
                     });
                 });
             }
