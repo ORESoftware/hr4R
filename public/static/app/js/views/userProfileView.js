@@ -62,13 +62,10 @@ define(
 
                     this.adhesive = new Adhesive(this, {});
 
-                    //this.adhesive.bind('user',this.model,null,this.$el,'keyup');
-
                     var self = this;
 
-                    this.adhesive.bind({
+                    this.adhesive.stick({
                         keyName: 'user',
-                        plainObjects:[],
                         models: {
                             //listenTo: [self.model],
                             //update: [self.model],
@@ -82,19 +79,20 @@ define(
                             update: [self.collection],
                             //listenTo: [],
                             //update: [],
-                            collectionEvent: 'model-change',
+                            collectionEvent: 'coll-change',
                             //where: {cid:self.model.cid},
-                            filterUpdate: function(model){
-                                return model.cid == self.model.cid;
-                            },
-                            filterListenTo: function(model){
-                                return model.cid == self.model.cid;
-                            }
+                            //filterUpdate: function(model){
+                            //    return model.cid == self.model.cid;
+                            //},
+                            //filterListenTo: function(model){
+                            //    return model.cid == self.model.cid;
+                            //}
                         },
-                        limitToEventTarget:true,
-                        domElementListen: self.$el,
+                        limitToEventTarget:false,
+                        //domElementListen: self.$el,
+                        domElementListen: $(document),
                         domElementUpdate: $(document),
-                        domEventType: 'keyup',
+                        domEventType: 'click',
                         propagateChangesToServerImmediately:false,
                         callback: null
                     });

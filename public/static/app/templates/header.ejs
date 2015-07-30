@@ -21,7 +21,7 @@
             <% } %>
             </div>
             <div class="col-md-2">
-                <p><font color="red"> Socket connection: <% if (appState.get('socketConnection')) { %> <div><%= appState.get('socketConnection').id %></div> <% } else { %> no socket connection <% } %></font></p>
+                <p><font color="red"> Socket connection: <span adhesive-value="socket:connected" ><%= socketConnection %></span></font></p>
             </div>
             <div class="col-md-2">
                 <button class="btn btn-default" id="reset-all-button-id">Reset-All</button>
@@ -31,9 +31,6 @@
             </div>
             <div class="col-md-2">
                 <button class="btn btn-default" id="reset-back-end-button-id">Reset-Backend</button>
-            </div>
-            <div class="col-md-2">
-                <button class="btn btn-default" id="go-to-portal-button-id">Go To Portal</button>
             </div>
         </div>
     </div>

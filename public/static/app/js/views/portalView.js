@@ -26,19 +26,14 @@ define(
 
         var PortalView = Backbone.View.extend({
 
-                //id: 'PortalViewID',
-                //tagName: 'PortalViewTagName',
-                //className: 'PortalViewClassName',
 
-
-                defaults: function(){
-                    return{
+                defaults: function () {
+                    return {
                         collection: collections.users,
-                        model:null
+                        model: null
                     }
                 },
 
-                //el: '#main-div-id',
 
                 constructor: function () {
                     this.givenName = '@PortalView';
@@ -49,14 +44,12 @@ define(
 
                     this.setViewProps(opts);
                     _.bindAll(this, 'render', 'show', 'onChange', 'handleModelSyncSuccess', 'handleModelError');
-                    this.listenTo(this.collection, 'add reset', this.render);
-                    this.listenTo(this.collection, 'change', this.onChange, this);
-                    this.listenTo(this.model, 'sync', this.handleModelSyncSuccess);
-                    this.listenTo(this.model, 'error', this.handleModelError);
-                    this.listenTo(Backbone.Events, 'books:created', this.show);
+                    //this.listenTo(this.collection, 'add reset', this.render);
+                    //this.listenTo(this.collection, 'change', this.onChange, this);
+                    //this.listenTo(this.model, 'sync', this.handleModelSyncSuccess);
+                    //this.listenTo(this.model, 'error', this.handleModelError);
+                    //this.listenTo(Backbone.Events, 'books:created', this.show);
 
-                    //this.el = $('#main-content-id');
-                    //this._ensureElement();
                 },
 
 
@@ -66,43 +59,16 @@ define(
 
                 onChange: function (msg) {
 
-                    //console.log(msg);
                 },
-
 
                 render: function () {
                     console.log('attempting to render PortalView.');
 
                     var self = this;
 
-                    if (PortalView.template == null) {
-
-                        console.log('PortalView template is null, retrieving from server.')
-
-                        $.ajax({
-                            url: 'static/html/ejs/portal.ejs',
-                            type: 'GET',
-                            success: function (msg) {
-                                PortalView.template = msg;
-                                renderThis.bind(self)(msg);
-                            },
-                            error: function (err) {
-                                console.log('error:', err);
-                            }
-                        });
-                    }
-                    else {
-                        renderThis.bind(self)(PortalView.template);
-                    }
-
-                    function renderThis($template) {
-
-                        var ret = EJS.render($template, {});
-
-                        //self.$el.html(ret);
-                        $('#main-div-id').html(ret);
-                        console.log('PortalView (re)rendered');
-                    }
+                    var ret = EJS.render(PortalView.template, {});
+                    $('#main-div-id').html(ret);
+                    console.log('PortalView (re)rendered');
 
                     return this;
                 },
@@ -115,7 +81,7 @@ define(
             },
 
             { //class properties
-                template:template
+                template: template
             }
         );
 

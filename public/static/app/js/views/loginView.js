@@ -60,33 +60,9 @@ define(
 
                     var self = this;
 
-                    if (LoginView.template == null) {
-
-                        console.log('loginView template is null, retrieving from server.')
-
-                        $.ajax({
-                            url: 'static/html/ejs/loginTemplate.ejs',
-                            type: 'GET',
-                            success: function (msg) {
-                                LoginView.template = msg;
-                                renderThis.bind(self)(LoginView.template);
-                            },
-                            error: function (err) {
-                                console.log('error:', err);
-                            }
-                        });
-                    }
-                    else {
-
-                        renderThis.bind(self)(LoginView.template);
-                    }
-
-                    function renderThis($template) {
-                        var ret = EJS.render($template, {});
-                        self.$el.html(ret);
-                        console.log('loginView rendered');
-                    }
-
+                    var ret = EJS.render(LoginView.template, {});
+                    self.$el.html(ret);
+                    console.log('loginView rendered');
 
                     return this;
                 },

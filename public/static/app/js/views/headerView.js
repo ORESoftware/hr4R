@@ -17,14 +17,15 @@ define(
         'ejs',
         'jquery',
         'underscore',
-        'handlebars',
+        'app/js/Adhesive',
         'backbone',
         'backbone-validation',
+        'app/js/giant',
         'text!app/templates/header.ejs'
     ],
 
 
-    function (appState, viewState, async, collections, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
+    function (appState, viewState, async, collections, models, form2js, EJS, $, _, Adhesive, Backbone, BackboneValidation, giant, template) {
 
 
         //TODO: http://stackoverflow.com/questions/7567404/backbone-js-repopulate-or-recreate-the-view
@@ -49,7 +50,6 @@ define(
                     'click #reset-all-button-id': 'onClickResetAll',
                     'click #reset-front-end-button-id': 'onClickResetFrontEnd',
                     'click #reset-back-end-button-id': 'onClickResetBackEnd',
-                    'click #go-to-portal-button-id': 'onClickGoToPortal'
                 },
 
                 constructor: function () {
@@ -61,6 +61,21 @@ define(
 
                     this.setViewProps(opts); //has side effects
                     _.bindAll(this, 'render', 'onClickResetAll', 'onClickResetFrontEnd', 'onClickResetBackEnd');
+
+                    this.adhesive = new Adhesive(this, {});
+
+                    var self = this;
+
+                    this.adhesive.stick({
+                        keyName: 'socket',
+                        plainObjects:{
+                            listenTo: [giant.socketEvents],
+                            update: [],
+                            events: ['socket-error','socket-disconnected','socket-connected']
+                        },
+                        domElementUpdate: $(self.el),
+                        callback: null
+                    });
                 },
 
                 render: function () {
@@ -68,7 +83,7 @@ define(
 
                     var self = this;
 
-                    var ret = EJS.render(HeaderView.template, {appState: appState, viewState: viewState});
+                    var ret = EJS.render(HeaderView.template, {appState: appState, viewState: viewState, socketConnection:giant.getSocketIOConn().id});
                     self.$el.html(ret);
 
                     console.log('re-rendered headerView.');
@@ -174,9 +189,6 @@ define(
                     event.preventDefault();
 
 
-                },
-                onClickGoToPortal: function (event) {
-                    Backbone.Events.trigger('bootRouter', 'portal');
                 }
             },
             { //class properties

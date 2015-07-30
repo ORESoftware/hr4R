@@ -34,9 +34,7 @@ define(
                         childViews: {}
                     }
                 },
-                events: {
-
-                },
+                events: {},
 
                 constructor: function () {
                     this.givenName = '@RegisteredUsersView';
@@ -56,7 +54,7 @@ define(
 
                     var self = this;
 
-                    this.adhesive.bind({
+                    this.adhesive.stick({
                         keyName: 'user',
                         models: {
                             //listenTo: [self.model],
@@ -70,10 +68,10 @@ define(
                             update: [self.collection],
                             //listenTo: [],
                             //update: [],
-                            collectionEvent: 'model-change',
+                            collectionEvent: 'coll-change',
                             where: {}
                         },
-                        limitToEventTarget:true,
+                        limitToEventTarget: true,
                         domElementListen: self.$el,
                         domElementUpdate: $(document),
                         domEventType: 'keyup',
@@ -88,36 +86,13 @@ define(
                     var data = this.collection.models;
                     var self = this;
 
-                    if (RegisteredUsersView.template == null) {
+                    var ret = EJS.render(RegisteredUsersView.template, {
+                        users: data
+                    });
 
-                        console.log('registeredUsersView template is null, retrieving from server.')
+                    self.$el.html(ret);
 
-                        $.ajax({
-                            url: 'static/html/ejs/registeredUsersTemplate.ejs',
-                            type: 'GET',
-                            success: function (msg) {
-                                RegisteredUsersView.template = msg;
-                                renderThis.bind(self)(msg);
-                            },
-                            error: function (err) {
-                                throw err;
-                            }
-                        });
-                    }
-                    else {
-                        renderThis.bind(this)(RegisteredUsersView.template);
-                    }
-
-                    function renderThis($template) {
-                        var ret = EJS.render($template, {
-                            users: data
-                        });
-
-                        self.$el.html(ret);
-
-                        console.log('registeredUsersView rendered');
-                    }
-
+                    console.log('registeredUsersView rendered');
 
                     return this;
                 }

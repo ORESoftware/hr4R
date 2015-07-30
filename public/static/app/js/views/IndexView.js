@@ -30,11 +30,11 @@ define(
 
                 //el: '#main-div-id',
 
-                defaults: function(){
-                    return{
+                defaults: function () {
+                    return {
                         model: null,
                         collection: collections.users,
-                        childViews:{
+                        childViews: {
                             childLoginView: null,
                             childRegisteredUsersView: null
                         }
@@ -75,54 +75,25 @@ define(
 
                     var self = this;
 
-                    if (IndexView.template == null) {
 
-                        console.log('indexView template is null, retrieving from server.')
+                    var ret = EJS.render(IndexView.template, {
+                        users: data
+                    });
 
-                        $.ajax({
-                            url: 'static/html/ejs/indexTemplate.ejs',
-                            type: 'GET',
-                            success: function (msg) {
+                    this.$el.html(ret);
 
-                                IndexView.template = msg;
-                                renderChildren.bind(self)(msg);
+                    this.childViews.childLoginView = new LoginView({el: this.$('#child-view-login-container')});
+                    //this.childViews.childLoginView = new LoginView({el: $('#child-view-login-container')});
+                    this.childViews.childLoginView.render();
+                    this.childViews.childLoginView.delegateEvents();
 
-                            },
-                            error: function (err) {
-                                console.log('error:', err);
-                            }
-                        });
-
-                    }
-                    else {
-                        renderChildren.bind(self)(IndexView.template);
-                    }
+                    this.childViews.childRegisteredUsersView = new RegisteredUsersView({el: this.$('#child-view-registered-users-container')});
+                    //this.childViews.childRegisteredUsersView = new RegisteredUsersView({el: $('#child-view-registered-users-container')});
+                    this.childViews.childRegisteredUsersView.render();
+                    this.childViews.childRegisteredUsersView.delegateEvents();
 
 
-                    function renderChildren($template) {
-                        var ret = EJS.render($template, {
-                            users: data
-                        });
-                        //
-
-                        this.$el.html(ret);
-
-                        //$('#main-div-id').html(ret);
-
-                        this.childViews.childLoginView = new LoginView({el: this.$('#child-view-login-container')});
-                        //this.childViews.childLoginView = new LoginView({el: $('#child-view-login-container')});
-                        this.childViews.childLoginView.render();
-                        this.childViews.childLoginView.delegateEvents();
-
-                        this.childViews.childRegisteredUsersView = new RegisteredUsersView({el: this.$('#child-view-registered-users-container')});
-                        //this.childViews.childRegisteredUsersView = new RegisteredUsersView({el: $('#child-view-registered-users-container')});
-                        this.childViews.childRegisteredUsersView.render();
-                        this.childViews.childRegisteredUsersView.delegateEvents();
-
-
-                        console.log('IndexView rendered');
-                    }
-
+                    console.log('IndexView rendered');
 
                     return this;
 
@@ -140,7 +111,7 @@ define(
                 }
             },
             { //class properties
-                template:template
+                template: template
             });
 
 

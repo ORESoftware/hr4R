@@ -33,88 +33,65 @@ define(
 
         var HomeView = Backbone.View.extend({
 
-                //id: 'HomeViewID',
-                //tagName: 'HomeViewTagName',
-                //className: 'HomeViewClassName',
+                    //id: 'HomeViewID',
+                    //tagName: 'HomeViewTagName',
+                    //className: 'HomeViewClassName',
 
 
-                defaults: function(){
-                    return{
-                        collection: collections.users,
-                        model:null
-                    }
-                },
+                    defaults: function () {
+                        return {
+                            collection: collections.users,
+                            model: null
+                        }
+                    },
 
-                //el: '#main-div-id',
+                    //el: '#main-div-id',
 
-                constructor: function (opts) {
-                    this.givenName = '@HomeView';
-                    Backbone.View.apply(this, arguments);
-                },
+                    constructor: function (opts) {
+                        this.givenName = '@HomeView';
+                        Backbone.View.apply(this, arguments);
+                    },
 
-                initialize: function (opts) {
+                    initialize: function (opts) {
 
-                    this.setViewProps(opts);
-                    _.bindAll(this, 'render', 'show', 'onChange', 'handleModelSyncSuccess', 'handleModelError');
-                    //this.listenTo(this.collection, 'add reset', this.render);
-                    //this.listenTo(this.collection, 'change', this.onChange, this);
-                    this.listenTo(this.model, 'sync', this.handleModelSyncSuccess);
-                    this.listenTo(this.model, 'error', this.handleModelError);
-                    //this.listenTo(Backbone.Events, 'books:created', this.show);
-                },
-
-
-                show: function () {
-                    console.log('heard about BOOKS:CREATED: this:', this);
-                },
-
-                onChange: function (msg) {
-
-                    //console.log(msg);
-                },
+                        this.setViewProps(opts);
+                        _.bindAll(this, 'render', 'show', 'onChange', 'handleModelSyncSuccess', 'handleModelError');
+                        //this.listenTo(this.collection, 'add reset', this.render);
+                        //this.listenTo(this.collection, 'change', this.onChange, this);
+                        this.listenTo(this.model, 'sync', this.handleModelSyncSuccess);
+                        this.listenTo(this.model, 'error', this.handleModelError);
+                        //this.listenTo(Backbone.Events, 'books:created', this.show);
+                    },
 
 
-                render: function () {
-                    console.log('attempting to render HomeView.');
+                    show: function () {
+                        console.log('heard about BOOKS:CREATED: this:', this);
+                    },
 
-                    var self = this;
+                    onChange: function (msg) {
 
-                    if (HomeView.template == null) {
+                        //console.log(msg);
+                    },
 
-                        console.log('homeView template is null, retrieving from server.')
 
-                        $.ajax({
-                            url: 'static/html/ejs/homeTemplate.ejs',
-                            type: 'GET',
-                            success: function (msg) {
-                                HomeView.template = msg;
-                                renderThis.bind(self)(msg);
-                            },
-                            error: function (err) {
-                                console.log('error:', err);
-                            }
-                        });
-                    }
-                    else {
-                        renderThis.bind(self)(HomeView.template);
-                    }
+                    render: function () {
+                        console.log('attempting to render HomeView.');
 
-                    function renderThis($template) {
+                        var self = this;
 
-                        var ret = EJS.render($template, {});
+                        var ret = EJS.render(HomeView.template, {});
 
                         self.$el.html(ret);
 
                         React.render(
-                            <TimerExample start={Date.now()} />,
+                            <TimerExample start={Date.now()}/>,
                             //self.el
                             //$('#react-timer-example-div-id')[0]
                             $(self.el).find('#react-timer-example-div-id')[0]
-
                         );
 
                         React.render(
-                            <MenuExample items={ ['Home', 'Services', 'About', 'Contact us'] } />,
+                            <MenuExample items={ ['Home', 'Services', 'About', 'Contact us'] }/>,
                             //$('#react-menu-example-div-id')[0]
                             //document.getElementById('react-menu-example-div-id')
                             $(self.el).find('#react-menu-example-div-id')[0]
@@ -122,24 +99,27 @@ define(
 
 
                         console.log('HomeView (re)rendered');
+
+
+                        return this;
+                    },
+                    handleModelSyncSuccess: function () {
+                        console.log('model sync success');
                     }
+                    ,
+                    handleModelError: function () {
+                        console.log('model error!! in this:', this);
+                    }
+                },
 
-                    return this;
-                },
-                handleModelSyncSuccess: function () {
-                    console.log('model sync success');
-                },
-                handleModelError: function () {
-                    console.log('model error!! in this:', this);
+                { //class properties
+                    template: template
                 }
-            },
-
-            { //class properties
-                template:template
-            }
-        );
+            )
+            ;
 
         return HomeView;
 
-    });
+    })
+;
 

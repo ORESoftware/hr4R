@@ -17,11 +17,23 @@ define(
 
             collNeedsPersisting: false,
 
+            modelsToBatchUpdateDomWith: {},
+
             constructor: function () {
                 var self = this;
                 this.on('change', function (model, something) {
                     self.collNeedsPersisting = true;
-                    self.trigger('model-change', model, model.changed);
+                    //if(model._id){ //TODO: only need to update DOM for models already saved on the server?
+                    //    self.modelsToBatchUpdateDomWith.push(model);
+                    //}
+                    //self.modelsToBatchUpdateDomWith.push(model);
+                    self.modelsToBatchUpdateDomWith[model.cid] = {model:model,changed:model.changed};
+
+                    var func = (_.debounce(function(){
+                        var temp = self.modelsToBatchUpdateDomWith;
+                        self.modelsToBatchUpdateDomWith = {};
+                        self.trigger('coll-change', temp);
+                    }, 100))(); //delay DOM updates by at least 100 seconds in order to batch updates
                 });
                 this.on('add', function (model, something) {
                     self.collNeedsPersisting = true;

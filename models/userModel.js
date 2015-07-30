@@ -75,11 +75,11 @@ var registerSchema = function () {
         },
         firstName: {
             type: String,
-            required: true
+            required: false
         },
         lastName: {
             type: String,
-            required: true
+            required: false
         },
         registered_at: {
             type: Date,

@@ -18,10 +18,11 @@ define(
         //'app/js/allViews',
         'app/js/allCollections',
         'ijson',
-        'backbone'
+        'backbone',
+        'underscore'
     ],
 
-    function (appState, io, collections, IJSON, Backbone) {
+    function (appState, io, collections, IJSON, Backbone,_) {
 
 
         //TODO: perhaps wait to make socket.io connection after logging in
@@ -41,6 +42,8 @@ define(
             return ret;
         }
 
+        var socketEvents = _.extend({},Backbone.Events);
+
         var socket = null;
 
         function getConnection(){
@@ -51,16 +54,6 @@ define(
                socket = io.connect('http://127.0.0.1:3001');
 
                 //TODO: match socket session with express session
-
-
-                socket.on('burger', function (msg) {
-                    console.log('server sent a message to the client,', msg);
-
-                    //var parsed = JSON.parse(msg);
-
-                    socket.emit('sent info to client');
-                });
-
 
 
                 socket.on('update', function (data) {
@@ -107,13 +100,21 @@ define(
                 });
 
 
-                socket.on('error', function socketConnectionErrorCallback(reason) {
-                    console.error('Unable to connect Socket.IO ---->', reason);
+                socket.on('error', function socketConnectionErrorCallback(err) {
+                    socketEvents.trigger('socket-error',err);
+                    console.error('Unable to connect Socket.IO ---->', JSON.stringify(err));
                 });
 
-                socket.on('connect', function () {
+                socket.on('connect', function (event) {
+                    socketEvents.trigger('socket-connected','connected --> id'.concat(socket.id));
                     console.log('document.cookie after socketio connection:',document.cookie);
                     console.info('successfully established a working and authorized connection'.toUpperCase());
+                });
+
+                socket.on('disconnect', function (event) {
+                    socketEvents.trigger('socket-disconnected','disconnected');
+                    console.log('document.cookie after socketio DIS-connection:',document.cookie);
+                    console.info('socket disconnected'.toUpperCase());
                 });
 
             }
@@ -133,7 +134,8 @@ define(
 
         return {
             getSocketIOConn: getConnection,
-            addEvent: addEvent
+            addEvent: addEvent,
+            socketEvents: socketEvents
         };
     });
 
