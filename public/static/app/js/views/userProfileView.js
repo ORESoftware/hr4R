@@ -69,9 +69,9 @@ define(
                         models: {
                             //listenTo: [self.model],
                             //update: [self.model],
-                            listenTo: [],
-                            update: [],
-                            modelEvent: 'change',
+                            listenTo: [self.model],
+                            update: [self.model],
+                            modelEvents: ['model-local-change-broadcast'],
                             where: {}
                         },
                         collections: {
@@ -79,7 +79,7 @@ define(
                             update: [self.collection],
                             //listenTo: [],
                             //update: [],
-                            collectionEvent: 'coll-change',
+                            collectionEvents: ['coll-change-socket']
                             //where: {cid:self.model.cid},
                             //filterUpdate: function(model){
                             //    return model.cid == self.model.cid;
@@ -88,11 +88,11 @@ define(
                             //    return model.cid == self.model.cid;
                             //}
                         },
-                        limitToEventTarget:false,
+                        limitToEventTarget:true,
                         //domElementListen: self.$el,
                         domElementListen: $(document),
-                        domElementUpdate: $(document),
-                        domEventType: 'click',
+                        domElementUpdate: $(self.el),
+                        domEventType: 'keyup',
                         propagateChangesToServerImmediately:false,
                         callback: null
                     });

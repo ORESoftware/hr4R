@@ -35,7 +35,7 @@ define(
                     return <Service name={s.name} price={s.price} active={s.active} addTotal={self.addTotal}/>;
                 });
 
-                return <div>
+                return (<div>
                     <h1>Our services</h1>
 
                     <div id="services">
@@ -45,7 +45,7 @@ define(
 
                     </div>
 
-                </div>;
+                </div>);
 
             }
         });

@@ -3,6 +3,8 @@
  */
 
 
+//TODO: insert a new row in table without re-rendering http://stackoverflow.com/q/31665966/1223975
+
 
 define(
     [
@@ -18,7 +20,8 @@ define(
             this.view = view;
             _.extend(this, Backbone.Events);
             this.stick = stick.bind(this);
-            this.jQueryBinds = []; //TODO: do we need to unbind any elements or since we are using 'this.el' Backbone might take care of this already..?
+            //TODO: do we need to unbind any elements or since we are using 'this.el' Backbone might take care of this already..?
+            this.jQueryBinds = [];
         }
 
         Adhesive.prototype.unStick = function () {
@@ -30,6 +33,11 @@ define(
         };
 
         function stick(opts) {
+
+            //TODO: give these default values inside this class
+            //limitToEventTarget: true,
+            //domElementListen: self.$el,
+            //domElementUpdate: $(document),
 
             var domKeyName = opts.keyName;
             var domElementListen = opts.domElementListen;
@@ -52,17 +60,21 @@ define(
                 var plainObjectEvents = plainObjects.events;
                 var plainObjectsToUpdate = plainObjects.update;
 
-                plainObjectEvents = plainObjectEvents.join(' '); //separate event-names by a space
+                if(plainObjectEvents && plainObjectEvents.length > 0){
 
-                _.each(plainObjectsToListenTo, function (obj, index) {
-                    self.listenTo(obj, plainObjectEvents, function (event) {
-                        updateDOMViaPlainObjectChange(domKeyName, domElementUpdate, obj, event);
+                    plainObjectEvents = plainObjectEvents.join(' '); //separate event-names by a space
+                    _.each(plainObjectsToListenTo, function (obj, index) {
+                        self.listenTo(obj, plainObjectEvents, function (event) {
+                            updateDOMViaPlainObjectChange(domKeyName, domElementUpdate, obj, event);
+                        });
                     });
-                });
+
+                }
 
                 if (plainObjectsToUpdate && plainObjectsToUpdate.length > 0) {
                     domElementListen.on(domEventType, function (event) { //click will only be registered in html is in DOM anyway so...assume it is there
-                        //event.preventDefault();
+
+                        event.preventDefault();
 
                         if (typeof callback === 'function') {
                             callback(event);
@@ -77,19 +89,25 @@ define(
             if (models) {
 
                 var modelsToListenTo = models.listenTo;
-                var modelEvent = models.modelEvent;
+                var modelEvents = models.modelEvents;
                 var modelsToUpdate = models.update;
 
-                _.each(modelsToListenTo, function (model, index) {
-                    self.listenTo(model, modelEvent, function (model) {
-                        updateDOMViaModelChange(domKeyName, model, domElementUpdate);
-                    });
-                });
 
+                if(modelEvents && modelEvents.length > 0){
+
+                    modelEvents = modelEvents.join(' '); //separate event-names by a space
+                    _.each(modelsToListenTo, function (model, index) {
+                        self.listenTo(model, modelEvents, function (model) {
+                            updateDOMViaModelChange(domKeyName, model, domElementUpdate);
+                        });
+                    });
+
+                }
 
                 if (modelsToUpdate && modelsToUpdate.length > 0) {
                     domElementListen.on(domEventType, function (event) { //click will only be registered in html is in DOM anyway so...assume it is there
-                        //event.preventDefault();
+
+                        event.preventDefault();
 
                         if (typeof callback === 'function') {
                             callback(event);
@@ -106,29 +124,33 @@ define(
             if (collections) {
 
                 var collectionsToListenTo = collections.listenTo;
-                var collectionEvent = collections.collectionEvent;
+                var collectionEvents = collections.collectionEvents;
                 var collectionsToUpdate = collections.update;
-                var filterFunction = collections.filterUpdate || function () {
+                var filterUpdateFunction = collections.filterUpdateFunction || function () {
                         return true
                     };
 
+                if(collectionEvents && collectionEvents.length > 0){
 
-                _.each(collectionsToListenTo, function (coll, index) {
-                    //self.listenTo(coll, collectionEvent, function (model, changes) {
-                    self.listenTo(coll, collectionEvent, function (models) {
-                        updateDOMViaCollectionChange(domKeyName, coll, domElementUpdate, models);
+                    collectionEvents = collectionEvents.join(' '); //separate event-names by a space
+                    _.each(collectionsToListenTo, function (coll, index) {
+                        self.listenTo(coll, collectionEvents, function (models, eventName) {
+                            updateDOMViaCollectionChange(self, domKeyName, coll, domElementUpdate, models, eventName);
+                        });
                     });
-                });
+                }
+
 
                 if (collectionsToUpdate && collectionsToUpdate.length > 0) {
                     domElementListen.on(domEventType, function (event) { //click will only be registered if html is in DOM anyway so...assume it is there
 
-                        //event.preventDefault();
+                        event.preventDefault();
+
                         if (typeof callback === 'function') {
                             callback(event);
                         }
                         else {
-                            updateBackboneCollections(domKeyName, domElementListen, collectionsToUpdate, event, limitToEventTarget, filterFunction);
+                            updateBackboneCollections(domKeyName, domElementListen, collectionsToUpdate, event, limitToEventTarget, filterUpdateFunction);
                         }
                     });
                 }
@@ -206,7 +228,9 @@ define(
                         var modelName = split[0];
                         var modelProp = split[1];
 
-                        if (domKeyName == modelName && _.contains(props, modelProp)) {
+                        //if (domKeyName == modelName && _.contains(props, modelProp)) {
+
+                        if (domKeyName == modelName) {
 
                             var cid = $(self).attr('adhesive-cid');
 
@@ -217,10 +241,10 @@ define(
 
                                 numChanges++;
 
-                                if (numChanges >= maxChanges) {
-                                    exitLoop = true;
-                                    return false; //break from each loop, we are done updating DOM for this model
-                                }
+                                //if (numChanges >= maxChanges) {
+                                //    exitLoop = true;
+                                //    return false; //break from each loop, we are done updating DOM for this model
+                                //}
                             }
                         }
                     }
@@ -229,7 +253,7 @@ define(
         }
 
 
-        function updateDOMViaCollectionChange(domKeyName, collection, domElement, modelCIDHash) {
+        function updateDOMViaCollectionChange(self, domKeyName, collection, domElement, modelCIDHash, eventName) {
 
             console.log('update-DOM-Via-Collection-Change:', domElement, 'models changed:', modelCIDHash);
 
@@ -242,6 +266,15 @@ define(
             //var maxChanges = Object.keys(changes).length;
 
             //var maxChanges = models.length;
+
+            if(eventName === 'coll-add'){
+                //if we add a model to a collection, for now we just re-render the view, it's just way easier
+                //later on we can use jQuery to add a row to a table instead of just re-rendering the entire view
+                self.view.render();
+                return;
+            }
+
+
             var exitLoop = false;
             var numChanges = 0;
 
@@ -333,8 +366,8 @@ define(
                         var val = func(element);
 
                         _.each(models, function (model, index) {
-                            model.set(modelProp, val);
-                            model.save();
+                            model.set(modelProp, val, {localChange:true});
+                            model.persistModel();
                             console.log('backbone model property:', modelProp, 'set to:', val);
                         });
                     }
@@ -398,12 +431,15 @@ define(
 
                         _.each(collections, function (coll, index) {
 
+                            //TODO instead of always filtering, filter conditionally only if there is a filter function,
+                            // TODO: have to deal with filter returning a plain array instead of Backbone collections
+
                             coll = coll.filter(filterFunction);
 
                             //coll.each(function (model) {
                             _.each(coll, function (model, index) {
-                                model.set(modelProp, val);
-                                model.save();
+                                model.set(modelProp, val, {localChange:true});
+                                model.persistModel();
                                 console.log('backbone model property:', modelProp, 'set to:', val);
                             })
                         });

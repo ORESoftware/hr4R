@@ -43,14 +43,12 @@ define(
 
                 initialize: function (opts) {
 
-                    this.setViewProps(opts); //has side effects
+                    this.setViewProps(opts);
                     _.bindAll(this, 'render');
                     //this.listenTo(this.collection, 'change', this.render);
                     //this.listenTo(this.collection, 'add remove reset', this.render);
 
                     this.adhesive = new Adhesive(this, {});
-
-                    //this.adhesive.bind('user',this.model,null,this.$el,'keyup');
 
                     var self = this;
 
@@ -61,14 +59,14 @@ define(
                             //update: [self.model],
                             listenTo: [],
                             update: [],
-                            modelEvent: 'change'
+                            modelEvents: ['change']
                         },
                         collections: {
                             listenTo: [self.collection],
                             update: [self.collection],
                             //listenTo: [],
                             //update: [],
-                            collectionEvent: 'coll-change',
+                            collectionEvents: ['coll-change','coll-add'],
                             where: {}
                         },
                         limitToEventTarget: true,

@@ -48,7 +48,7 @@ define(
 
                     this.setViewProps(opts); //has side effects
                     _.bindAll(this, 'render', 'onSubmitLogin', 'onSubmitRegistration');
-                    this.listenTo(this.collection, 'add remove', this.render);
+                    //this.listenTo(this.collection, 'add remove', this.render);
 
                     //this.model = new models.UserModel();
                 },
@@ -136,13 +136,14 @@ define(
 
                     })
                         .fail(function (msg) {
+                            self.render();
                             setTimeout(function () {
                                 //TODO get validator error from mongoose by submitting bad registration info (missing firstname/username etc)
                                 alert("Server error during user login/registration - " + IJSON.parse(msg));//
                             }, 200);
                         })
                         .always(function () {
-                            self.render();
+                            //self.render();
                         });
 
 
@@ -176,10 +177,10 @@ define(
                         .done(function (res) {
 
                             if (res.error) {
+                                self.render();
                                 setTimeout(function () {
                                     alert("Very Bad login" + IJSON.parse(res.error));
                                 }, 200);
-                                self.render();
                             }
                             else if (res.success) { //TODO: I like this convention
                                 res = res.success;
@@ -191,12 +192,13 @@ define(
 
                         })
                         .fail(function (msg) {
+                            self.render();
                             setTimeout(function () {
                                 alert("Server error during user login/registration - " + msg);
                             }, 200);
                         })
                         .always(function () {
-                            self.render();
+                            //self.render();
                         });
                 }
             },
@@ -236,7 +238,7 @@ define(
                             throw new Error('null or undefined currentUser');
                         }
                         else {
-                            //Backbone.Events.trigger('bootRouter', 'home');
+
                             var hash = readFromLocalStorage('router_hash_request');
                             if (hash == null) {
                                 hash = readFromLocalStorage('original_hash_request');

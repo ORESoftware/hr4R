@@ -244,7 +244,7 @@ define(
                                 });
                         }
                         else {
-                            console.log('avoiding persisting collection with no changes:', coll);
+                            console.log('avoiding persisting collection that experienced no changes:', coll);
                         }
                     }
                 });
@@ -255,10 +255,8 @@ define(
                             onError(err);
                         }
                         else {
-                            //continueOn(self);//continueOn().bind(self);//var func = continueOn.bind(self);//func();
-                            continueOn.bind(self)(opts); //bind continueOn function self and then call continueOn()
+                            continueOn.bind(self)(opts);
                         }
-
                     }
                 );
 

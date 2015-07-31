@@ -97,13 +97,11 @@ define(
 
                             // Notice the use of the bind() method. It makes the
                             // index available to the clicked function:
-
                             return <li className={style} onClick={self.clicked.bind(self, index)}>{m}</li>;
 
                         }) }
 
                         </ul>
-
                         <p>Selected: {this.props.items[this.state.focused]}</p>
                     </div>
                 );

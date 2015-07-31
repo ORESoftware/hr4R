@@ -18,7 +18,6 @@ define(
         'ejs',
         'jquery',
         'underscore',
-        'handlebars',
         'backbone',
         'backbone-validation',
         'react',
@@ -28,7 +27,7 @@ define(
     ],
 
 
-    function (appState, models, collections, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, React, TimerExample, MenuExample, template) {
+    function (appState, models, collections, form2js, EJS, $, _, Backbone, BackboneValidation, React, TimerExample, MenuExample, template) {
 
 
         var HomeView = Backbone.View.extend({
@@ -115,8 +114,7 @@ define(
                 { //class properties
                     template: template
                 }
-            )
-            ;
+            );
 
         return HomeView;
 

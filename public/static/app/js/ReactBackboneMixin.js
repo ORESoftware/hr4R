@@ -2,6 +2,8 @@
  * Created by amills001c on 7/21/15.
  */
 
+//TODO: http://stackoverflow.com/questions/21854938/using-mixins-vs-components-for-code-reuse-in-facebook-react
+//TODO: https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750
 
 define(
     [

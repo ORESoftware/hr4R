@@ -30,32 +30,18 @@ define(
             batchURL: '/users_batch',
             //urlRoot: '/users',
 
-            //constructor: function () {
-            //    this.givenName = '@UsersCollection';
-            //    this.__super__.constructor_shoe();
-            //    Backbone.Collection.apply(this, arguments);
-            //},
 
             initialize: function (models, opts) {
 
                 this.uniqueName = 'users';
+                this.givenName = '@UsersCollection';
 
                 this.options = opts || {};
                 _.bindAll(this, 'persistCollection');
 
-                // This will be called when an item is added. pushed or unshifted
-                this.on('add', function (model) {
-                    console.log('something got added');
-                });
-                // This will be called when an item is removed, popped or shifted
-                this.on('remove', function (model) {
-                    console.log('something got removed');
-                });
-
-
             },
 
-            // Todos are sorted by their original insertion order.
+            // Users are sorted by their original insertion order.
             comparator: 'order'
         });
 

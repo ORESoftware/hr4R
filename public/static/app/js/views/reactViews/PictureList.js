@@ -150,11 +150,8 @@ define(
 
                     <div>
                         <h1>Popular Instagram pics</h1>
-
                         <div className="pictures"> {pictures} </div>
-
                         <h1>Your favorites</h1>
-
                         <div className="favorites"> {favorites} </div>
                     </div>
 

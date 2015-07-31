@@ -21,12 +21,13 @@ console.log('loading app/js/models/jobModel.js');
 
 define(
     [
+        '#appState',
         'underscore',
         'backbone',
         'ijson'
     ],
 
-    function (_, Backbone,IJSON) {
+    function (appState, _, Backbone, IJSON) {
 
         var BaseModel = Backbone.Model.extend({
 
@@ -34,42 +35,147 @@ define(
 
                 constructor: function () {
                     var self = this;
-                    this.on('change',function(model,something){
+                    this.on('change', function (model, something) {
                         self.needsPersisting = true;
                     });
-                    this.on('sync',function(){
+                    this.on('sync', function () {
                         self.needsPersisting = false;
                     });
                     Backbone.Model.apply(this, arguments);
                 },
 
+                //set: function(key, value, options) { //this is also known as (attributes,options)
+                //
+                //    if(options && options.localChange){
+                //       this.trigger('model-local-change-broadcast',this);
+                //    }
+                //
+                //    return Backbone.Model.prototype.set.apply(this, arguments);
+                //},
+
+                set: function (key, val, options) {
+                    if (key == null) return this;
+
+                    // Handle both `"key", value` and `{key: value}` -style arguments.
+                    var attrs;
+                    if (typeof key === 'object') {
+                        attrs = key;
+                        options = val;
+                    }
+                    else {
+                        (attrs = {})[key] = val;
+                    }
+
+                    options || (options = {});
+
+                    // Run validation.
+                    if (!this._validate(attrs, options)) return false;
+
+                    // Extract attributes and options.
+                    var unset = options.unset;
+                    var silent = options.silent;
+                    var changes = [];
+                    var changing = this._changing;
+                    this._changing = true;
+
+                    if (!changing) {
+                        this._previousAttributes = _.clone(this.attributes);
+                        this.changed = {};
+                    }
+
+                    var current = this.attributes;
+                    var changed = this.changed;
+                    var prev = this._previousAttributes;
+
+                    // For each `set` attribute, update or delete the current value.
+                    for (var attr in attrs) {
+                        val = attrs[attr];
+                        if (!_.isEqual(current[attr], val)) changes.push(attr);
+                        if (!_.isEqual(prev[attr], val)) {
+                            changed[attr] = val;
+                        }
+                        else {
+                            delete changed[attr];
+                        }
+                        unset ? delete current[attr] : current[attr] = val;
+                    }
+
+                    // Update the `id`.
+                    this.id = this.get(this.idAttribute);
+
+                    // Trigger all relevant attribute changes.
+                    if (!silent) {
+                        if (changes.length) this._pending = options;
+                        for (var i = 0; i < changes.length; i++) {
+                            this.trigger('change:' + changes[i], this, current[changes[i]], options);
+                        }
+                    }
+
+                    // You might be wondering why there's a `while` loop here. Changes can
+                    // be recursively nested within `"change"` events.
+                    if (changing) return this;
+
+                    //TODO: I added this:
+                    if (options && options.localChange) {
+                        this.trigger('model-local-change-broadcast', this);
+                    }
+
+                    if (!silent) {
+                        while (this._pending) {
+                            options = this._pending;
+                            this._pending = false;
+                            this.trigger('change', this, options);
+                        }
+                    }
+                    this._pending = false;
+                    this._changing = false;
+                    return this;
+                },
+
                 persistModel: function (attributes, opts, callback) {
 
-                    if(this.needsPersisting){
-                        var self = this;
+                    //TODO: need to take into account new attributes here insofar as needs persisting goes
+
+                    if (this.needsPersisting) {
+
                         //TODO: add opts to object below
-                        self.save(attributes, {
+
+                        if(this._id == null && appState.get('currentUser')){
+                            this.set('created_by',appState.get('currentUser').get('_id'));
+                        }
+
+                        if(appState.get('currentUser')){
+                            var str = appState.get('currentUser').get('_id').concat('_').concat(Date.now());
+                            this.set('updated_by',str);
+                        }
+
+                        var self = this;
+                        this.save(attributes, {
                             wait: true, //prevents optimistic persist
                             dataType: "json",
                             //TODO:  model.trigger('sync', model, resp, options);
                             success: function (model, response, options) {
                                 self.needsPersisting = false;
-                                callback(null,model, IJSON.parse(response), options);
+                                if(typeof callback === 'function'){
+                                    callback(null, model, IJSON.parse(response), options);
+                                }
                             },
                             error: function (model, xhr, options) {
                                 var err = new Error("Something went wrong while saving the model");
-                                callback(err, model, xhr, options);
+                                if(typeof callback === 'function'){
+                                    callback(err, model, xhr, options);
+                                }
                             }
                         });
                     }
-                    else{
-                        console.log('avoided unnecessarily saving model to server:',this);
-                        callback(null,this,null,null);
+                    else {
+                        console.log('avoided unnecessarily saving model to server:', this);
+                        callback(null, this, null, null);
                     }
 
                 },
 
-                deleteModel: function (opts,callback) {
+                deleteModel: function (opts, callback) {
                     //TODO: add opts to object below
                     //TODO: turn this into https://www.dropbox.com/s/lzzgg2wanjlguf5/Screenshot%202015-07-14%2016.54.57.png?dl=0
                     this.destroy({
@@ -92,13 +198,13 @@ define(
                      parse converts a response into the hash of attributes to be set on the model.
                      The default implementation is just to pass the response along.
                      */
-                    if(resp.success){
+                    if (resp.success) {
                         return resp.success;
                     }
-                    else if(resp.error){
+                    else if (resp.error) {
                         return this.attributes;
                     }
-                    else{
+                    else {
                         return resp;
                     }
                     //return resp;

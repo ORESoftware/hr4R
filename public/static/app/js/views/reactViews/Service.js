@@ -29,9 +29,11 @@ define(
 
             render: function () {
 
-                return <p className={ this.state.active ? 'active' : '' } onClick={this.clickHandler}>
+                return (
+                    <p className={ this.state.active ? 'active' : '' } onClick={this.clickHandler}>
                     {this.props.name} <b>${this.props.price.toFixed(2)}</b>
-                </p>;
+                </p>
+                );
 
             }
 

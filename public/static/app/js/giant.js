@@ -10,7 +10,6 @@
 console.log('loading app/js/giant.js');
 
 define(
-
     [
         '#appState',
         'socketio',
@@ -22,18 +21,18 @@ define(
         'underscore'
     ],
 
-    function (appState, io, collections, IJSON, Backbone,_) {
+    function (appState, io, collections, IJSON, Backbone, _) {
 
 
         //TODO: perhaps wait to make socket.io connection after logging in
 
 
-        function findCollection(name){
+        function findCollection(name) {
             var ret = null;
-            for(var collection in collections){
+            for (var collection in collections) {
                 if (collections.hasOwnProperty(collection)) {
                     var coll = collections[collection];
-                    if(coll.uniqueName == name){
+                    if (coll.uniqueName == name) {
                         ret = coll;
                         break;
                     }
@@ -42,22 +41,22 @@ define(
             return ret;
         }
 
-        var socketEvents = _.extend({},Backbone.Events);
+        var socketEvents = _.extend({}, Backbone.Events);
 
         var socket = null;
 
-        function getConnection(){
+        function getConnection() {
 
-            if(socket == null){
-                console.log('document.cookie before socketio:',document.cookie);
+            if (socket == null) {
+                console.log('document.cookie before socketio:', document.cookie);
 
-               socket = io.connect('http://127.0.0.1:3001');
+                socket = io.connect('http://127.0.0.1:3001');
 
                 //TODO: match socket session with express session
 
 
                 socket.on('update', function (data) {
-                    console.log('UPDATE FROM SERVER:',data);
+                    console.log('UPDATE FROM SERVER:', data);
                     var oplogDoc = IJSON.parse(data);
                     var _id = oplogDoc.o2._id;
                     var ns = oplogDoc.ns;
@@ -65,67 +64,79 @@ define(
                     var dbName = split[0];
                     var collectionName = split[1];
                     var coll = findCollection(collectionName);
-                    if(coll){
+                    if (coll) {
                         var updateInfo = oplogDoc.o.$set;
-                        coll.updateModel(_id,updateInfo);
+                        coll.updateModelSocket(_id,updateInfo,{});
+                        //coll.updateModel(_id, updateInfo, {silent:true});
                     }
                 });
 
                 socket.on('insert', function (data) {
-                    console.log('INSERT ON SERVER:',data);
+                    console.log('INSERT ON SERVER:', data);
                     var oplogDoc = IJSON.parse(data);
                     var ns = oplogDoc.ns;
                     var split = String(ns).split('.');
                     var dbName = split[0];
                     var collectionName = split[1];
                     var coll = findCollection(collectionName);
-                    if(coll){
+                    if (coll) {
                         var data = oplogDoc.o;
-                        coll.create(data);
+                        var _id = data._id;
+                        //coll.create(data);
+                        //var ModelType = coll.model;
+                        //var newModel = new ModelType(data);
+                        coll.insertModelSocket(_id,data,{});
+
+                        //coll.add(newModel, {merge: true, silent: true}); //most likely a new model if the DB did an insert
+                        //coll.trigger('coll-add-socket',newModel,{});
+
+                        // coll.create saves the model by default which we don't want for this so we go with coll.add
+                        //TODO: if silent is set to false, views to seem to render magically for no reason
                     }
                 });
 
                 socket.on('delete', function (data) {
-                    console.log('DELETE ON SERVER:',data);
+                    console.log('DELETE ON SERVER:', data);
                     var oplogDoc = IJSON.parse(data);
                     var ns = oplogDoc.ns;
                     var split = String(ns).split('.');
                     var dbName = split[0];
                     var collectionName = split[1];
                     var coll = findCollection(collectionName);
-                    if(coll){
+                    if (coll) {
                         var _id = oplogDoc.o._id;
-                        coll.remove({_id:_id});
+                        //coll.remove({_id: _id});
+                        coll.removeModelSocket(_id);
                     }
                 });
 
 
                 socket.on('error', function socketConnectionErrorCallback(err) {
-                    socketEvents.trigger('socket-error',err);
+                    socketEvents.trigger('socket-error', err);
                     console.error('Unable to connect Socket.IO ---->', JSON.stringify(err));
                 });
 
                 socket.on('connect', function (event) {
-                    socketEvents.trigger('socket-connected','connected --> id'.concat(socket.id));
-                    console.log('document.cookie after socketio connection:',document.cookie);
+                    socketEvents.trigger('socket-connected', 'connected --> id'.concat(socket.id));
+                    console.log('document.cookie after socketio connection:', document.cookie);
                     console.info('successfully established a working and authorized connection'.toUpperCase());
                 });
 
                 socket.on('disconnect', function (event) {
-                    socketEvents.trigger('socket-disconnected','disconnected');
-                    console.log('document.cookie after socketio DIS-connection:',document.cookie);
+                    socketEvents.trigger('socket-disconnected', 'disconnected');
+                    console.log('document.cookie after socketio DIS-connection:', document.cookie);
                     console.info('socket disconnected'.toUpperCase());
                 });
 
             }
 
-            appState.set('socketConnection',socket);
+            appState.set('socketConnection', socket);
             return socket;
         }
 
-        function addEvent(eventName,callback){
+        function addEvent(eventName, callback) {
 
-            getConnection().on(eventName,function(){
+            getConnection().on(eventName, function () {
                 callback(arguments);
             });
 

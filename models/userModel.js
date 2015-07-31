@@ -52,50 +52,56 @@ var validation = {
 var registerSchema = function () {
 
     userSchema = mongoose.Schema({
-        role: {
-            type: String,
-            enum: ['Admin', 'Owner', 'User']
+            role: {
+                type: String,
+                enum: ['Admin', 'Owner', 'User']
+            },
+            username: {
+                type: String,
+                unique: true,
+                required: true,
+                validate: [validation.usernameValidator, 'not a valid username']
+            },
+            passwordHash: {
+                type: String,
+                required: true,
+                validate: [validation.passwordValidator, 'not a valid password']
+            },
+            email: {
+                type: String,
+                unique: true,
+                required: true,
+                validate: [validation.emailValidator, 'not a valid email address']
+            },
+            firstName: {
+                type: String,
+                required: false
+            },
+            lastName: {
+                type: String,
+                required: false
+            },
+            registered_at: {
+                type: Date,
+                default: Date.now
+            },
+            created_by: {
+                type: String
+            },
+            updated_by: {
+                type: String
+            },
+            created_at: {
+                type: Date,
+                default: Date.now
+            },
+            updated_at: {
+                type: Date,
+                default: Date.now
+            }
         },
-        username: {
-            type: String,
-            unique: true,
-            required: true,
-            validate: [validation.usernameValidator, 'not a valid username']
-        },
-        passwordHash: {
-            type: String,
-            required: true,
-            validate: [validation.passwordValidator, 'not a valid password']
-        },
-        email: {
-            type: String,
-            unique: true,
-            required: true,
-            validate: [validation.emailValidator, 'not a valid email address']
-        },
-        firstName: {
-            type: String,
-            required: false
-        },
-        lastName: {
-            type: String,
-            required: false
-        },
-        registered_at: {
-            type: Date,
-            default: Date.now
-        },
-        created_at: {
-            type: Date,
-            default: Date.now
-        },
-        updated_at: {
-            type: Date,
-            default: Date.now
-        }
-    },
         {
-            autoIndex:false
+            autoIndex: false
         });
 
     userSchema.pre('save', function (next) {
@@ -141,16 +147,16 @@ var registerSchema = function () {
 
     userSchema.path('username').validate(function (value, cb) {
         var self = this;
-        get(function(err,User){
+        get(function (err, User) {
             User.findOne({username: value}, function (err, user) {
                 if (err) {
                     throw err;
                 }
                 else if (user) {  //we found a user in the DB already, so this username has been taken
-                    if(self._doc._id.equals(user._doc._id)){
+                    if (self._doc._id.equals(user._doc._id)) {
                         cb(true);
                     }
-                    else{
+                    else {
                         cb(false);
                     }
 
@@ -164,9 +170,9 @@ var registerSchema = function () {
 
     userSchema.path('email').validate(function (value, cb) {
         var self = this;
-        get(function(err,User){
+        get(function (err, User) {
 
-            if(err){
+            if (err) {
                 throw err;
             }
 
@@ -176,10 +182,10 @@ var registerSchema = function () {
                     throw err;
                 }
                 else if (user) {  //we found a user in the DB already, so this email has already been registered
-                    if(self._doc._id.equals(user._doc._id)){
+                    if (self._doc._id.equals(user._doc._id)) {
                         cb(true);
                     }
-                    else{
+                    else {
                         cb(false);
                     }
                 }
@@ -250,19 +256,19 @@ var UserModel = null;
 
 var get = function (cb) {
 
-    eventBus.emit('userModel','message from user model via eventBus!');
+    eventBus.emit('userModel', 'message from user model via eventBus!');
 
-    if(UserModel === null){
+    if (UserModel === null) {
         UserModel = mongoDB.model('users', userSchema);
-        UserModel.ensureIndexes(function(err){
-            if(err){
+        UserModel.ensureIndexes(function (err) {
+            if (err) {
                 console.log(colors.bgRed(err));
             }
-            cb(err,UserModel);
+            cb(err, UserModel);
         });
     }
-    else{
-        cb(null,UserModel);
+    else {
+        cb(null, UserModel);
     }
 };
 

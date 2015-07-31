@@ -101,7 +101,9 @@ define(
 
             var opts = options || {};
 
-            var temp = _.defaults({}, opts, _.result(this, 'defaults'));
+            //var temp = _.defaults({}, opts, _.result(this, 'defaults'));
+
+            var temp = _.defaults(_.result(this, 'defaults'),opts);
 
             //_.defaults(this, _.result(this, 'defaults'));
             //
