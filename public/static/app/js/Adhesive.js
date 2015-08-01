@@ -46,6 +46,8 @@ define(
             var limitToEventTarget = opts.limitToEventTarget;
             var callback = opts.callback;
 
+            var limitToClass = opts.limitToClass;
+
             this.jQueryBinds.push(domElementListen);
 
             var self = this;
@@ -60,7 +62,7 @@ define(
                 var plainObjectEvents = plainObjects.events;
                 var plainObjectsToUpdate = plainObjects.update;
 
-                if(plainObjectEvents && plainObjectEvents.length > 0){
+                if (plainObjectEvents && plainObjectEvents.length > 0) {
 
                     plainObjectEvents = plainObjectEvents.join(' '); //separate event-names by a space
                     _.each(plainObjectsToListenTo, function (obj, index) {
@@ -72,6 +74,10 @@ define(
                 }
 
                 if (plainObjectsToUpdate && plainObjectsToUpdate.length > 0) {
+
+                    if (limitToClass) {
+                        domElementListen = domElementListen.find(limitToClass);
+                    }
                     domElementListen.on(domEventType, function (event) { //click will only be registered in html is in DOM anyway so...assume it is there
 
                         event.preventDefault();
@@ -93,7 +99,7 @@ define(
                 var modelsToUpdate = models.update;
 
 
-                if(modelEvents && modelEvents.length > 0){
+                if (modelEvents && modelEvents.length > 0) {
 
                     modelEvents = modelEvents.join(' '); //separate event-names by a space
                     _.each(modelsToListenTo, function (model, index) {
@@ -105,6 +111,11 @@ define(
                 }
 
                 if (modelsToUpdate && modelsToUpdate.length > 0) {
+
+                    if (limitToClass) {
+                        domElementListen = domElementListen.find(limitToClass);
+                    }
+
                     domElementListen.on(domEventType, function (event) { //click will only be registered in html is in DOM anyway so...assume it is there
 
                         event.preventDefault();
@@ -130,7 +141,7 @@ define(
                         return true
                     };
 
-                if(collectionEvents && collectionEvents.length > 0){
+                if (collectionEvents && collectionEvents.length > 0) {
 
                     collectionEvents = collectionEvents.join(' '); //separate event-names by a space
                     _.each(collectionsToListenTo, function (coll, index) {
@@ -142,6 +153,11 @@ define(
 
 
                 if (collectionsToUpdate && collectionsToUpdate.length > 0) {
+
+                    if (limitToClass) {
+                        domElementListen = domElementListen.find(limitToClass);
+                    }
+
                     domElementListen.on(domEventType, function (event) { //click will only be registered if html is in DOM anyway so...assume it is there
 
                         event.preventDefault();
@@ -267,7 +283,7 @@ define(
 
             //var maxChanges = models.length;
 
-            if(eventName === 'coll-add'){
+            if (eventName === 'coll-add') {
                 //if we add a model to a collection, for now we just re-render the view, it's just way easier
                 //later on we can use jQuery to add a row to a table instead of just re-rendering the entire view
                 self.view.render();
@@ -290,43 +306,70 @@ define(
                     var name = attrib.name;
                     var value = attrib.value;
 
-                    if (name === 'adhesive-value') {
+                    var func = null;
 
-                        var split = String(value).split(':');
+                    switch (name) {
+                        case 'adhesive-value':
+                            func = function (element, val) {
+                                $(element).html(String(val));
+                            };
+                            break;
+                        case 'adhesive-value-checkbox':
+                            func = function (element, val) {
+                                $(element).prop('checked', val);
+                            };
+                            break;
+                        default:
+                            return true; //could be return false if 'adhesive-get' was always first attribute
+                    }
 
-                        var modelName = split[0];
-                        var modelProp = split[1];
+                    var split = String(value).split(':');
 
-                        if (domKeyName == modelName) {
+                    var prop = split[split.length - 1];
+                    var modelProp = split.pop();
+                    var modelName = split.shift();
 
-                            var cid = $(self).attr('adhesive-cid');
+                    var props = split;
 
-                            //var foundModel = _.find(models,function(model){
-                            //    return model.cid == cid;
-                            //});
-                            if (cid) {
-                                var foundModel = modelCIDHash[cid];
+                    if (domKeyName == modelName) {
 
-                                if (foundModel) {
+                        var cid = $(self).attr('adhesive-cid');
 
-                                    var model = foundModel.model;
-                                    var props = Object.keys(foundModel.changed);
+                        if (cid) {
+                            var foundModel = modelCIDHash[cid];
 
-                                    //if(_.contains(props, modelProp)){
-                                    var prop = model.get(modelProp) || '';
+                            if (foundModel) {
 
-                                    $(self).html(String(prop));
-                                    //numChanges++;
+                                var model = foundModel.model;
+                                //var props = Object.keys(foundModel.changed);
 
-                                    //if (numChanges >= maxChanges) {
-                                    //    exitLoop = true;
-                                    //    return false; //break from each loop, we are done updating DOM for this model
-                                    //}
-                                    //}
+                                var subModel = getNestedModels(0,model,props);
+
+                                var valueTemp = '';
+
+                                if (subModel) {
+                                    if (subModel instanceof Backbone.Model) {
+                                        valueTemp= subModel.get(modelProp);
+                                    }
+                                    else {
+                                        valueTemp = subModel[modelProp];
+                                    }
+                                    func(self, prop); //done!
                                 }
+                                else{
+                                    console.error('no submodel found');
+                                }
+
+
+                                //numChanges++;
+                                //if (numChanges >= maxChanges) {
+                                //    exitLoop = true;
+                                //    return false; //break from each loop, we are done updating DOM for this model
+                                //}
                             }
                         }
                     }
+
                 });
             });
         }
@@ -366,7 +409,7 @@ define(
                         var val = func(element);
 
                         _.each(models, function (model, index) {
-                            model.set(modelProp, val, {localChange:true});
+                            model.set(modelProp, val, {localChange: true});
                             model.persistModel();
                             console.log('backbone model property:', modelProp, 'set to:', val);
                         });
@@ -416,14 +459,26 @@ define(
                                 return $(element).val();
                             };
                             break;
+                        case 'adhesive-get-checkbox':
+                            func = function (element) {
+                                //return $(element).text();
+                                return $(element).is(':checked');
+                            };
+                            break;
                         default:
                             return true; //could be return false if 'adhesive-get' was always first attribute
                     }
 
                     var split = String(value).split(':');
 
-                    var modelName = split[0];
-                    var modelProp = split[1];
+                    //var modelName = split[0];
+                    //var modelProp = split[1];
+
+                    var prop = split[split.length - 1];
+                    var modelProp = split.pop();
+                    var modelName = split.shift();
+
+                    var props = split;
 
                     if (domKeyName == modelName) {
 
@@ -438,14 +493,26 @@ define(
 
                             //coll.each(function (model) {
                             _.each(coll, function (model, index) {
-                                model.set(modelProp, val, {localChange:true});
-                                model.persistModel();
-                                console.log('backbone model property:', modelProp, 'set to:', val);
+
+                                var subModel = getNestedModels(0, model, props);
+
+                                if (subModel) {
+                                    if (subModel instanceof Backbone.Model) {
+                                        subModel.set(modelProp, val, {localChange: true});
+                                    }
+                                    else {
+                                        subModel[modelProp] = val;
+                                        model.trigger('model-local-change-broadcast', model);
+                                    }
+                                    model.persistModel();
+                                }
+                                else{
+                                    console.error('no submodel found');
+                                }
                             })
                         });
                     }
                 });
-
             }
 
             if (limitToEventTarget) {
@@ -464,6 +531,26 @@ define(
 
                     iterateOverAttributes(element, attributes);
                 });
+            }
+        }
+
+
+        function getNestedModels(index, model, props) {
+
+            var temp = null;
+            if (props[index]) {
+                temp = model.get(props[index]);
+
+                ++index;
+                if (props[index]) {
+                    getNestedModels(index, temp, props);
+                }
+                else {
+                    return temp;
+                }
+            }
+            else {
+                return model;
             }
         }
 

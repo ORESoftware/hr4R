@@ -79,7 +79,7 @@ define(
                             update: [self.collection],
                             //listenTo: [],
                             //update: [],
-                            collectionEvents: ['coll-change-socket']
+                            collectionEvents: ['coll-change-socket-broadcast']
                             //where: {cid:self.model.cid},
                             //filterUpdate: function(model){
                             //    return model.cid == self.model.cid;
@@ -88,10 +88,13 @@ define(
                             //    return model.cid == self.model.cid;
                             //}
                         },
-                        limitToEventTarget:true,
+                        limitToEventTarget:true, //will limit updates for just the element touched
+                        //limitToClass: 'barf',  //will limit what elements get listened to at all
                         //domElementListen: self.$el,
                         domElementListen: $(document),
-                        domElementUpdate: $(self.el),
+                        //domElementUpdate: $(self.el),
+                        domElementUpdate: $(document),
+
                         domEventType: 'keyup',
                         propagateChangesToServerImmediately:false,
                         callback: null

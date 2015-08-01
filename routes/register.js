@@ -85,6 +85,11 @@ function registerUser(req, res, next) {
     var username = user.username;
     var password = user.password;
     var email = user.email;
+    var created_by = user.created_by;
+    var created_at = user.created_at;
+    var updated_by = user.updated_by;
+    var updated_at = user.updated_at;
+
 
     var UserModel = req.site.models.User;
     UserModel.get(function(err,User){
@@ -94,7 +99,11 @@ function registerUser(req, res, next) {
             passwordHash: 'this value is temporary',
             email: email,
             firstName: firstName,
-            lastName: lastName
+            lastName: lastName,
+            created_by: created_by,
+            created_at: created_at,
+            updated_by: updated_by,
+            updated_at: updated_at
         });
 
         newUser.passwordPreHash = password;

@@ -34,7 +34,7 @@ define(
 
             routes: {
                 '': 'canonical',
-                "+refreshCurrentPage": "refreshCurrentPage",
+                //"+refreshCurrentPage": "refreshCurrentPage",
                 "posts/:id": "getPost",
                 'books/:id': 'bookScreen',
                 'index': 'index',
@@ -45,8 +45,30 @@ define(
                 'dashboard': 'dashboard',
                 'portal': 'portal',
                 'login': 'login',
-                ":route/:action": "loadView",
+                "lv/:route/:action": "loadView",
+                'ctrl/:controller': 'controllerRoute',
+                'ctrl/:controller/:action': 'controllerRoute',
+                'ctrl/:controller/:action/:id': 'controllerRoute',
+                'ctrl/:controller/:action/*id': 'controllerRoute',
                 "*notFound": "defaultRoute" // Backbone will try to match the routes above first
+            },
+
+            controllerRoute: function (controllerName, actionName, id) {
+                //controllerName = controllerName || Config.Defaults.Controller;
+                //actionName = actionName || Config.Defaults.Action;
+
+                var self = this;
+                //require(["app/js/controllers/" + controllerName], function (ctl) {
+                require(["controllers/" + controllerName], function (ctl) {
+                    //var code = "ctl." + actionName + "();";
+                    //eval(code);
+                    if(typeof ctl[actionName] === 'function'){
+                        ctl[actionName](id,self.changeView);
+                    }
+                    else{
+                        ctl['default'](id,self.changeView);
+                    }
+                });
             },
 
             canonical: function () {
@@ -54,16 +76,16 @@ define(
                 console.log('hit the canonical route.');
             },
 
-            refreshCurrentPage: function () {
-
-                //TODO:refresh current page when user calls reset-all or whatever
-
-                var currentView = this.viewState.get('mainView');
-                var currentViewName = currentView.givenName;
-                currentViewName = currentViewName.replace('View', '').replace('@', '');
-                //TODO: need to fix url of this page
-                this.changeView(new allViews[currentViewName]());
-            },
+            //refreshCurrentPage: function () {
+            //
+            //    //TODO:refresh current page when user calls reset-all or whatever
+            //
+            //    var currentView = this.viewState.get('mainView');
+            //    var currentViewName = currentView.givenName;
+            //    currentViewName = currentViewName.replace('View', '').replace('@', '');
+            //    //TODO: need to fix url of this page
+            //    this.changeView(new allViews[currentViewName]());
+            //},
 
             home: function () {
                 this.changeView({
@@ -123,6 +145,8 @@ define(
             bookScreen: function (id) {
                 // Fetch book with `id` and render it.
             },
+
+
 
             defaultRoute: function () {
 

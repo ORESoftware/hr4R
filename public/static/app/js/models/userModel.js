@@ -36,7 +36,11 @@ define(
                         password: null,
                         email: null,
                         old_password: null,
-                        new_password: null
+                        new_password: null,
+                        created_by:null,
+                        updated_by:null,
+                        created_at:null,
+                        updated_at:null
                     }
                 },
 

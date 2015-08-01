@@ -3,6 +3,7 @@
  */
 
 //TODO:https://github.com/marionettejs/backbone.marionette/issues/611
+//TODO: load CSS ===> http://requirejs.org/docs/faq-advanced.html
 
 console.log('loading headerView');
 
@@ -50,6 +51,7 @@ define(
                     'click #reset-all-button-id': 'onClickResetAll',
                     'click #reset-front-end-button-id': 'onClickResetFrontEnd',
                     'click #reset-back-end-button-id': 'onClickResetBackEnd',
+                    'click #disconnect-socket-button-id': 'onClickDisconnectSocket'
                 },
 
                 constructor: function () {
@@ -68,10 +70,10 @@ define(
 
                     this.adhesive.stick({
                         keyName: 'socket',
-                        plainObjects:{
+                        plainObjects: {
                             listenTo: [giant.socketEvents],
                             update: [],
-                            events: ['socket-error','socket-disconnected','socket-connected']
+                            events: ['socket-error', 'socket-disconnected', 'socket-connected']
                         },
                         domElementUpdate: $(self.el),
                         callback: null
@@ -83,12 +85,28 @@ define(
 
                     var self = this;
 
-                    var ret = EJS.render(HeaderView.template, {appState: appState, viewState: viewState, socketConnection:giant.getSocketIOConn().id});
+                    var ret = EJS.render(HeaderView.template, {
+                        appState: appState,
+                        viewState: viewState,
+                        socketConnection: giant.getSocketIOConn().id
+                    });
                     self.$el.html(ret);
 
                     console.log('re-rendered headerView.');
 
                     return this;
+                },
+
+                onClickDisconnectSocket: function (event) {
+                    event.preventDefault();
+
+                    try{
+                        giant.getSocketIOConn().disconnect();
+                    }
+                    catch(err){
+                        return alert('socket failed disconnect --->' + err.toString());
+                    }
+                    return alert('socket disconnected successfully');
                 },
 
                 onClickLogout: function (event) {

@@ -69,6 +69,7 @@ define(
                             collectionEvents: ['coll-change','coll-add'],
                             where: {}
                         },
+                        listenToClass: 'className',
                         limitToEventTarget: true,
                         domElementListen: self.$el,
                         domElementUpdate: $(document),

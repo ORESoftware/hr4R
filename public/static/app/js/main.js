@@ -33,6 +33,7 @@ requirejs.config({
         'handlebars': 'vendor/handlebars',
         'backbone-validation': 'vendor/backbone-validation-amd',
         'jsx': "vendor/jsx",
+        'controllers':'app/js/controllers/*',
         'JSXTransformer': 'vendor/JSXTransformer',
         'observe':'vendor/observe',
         'react':'vendor/react-with-addons',

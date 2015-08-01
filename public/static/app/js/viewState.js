@@ -23,13 +23,6 @@ define('#viewState',function() {
         set: function($viewName,$view){
             if($viewName in view){
                 view[$viewName] = $view;
-                if($view){
-                    console.log('setting view:',$viewName,'to this view:',$view.givenName);
-                }
-                else{
-                    console.log('setting view:',$viewName,'to this view:',$view);
-                }
-
             }
             else{
                 throw new Error('no view matched.');

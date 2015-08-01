@@ -4,14 +4,13 @@
 
 
 define(
-
     [
         'backbone',
         'underscore',
         'async'
     ],
 
-    function (Backbone,_, async) {
+    function (Backbone, _, async) {
 
         return {
 
@@ -42,15 +41,20 @@ define(
                 //    self.trigger('model-local-change-broadcast', obj, 'model-local-change-broadcast');
                 //});
 
+                this.on('model-local-change-broadcast', function (model, something) {
+                    var temp = {};
+                    temp[model.cid] = {model: model, changed: model.changed};
+                    self.trigger('coll-local-change-broadcast', temp,'coll-local-change-broadcast');
+                });
 
                 this.on('coll-change-socket', function (model, something) {
                     //if(model._id){ //TODO: only need to update DOM for models already saved on the server?
                     //    self.modelsToBatchUpdateDomWith.push(model);
                     //}
                     //self.modelsToBatchUpdateDomWith.push(model);
-                    self.changedModelsToBatchUpdateDomWith[model.cid] = {model:model,changed:model.changed};
+                    self.changedModelsToBatchUpdateDomWith[model.cid] = {model: model, changed: model.changed};
 
-                    var func = (_.debounce(function(){
+                    var func = (_.debounce(function () {
                         var temp = self.changedModelsToBatchUpdateDomWith;
                         self.changedModelsToBatchUpdateDomWith = {};
                         self.trigger('coll-change-socket-broadcast', temp, 'coll-change-socket-broadcast');
@@ -61,16 +65,15 @@ define(
                 this.on('coll-add-socket', function (model, something) {
                     self.collNeedsPersisting = true;
 
-                    //self.addedModelsToBatchUpdateDomWith[model.cid] = {model:model,changed:model.changed};
+                    self.addedModelsToBatchUpdateDomWith[model.cid] = {model: model, changed: model.changed};
 
-                    var func = (_.debounce(function(){
-                        //var temp = self.addedModelsToBatchUpdateDomWith;
-                        //self.addedModelsToBatchUpdateDomWith = {};
-                        self.trigger('coll-add-socket-broadcast', {}, 'coll-add-socket-broadcast');
+                    var func = (_.debounce(function () {
+                        var temp = self.addedModelsToBatchUpdateDomWith;
+                        self.addedModelsToBatchUpdateDomWith = {};
+                        self.trigger('coll-add-socket-broadcast', temp, 'coll-add-socket-broadcast');
                     }, 100))(); //delay DOM updates by at least 100 seconds in order to batch updates
 
                 });
-
 
 
                 this.on('sync', function () {
@@ -79,45 +82,45 @@ define(
                 Backbone.Collection.apply(this, arguments);
             },
 
-            insertModelSocket: function (_id, data,opts) {
+            insertModelSocket: function (_id, data, opts) {
 
                 var self = this;
 
                 for (var i = 0; i < this.models.length; i++) {
                     var model = this.models[i];
                     if (String(model.get('_id')) == String(_id)) {
-                        model.set(data,opts);
-                        self.trigger('coll-change-socket',model,{});
+                        model.set(data, opts);
+                        self.trigger('coll-change-socket', model, {});
                         return;
                     }
                 }
 
                 var ModelType = this.model;
-                var newModel =  new ModelType(data);
-                this.add(newModel,{silent:true});
-                this.trigger('coll-add-socket',newModel,{});
+                var newModel = new ModelType(data);
+                this.add(newModel, {silent: true});
+                this.trigger('coll-add-socket', newModel, {});
             },
 
-            updateModelSocket: function (_id, data,opts) {
+            updateModelSocket: function (_id, data, opts) {
 
                 var self = this;
 
                 for (var i = 0; i < this.models.length; i++) {
                     var model = this.models[i];
                     if (String(model.get('_id')) == String(_id)) {
-                        model.set(data,opts);
-                        self.trigger('coll-change-socket',model,{});
+                        model.set(data, opts);
+                        self.trigger('coll-change-socket', model, {});
                         return;
                     }
                 }
 
                 var ModelType = this.model;
-                var newModel =  new ModelType(data);
-                this.add(newModel,{silent:true});
-                this.trigger('coll-add-socket',newModel,{});
+                var newModel = new ModelType(data);
+                this.add(newModel, {silent: true});
+                this.trigger('coll-add-socket', newModel, {});
             },
 
-            removeModelSocket: function (_id,opts) {
+            removeModelSocket: function (_id, opts) {
 
                 var self = this;
 
@@ -125,7 +128,7 @@ define(
                     var model = this.models[i];
                     if (String(model.get('_id')) == String(_id)) {
                         self.remove(model);
-                        self.trigger('coll-remove-socket',model,{});
+                        self.trigger('coll-remove-socket', model, {});
                         break;
                     }
                 }

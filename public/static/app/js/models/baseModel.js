@@ -141,13 +141,19 @@ define(
                         //TODO: add opts to object below
 
                         if(this._id == null && appState.get('currentUser')){
-                            this.set('created_by',appState.get('currentUser').get('_id'));
+                            this.set('created_at',Date.now());
+                            var str =appState.get('currentUser').get('_id').concat('@').concat(Date.now());
+                            this.set('created_by', str);
                         }
 
                         if(appState.get('currentUser')){
-                            var str = appState.get('currentUser').get('_id').concat('_').concat(Date.now());
+                            var str = appState.get('currentUser').get('_id').concat('@').concat(Date.now());
                             this.set('updated_by',str);
                         }
+
+                        //this.set('created_by','ooooooh');
+                        //this.set('updated_by','jimmy jazz');
+                        this.set('updated_at',Date.now());
 
                         var self = this;
                         this.save(attributes, {
@@ -170,7 +176,9 @@ define(
                     }
                     else {
                         console.log('avoided unnecessarily saving model to server:', this);
-                        callback(null, this, null, null);
+                        if(typeof callback === 'function') {
+                            callback(null, this, null, null);
+                        }
                     }
 
                 },

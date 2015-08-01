@@ -14,6 +14,8 @@ console.log('loading app/js/models/jobModel.js');
 //TODO: http://beletsky.net/2012/11/baby-steps-to-backbonejs-model.html
 //TODO: http://christianalfoni.github.io/javascript/2014/10/22/nailing-that-validation-with-reactjs.html
 
+//http://stackoverflow.com/questions/6351271/backbone-js-get-and-set-nested-object-attribute
+
 define(
     [
         'underscore',
@@ -36,7 +38,12 @@ define(
 
                 defaults: function () { //prevents copying default attributes to all instances of JobModel
                     return {
-                        jobname: null
+                        jobname: null,
+                        animals: new Backbone.Model({
+                            cats:true,
+                            dogs:false,
+                            birds:false
+                        })
                     }
                 },
 

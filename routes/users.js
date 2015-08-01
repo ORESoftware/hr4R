@@ -104,7 +104,7 @@ router.get('/:user_id', function (req, res, next) {
         res.json(user);
     }
     else {
-        res.json({error: {errorMessage:'no user found for GET operation, probably deleted from DB'}});
+        res.json({error: {errorMessage: 'no user found for GET operation, probably deleted from DB'}});
         return next(new Error('no user found.'));
     }
 });
@@ -120,6 +120,10 @@ router.post('/', function (req, res, next) {
     var username = user.username;
     var password = user.password;
     var email = user.email;
+    var created_by = user.created_by;
+    var created_at = user.created_at;
+    var updated_by = user.updated_by;
+    var updated_at = user.updated_at;
 
     var UserModel = req.site.models.User;
     UserModel.get(function (err, User) {
@@ -133,7 +137,11 @@ router.post('/', function (req, res, next) {
             passwordHash: 'this value is temporary',
             email: email,
             firstName: firstName,
-            lastName: lastName
+            lastName: lastName,
+            created_by: created_by,
+            created_at: created_at,
+            updated_by: updated_by,
+            updated_at: updated_at
         });
 
         newUser.passwordPreHash = password;
@@ -162,7 +170,7 @@ router.put('/:user_id', function (req, res, next) {
     var userToUpdate = req.specialParams.user_model;
 
     if (userToUpdate == null) {
-        res.json({error: {errorMessage:'no user found for PUT operation, probably deleted from DB'}});
+        res.json({error: {errorMessage: 'no user found for PUT operation, probably deleted from DB'}});
         return next(new Error('router params did not pick up user with PUT users/:user_id'));
     }
 
@@ -173,13 +181,17 @@ router.put('/:user_id', function (req, res, next) {
     var lastName = user.lastName;
     var username = user.username;
     var password = user.password;
-    //var email = user.email;
+
+    var updated_at = user.updated_at;
+    var updated_by = user.updated_by;
+
 
     userToUpdate.firstName = firstName;
     userToUpdate.lastName = lastName;
     userToUpdate.username = username;
     userToUpdate.passwordPreHash = password;
-
+    userToUpdate.updated_at = updated_at;
+    userToUpdate.updated_by = updated_by;
 
     userToUpdate.save(function (err, result) {
         if (err) {
@@ -211,7 +223,7 @@ router.delete('/:user_id', function (req, res, next) {
             var userToDelete = req.specialParams.user_model;
 
             if (!userToDelete) {
-                res.json({error: {errorMessage:'no user found for DELETE operation, probably already deleted from DB'}});
+                res.json({error: {errorMessage: 'no user found for DELETE operation, probably already deleted from DB'}});
                 return next(new Error('no user matched'));
             }
             else {

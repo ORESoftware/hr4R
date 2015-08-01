@@ -36,6 +36,19 @@ var registerSchema = function () {
                 type: String,
                 enum: ['Admin', 'Owner', 'Job']
             },
+            animals:{
+              type: Object
+            },
+            created_by: {
+                type: String,
+                required: false,
+                default: 'created by unknown user'
+            },
+            updated_by: {
+                type: String,
+                required: false,
+                default: 'updated by unknown user'
+            },
             created_at: {
                 type: Date,
                 default: Date.now

@@ -59,13 +59,21 @@ define(
                     console.log('UPDATE FROM SERVER:', data);
                     var oplogDoc = IJSON.parse(data);
                     var _id = oplogDoc.o2._id;
+                    var updateInfo = oplogDoc.o.$set;
+                    var updated_by = updateInfo.updated_by;
+                    if(updated_by){
+                        var updateUserID = String(updated_by).split('@')[0];
+                        var currentUserId = appState.get('currentUser') ? appState.get('currentUser').get('_id') : null;
+                        if(currentUserId && currentUserId.toString() == updateUserID){
+                            return;
+                        }
+                    }
                     var ns = oplogDoc.ns;
                     var split = String(ns).split('.');
                     var dbName = split[0];
                     var collectionName = split[1];
                     var coll = findCollection(collectionName);
                     if (coll) {
-                        var updateInfo = oplogDoc.o.$set;
                         coll.updateModelSocket(_id,updateInfo,{});
                         //coll.updateModel(_id, updateInfo, {silent:true});
                     }
@@ -74,13 +82,27 @@ define(
                 socket.on('insert', function (data) {
                     console.log('INSERT ON SERVER:', data);
                     var oplogDoc = IJSON.parse(data);
+                    var data = oplogDoc.o;
+
+                    var created_by = data.created_by;
+                    if(created_by){
+                        var createdByUserID = String(created_by).split('@')[0];
+                        var currentUserId = appState.get('currentUser') ? appState.get('currentUser').get('_id') : null;
+                        if(currentUserId && currentUserId.toString() == createdByUserID){
+                            return;
+                        }
+                    }
+                    else{
+                        throw new Error('no created by field present');
+                    }
+
                     var ns = oplogDoc.ns;
                     var split = String(ns).split('.');
                     var dbName = split[0];
                     var collectionName = split[1];
                     var coll = findCollection(collectionName);
                     if (coll) {
-                        var data = oplogDoc.o;
+
                         var _id = data._id;
                         //coll.create(data);
                         //var ModelType = coll.model;
