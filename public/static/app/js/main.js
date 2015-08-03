@@ -33,14 +33,15 @@ requirejs.config({
         'handlebars': 'vendor/handlebars',
         'backbone-validation': 'vendor/backbone-validation-amd',
         'jsx': "vendor/jsx",
-        'controllers':'app/js/controllers/*',
+        //'controllers':'app/js/controllers/*',
         'JSXTransformer': 'vendor/JSXTransformer',
         'observe':'vendor/observe',
         'react':'vendor/react-with-addons',
         'socketio':'vendor/socketio',
         '#appState':'app/js/appState',
         '#viewState':'app/js/viewState',
-        'd3':'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min'
+        '#allControllers':'app/js/allControllers'
+        //'d3':'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min'
     },
 
     'shim': {

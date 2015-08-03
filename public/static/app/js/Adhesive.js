@@ -88,6 +88,8 @@ define(
                         else {
                             updatePlainObjects(domKeyName, domElementListen, plainObjectsToUpdate, event, limitToEventTarget);
                         }
+
+                        event.stopPropagation();
                     });
                 }
             }
@@ -126,9 +128,10 @@ define(
                         else {
                             updateBackboneModels(domKeyName, domElementListen, modelsToUpdate, event, limitToEventTarget);
                         }
+
+                        event.stopPropagation();
                     });
                 }
-
             }
 
 
@@ -168,6 +171,8 @@ define(
                         else {
                             updateBackboneCollections(domKeyName, domElementListen, collectionsToUpdate, event, limitToEventTarget, filterUpdateFunction);
                         }
+
+                        event.stopPropagation();
                     });
                 }
             }

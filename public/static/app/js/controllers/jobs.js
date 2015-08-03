@@ -37,6 +37,7 @@ define(
             },
             default: function (id) {
                 console.log('id is:!!!',id);
+                return 'eureka!';
             }
         };
     });

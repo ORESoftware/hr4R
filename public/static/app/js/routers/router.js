@@ -58,8 +58,8 @@ define(
                 //actionName = actionName || Config.Defaults.Action;
 
                 var self = this;
-                //require(["app/js/controllers/" + controllerName], function (ctl) {
-                require(["controllers/" + controllerName], function (ctl) {
+                require(["app/js/controllers/" + controllerName], function (ctl) {
+                //require(["controllers/" + controllerName], function (ctl) {
                     //var code = "ctl." + actionName + "();";
                     //eval(code);
                     if(typeof ctl[actionName] === 'function'){

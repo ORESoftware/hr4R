@@ -46,7 +46,7 @@ window.readFromLocalStorage = function (key) {
 
 define(
     [
-        'd3',
+        //'d3',
         'observe',
         'backbone',
         'underscore',
@@ -56,13 +56,14 @@ define(
         'app/js/allModels',
         'app/js/allViews',
         'app/js/routers/router',
-        'app/js/allTemplates'
+        'app/js/allTemplates',
+        '#allControllers'
         //'app/js/giant'
 
 
     ],
 
-    function (d3, Observe, Backbone, _, IJSON, React, collections, models, allViews, router, allTemplates) {
+    function (Observe, Backbone, _, IJSON, React, collections, models, allViews, router, allTemplates, allControllers) {
 
         /*
          we don't use the majority of these dependencies in this file, but they are loaded here so that r.js can build
@@ -71,6 +72,9 @@ define(
 
         //d3.select("body").transition().delay(1750)
         //    .style("background-color", "#919191");
+
+
+        alert(allControllers['app/js/controllers/jobs'].default());
 
         if (typeof String.prototype.startsWith !== 'function') {
             // see below for better implementation!
