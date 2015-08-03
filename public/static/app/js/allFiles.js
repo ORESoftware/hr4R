@@ -29,19 +29,27 @@ var getAllFilesFromFolder = function(dir) {
     return results;
 };
 
-var resulz = getAllFilesFromFolder('controllers');
+var resulz = getAllFilesFromFolder(__dirname + '/controllers');
 
 var array1 = resulz.map(function(item){
 
-    return String(', "app/js/'+ item + '"').replace('.js','');
+    if(String(item).indexOf('./') == 0){
+        item = item.substring(2);
+    }
+
+    return String(', "app/js/'+ String(item).replace('.js',''));
 });
 
 var array2 = resulz.map(function(item,index){
 
-    var firstPart = String('"app/js/'+ item + '"').replace('.js','');
+    if(String(item).indexOf('./') == 0){
+        item = item.substring(2);
+    }
+
+    var firstPart = String(('"app/js/'+ item + '"').replace('.js',''));
     var secondPart = firstPart.concat(': arguments[').concat(index+1).concat(']');
     return secondPart;
 });
 
-fs.writeFileSync('./temp1.js',array1.join('\n'));
-fs.writeFileSync('./temp2.js',array2.join('\n'));
+fs.writeFileSync('./temp1.txt',array1.join('\n'));
+fs.writeFileSync('./temp2.txt',array2.join('\n'));
