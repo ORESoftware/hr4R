@@ -60,7 +60,10 @@ define(
 
                     var self = this;
 
-                    var ret = EJS.render(LoginView.template, {});
+                    var ret = EJS.render(LoginView.template, {
+                        model:self.model,
+                        collection:self.collection
+                    });
                     self.$el.html(ret);
                     console.log('loginView rendered');
 

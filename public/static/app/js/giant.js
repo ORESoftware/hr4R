@@ -93,7 +93,7 @@ define(
                         }
                     }
                     else{
-                        throw new Error('no created by field present');
+                        throw new Error('no created by field present:',data);
                     }
 
                     var ns = oplogDoc.ns;

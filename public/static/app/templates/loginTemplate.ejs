@@ -1,86 +1,118 @@
-<div class="form">
+<div class="container">
+    <div style="outline: 1px solid orange">
+        <div class="form">
 
-    <ul class="tab-group">
-        <li class="tab active"><a href="#signup_here">Sign Up</a></li>
-        <li class="tab"><a href="#login_here">Log In</a></li>
-    </ul>
+            <ul class="tab-group">
+                <li class="tab active"><a href="#signup_here">Sign Up</a></li>
+                <li class="tab"><a href="#login_here">Log In</a></li>
+            </ul>
 
-    <div class="tab-content">
-        <div id="signup-div-id">
-            <h1>Sign Up</h1>
+            <div class="tab-content">
+                <div id="signup-div-id">
+                    <h1>Sign Up</h1>
 
-            <form id="register-form-id" action="javascript:void(0);" method="post">
+                    <form id="register-form-id" action="javascript:void(0);" method="post">
 
-                <div class="top-row">
-                    <div class="field-wrap">
-                        <label>
-                            First Name<span class="req">*</span>
-                        </label>
-                        <input type="text" name="user.firstName" required autocomplete="off"/>
-                    </div>
+                        <div class="top-row">
+                            <div class="field-wrap">
+                                <label>
+                                    First Name<span class="req">*</span>
+                                </label>
+                                <input type="text" name="user.firstName" required autocomplete="off"/>
+                            </div>
 
-                    <div class="field-wrap">
-                        <label>
-                            Last Name<span class="req">*</span>
-                        </label>
-                        <input type="text" name="user.lastName" required autocomplete="off"/>
-                    </div>
+                            <div class="field-wrap">
+                                <label>
+                                    Last Name<span class="req">*</span>
+                                </label>
+                                <input type="text" name="user.lastName" required autocomplete="off"/>
+                            </div>
+                        </div>
+
+                        <div class="field-wrap">
+                            <label>
+                                Email Address<span class="req">*</span>
+                            </label>
+                            <input type="email" name="user.email" required autocomplete="off"/>
+                        </div>
+
+                        <div class="field-wrap">
+                            <label>
+                                Username<span class="req">*</span>
+                            </label>
+                            <input type="text" name="user.username" required autocomplete="off"/>
+                        </div>
+
+                        <div class="field-wrap">
+                            <label>
+                                Set A Password<span class="req">*</span>
+                            </label>
+                            <input type="password" name="user.password" required autocomplete="off"/>
+                        </div>
+
+                        <button type="submit" id="submit-registration-button-id" class="button button-block">
+                            Get Started
+                        </button>
+
+                    </form>
+
                 </div>
 
-                <div class="field-wrap">
-                    <label>
-                        Email Address<span class="req">*</span>
-                    </label>
-                    <input type="email" name="user.email" required autocomplete="off"/>
+                <div id="login-div-id">
+                    <h1>Welcome Back!</h1>
+
+                    <form id="login-form-id" action="javascript:void(0);" method="post">
+
+                        <div class="field-wrap">
+                            <label>
+                                SC Admin username<span class="req">*</span>
+                            </label>
+                            <input type="text" name="user.username" required autocomplete="off"/>
+                        </div>
+
+                        <div class="field-wrap">
+                            <label>
+                                Password<span class="req">*</span>
+                            </label>
+                            <input type="password" name="user.password" required autocomplete="off"/>
+                        </div>
+
+                        <p class="forgot"><a href="#">Forgot Password?</a></p>
+
+                        <button id="submit-login-button-id" class="button button-block">
+                            Log In
+                        </button>
+
+                    </form>
+
                 </div>
-
-                <div class="field-wrap">
-                    <label>
-                        Username<span class="req">*</span>
-                    </label>
-                    <input type="text" name="user.username" required autocomplete="off"/>
-                </div>
-
-                <div class="field-wrap">
-                    <label>
-                        Set A Password<span class="req">*</span>
-                    </label>
-                    <input type="password" name="user.password" required autocomplete="off"/>
-                </div>
-
-                <button type="submit" id="submit-registration-button-id" class="button button-block">
-                Get Started</button>
-
-            </form>
-
+            </div>
         </div>
-
-        <div id="login-div-id">
-            <h1>Welcome Back!</h1>
-
-            <form id="login-form-id" action="javascript:void(0);" method="post">
-
-                <div class="field-wrap">
-                    <label>
-                        SC Admin username<span class="req">*</span>
-                    </label>
-                    <input type="text" name="user.username" required autocomplete="off"/>
-                </div>
-
-                <div class="field-wrap">
-                    <label>
-                        Password<span class="req">*</span>
-                    </label>
-                    <input type="password" name="user.password" required autocomplete="off"/>
-                </div>
-
-                <p class="forgot"><a href="#">Forgot Password?</a></p>
-
-                <button id="submit-login-button-id" class="button button-block">
-                Log In</button>
-
-            </form>
-
+        <div class="row">
+            <div class="col-md-2">
+                <small>
+                    <div id="collection-div-id">
+                        <% if(locals.collection){ %>
+                        <%= collection.givenName %>
+                        <% }
+                        else { %>
+                        (no collection detected)
+                        <% } %>
+                    </div>
+                </small>
+            </div>
+            <div class="col-md-2">
+                <small>
+                    <div id="model-div-id">
+                        <% if(locals.model) { %>
+                        <%= model.givenName %>, cid: <%= model.cid %> <p>_id: <%= model.get('_id') %></p>
+                        <% }
+                        else { %>
+                        (no model detected)
+                        <% } %>
+                    </div>
+                </small>
+            </div>
         </div>
     </div>
 </div>

@@ -1,7 +1,33 @@
 <footer class="footer">
     <div class="container">
-        <p class="text-muted">Baymax team, Comcast 2015</p>
-        <button id="footer-button-id">Button Here (Click Me)</button>
-        <div id="footer-div-id">Footer Div Here</div>
+        <div class="row">
+            <div class="col-md-3"><p class="text-muted">(Baymax team, Comcast 2015)</p></div>
+            <% if (locals.appState.get('env') == 'development') {%>
+            <div class="col-md-3">
+                <div id="env-id">ENV: <%= locals.appState.get('env') %></div>
+            </div>
+            <div class="col-md-3">
+                <div id="collection-div-id">
+                    <% if(locals.collection){ %>
+                    <%= collection.givenName %>
+                    <% }
+                    else { %>
+                    (no collection detected)
+                    <% } %>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div id="model-div-id">
+                    <% if(locals.model) { %>
+                    <%= model.givenName %>, cid: <%= model.cid %> <p>_id: <%= model.get('_id') %></p>
+                    <% } else { %>
+                    (no model detected)
+                    <%
+                    } %>
+                </div>
+            </div>
+            <% }%>
+        </div>
+
     </div>
 </footer>

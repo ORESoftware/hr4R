@@ -49,7 +49,13 @@ define(
 
                     //this.model = new JobModel();
 
-                    this.model = this.collection.first();
+                    this.model = this.collection.find(function(model){
+
+                        var _id = model.get('_id');
+                        if(_id){
+                            return _id.toString() == '55c13213aaf8352a3a4ab48f';
+                        }
+                    });
 
                     if(this.model == null){
                         var JobModel = this.collection.model;
@@ -107,13 +113,14 @@ define(
 
                 render: function () {
 
+                    var self = this;
 
                     var ret = EJS.render(JobsView.template, {
-                        job:this.model,
-                        jobs:this.collection
+                        job:self.model,
+                        jobs:self.collection,
+                        model: self.model,
+                        collection: self.collection
                     });
-
-                    var self = this;
 
                     self.$el.html(ret);
 

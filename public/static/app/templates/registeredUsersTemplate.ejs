@@ -1,15 +1,45 @@
 <div>
-    <table>
-        <thead>
-        <th>Registered users:</th>
-        </thead>
-        <tbody>
-        <% for(var i=0; i<users.length; i++) { %>
-        <tr>
-            <td adhesive-value="user:firstName" adhesive-cid="<%= users[i].cid %>"><%=users[i].get('firstName')%></td>
-            <td adhesive-value="user:lastName" adhesive-cid="<%= users[i].cid %>"><%=users[i].get('lastName')%></td>
-        </tr>
-        <% } %>
-        </tbody>
-    </table>
+    <div class="container">
+        <table>
+            <thead>
+            <th>Registered users:</th>
+            </thead>
+            <tbody>
+            <% for(var i = 0; i < users.length; i++) { %>
+            <tr>
+                <td adhesive-value="user:firstName"
+                    adhesive-cid="<%= users[i].cid %>"><%= users[i].get('firstName') %></td>
+                <td adhesive-value="user:lastName"
+                    adhesive-cid="<%= users[i].cid %>"><%= users[i].get('lastName') %></td>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-md-2">
+                <small>
+                    <div id="collection-div-id">
+                        <% if(locals.collection){ %>
+                        <%= collection.givenName %>
+                        <% }
+                        else { %>
+                        (no collection detected)
+                        <% } %>
+                    </div>
+                </small>
+            </div>
+            <div class="col-md-2">
+                <small>
+                    <div id="model-div-id">
+                        <% if(locals.model) { %>
+                        <%= model.givenName %>, cid: <%= model.cid %> <p>_id: <%= model.get('_id') %></p>
+                        <% }
+                        else { %>
+                        (no model detected)
+                        <% } %>
+                    </div>
+                </small>
+            </div>
+        </div>
+    </div>
 </div>

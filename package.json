@@ -6,8 +6,10 @@
     "if-present": false
   },
   "scripts": {
-    "prestart": "gulp default",
-    "start": "node ./bin/www",
+    "prestart": "",
+    "start": "NODE_ENV=production node ./bin/www",
+    "prestart_test": "",
+    "start_test": "NODE_ENV=test node ./bin/www",
     "prestart_windows": "gulp default",
     "start_windows": "set NODE_ENV=development&&node ./bin/www",
     "prestart_dev": "",

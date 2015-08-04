@@ -59,14 +59,14 @@ define(
 
                 var self = this;
                 require(["app/js/controllers/" + controllerName], function (cntr) {
-                //require(["controllers/" + controllerName], function (ctl) {
+                    //require(["controllers/" + controllerName], function (ctl) {
                     //var code = "ctl." + actionName + "();";
                     //eval(code);
-                    if(typeof cntr[actionName] === 'function'){
-                        cntr[actionName](id,self.changeView);
+                    if (typeof cntr[actionName] === 'function') {
+                        cntr[actionName](id, self.changeView);
                     }
-                    else{
-                        cntr['default'](id,self.changeView);
+                    else {
+                        cntr['default'](id, self.changeView);
                     }
                 });
             },
@@ -147,7 +147,6 @@ define(
             },
 
 
-
             defaultRoute: function () {
 
                 alert('route not found so navigating to home view');
@@ -175,14 +174,14 @@ define(
 
                 function onToggleViewRequest(viewName) {
 
-                    if(window.location.hash && String(window.location.hash).length > 1 && String(window.location.hash).charAt(0) ==='#'){
+                    if (window.location.hash && String(window.location.hash).length > 1 && String(window.location.hash).charAt(0) === '#') {
                         var hash = String(window.location.hash).substring(1);
-                        console.log('router_hash_request:',hash);
-                        saveToLocalStorage('router_hash_request',hash);
+                        console.log('router_hash_request:', hash);
+                        saveToLocalStorage('router_hash_request', hash);
                     }
-                    else{
+                    else {
                         console.log('no hash in URL seen, setting desired hash to "home"');
-                        saveToLocalStorage('router_hash_request','home');
+                        saveToLocalStorage('router_hash_request', 'home');
                     }
 
                     self.navigate(viewName, {trigger: true});
@@ -268,6 +267,15 @@ define(
                                 });
                         }
                         else {
+                            collectionsToSync.push(
+                                function (cb) {
+                                    coll.fetch()
+                                        .done(function (msg) {
+                                            cb(null, msg);
+                                        }).fail(function (err) {
+                                            cb(err);
+                                        });
+                                });
                             console.log('avoiding persisting collection that experienced no changes:', coll);
                         }
                     }
@@ -366,12 +374,16 @@ define(
                 }
                 this.viewState.set('mainView', view);
 
-                if (this.viewState.get('footerView') == null) {
-                    this.viewState.set('footerView', new standardViews.Footer());
-                }
-                if (this.viewState.get('headerView') == null) {
-                    this.viewState.set('headerView', new standardViews.Header());
-                }
+                var collection = view.collection;
+                var model = view.model;
+
+                //if (this.viewState.get('footerView') == null) {
+                this.viewState.set('footerView', new standardViews.Footer({model: model, collection: collection}));
+                //}
+                //if (this.viewState.get('headerView') == null) {
+                this.viewState.set('headerView', new standardViews.Header());
+                //}
+
                 //**render header**
                 this.viewState.get('headerView').render();
 

@@ -16,13 +16,13 @@ define(
         'handlebars',
         'backbone',
         'backbone-validation',
+        'app/js/Adhesive',
         //'text!app/templates/footer.ejs'
         '#allTemplates'
     ],
 
 
-
-    function (appState, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, allTemplates) {
+    function (appState, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, Adhesive, allTemplates) {
 
         var template = allTemplates.FooterTemplate;
 
@@ -49,49 +49,72 @@ define(
                     'click #footer-button-id': 'onClickFooter'
                 },
 
-                constructor: function () {
-                    this.givenName = '@FooterView';
-                    Backbone.View.apply(this, arguments);
-                },
+                //constructor: function () {
+                //    this.givenName = '@FooterView';
+                //    Backbone.View.apply(this, arguments);
+                //},
 
                 initialize: function (opts) {
 
                     this.setViewProps(opts); //has side effects
                     _.bindAll(this, 'render');
-                    //this.listenTo(this.model, 'change', this.render);
-                    //this.listenTo(this.collection, 'reset', this.render);
 
+
+                    this.listenTo(this.model, 'change', this.render);
+                    this.listenTo(this.collection, 'change', this.render);
+
+
+                    //var self = this;
+                    //this.adhesive = new Adhesive(self,{});
+                    //
+                    //this.adhesive.stick({
+                    //    keyName: 'user',
+                    //    models: {
+                    //        //listenTo: [self.model],
+                    //        //update: [self.model],
+                    //        listenTo: [self.model],
+                    //        update: [self.model],
+                    //        modelEvents: ['model-local-change-broadcast'],
+                    //        where: {}
+                    //    },
+                    //    collections: {
+                    //        listenTo: [self.collection],
+                    //        update: [self.collection],
+                    //        //listenTo: [],
+                    //        //update: [],
+                    //        collectionEvents: ['coll-change-socket-broadcast']
+                    //        //where: {cid:self.model.cid},
+                    //        //filterUpdate: function(model){
+                    //        //    return model.cid == self.model.cid;
+                    //        //},
+                    //        //filterListenTo: function(model){
+                    //        //    return model.cid == self.model.cid;
+                    //        //}
+                    //    },
+                    //    limitToEventTarget:true, //will limit updates for just the element touched
+                    //    //limitToClass: 'barf',  //will limit what elements get listened to at all
+                    //    //domElementListen: self.$el,
+                    //    domElementListen: $(document),
+                    //    //domElementUpdate: $(self.el),
+                    //    domElementUpdate: $(document),
+                    //
+                    //    domEventType: 'keyup',
+                    //    propagateChangesToServerImmediately:false,
+                    //    callback: null
+                    //});
                 },
                 render: function () {
                     console.log('attempting to render FooterView.');
 
                     var self = this;
 
-                    if (FooterView.template == null) {
+                    var ret = EJS.render(FooterView.template, {
+                        appState:appState,
+                        model: self.model,
+                        collection: self.collection
+                    });
 
-                        console.log('footerView template is null, retrieving from server.');
-
-                        $.ajax({
-                            url: 'static/html/ejs/footer.ejs',
-                            type: 'GET',
-                            success: function (msg) {
-                                FooterView.template = msg;
-                                var ret = EJS.render(FooterView.template, appState.value);
-                                //console.log('login view:', ret);
-                                self.$el.html(ret);
-                            },
-                            error: function (err) {
-                                //console.log('error:', err);
-                                alert(err.toString());
-                            }
-                        });
-                    }
-                    else {
-
-                        var ret = EJS.render(FooterView.template, appState.value);
-                        self.$el.html(ret);
-
-                    }
+                    self.$el.html(ret);
 
                     console.log('re-rendered FooterView.');
                     this.delegateEvents();
@@ -103,16 +126,16 @@ define(
 
                     console.log('clicked footer...');
 
-                    $.ajax({
-                        url: '/testSocketIO',
-                        type: 'GET',
-                        success: function (msg) {
-                            console.log(msg);
-                        },
-                        error: function (err) {
-                            alert(err.toString());
-                        }
-                    });
+                    //$.ajax({
+                    //    url: '/testSocketIO',
+                    //    type: 'GET',
+                    //    success: function (msg) {
+                    //        console.log(msg);
+                    //    },
+                    //    error: function (err) {
+                    //        alert(err.toString());
+                    //    }
+                    //});
 
                 }
             },

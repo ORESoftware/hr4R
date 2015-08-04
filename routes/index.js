@@ -28,7 +28,7 @@ router.get('/', function (req, res, next) {
                 }
                 else {
                     //res.json({msg: user});
-                    res.render('index', {title: 'SmartConnect Admin Portal'});
+                    res.render('index', {title: 'SmartConnect Admin Portal', env: process.env.NODE_ENV});
                 }
             });
 
@@ -37,7 +37,7 @@ router.get('/', function (req, res, next) {
     } else {
         console.log("no passport session found in index route, rendering index page...");
 
-        res.render('index', {title: 'SmartConnect Admin Portal'});
+        res.render('index', {title: 'SmartConnect Admin Portal',env: process.env.NODE_ENV});
 
     }
 

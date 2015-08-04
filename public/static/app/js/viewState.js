@@ -18,7 +18,8 @@ define('#viewState',function() {
     return {
         value: view,
         get: function($viewName){
-            return view[$viewName];
+            var temp = view[$viewName];
+            return temp;
         },
         set: function($viewName,$view){
             if($viewName in view){

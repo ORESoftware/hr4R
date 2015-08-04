@@ -111,7 +111,9 @@ define(
                     var self = this;
 
                     var ret = EJS.render(UserProfileView.template, {
-                        user: self.model
+                        user: self.model,
+                        model:self.model,
+                        collection:self.collection
                     });
 
                     self.$el.html(ret);

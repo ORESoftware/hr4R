@@ -93,7 +93,6 @@ define('app/js/boot',
 
             if(appState.get('env') === 'development'){
                 loadDefaultUsers(run);
-                //run();
             }
             else{
                 run();

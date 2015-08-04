@@ -45,37 +45,37 @@ define(
 
                     this.setViewProps(opts);
                     _.bindAll(this, 'render');
-                    //this.listenTo(this.collection, 'change', this.render);
-                    //this.listenTo(this.collection, 'add remove reset', this.render);
+                    this.listenTo(this.collection, 'change', this.render);
+                    this.listenTo(this.collection, 'add remove reset', this.render);
 
-                    this.adhesive = new Adhesive(this, {});
-
-                    var self = this;
-
-                    this.adhesive.stick({
-                        keyName: 'user',
-                        models: {
-                            //listenTo: [self.model],
-                            //update: [self.model],
-                            listenTo: [],
-                            update: [],
-                            modelEvents: ['change']
-                        },
-                        collections: {
-                            listenTo: [self.collection],
-                            update: [self.collection],
-                            //listenTo: [],
-                            //update: [],
-                            collectionEvents: ['coll-change','coll-add'],
-                            where: {}
-                        },
-                        listenToClass: 'className',
-                        limitToEventTarget: true,
-                        domElementListen: self.$el,
-                        domElementUpdate: $(document),
-                        domEventType: 'keyup',
-                        callback: null
-                    });
+                    //this.adhesive = new Adhesive(this, {});
+                    //
+                    //var self = this;
+                    //
+                    //this.adhesive.stick({
+                    //    keyName: 'user',
+                    //    models: {
+                    //        //listenTo: [self.model],
+                    //        //update: [self.model],
+                    //        listenTo: [],
+                    //        update: [],
+                    //        modelEvents: ['change']
+                    //    },
+                    //    collections: {
+                    //        listenTo: [self.collection],
+                    //        update: [self.collection],
+                    //        //listenTo: [],
+                    //        //update: [],
+                    //        collectionEvents: ['coll-change','coll-add'],
+                    //        where: {}
+                    //    },
+                    //    listenToClass: 'className',
+                    //    limitToEventTarget: true,
+                    //    domElementListen: self.$el,
+                    //    domElementUpdate: $(document),
+                    //    domEventType: 'keyup',
+                    //    callback: null
+                    //});
 
                 },
                 render: function () {
@@ -86,7 +86,9 @@ define(
                     var self = this;
 
                     var ret = EJS.render(RegisteredUsersView.template, {
-                        users: data
+                        users: data,
+                        model:self.model,
+                        collection:self.collection
                     });
 
                     self.$el.html(ret);

@@ -2,15 +2,6 @@
 <html>
 <head>
 
-    <!--&lt;!&ndash; production&ndash;&gt;-->
-    <!--&lt;!&ndash;<script src="/static/vendor/require.js"></script>&ndash;&gt;-->
-    <!--&lt;!&ndash;<script src="/static/app/js/optimized_templates.js"></script>&ndash;&gt;-->
-    <!--&lt;!&ndash;<script src="/static/app/js/optimized.js"></script>&ndash;&gt;-->
-
-    <!--&lt;!&ndash; development&ndash;&gt;-->
-    <!--<script data-main="/static/app/js/main" src="/static/vendor/require.js"></script>-->
-
-
     <!--&lt;!&ndash; stylesheets&ndash;&gt;-->
     <!--<link rel='stylesheet' href='/static/stylesheets/style.css'/>-->
     <!--<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,300' rel='stylesheet' type='text/css'>-->
@@ -32,13 +23,18 @@
 <%- body %>
 </body>
 
-<!-- production-->
-<!--<script src="/static/vendor/require.js"></script>-->
-<!--<script src="/static/app/js/optimized_templates.js"></script>-->
-<!--<script src="/static/app/optimized/optimized.js"></script>-->
 
-<!-- development-->
+<% if(env == 'development') {%> <!-- development-->
+
 <script data-main="/static/app/js/main" src="/static/vendor/require.js"></script>
+
+<% } else { %> <!-- test && production-->
+
+<!--<script src="/static/vendor/require.js"></script>-->
+<script src="/static/app/optimized/optimized.js"></script>
+
+<% } %>
+
 
 
 <!-- stylesheets-->

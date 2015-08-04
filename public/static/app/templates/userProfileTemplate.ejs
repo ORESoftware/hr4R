@@ -1,62 +1,105 @@
 <div>
-    <div class="row">
-        Update Your Personal Information:
-    </div>
-    <div class="row">
-
-        <div class="col-lg-4">
-            <form role="form" id="user-profile-update-form-id" action="javascript:void(0);" method="post">
-
-                <div class="form-group input-group">
-                    <span class="input-group-addon user-profile-update-form">Email</span>
-                    <input type="text" class="form-control" placeholder="Email">
-                </div>
-
-                <div class="form-group input-group">
-                    <span class="input-group-addon user-profile-update-form">Username</span>
-                    <input type="text" class="form-control" name="user.username" placeholder="Username">
-                </div>
-
-                <div class="form-group input-group">
-                    <span class="input-group-addon user-profile-update-form">First Name</span>
-                    <input type="text" class="form-control" adhesive-get="user:firstName" adhesive-cid="<%= user.cid %>" name="user.firstName" placeholder="First Name">
-                </div>
-
-                <div class="form-group input-group">
-                    <span class="input-group-addon user-profile-update-form">Last Name</span>
-                    <input type="text" class="form-control" adhesive-get="user:lastName" adhesive-cid="<%= user.cid %>" name="user.lastName" placeholder="Last Name">
-                </div>
-
-                <div class="form-group input-group">
-                    <span class="input-group-addon user-profile-update-form">Current Password</span>
-                    <input type="password" class="form-control" adhesive-get="user:current_password" adhesive-cid="<%= user.cid %>" name="user.current_password" placeholder="Current Password">
-                </div>
-
-                <div class="form-group input-group">
-                    <span class="input-group-addon user-profile-update-form">New Password</span>
-                    <input type="password" class="form-control" name="user.new_password" placeholder="New Password">
-                </div>
-
-                <div class="form-group input-group">
-                    <span class="input-group-addon user-profile-update-form">Confirm New Password</span>
-                    <input type="password" class="form-control" name="user.new_confirmed_password"
-                           placeholder="New Password">
-                </div>
-
-                <button type="submit" id="submit-user-profile-update-form-id" class="btn btn-default">
-                    Update Your Info
-                </button>
-
-            </form>
+    <div class="container">
+        <div class="row">
+            Update Your Personal Information:
         </div>
-        <div class="col-lg-4">
-            <b><i>there should be something here</i></b>
-            <div id="user-view">
-                <p>username:<span adhesive-value="user:username" adhesive-cid="<%= user.cid %>"><%= user.get('username') %></span></p>
-                <p>email:<span adhesive-value="user:email" adhesive-cid="<%= user.cid %>"><%= user.get('email') %></span></p>
-                <p>first name:<span adhesive-value="user:firstName" adhesive-cid="<%= user.cid %>"><%= user.get('firstName') %></span></p>
-                <p>last name:<span adhesive-value="user:lastName" adhesive-cid="<%= user.cid %>"><%= user.get('lastname') %></span></p>
-                <p>Current password:<span adhesive-value="user:current_password" adhesive-cid="<%= user.cid %>"><%= user.get('current_password') %></span></p>
+        <div class="row">
+
+            <div class="col-lg-4">
+                <form role="form" id="user-profile-update-form-id" action="javascript:void(0);" method="post">
+
+                    <div class="form-group input-group">
+                        <span class="input-group-addon user-profile-update-form">Email</span>
+                        <input type="text" class="form-control" placeholder="Email">
+                    </div>
+
+                    <div class="form-group input-group">
+                        <span class="input-group-addon user-profile-update-form">Username</span>
+                        <input type="text" class="form-control" name="user.username" placeholder="Username">
+                    </div>
+
+                    <div class="form-group input-group">
+                        <span class="input-group-addon user-profile-update-form">First Name</span>
+                        <input type="text" class="form-control" adhesive-get="user:firstName"
+                               adhesive-cid="<%= user.cid %>" name="user.firstName" placeholder="First Name">
+                    </div>
+
+                    <div class="form-group input-group">
+                        <span class="input-group-addon user-profile-update-form">Last Name</span>
+                        <input type="text" class="form-control" adhesive-get="user:lastName"
+                               adhesive-cid="<%= user.cid %>" name="user.lastName" placeholder="Last Name">
+                    </div>
+
+                    <div class="form-group input-group">
+                        <span class="input-group-addon user-profile-update-form">Current Password</span>
+                        <input type="password" class="form-control" adhesive-get="user:current_password"
+                               adhesive-cid="<%= user.cid %>" name="user.current_password"
+                               placeholder="Current Password">
+                    </div>
+
+                    <div class="form-group input-group">
+                        <span class="input-group-addon user-profile-update-form">New Password</span>
+                        <input type="password" class="form-control" name="user.new_password" placeholder="New Password">
+                    </div>
+
+                    <div class="form-group input-group">
+                        <span class="input-group-addon user-profile-update-form">Confirm New Password</span>
+                        <input type="password" class="form-control" name="user.new_confirmed_password"
+                               placeholder="New Password">
+                    </div>
+
+                    <button type="submit" id="submit-user-profile-update-form-id" class="btn btn-default">
+                        Update Your Info
+                    </button>
+
+                </form>
+            </div>
+            <div class="col-lg-4">
+                <b><i>there should be something here</i></b>
+
+                <div id="user-view">
+                    <p>username:<span adhesive-value="user:username"
+                                      adhesive-cid="<%= user.cid %>"><%= user.get('username') %></span></p>
+
+                    <p>email:<span adhesive-value="user:email"
+                                   adhesive-cid="<%= user.cid %>"><%= user.get('email') %></span></p>
+
+                    <p>first name:<span adhesive-value="user:firstName"
+                                        adhesive-cid="<%= user.cid %>"><%= user.get('firstName') %></span></p>
+
+                    <p>last name:<span adhesive-value="user:lastName"
+                                       adhesive-cid="<%= user.cid %>"><%= user.get('lastname') %></span></p>
+
+                    <p>Current password:<span adhesive-value="user:current_password"
+                                              adhesive-cid="<%= user.cid %>"><%= user.get('current_password') %></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <small>
+                    <div id="collection-div-id">
+                        <% if(locals.collection){ %>
+                        <%= collection.givenName %>
+                        <% }
+                        else { %>
+                        (no collection detected)
+                        <% } %>
+                    </div>
+                </small>
+            </div>
+            <div class="col-md-3">
+                <small>
+                    <div id="model-div-id">
+                        <% if(locals.model) { %>
+                        <%= model.givenName %>, cid: <%= model.cid %> <p>_id: <%= model.get('_id') %></p>
+                        <% }
+                        else { %>
+                        (no model detected)
+                        <% } %>
+                    </div>
+                </small>
             </div>
         </div>
     </div>
