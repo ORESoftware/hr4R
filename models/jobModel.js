@@ -85,6 +85,9 @@ var get = function (cb) {
 
     if(JobModel === null){
         JobModel = mongoDB.model('jobs', jobSchema);
+
+        //TODO: db.collection.createIndex(keys, options)
+
         JobModel.ensureIndexes(function(err){
             if(err){
                 console.log(colors.bgRed(err));

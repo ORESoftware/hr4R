@@ -23,15 +23,14 @@ define(
         'backbone',
         'react',
         'jsx!app/js/views/reactViews/ServiceChooser',
-        'text!app/templates/dashboardTemplate.ejs'
+        //'text!app/templates/dashboardTemplate.ejs'
+        '#allTemplates'
     ],
 
 
-    function (appState, collections, standardViews, EJS, $, _, Handlebars, Backbone, React, ServiceChooser, template) {
+    function (appState, collections, standardViews, EJS, $, _, Handlebars, Backbone, React, ServiceChooser, allTemplates) {
 
-
-        var LoginView = standardViews.Login;
-        var RegisteredUsersView = standardViews.RegisteredUsers;
+        var template = allTemplates.DashboardTemplate;
 
         var DashboardView = Backbone.View.extend({
 

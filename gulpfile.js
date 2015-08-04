@@ -50,7 +50,7 @@ gulp.task('build_requirejs', function () {
 
 });
 
-gulp.task('build_requirejs_pipe', function () {
+gulp.task('build_requirejs_pipe_controllers', function () {
 
     var str = require('./public/static/app/js/allFiles.js')('./public/static/app/js/controllers', 'app/js/');
 
@@ -58,7 +58,7 @@ gulp.task('build_requirejs_pipe', function () {
     var dollars = str.split(';')[1];
 
 
-    fs.createReadStream(path.resolve('./public/static/app/js/helperStuff/requirejsTemplate.txt'))
+    fs.createReadStream(path.resolve('./public/static/app/js/meta/requirejsTemplate.txt'))
         .pipe(
         replaceStream('****', stars))
         .pipe(
@@ -69,13 +69,37 @@ gulp.task('build_requirejs_pipe', function () {
 
 });
 
+gulp.task('build_requirejs_pipe_views', function () {
+
+    var str = require('./public/static/app/js/allFiles.js')('./public/static/app/js/views/relViews', 'jsx!app/js/views/');
+
+    var stars = str.split(';')[0];
+    var dollars = str.split(';')[1];
+
+
+    fs.createReadStream(path.resolve('./public/static/app/js/meta/requirejsTemplate.txt'))
+        .pipe(
+        replaceStream('****', stars))
+        .pipe(
+        replaceStream('$$$$', dollars))
+        .pipe(
+        fse.createOutputStream('./public/static/app/js/meta/allRelViews.js')
+    );
+
+});
+
 
 gulp.task('default', function () {
 
-    gulp.run('build_requirejs_pipe');
+    gulp.run('build_requirejs_pipe_controllers');
+    gulp.run('build_requirejs_pipe_views');
 
     gulp.watch('public/static/app/js/controllers/**/*.js', function () {
-        gulp.run('build_requirejs_pipe');
+        gulp.run('build_requirejs_pipe_controllers');
+    });
+
+    gulp.watch('public/static/app/js/views/relViews/**/*.js', function () {
+        gulp.run('build_requirejs_pipe_views');
     });
 
     //gulp.watch('./public/static/app/js/controllers/**/*.js', ['build_requirejs_pipe']);

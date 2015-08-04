@@ -16,12 +16,15 @@ define(
         'handlebars',
         'backbone',
         'backbone-validation',
-        'text!app/templates/footer.ejs'
+        //'text!app/templates/footer.ejs'
+        '#allTemplates'
     ],
 
 
-    function (appState, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
 
+    function (appState, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, allTemplates) {
+
+        var template = allTemplates.FooterTemplate;
 
         var FooterView = Backbone.View.extend({
 
@@ -55,8 +58,8 @@ define(
 
                     this.setViewProps(opts); //has side effects
                     _.bindAll(this, 'render');
-                    this.listenTo(this.model, 'change', this.render);
-                    this.listenTo(this.collection, 'reset', this.render);
+                    //this.listenTo(this.model, 'change', this.render);
+                    //this.listenTo(this.collection, 'reset', this.render);
 
                 },
                 render: function () {
@@ -94,6 +97,7 @@ define(
                     this.delegateEvents();
                     return this;
                 },
+
                 onClickFooter: function (event) {
                     event.preventDefault();
 

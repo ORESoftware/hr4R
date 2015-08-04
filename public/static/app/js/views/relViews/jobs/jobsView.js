@@ -19,11 +19,14 @@ define(
         'backbone',
         'react',
         'jsx!app/js/views/reactViews/JobsList',
-        'text!app/templates/jobsTemplate.ejs'
+        '#allTemplates'
+        //'text!app/templates/jobsTemplate.ejs'
     ],
 
 
-    function (appState, collections, EJS, $, _, Adhesive, Backbone, React, JobsList, template) {
+    function (appState, collections, EJS, $, _, Adhesive, Backbone, React, JobsList, allTemplates) {
+
+        var template = allTemplates.JobsTemplate;
 
 
         var JobsView = Backbone.View.extend({
@@ -42,11 +45,20 @@ define(
                     this.setViewProps(opts); //has side effects
                     _.bindAll(this, 'render');
 
-                    var JobModel = this.collection.model;
+                    //var JobModel = this.collection.model;
 
-                    this.model = new JobModel();
+                    //this.model = new JobModel();
 
-                    this.collection.add(this.model);
+                    this.model = this.collection.first();
+
+                    if(this.model == null){
+                        var JobModel = this.collection.model;
+                        this.model = new JobModel();
+                        this.collection.add(this.model);
+                        this.model.persistModel();
+                    }
+
+                    //this.collection.add(this.model);
 
 
                     this.adhesive = new Adhesive(this, {});
@@ -68,8 +80,9 @@ define(
                             update: [self.collection],
                             //listenTo: [],
                             //update: [],
+                            //TODO: loop with coll-local-change
                             //collectionEvents: ['coll-change-socket-broadcast', 'coll-local-change-broadcast']
-                            collectionEvents: ['coll-local-change-broadcast']
+                            collectionEvents: ['coll-local-change-socket-broadcast']
                             //where: {cid:self.model.cid},
                             //filterUpdate: function(model){
                             //    return model.cid == self.model.cid;
@@ -85,7 +98,7 @@ define(
                         //domElementUpdate: $(self.el),
                         domElementUpdate: $(document),
 
-                        domEventType: 'click',
+                        domEventType: 'keyup',
                         propagateChangesToServerImmediately: false,
                         callback: null
                     });

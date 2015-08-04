@@ -55,14 +55,15 @@ define(
         'app/js/allCollections',
         'app/js/allModels',
         'app/js/routers/router',
-        'app/js/allTemplates',
-        '#allControllers'
+        '#allTemplates',
+        '#allControllers',
+        '#allRelViews'
         //'app/js/giant'
 
 
     ],
 
-    function (Observe, Backbone, _, IJSON, React, collections, models, router, allTemplates, allControllers) {
+    function (Observe, Backbone, _, IJSON, React, collections, models, router, allTemplates, allControllers, allRelViews) {
 
         /*
          we don't use the majority of these dependencies in this file, but they are loaded here so that r.js can build

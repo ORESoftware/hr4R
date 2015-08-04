@@ -264,6 +264,8 @@ var get = function (cb) {
 
     if (UserModel === null) {
         UserModel = mongoDB.model('users', userSchema);
+
+        //TODO: db.collection.createIndex(keys, options)
         UserModel.ensureIndexes(function (err) {
             if (err) {
                 console.log(colors.bgRed(err));

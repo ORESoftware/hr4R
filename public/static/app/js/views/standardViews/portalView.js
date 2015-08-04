@@ -17,11 +17,15 @@ define(
         'handlebars',
         'backbone',
         'backbone-validation',
-        'text!app/templates/portal.ejs'
+        '#allTemplates'
+        //'text!app/templates/portal.ejs'
     ],
 
 
-    function (appState, models, collections, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
+    function (appState, models, collections, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, allTemplates) {
+
+
+        var template = allTemplates.PortalTemplate;
 
 
         var PortalView = Backbone.View.extend({

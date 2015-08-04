@@ -72,11 +72,8 @@ define(
                 render: function () {
                     console.log('attempting to render IndexView.');
 
-
                     var data = this.collection.models;
-
                     var self = this;
-
 
                     var ret = EJS.render(IndexView.template, {
                         users: data

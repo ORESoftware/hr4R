@@ -22,11 +22,14 @@ define(
         'backbone',
         'backbone-validation',
         'app/js/giant',
-        'text!app/templates/header.ejs'
+        '#allTemplates'
+        //'text!app/templates/header.ejs'
     ],
 
 
-    function (appState, viewState, async, collections, models, form2js, EJS, $, _, Adhesive, Backbone, BackboneValidation, giant, template) {
+    function (appState, viewState, async, collections, models, form2js, EJS, $, _, Adhesive, Backbone, BackboneValidation, giant, allTemplates) {
+
+        var template = allTemplates.HeaderTemplate;
 
 
         //TODO: http://stackoverflow.com/questions/7567404/backbone-js-repopulate-or-recreate-the-view

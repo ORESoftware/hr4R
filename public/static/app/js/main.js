@@ -38,6 +38,8 @@ requirejs.config({
         'observe':'vendor/observe',
         'react':'vendor/react-with-addons',
         'socketio':'vendor/socketio',
+        '#allRelViews':'app/js/meta/allRelViews',
+        '#allTemplates':'app/js/meta/allTemplates',
         '#standardViews': 'app/js/meta/allStandardViews',
         '#appState':'app/js/appState',
         '#viewState':'app/js/viewState',

@@ -26,7 +26,7 @@ define(
             },
             jobs: function (id, changeViewFunction) {
 
-                require(['jsx!app/js/views/jobs/jobsView'], function (View) {
+                require(['jsx!app/js/views/relViews/jobs/jobsView'], function (View) {
 
                     var viewOpts = {};
                     viewOpts.id = id;
