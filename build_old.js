@@ -8,7 +8,7 @@
     "baseUrl": "./public/static",
     "name": "app/js/main",
     "mainConfigFile": "./public/static/app/js/main.js",
-    "out": "./public/static/app/js/optimized.js",
+    "out": "./public/static/app/optimized/optimized.js",
     "paths" :{
         requireLib : 'vendor/require'
     },

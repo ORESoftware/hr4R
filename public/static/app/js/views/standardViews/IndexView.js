@@ -10,8 +10,7 @@ define(
     [
         '#appState',
         'app/js/allCollections',
-        'app/js/views/loginView',
-        'app/js/views/registeredUsersView',
+        //'#standardViews',
         'ejs',
         'jquery',
         'underscore',
@@ -22,8 +21,11 @@ define(
     ],
 
 
-    function (appState, collections, LoginView, RegisteredUsersView, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
+    function (appState, collections, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
 
+
+        //var LoginView = standardViews.Login;
+        //var RegisteredUsersView = standardViews.RegisteredUsers;
 
         var IndexView = Backbone.View.extend({
 
@@ -82,16 +84,19 @@ define(
 
                     this.$el.html(ret);
 
-                    this.childViews.childLoginView = new LoginView({el: this.$('#child-view-login-container')});
-                    //this.childViews.childLoginView = new LoginView({el: $('#child-view-login-container')});
-                    this.childViews.childLoginView.render();
-                    this.childViews.childLoginView.delegateEvents();
 
-                    this.childViews.childRegisteredUsersView = new RegisteredUsersView({el: this.$('#child-view-registered-users-container')});
-                    //this.childViews.childRegisteredUsersView = new RegisteredUsersView({el: $('#child-view-registered-users-container')});
-                    this.childViews.childRegisteredUsersView.render();
-                    this.childViews.childRegisteredUsersView.delegateEvents();
+                    require(['#standardViews'],function(standardViews){
 
+                        self.childViews.childLoginView = new standardViews.Login({el: this.$('#child-view-login-container')});
+                        //this.childViews.childLoginView = new LoginView({el: $('#child-view-login-container')});
+                        self.childViews.childLoginView.render();
+                        self.childViews.childLoginView.delegateEvents();
+
+                        self.childViews.childRegisteredUsersView = new standardViews.RegisteredUsers({el: this.$('#child-view-registered-users-container')});
+                        //this.childViews.childRegisteredUsersView = new RegisteredUsersView({el: $('#child-view-registered-users-container')});
+                        self.childViews.childRegisteredUsersView.render();
+                        self.childViews.childRegisteredUsersView.delegateEvents();
+                    });
 
                     console.log('IndexView rendered');
 

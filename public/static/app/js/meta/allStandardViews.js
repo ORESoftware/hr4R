@@ -8,20 +8,20 @@ console.log('loading allViews');
 //var viewOptions = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
 
 
-define('app/js/allViews',
+define(
 
     [
-        'jsx!app/js/views/dashboardView',
-        'app/js/views/headerView',
-        'app/js/views/footerView',
-        'app/js/views/registeredUsersView',
-        'app/js/views/indexView',
-        'app/js/views/loginView',
-        'jsx!app/js/views/homeView',
-        'jsx!app/js/views/pictureView',
-        'app/js/views/portalView',
-        'app/js/views/userProfileView',
-        'jsx!app/js/views/overviewView',
+        'jsx!app/js/views/standardViews/dashboardView',
+        'app/js/views/standardViews/headerView',
+        'app/js/views/standardViews/footerView',
+        'app/js/views/standardViews/registeredUsersView',
+        'app/js/views/standardViews/indexView',
+        'app/js/views/standardViews/loginView',
+        'jsx!app/js/views/standardViews/homeView',
+        'jsx!app/js/views/standardViews/pictureView',
+        'app/js/views/standardViews/portalView',
+        'app/js/views/standardViews/userProfileView',
+        'jsx!app/js/views/standardViews/overviewView',
         'exports'
     ],
 

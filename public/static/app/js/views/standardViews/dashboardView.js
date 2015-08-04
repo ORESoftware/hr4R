@@ -15,8 +15,7 @@ define(
     [
         '#appState',
         'app/js/allCollections',
-        'app/js/views/loginView',
-        'app/js/views/registeredUsersView',
+        '#standardViews',
         'ejs',
         'jquery',
         'underscore',
@@ -28,8 +27,11 @@ define(
     ],
 
 
-    function (appState, collections, LoginView, RegisteredUsersView, EJS, $, _, Handlebars, Backbone, React, ServiceChooser, template) {
+    function (appState, collections, standardViews, EJS, $, _, Handlebars, Backbone, React, ServiceChooser, template) {
 
+
+        var LoginView = standardViews.Login;
+        var RegisteredUsersView = standardViews.RegisteredUsers;
 
         var DashboardView = Backbone.View.extend({
 

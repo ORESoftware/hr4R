@@ -1,9 +1,8 @@
 /**
- * Created by amills001c on 7/31/15.
+ * Created by amills001c on 8/3/15.
  */
 
 
-    // Filename: controllers/home.js
 define(
     [
         'jquery',
@@ -24,9 +23,9 @@ define(
                     view.render();
                 });
             },
-            jobs: function (id, changeViewFunction) {
+            Users: function (id, changeViewFunction) {
 
-                require(['jsx!app/js/views/jobs/jobsView'], function (View) {
+                require(['jsx!app/js/views/Users/UsersView'], function (View) {
 
                     var viewOpts = {};
                     viewOpts.id = id;

@@ -5,6 +5,8 @@
 var fs = require("fs");
 var path = require('path');
 
+var dirs = null;
+
 
 var getAllFilesFromFolder = function(dir) {
 
@@ -13,15 +15,15 @@ var getAllFilesFromFolder = function(dir) {
 
     fs.readdirSync(dir).forEach(function(file) {
 
+        //var temp = file;
         file = dir+'/'+file;
         stat = fs.statSync(file);
 
         if (stat && stat.isDirectory()) {
             results = results.concat(getAllFilesFromFolder(file))
         } else {
-            var str1 = String(file);
-            //var str = str1.substring(str1.indexOf('app/js'));
-            results.push(str1);
+            var str = String(file);
+            results.push(str);
         }
 
     });
@@ -29,27 +31,73 @@ var getAllFilesFromFolder = function(dir) {
     return results;
 };
 
-var resulz = getAllFilesFromFolder(__dirname + '/controllers');
+module.exports = function runTheTrap(dir,append){
 
-var array1 = resulz.map(function(item){
+    dirs = String(dir).split(path.sep);
 
-    if(String(item).indexOf('./') == 0){
-        item = item.substring(2);
-    }
+    //dirs = String(__dirname + '/controllers').split(path.sep);
 
-    return String(', "app/js/'+ String(item).replace('.js',''));
-});
+    var length = dirs.length-1;
 
-var array2 = resulz.map(function(item,index){
+    var resulz = getAllFilesFromFolder(dir);
+    //var resulz = getAllFilesFromFolder(__dirname + '/controllers');
 
-    if(String(item).indexOf('./') == 0){
-        item = item.substring(2);
-    }
+    var array1 = resulz.map(function(item){
 
-    var firstPart = String(('"app/js/'+ item + '"').replace('.js',''));
-    var secondPart = firstPart.concat(': arguments[').concat(index+1).concat(']');
-    return secondPart;
-});
+        var split = String(item).split(path.sep);
 
-fs.writeFileSync('./temp1.txt',array1.join('\n'));
-fs.writeFileSync('./temp2.txt',array2.join('\n'));
+        for(var i = 0; i< length; i++){
+            split.shift();
+        }
+
+        item = split.join(path.sep);
+
+        return String('"' + append + String(item).replace('.js','')).concat('"');
+    });
+
+    var array2 = resulz.map(function(item,index){
+
+        var split = String(item).split(path.sep);
+
+        for(var i = 0; i< length; i++){
+            split.shift();
+        }
+
+        item = split.join(path.sep);
+
+        var firstPart = String(('"' + append + item + '"').replace('.js',''));
+        var secondPart = ': arguments['.concat(index).concat(']');
+        return firstPart + secondPart;
+    });
+
+    //fs.writeFileSync(__dirname +'/temp1.txt',array1.join(''));
+    //fs.writeFileSync(__dirname +'/temp2.txt',array2.join(''));
+
+    return array1.join(',\n\t\t').concat(';').concat(array2.join(',\n\t\t\t'));
+
+};
+
+//var resulz = getAllFilesFromFolder(__dirname + '/controllers');
+//
+//var array1 = resulz.map(function(item){
+//
+//    //if(String(item).indexOf('./') == 0){
+//    //    item = item.substring(2);
+//    //}
+//
+//    return String(', "app/js/'+ String(item).replace('.js','')).concat('"');
+//});
+//
+//var array2 = resulz.map(function(item,index){
+//
+//    //if(String(item).indexOf('./') == 0){
+//    //    item = item.substring(2);
+//    //}
+//
+//    var firstPart = String(('"app/js/'+ item + '"').replace('.js',''));
+//    var secondPart = ': arguments['.concat(index+1).concat(']');
+//    return firstPart + secondPart;
+//});
+//
+//fs.writeFileSync(__dirname +'/temp1.txt',array1.join('\n'));
+//fs.writeFileSync(__dirname +'/temp2.txt',array2.join('\n'));

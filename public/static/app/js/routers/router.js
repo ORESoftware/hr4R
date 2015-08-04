@@ -22,10 +22,10 @@ define(
         'async',
         'app/js/allCollections',
         'ijson',
-        'app/js/allViews'
+        '#standardViews'
     ],
 
-    function (appState, viewState, React, Backbone, async, collections, IJSON, allViews) {
+    function (appState, viewState, React, Backbone, async, collections, IJSON, standardViews) {
 
 
         var BootRouter = Backbone.Router.extend({
@@ -58,15 +58,15 @@ define(
                 //actionName = actionName || Config.Defaults.Action;
 
                 var self = this;
-                require(["app/js/controllers/" + controllerName], function (ctl) {
+                require(["app/js/controllers/" + controllerName], function (cntr) {
                 //require(["controllers/" + controllerName], function (ctl) {
                     //var code = "ctl." + actionName + "();";
                     //eval(code);
-                    if(typeof ctl[actionName] === 'function'){
-                        ctl[actionName](id,self.changeView);
+                    if(typeof cntr[actionName] === 'function'){
+                        cntr[actionName](id,self.changeView);
                     }
                     else{
-                        ctl['default'](id,self.changeView);
+                        cntr['default'](id,self.changeView);
                     }
                 });
             },
@@ -91,14 +91,14 @@ define(
                 this.changeView({
                     //view:allViews.Home,
                     //view: new allViews.Home({el: '#main-content-id'}),
-                    view: new allViews.Home(),
+                    view: new standardViews.Home(),
                     useSidebar: true
                 });
             },
 
             pictures: function () {
                 this.changeView({
-                    view: new allViews.Picture(),
+                    view: new standardViews.Picture(),
                     useSidebar: true
                 });
             },
@@ -106,7 +106,7 @@ define(
             userProfile: function () {
                 this.changeView({
                     //view: allViews.UserProfile,
-                    view: new allViews.UserProfile(
+                    view: new standardViews.UserProfile(
                         {
                             //el:'#main-content-id',
                             model: appState.get('currentUser'),
@@ -121,7 +121,7 @@ define(
             index: function () {
                 this.changeView({
                     //view:allViews.Index,
-                    view: new allViews.Index({collection: collections.users}),
+                    view: new standardViews.Index({collection: collections.users}),
                     useSidebar: false
                 });
             },
@@ -129,7 +129,7 @@ define(
             dashboard: function () {
                 this.changeView({
                     //view:allViews.Index,
-                    view: new allViews.Dashboard({}),
+                    view: new standardViews.Dashboard({}),
                     useSidebar: true
                 });
             },
@@ -137,7 +137,7 @@ define(
             overview: function () {
                 this.changeView({
                     //view:allViews.Index,
-                    view: new allViews.Overview(),
+                    view: new standardViews.Overview(),
                     useSidebar: true
                 });
             },
@@ -154,7 +154,7 @@ define(
                 this.changeView({
                     //view:allViews.Home,
                     //view: new allViews.Home({el: '#main-content-id'}),
-                    view: new allViews.Home(),
+                    view: new standardViews.Home(),
                     useSidebar: true
                 });
             },
@@ -326,14 +326,14 @@ define(
                 if (this.viewState.get('mainParentView') != null) {
                     this.destroyView(this.viewState.get('mainParentView'));
                 }
-                this.viewState.set('mainView', new allViews.Index());
+                this.viewState.set('mainView', new standardViews.Index());
                 window.location.hash = 'index'; //TODO why do we need this line?
 
                 if (this.viewState.get('footerView') == null) {
-                    this.viewState.set('footerView', new allViews.Footer());
+                    this.viewState.set('footerView', new standardViews.Footer());
                 }
                 if (this.viewState.get('headerView') == null) {
-                    this.viewState.set('headerView', new allViews.Header());
+                    this.viewState.set('headerView', new standardViews.Header());
                 }
                 this.viewState.get('headerView').render();
                 //this.viewState.get('mainView').render();
@@ -351,7 +351,7 @@ define(
 
                 if (opts.useSidebar === true) {
                     //this.destroyView(this.viewState.get('mainParentView'));
-                    this.viewState.set('mainParentView', new allViews.Portal());
+                    this.viewState.set('mainParentView', new standardViews.Portal());
                     var temp = this.viewState.get('mainParentView');
                     temp.render();
                 }
@@ -367,10 +367,10 @@ define(
                 this.viewState.set('mainView', view);
 
                 if (this.viewState.get('footerView') == null) {
-                    this.viewState.set('footerView', new allViews.Footer());
+                    this.viewState.set('footerView', new standardViews.Footer());
                 }
                 if (this.viewState.get('headerView') == null) {
-                    this.viewState.set('headerView', new allViews.Header());
+                    this.viewState.set('headerView', new standardViews.Header());
                 }
                 //**render header**
                 this.viewState.get('headerView').render();

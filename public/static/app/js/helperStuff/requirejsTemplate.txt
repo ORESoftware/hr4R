@@ -5,9 +5,9 @@
 
 define(
     [
-        'require'
+        //'require'
 
-        , "app/js/./controllers/jobs"
+        ****
     ],
     function(){
 
@@ -15,6 +15,6 @@ define(
 
         return {
 
-            "app/js/./controllers/jobs": arguments[1]
+            $$$$
         }
 });

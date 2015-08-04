@@ -38,9 +38,10 @@ requirejs.config({
         'observe':'vendor/observe',
         'react':'vendor/react-with-addons',
         'socketio':'vendor/socketio',
+        '#standardViews': 'app/js/meta/allStandardViews',
         '#appState':'app/js/appState',
         '#viewState':'app/js/viewState',
-        '#allControllers':'app/js/allControllers'
+        '#allControllers':'app/js/meta/allControllers'
         //'d3':'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min'
     },
 

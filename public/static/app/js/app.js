@@ -54,7 +54,6 @@ define(
         'react',
         'app/js/allCollections',
         'app/js/allModels',
-        'app/js/allViews',
         'app/js/routers/router',
         'app/js/allTemplates',
         '#allControllers'
@@ -63,7 +62,7 @@ define(
 
     ],
 
-    function (Observe, Backbone, _, IJSON, React, collections, models, allViews, router, allTemplates, allControllers) {
+    function (Observe, Backbone, _, IJSON, React, collections, models, router, allTemplates, allControllers) {
 
         /*
          we don't use the majority of these dependencies in this file, but they are loaded here so that r.js can build
@@ -74,7 +73,12 @@ define(
         //    .style("background-color", "#919191");
 
 
-        alert(allControllers['app/js/controllers/jobs'].default());
+        //alert(allControllers['app/js/controllers/jobs'].default());
+        //
+        //require(['app/js/controllers/jobs'],function(x){
+        //    console.log('EUROOOOKA!!!!');
+        //    alert(x.default());
+        //});
 
         if (typeof String.prototype.startsWith !== 'function') {
             // see below for better implementation!
