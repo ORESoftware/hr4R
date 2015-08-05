@@ -53,6 +53,27 @@ define(
                 //    return Backbone.Model.prototype.set.apply(this, arguments);
                 //},
 
+                //    Backbone.Model.prototype.toJSON = function () {
+                //    var json = _.clone(this.attributes);
+                //    for (var attr in json) {
+                //        if ((json[attr] instanceof Backbone.Model) || (json[attr] instanceof Backbone.Collection)) {
+                //            json[attr] = json[attr].toJSON();
+                //        }
+                //    }
+                //    return json;
+                //};
+
+                toJSON: function () {
+                    // return _.omit(this.attributes, this.stale);
+                    var json = _.clone(this.attributes);
+                    for (var attr in json) {
+                        if ((json[attr] instanceof Backbone.Model) || (json[attr] instanceof Backbone.Collection)) {
+                            json[attr] = json[attr].toJSON();
+                        }
+                    }
+                    return json;
+                },
+
                 set: function (key, val, options) {
                     if (key == null) return this;
 
@@ -130,7 +151,9 @@ define(
                     this._pending = false;
                     this._changing = false;
                     return this;
-                },
+                }
+
+                ,
 
                 persistModel: function (attributes, opts, callback) {
 
@@ -140,20 +163,20 @@ define(
 
                         //TODO: add opts to object below
 
-                        if(this._id == null && appState.get('currentUser')){
-                            this.set('created_at',Date.now());
-                            var str =appState.get('currentUser').get('_id').concat('@').concat(Date.now());
+                        if (this._id == null && appState.get('currentUser')) {
+                            this.set('created_at', Date.now());
+                            var str = appState.get('currentUser').get('_id').concat('@').concat(Date.now());
                             this.set('created_by', str);
                         }
 
-                        if(appState.get('currentUser')){
+                        if (appState.get('currentUser')) {
                             var str = appState.get('currentUser').get('_id').concat('@').concat(Date.now());
-                            this.set('updated_by',str);
+                            this.set('updated_by', str);
                         }
 
                         //this.set('created_by','ooooooh');
                         //this.set('updated_by','jimmy jazz');
-                        this.set('updated_at',Date.now());
+                        this.set('updated_at', Date.now());
 
                         var self = this;
                         this.save(attributes, {
@@ -162,13 +185,13 @@ define(
                             //TODO:  model.trigger('sync', model, resp, options);
                             success: function (model, response, options) {
                                 self.needsPersisting = false;
-                                if(typeof callback === 'function'){
+                                if (typeof callback === 'function') {
                                     callback(null, model, IJSON.parse(response), options);
                                 }
                             },
                             error: function (model, xhr, options) {
                                 var err = new Error("Something went wrong while saving the model");
-                                if(typeof callback === 'function'){
+                                if (typeof callback === 'function') {
                                     callback(err, model, xhr, options);
                                 }
                             }
@@ -176,12 +199,13 @@ define(
                     }
                     else {
                         console.log('avoided unnecessarily saving model to server:', this);
-                        if(typeof callback === 'function') {
+                        if (typeof callback === 'function') {
                             callback(null, this, null, null);
                         }
                     }
 
-                },
+                }
+                ,
 
                 deleteModel: function (opts, callback) {
                     //TODO: add opts to object below
@@ -200,7 +224,8 @@ define(
                             callback(err, model, xhr, options);
                         }
                     });
-                },
+                }
+                ,
                 parse: function (resp, options) {
                     /*
                      parse converts a response into the hash of attributes to be set on the model.
@@ -213,6 +238,7 @@ define(
                         return this.attributes;
                     }
                     else {
+                        //this will get called when collection parses stuff
                         return resp;
                     }
                     //return resp;
@@ -225,4 +251,5 @@ define(
 
 
         return BaseModel;
-    });
+    })
+;

@@ -9,7 +9,7 @@ define(
     [
         '#appState',
         'app/js/allModels',
-        'app/js/allCollections',
+        '#allCollections',
         'form2js',
         'ejs',
         'jquery',

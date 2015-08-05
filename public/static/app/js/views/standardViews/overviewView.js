@@ -6,7 +6,7 @@
 define(
     [
         '#appState',
-        'app/js/allCollections',
+        '#allCollections',
         'ejs',
         'jquery',
         'underscore',

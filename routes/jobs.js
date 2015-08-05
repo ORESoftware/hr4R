@@ -79,7 +79,7 @@ router.get('/:job_id', function (req, res, next) {
     //});
 
     if (job) {
-        res.json(job);
+        res.json({success:job});
     }
     else {
         res.json({error: 'no job found'});

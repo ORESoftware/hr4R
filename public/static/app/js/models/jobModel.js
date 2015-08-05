@@ -21,10 +21,11 @@ define(
         'underscore',
         'backbone',
         'ijson',
-        'app/js/models/BaseModel'
+        'app/js/models/BaseModel',
+        'app/js/models/NestedModel'
     ],
 
-    function (_, Backbone, IJSON, BaseModel) {
+    function (_, Backbone, IJSON, BaseModel, NestedModel) {
 
         var Job = BaseModel.extend({
 
@@ -39,7 +40,7 @@ define(
                 defaults: function () { //prevents copying default attributes to all instances of JobModel
                     return {
                         jobname: null,
-                        animals: new Backbone.Model({
+                        animals: new NestedModel(this,{
                             cats:true,
                             dogs:false,
                             birds:false

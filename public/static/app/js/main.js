@@ -42,6 +42,7 @@ requirejs.config({
         '#allRelViews':'app/js/meta/allRelViews',
         '#allTemplates':'app/js/meta/allTemplates',
         '#standardViews': 'app/js/meta/allStandardViews',
+        '#allCollections': 'app/js/meta/allCollections',
         '#appState':'app/js/appState',
         '#viewState':'app/js/viewState',
         '#allControllers':'app/js/meta/allControllers'

@@ -18,7 +18,7 @@ define('app/js/boot',
         'backbone',
         'app/js/giant',
         'app/js/allModels',
-        'app/js/allCollections'
+        '#allCollections'
     ],
 
     function (appState, $, Backbone, giant, models, collections) {

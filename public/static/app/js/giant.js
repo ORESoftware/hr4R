@@ -15,7 +15,7 @@ define(
         'socketio',
         //'app/js/routers/router',
         //'app/js/allViews',
-        'app/js/allCollections',
+        '#allCollections',
         'ijson',
         'backbone',
         'underscore'

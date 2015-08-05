@@ -73,7 +73,7 @@ router.param('user_id', function (req, res, next, user_id) {
 
 // middleware specific to this router
 router.use(function timeLog(req, res, next) {
-    console.log('Time: ', Date.now());
+    //console.log('Time: ', Date.now());
     next();
 });
 
@@ -101,7 +101,7 @@ router.get('/:user_id', function (req, res, next) {
     var user = req.specialParams.user_model;
 
     if (user) {
-        res.json(user);
+        res.json({success:user});
     }
     else {
         res.json({error: {errorMessage: 'no user found for GET operation, probably deleted from DB'}});

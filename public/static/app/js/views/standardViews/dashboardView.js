@@ -14,7 +14,7 @@
 define(
     [
         '#appState',
-        'app/js/allCollections',
+        '#allCollections',
         '#standardViews',
         'ejs',
         'jquery',

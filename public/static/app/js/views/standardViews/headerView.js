@@ -12,7 +12,7 @@ define(
         '#appState',
         '#viewState',
         'async',
-        'app/js/allCollections',
+        '#allCollections',
         'app/js/allModels',
         'form2js',
         'ejs',

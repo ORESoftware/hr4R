@@ -11,7 +11,7 @@ console.log('loading loginView');
 define(
     [
         '#appState',
-        'app/js/allCollections',
+        '#allCollections',
         'app/js/allModels',
         'form2js',
         'ejs',
@@ -27,7 +27,6 @@ define(
 
     function (appState, collections, models, form2js, EJS, $, _, Backbone, BackboneValidation, IJSON, giant, template) {
 
-        //var router = routers(null).bootRouter;
 
         var LoginView = Backbone.View.extend({
 

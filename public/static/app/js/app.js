@@ -52,7 +52,7 @@ define(
         'underscore',
         'ijson',
         'react',
-        'app/js/allCollections',
+        '#allCollections',
         'app/js/allModels',
         'app/js/routers/router',
         '#allTemplates',
@@ -80,6 +80,17 @@ define(
         //    console.log('EUROOOOKA!!!!');
         //    alert(x.default());
         //});
+
+        window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
+
+            document.write('<h1> error message:' + errorMsg + '</h1>');
+            document.write('<h2> url:' + url +'</h2>');
+            document.write('line number:' + lineNumber);
+            $(document).html('error:'+ JSON.stringify(errorMsg));
+            return false;
+        };
+
+        throw new Error('whoa');
 
         if (typeof String.prototype.startsWith !== 'function') {
             // see below for better implementation!

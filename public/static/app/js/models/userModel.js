@@ -14,10 +14,11 @@ define(
         'underscore',
         'backbone',
         'ijson',
-        'app/js/models/BaseModel'
+        'app/js/models/BaseModel',
+        'app/js/models/NestedModel'
     ],
 
-    function (_, Backbone,IJSON, BaseModel) {
+    function (_, Backbone,IJSON, BaseModel, NestedModel) {
 
         var User = BaseModel.extend({
 
@@ -25,6 +26,7 @@ define(
 
                 //url: '/users',
                 //urlRoot: '/users?user_id=',
+                stale: ['paid'],
 
                 urlRoot: '/users',
 
@@ -40,7 +42,8 @@ define(
                         created_by:null,
                         updated_by:null,
                         created_at:null,
-                        updated_at:null
+                        updated_at:null,
+                        nestedModel: null
                     }
                 },
 
@@ -54,6 +57,7 @@ define(
 
                     this.givenName = '@UserModel';
                     this.options = opts || {};
+                    this.set('nestedModel',new NestedModel(this,{}));
 
                     _.bindAll(this, 'deleteModel', 'persistModel', 'validate','parse');
 

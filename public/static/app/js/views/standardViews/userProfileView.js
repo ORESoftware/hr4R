@@ -12,7 +12,7 @@ console.log('loading userProfileView');
 define(
     [
         '#appState',
-        'app/js/allCollections',
+        '#allCollections',
         'ejs',
         'jquery',
         'underscore',
@@ -64,41 +64,41 @@ define(
 
                     var self = this;
 
-                    this.adhesive.stick({
-                        keyName: 'user',
-                        models: {
-                            //listenTo: [self.model],
-                            //update: [self.model],
-                            listenTo: [self.model],
-                            update: [self.model],
-                            modelEvents: ['model-local-change-broadcast'],
-                            where: {}
-                        },
-                        collections: {
-                            listenTo: [self.collection],
-                            update: [self.collection],
-                            //listenTo: [],
-                            //update: [],
-                            collectionEvents: ['coll-change-socket-broadcast']
-                            //where: {cid:self.model.cid},
-                            //filterUpdate: function(model){
-                            //    return model.cid == self.model.cid;
-                            //},
-                            //filterListenTo: function(model){
-                            //    return model.cid == self.model.cid;
-                            //}
-                        },
-                        limitToEventTarget:true, //will limit updates for just the element touched
-                        //limitToClass: 'barf',  //will limit what elements get listened to at all
-                        //domElementListen: self.$el,
-                        domElementListen: $(document),
-                        //domElementUpdate: $(self.el),
-                        domElementUpdate: $(document),
-
-                        domEventType: 'keyup',
-                        propagateChangesToServerImmediately:false,
-                        callback: null
-                    });
+                    //this.adhesive.stick({
+                    //    keyName: 'user',
+                    //    models: {
+                    //        //listenTo: [self.model],
+                    //        //update: [self.model],
+                    //        listenTo: [self.model],
+                    //        update: [self.model],
+                    //        modelEvents: ['model-local-change-broadcast'],
+                    //        where: {}
+                    //    },
+                    //    collections: {
+                    //        listenTo: [self.collection],
+                    //        update: [self.collection],
+                    //        //listenTo: [],
+                    //        //update: [],
+                    //        collectionEvents: ['coll-change-socket-broadcast']
+                    //        //where: {cid:self.model.cid},
+                    //        //filterUpdate: function(model){
+                    //        //    return model.cid == self.model.cid;
+                    //        //},
+                    //        //filterListenTo: function(model){
+                    //        //    return model.cid == self.model.cid;
+                    //        //}
+                    //    },
+                    //    limitToEventTarget:true, //will limit updates for just the element touched
+                    //    //limitToClass: 'barf',  //will limit what elements get listened to at all
+                    //    //domElementListen: self.$el,
+                    //    domElementListen: $(document),
+                    //    //domElementUpdate: $(self.el),
+                    //    domElementUpdate: $(document),
+                    //
+                    //    domEventType: 'keyup',
+                    //    propagateChangesToServerImmediately:false,
+                    //    callback: null
+                    //});
 
                     //this.listenTo(this.collection, 'change', this.render);
                     //this.listenTo(this.collection, 'add remove reset', this.render);

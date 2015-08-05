@@ -22,12 +22,13 @@ define(
         'text!app/templates/indexTemplate.ejs',
         'text!app/templates/loginTemplate.ejs',
         'text!app/templates/userProfileTemplate.ejs',
-        'text!app/templates/portalTemplate.ejs'
+        'text!app/templates/portalTemplate.ejs',
+        'text!app/templates/getAllTemplate.ejs'
     ],
 
     function (HomeTemplate, OverviewTemplate, PictureTemplate, DashboardTemplate,
               HeaderTemplate, FooterTemplate, JobsTemplate, IndexTemplate,
-              LoginTemplate, UserProfileTemplate, PortalTemplate) {
+              LoginTemplate, UserProfileTemplate, PortalTemplate, GetAllTemplate) {
 
 
         return {
@@ -40,6 +41,7 @@ define(
             LoginTemplate: LoginTemplate,
             UserProfileTemplate: UserProfileTemplate,
             PictureTemplate: PictureTemplate,
-            PortalTemplate: PortalTemplate
+            PortalTemplate: PortalTemplate,
+            GetAllTemplate: GetAllTemplate
         };
     });
