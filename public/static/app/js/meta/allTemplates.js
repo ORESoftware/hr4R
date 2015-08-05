@@ -7,7 +7,7 @@
 //TODO: optimized.js file needs a version number in it's name so that browser doesn't mistake old version for new one
 
 
-console.log('loading allTemplates');
+console.log('loading #allTemplates');
 
 
 define(

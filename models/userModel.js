@@ -9,6 +9,7 @@
 
 // dependencies
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 var colors = require('colors');
 var validator = require('mongoose-validate');
 var bcrypt = require('bcrypt');
@@ -51,7 +52,7 @@ var validation = {
 
 var registerSchema = function () {
 
-    userSchema = mongoose.Schema({
+    userSchema = new Schema({
             role: {
                 type: String,
                 enum: ['Admin', 'Owner', 'User']
@@ -200,6 +201,36 @@ var registerSchema = function () {
 
         });
     }, 'This email address is already taken!');
+
+    /**
+     * Methods
+     */
+
+    userSchema.method({
+
+        beMerry: function(){
+
+        },
+        juice: function(){
+
+        }
+
+    });
+
+    /**
+     * Statics
+     */
+
+    userSchema.static({
+
+        beMerry: function(){
+
+        },
+        juice: function(){
+
+        }
+
+    });
 
 
     userSchema.statics.findByEmailAndPassword = function (email, password, cb) {

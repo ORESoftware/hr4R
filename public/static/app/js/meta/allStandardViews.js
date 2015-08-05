@@ -3,7 +3,7 @@
  */
 
 
-console.log('loading allViews');
+console.log('loading #standardViews');
 
 //var viewOptions = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
 

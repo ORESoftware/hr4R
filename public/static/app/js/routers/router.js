@@ -251,12 +251,12 @@ define(
                         if (coll.collNeedsPersisting) {
                             collectionsToSync.push(
                                 function (cb) {
-                                    //TODO: this will be incorrect with more than one collection because key will be wrong
-
+                                    //TODO: use async.series?
                                     coll.persistCollection({}, function (err, res) {
                                         if (err) {
                                             return cb(err);
                                         }
+                                        //TODO: if websockets are on, then shouldn't need to do fetch at all, can just check for connection
                                         coll.fetch()
                                             .done(function () {
                                                 cb();
@@ -268,6 +268,7 @@ define(
                         }
                         else {
                             collectionsToSync.push(
+                                //TODO: if websockets are on, then shouldn't need to do fetch at all, can just check for a current connection
                                 function (cb) {
                                     coll.fetch()
                                         .done(function (msg) {
