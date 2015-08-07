@@ -49,13 +49,15 @@ define(
 
                     //this.model = new JobModel();
 
-                    this.model = this.collection.find(function(model){
+                    //this.model = this.collection.find(function(model){
+                    //
+                    //    var _id = model.get('_id');
+                    //    if(_id){
+                    //        return _id.toString() == '55c13213aaf8352a3a4ab48f';
+                    //    }
+                    //});
 
-                        var _id = model.get('_id');
-                        if(_id){
-                            return _id.toString() == '55c13213aaf8352a3a4ab48f';
-                        }
-                    });
+                    this.model = this.collection.first();
 
                     if(this.model == null){
                         var JobModel = this.collection.model;
@@ -63,6 +65,8 @@ define(
                         this.collection.add(this.model);
                         this.model.persistModel();
                     }
+
+                    console.log('jobs view model cid:',this.model.cid);
 
                     //this.collection.add(this.model);
 

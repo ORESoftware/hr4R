@@ -499,21 +499,24 @@ define(
                             //coll.each(function (model) {
                             _.each(coll, function (model, index) {
 
-                                var subModel = getNestedModels(0, model, props);
+                                //var subModel = getNestedModels(null,0, model, props);
+                                //
+                                //if (subModel) {
+                                //    if (subModel instanceof Backbone.Model) {
+                                //        subModel.set(modelProp, val, {localChange: true});
+                                //    }
+                                //    else {
+                                //        subModel[modelProp] = val;
+                                //        model.trigger('model-local-change-broadcast', model);
+                                //    }
+                                //    model.persistModel();
+                                //}
+                                //else{
+                                //    console.error('no submodel found');
+                                //}
 
-                                if (subModel) {
-                                    if (subModel instanceof Backbone.Model) {
-                                        subModel.set(modelProp, val, {localChange: true});
-                                    }
-                                    else {
-                                        subModel[modelProp] = val;
-                                        model.trigger('model-local-change-broadcast', model);
-                                    }
-                                    model.persistModel();
-                                }
-                                else{
-                                    console.error('no submodel found');
-                                }
+                                model.set(modelProp,val);
+                                model.persistModel();
                             })
                         });
                     }
@@ -540,22 +543,25 @@ define(
         }
 
 
-        function getNestedModels(index, model, props) {
+        //TODO: recursion is even harder in JS due to closures
 
-            var temp = null;
+        function getNestedModels(value, index, model, props) {
+
+            var temp = value;
+            var value = model;
             if (props[index]) {
                 temp = model.get(props[index]);
 
                 ++index;
                 if (props[index]) {
-                    getNestedModels(index, temp, props);
+                    getNestedModels(temp, index, temp, props);
                 }
                 else {
                     return temp;
                 }
             }
             else {
-                return model;
+                return value;
             }
         }
 

@@ -17,7 +17,7 @@
     "prestart_nodemon": "",
     "start_nodemon": "NODE_ENV=development nodemon ./bin/www",
     "start_nodemon_windows": "set NODE_ENV=development&&nodemon ./bin/www",
-    "build": "r.js -o ./build_old.js",
+    "build": "r.js -o ./build/build.js",
     "build_windows": "r.js.cmd -o ./build_old.js",
     "mocha_run_test": "mocha --grep $TEST_NAME",
     "start_expose_gc": "node --expose-gc ./bin/www",
