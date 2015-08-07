@@ -54,38 +54,34 @@ define(
 
                 //TODO: match socket session with express session
 
-
-                socket.on('update', function (data) {
-                    console.log('UPDATE FROM SERVER:', data);
-                    var oplogDoc = IJSON.parse(data);
-                    var _id = oplogDoc.o2._id;
-                    var updateInfo = oplogDoc.o.$set;
-                    var updated_by = updateInfo.updated_by;
-                    if(updated_by){
-                        var updateUserID = String(updated_by).split('@')[0];
-                        var currentUserId = appState.get('currentUser') ? appState.get('currentUser').get('_id') : null;
-                        if(currentUserId && currentUserId.toString() == updateUserID){
-                            return;
-                        }
-                    }
-                    var ns = oplogDoc.ns;
-                    var split = String(ns).split('.');
-                    var dbName = split[0];
-                    var collectionName = split[1];
-                    var coll = findCollection(collectionName);
-                    if (coll) {
-                        coll.updateModelSocket(_id,updateInfo,{});
-                        //coll.updateModel(_id, updateInfo, {silent:true});
-                    }
+                socket.on('error', function socketConnectionErrorCallback(err) {
+                    socketEvents.trigger('socket-error', err);
+                    console.error('Unable to connect Socket.IO ---->', JSON.stringify(err));
                 });
 
+                socket.on('connect', function (event) {
+                    socketEvents.trigger('socket-connected', 'connected --> id'.concat(socket.id));
+                    console.log('document.cookie after socketio connection:', document.cookie);
+                    console.info('successfully established a working and authorized connection'.toUpperCase());
+                });
+
+                socket.on('disconnect', function (event) {
+                    socketEvents.trigger('socket-disconnected', 'disconnected');
+                    console.log('document.cookie after socketio DIS-connection:', document.cookie);
+                    console.info('socket disconnected'.toUpperCase());
+                });
+
+
                 socket.on('insert', function (data) {
-                    console.log('INSERT ON SERVER:', data);
+
                     var oplogDoc = IJSON.parse(data);
                     var data = oplogDoc.o;
 
                     var created_by = data.created_by;
                     if(created_by){
+                        if(created_by === 'temp_created_by'){
+                            return;
+                        }
                         var createdByUserID = String(created_by).split('@')[0];
                         var currentUserId = appState.get('currentUser') ? appState.get('currentUser').get('_id') : null;
                         if(currentUserId && currentUserId.toString() == createdByUserID){
@@ -93,9 +89,10 @@ define(
                         }
                     }
                     else{
-                        throw new Error('no created by field present:',data);
+                        throw new Error('no created_by field present:'+data);
                     }
 
+                    console.log('INSERT ON SERVER:', data);
                     var ns = oplogDoc.ns;
                     var split = String(ns).split('.');
                     var dbName = split[0];
@@ -117,6 +114,38 @@ define(
                     }
                 });
 
+                socket.on('update', function (data) {
+
+                    var oplogDoc = IJSON.parse(data);
+                    var _id = oplogDoc.o2._id;
+                    var updateInfo = oplogDoc.o.$set;
+                    var updated_by = updateInfo.updated_by;
+                    if(updated_by){
+                        if(updated_by === 'temp_updated_by'){
+                            return;
+                        }
+                        var updateUserID = String(updated_by).split('@')[0];
+                        var currentUserId = appState.get('currentUser') ? appState.get('currentUser').get('_id') : null;
+                        if(currentUserId && currentUserId.toString() == updateUserID){
+                            return;
+                        }
+                    }else{
+                        throw new Error('no updated_by field present:'+data);
+                    }
+                    console.log('UPDATE FROM SERVER:', data);
+                    var ns = oplogDoc.ns;
+                    var split = String(ns).split('.');
+                    var dbName = split[0];
+                    var collectionName = split[1];
+                    var coll = findCollection(collectionName);
+                    if (coll) {
+                        coll.updateModelSocket(_id,updateInfo,{});
+                        //coll.updateModel(_id, updateInfo, {silent:true});
+                    }
+                });
+
+
+
                 socket.on('delete', function (data) {
                     console.log('DELETE ON SERVER:', data);
                     var oplogDoc = IJSON.parse(data);
@@ -132,23 +161,6 @@ define(
                     }
                 });
 
-
-                socket.on('error', function socketConnectionErrorCallback(err) {
-                    socketEvents.trigger('socket-error', err);
-                    console.error('Unable to connect Socket.IO ---->', JSON.stringify(err));
-                });
-
-                socket.on('connect', function (event) {
-                    socketEvents.trigger('socket-connected', 'connected --> id'.concat(socket.id));
-                    console.log('document.cookie after socketio connection:', document.cookie);
-                    console.info('successfully established a working and authorized connection'.toUpperCase());
-                });
-
-                socket.on('disconnect', function (event) {
-                    socketEvents.trigger('socket-disconnected', 'disconnected');
-                    console.log('document.cookie after socketio DIS-connection:', document.cookie);
-                    console.info('socket disconnected'.toUpperCase());
-                });
 
             }
 

@@ -1,3 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- stylesheets-->
+    <link rel='stylesheet' href='/static/stylesheets/style.css'/>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+
+    <!--<link type="text/css" rel="stylesheet" href="bower_components/backbone-modal/backbone.modal.css">-->
+    <!--<link type="text/css" rel="stylesheet" href="bower_components/backbone-modal/backbone.modal.theme.css">-->
+
+    <link href="/static/css/bootstrap/bootstrap-notify.css" rel="stylesheet">
+
+    <!-- for simple sidebar -->
+    <link rel="stylesheet" type="text/css" href="/static/css/portal/simple-sidebar.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/static/css/userProfileView/user-profile.css" media="screen" />
+
+</head>
+
+
+<body>
 <div id="index_header_div_id" class="header navbar-fixed-top"></div>
 
 
@@ -7,3 +30,20 @@
 
 
 <div id="index_footer_div_id" class="footer navbar-fixed-bottom"></div>
+
+
+
+<!-- //////////////////////  here we run the front-end application //////////////////////-->
+<!-- ////////////////////////////////////////////////////////////////////////////////////-->
+<!-- ////////////////////////////////////////////////////////////////////////////////////-->
+<% if(env === 'development') {%> <!-- development-->
+<script data-main="/static/app/js/main" src="/static/vendor/require.js"></script>
+<% } else { %> <!-- test && production-->
+<script src="/static/app/optimized/optimized.js"></script>
+<% } %>
+<!-- ////////////////////////////////////////////////////////////////////////////////////-->
+<!-- ////////////////////////////////////////////////////////////////////////////////////-->
+<!-- ////////////////////////////////////////////////////////////////////////////////////-->
+
+</body>
+</html>

@@ -39,9 +39,11 @@ requirejs.config({
         'react':'vendor/react-with-addons',
         'socketio':'vendor/socketio',
         //'Adhesive':'app/js/Adhesive',
+        '#patches' :'app/js/patches',
         '#allRelViews':'app/js/meta/allRelViews',
         '#allTemplates':'app/js/meta/allTemplates',
         '#standardViews': 'app/js/meta/allStandardViews',
+        '#allModels': 'app/js/meta/allModels',
         '#allCollections': 'app/js/meta/allCollections',
         '#appState':'app/js/appState',
         '#viewState':'app/js/viewState',
@@ -69,7 +71,7 @@ requirejs.config({
     }
 });
 
-require(['app/js/app'], function (Application) {
+require(['app/js/app','app/js/boot'], function (Application) {
 
     $(document).ready(function () {
         console.log('document.ready fired, starting application...');

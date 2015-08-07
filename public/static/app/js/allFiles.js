@@ -13,10 +13,19 @@ var getAllFilesFromFolder = function(dir) {
     var results = [];
     var stat;
 
+    //console.log('dir before normalize:',dir);
+    //dir = path.normalize(dir);
+    //console.log('dir after normalize:',dir);
+
     fs.readdirSync(dir).forEach(function(file) {
 
         //var temp = file;
         file = dir+'/'+file;
+
+        //console.log('file before join:',file);
+        //file = path.join(dir,file);
+        //console.log('file after join:',file);
+
         stat = fs.statSync(file);
 
         if (stat && stat.isDirectory()) {

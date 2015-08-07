@@ -5,6 +5,7 @@
 
 ({
     //"optimizeAllPluginResources": true,
+    "preserveLicenseComments": false,
     "baseUrl": "./public/static",
     "name": "app/js/main",
     "mainConfigFile": "./public/static/app/js/main.js",

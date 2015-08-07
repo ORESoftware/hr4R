@@ -13,7 +13,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var ejs = require('ejs');
-var expressLayouts = require('express-ejs-layouts');
+//var expressLayouts = require('express-ejs-layouts');
 var express = require('express');
 
 
@@ -82,11 +82,11 @@ app.use(session);
  secure: false
  }}));*/
 
-app.use(expressLayouts);
+//app.use(expressLayouts);
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.set('layout', 'layoutx');
+//app.set('layout', 'layoutx');
 app.engine('html', ejs.renderFile);
 
 

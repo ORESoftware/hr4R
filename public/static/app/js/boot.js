@@ -17,7 +17,7 @@ define('app/js/boot',
         'jquery',
         'backbone',
         'app/js/giant',
-        'app/js/allModels',
+        '#allModels',
         '#allCollections'
     ],
 

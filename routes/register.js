@@ -2,6 +2,9 @@
  * Created by amills001c on 6/15/15.
  */
 
+
+//TODO: save vs insert vs update with upsert:true
+
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
@@ -92,7 +95,7 @@ function registerUser(req, res, next) {
 
 
     var UserModel = req.site.models.User;
-    UserModel.get(function(err,User){
+    UserModel.get(function (err, User) {
 
         var newUser = new User({
             username: username,
@@ -100,10 +103,10 @@ function registerUser(req, res, next) {
             email: email,
             firstName: firstName,
             lastName: lastName,
-            created_by: created_by,
-            created_at: created_at,
-            updated_by: updated_by,
-            updated_at: updated_at
+            created_by: 'temp_created_by',
+            created_at: Date.now(),
+            updated_by: 'temp_updated_by',
+            updated_at: Date.now()
         });
 
         newUser.passwordPreHash = password;
@@ -116,17 +119,23 @@ function registerUser(req, res, next) {
             }
             else if (result) {
                 delete result.passwordPreHash;
-                loginNewlyRegisteredUser(result, req, res, next)
+                result.updated_by = String(result._id).toString().concat('@').concat(Date.now());
+                result.created_by = String(result._id).toString().concat('@').concat(Date.now());
+                result.updated_at = Date.now();
+                result.created_at = Date.now();
+                result.save(function (err, result) {
+                    if (err) {
+                        res.json({error: err.errors});  //we pass mongoose errors object to front-end
+                        return next(err);
+                    }
+                    loginNewlyRegisteredUser(result, req, res, next)
+                });
             }
             else {
                 next(new Error('grave error in user.save() method in /register'));
             }
         });
     });
-
-
 }
-
-
 
 module.exports = router;

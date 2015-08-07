@@ -2,6 +2,7 @@
  * Created by amills001c on 6/9/15.
  */
 
+// 752,115 chars in optimized file
 
 //TODO: http://webdeveloperpost.com/Articles/10-most-useful-jQuery-functions-for-your-website.aspx
 //TODO: http://alfredkam.com/goodbye-marionette-hello-react/
@@ -9,51 +10,22 @@
 //TODO: http://www.gianlucaguarini.com/blog/rivet-js-backbone-js-made-my-code-awesome/
 //TODO: http://kwilson.me.uk/blog/inject-css-from-your-requirejs-module-into-the-main-app/
 
+//TODO:
+
 console.log('loading app/js/APP.js');
-
-/*
- window.appGlobal = {
-
- //unfortunately, can't really avoid global variables,
- // because templates need to access certain variables without have to re-inject variable values into templates
-
- authorized: null,  //boolean
- currentUser: null, //Backbone.Model
- env: null    //object
-
- };
- */
-
-
-window.no_op = function () {
-};
-window.no_op_err = function () {
-    throw new Error('this no_op function should not have been called.')
-};
-
-
-window.saveToLocalStorage = function (key, val) {
-    var str = JSON.stringify(val);
-    localStorage.setItem(key, str);
-};
-
-
-window.readFromLocalStorage = function (key) {
-    var val = localStorage.getItem(key);
-    return JSON.parse(val);
-};
 
 
 define(
     [
         //'d3',
+        '#patches',
         'observe',
         'backbone',
         'underscore',
         'ijson',
         'react',
         '#allCollections',
-        'app/js/allModels',
+        '#allModels',
         'app/js/routers/router',
         '#allTemplates',
         '#allControllers',
@@ -63,7 +35,7 @@ define(
 
     ],
 
-    function (Observe, Backbone, _, IJSON, React, collections, models, router, allTemplates, allControllers, allRelViews) {
+    function (patches, Observe, Backbone, _, IJSON, React, collections, models, router, allTemplates, allControllers, allRelViews) {
 
         /*
          we don't use the majority of these dependencies in this file, but they are loaded here so that r.js can build
@@ -81,16 +53,9 @@ define(
         //    alert(x.default());
         //});
 
-        window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
 
-            document.write('<h1> error message:' + errorMsg + '</h1>');
-            document.write('<h2> url:' + url +'</h2>');
-            document.write('line number:' + lineNumber);
-            $(document).html('error:'+ JSON.stringify(errorMsg));
-            return false;
-        };
 
-        throw new Error('whoa');
+        //window.throwGlobalError(new Error('whoa'));
 
         if (typeof String.prototype.startsWith !== 'function') {
             // see below for better implementation!
@@ -231,7 +196,7 @@ define(
 
 
         var start = function () {
-
+            //TODO: boot should be included in optimized build
             require(['app/js/boot'], function (boot) {
                 //$(function() {  //DOM is ready
                     boot.initialize();

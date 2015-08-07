@@ -257,10 +257,12 @@ define(
                                             return cb(err);
                                         }
                                         //TODO: if websockets are on, then shouldn't need to do fetch at all, can just check for connection
+                                        //TODO: we should only fetch a collection after it has been persisted
                                         coll.fetch()
                                             .done(function () {
                                                 cb();
-                                            }).fail(function (err) {
+                                            })
+                                            .fail(function (err) {
                                                 cb(err);
                                             });
                                     });
@@ -273,7 +275,8 @@ define(
                                     coll.fetch()
                                         .done(function (msg) {
                                             cb(null, msg);
-                                        }).fail(function (err) {
+                                        })
+                                        .fail(function (err) {
                                             cb(err);
                                         });
                                 });
@@ -318,6 +321,21 @@ define(
 
 
         function continueOn(opts) {
+
+
+            /*
+
+             each controller action has a collection defined for it
+
+             it passes the desired collection to the view
+
+             this also tells the router which new collection it needs to fetch from the server
+
+             the front-end only needs to save the collections that had been changed
+
+             and fetching should only happen for collections that are needed for the next view
+
+             */
 
 
             //TODO: ejs.update()

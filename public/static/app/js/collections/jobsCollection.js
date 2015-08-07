@@ -15,7 +15,7 @@ define(
     [
         'underscore',
         'backbone',
-        'app/js/allModels',
+        '#allModels',
         'app/js/collections/BaseCollection'
 
     ],

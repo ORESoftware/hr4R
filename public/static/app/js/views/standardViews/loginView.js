@@ -12,7 +12,7 @@ define(
     [
         '#appState',
         '#allCollections',
-        'app/js/allModels',
+        '#allModels',
         'form2js',
         'ejs',
         'jquery',
@@ -249,7 +249,8 @@ define(
                             Backbone.Events.trigger('bootRouter', hash);
                         }
 
-                    }).fail(function (err) {
+                    })
+                    .fail(function (err) {
                         alert('failed to fetch users collection in loginView');
                     });
             }
@@ -257,12 +258,12 @@ define(
 
                 var newUser = models.User.newUser(res.user);
                 collections.users.add(newUser);
+                appState.set('currentUser', newUser);
                 Backbone.syncCollection(collections.users, function (err, res) {  //TODO: should just save UserModel, not whole collection here
                     if (err) {
                         throw err;
                     }
                     else {
-                        appState.set('currentUser', newUser);
                         createSocketConnection();
                         Backbone.Events.trigger('bootRouter', 'home');
                     }

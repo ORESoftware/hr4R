@@ -8,7 +8,7 @@ console.log('loading portalView');
 define(
     [
         '#appState',
-        'app/js/allModels',
+        '#allModels',
         '#allCollections',
         'form2js',
         'ejs',

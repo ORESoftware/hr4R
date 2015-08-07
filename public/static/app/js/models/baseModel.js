@@ -162,6 +162,7 @@ define(
                     if (this.needsPersisting) {
 
                         //TODO: add opts to object below
+                        //TODO: need to make this work for new user that logs in
 
                         if (this._id == null && appState.get('currentUser')) {
                             this.set('created_at', Date.now());
@@ -204,8 +205,7 @@ define(
                         }
                     }
 
-                }
-                ,
+                },
 
                 deleteModel: function (opts, callback) {
                     //TODO: add opts to object below
@@ -224,8 +224,9 @@ define(
                             callback(err, model, xhr, options);
                         }
                     });
-                }
-                ,
+                },
+
+
                 parse: function (resp, options) {
                     /*
                      parse converts a response into the hash of attributes to be set on the model.
@@ -241,7 +242,6 @@ define(
                         //this will get called when collection parses stuff
                         return resp;
                     }
-                    //return resp;
                 }
             },
 
