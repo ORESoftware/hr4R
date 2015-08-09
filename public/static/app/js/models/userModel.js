@@ -15,20 +15,30 @@ define(
         'backbone',
         'ijson',
         'app/js/models/BaseModel',
-        'app/js/models/NestedModel'
+        'app/js/models/NestedModel',
+        'app/js/ModelCollectionMediator'
+        //'#allCollections'
     ],
 
-    function (_, Backbone,IJSON, BaseModel, NestedModel) {
+    function (_, Backbone,IJSON, BaseModel, NestedModel, MCM) {
 
         var User = BaseModel.extend({
 
-                idAttribute: "_id",
+                //idAttribute: "_id",
 
                 //url: '/users',
                 //urlRoot: '/users?user_id=',
                 stale: ['paid'],
 
-                urlRoot: '/users',
+                urlRoot: function(){
+                    //if(this.collection == null){
+                    //    throw new Error('no collection assigned to model');
+                    //}
+                    //return '/' + this.collection.uniqueName +'/'
+                    return '/users'
+                },
+
+                //urlRoot: '/users',
 
                 defaults: function () { //prevents copying default attributes to all instances of UserModel
                     return {
@@ -57,7 +67,10 @@ define(
 
                     this.givenName = '@UserModel';
                     this.options = opts || {};
+
                     this.set('nestedModel',new NestedModel(this,{}));
+
+                    this.collection = MCM.findCollectionByName('users');
 
                     _.bindAll(this, 'deleteModel', 'persistModel', 'validate','parse');
 
@@ -79,10 +92,8 @@ define(
 
             { //class properties
 
-                newUser: function ($user) {
-
-                    var user = new User($user);
-                    return user;
+                newUser: function (attributes,options) {
+                    return new User(attributes,options);
                 }
 
             });

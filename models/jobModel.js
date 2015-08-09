@@ -33,8 +33,8 @@ var registerSchema = function () {
 
     jobSchema = mongoose.Schema({
             jobName: {
-                type: String,
-                enum: ['Admin', 'Owner', 'Job']
+                type: String
+                //enum: ['Admin', 'Owner', 'Job']
             },
             animals:{
               type: Object

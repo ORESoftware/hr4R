@@ -96,6 +96,8 @@ router.post('/', function (req, res, next) {
     var job = req.body;
     var jobName = job.jobName;
     var animals = job.animals;
+    var firstName = job.firstName;
+    var lastName = job.lastName;
     var created_by = job.created_by;
     var created_at = job.created_at;
     var updated_by = job.updated_by;
@@ -111,6 +113,8 @@ router.post('/', function (req, res, next) {
 
         var newJob = new Job({
             jobName: jobName,
+            firstName:firstName,
+            lastName:lastName,
             animals:animals,
             created_by: created_by,
             created_at: created_at,
@@ -149,6 +153,17 @@ router.put('/:job_id', function (req, res, next) {
 
     var job = req.body;
     var jobName = job.jobName;
+    var firstName = job.firstName;
+    var lastName = job.lastName;
+    var updated_by = job.updated_by;
+    var updated_at = job.updated_at;
+
+
+    jobToUpdate.firstName = firstName;
+    jobToUpdate.lastName = lastName;
+    jobToUpdate.jobName = jobName;
+    jobToUpdate.updated_by = updated_by;
+    jobToUpdate.updated_at = updated_at;
 
 
     jobToUpdate.save(function (err, result) {

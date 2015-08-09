@@ -22,28 +22,40 @@ define(
         'backbone',
         'ijson',
         'app/js/models/BaseModel',
-        'app/js/models/NestedModel'
+        'app/js/models/NestedModel',
+        'app/js/ModelCollectionMediator'
+        //'#allCollections'
     ],
 
-    function (_, Backbone, IJSON, BaseModel, NestedModel) {
+    function (_, Backbone, IJSON, BaseModel, NestedModel, MCM) {
 
         var Job = BaseModel.extend({
 
 
-                idAttribute: "_id",
+                //idAttribute: "_id",
 
                 //url: '/jobs',
                 //urlRoot: '/jobs?job_id=',
 
-                urlRoot: '/jobs',
+                //urlRoot: '/jobs',
+
+                urlRoot: function () {
+                    //if(this.collection == null){
+                    //    throw new Error('no collection assigned to model');
+                    //}
+                    //return '/' + this.collection.uniqueName +'/'
+                    return '/jobs'
+                },
 
                 defaults: function () { //prevents copying default attributes to all instances of JobModel
                     return {
-                        jobname: null,
-                        animals: new NestedModel(this,{
-                            cats:true,
-                            dogs:false,
-                            birds:false
+                        jobName: null,
+                        firstName: null,
+                        lastName: null,
+                        animals: new NestedModel(this, {
+                            cats: true,
+                            dogs: false,
+                            birds: false
                         })
                     }
                 },
@@ -58,8 +70,19 @@ define(
 
                     this.options = opts || {};
                     this.givenName = '@JobModel';
-                    _.bindAll(this, 'deleteModel', 'persistModel', 'validate', 'parse');
 
+                    //TODO: how to have a default collection?
+
+                    if(this.collection == null){
+                        if(this.collectionName){
+                            this.collection = MCM.findCollectionByName(this.collectionName);
+                        }
+                        else{ //default
+                            this.collection = MCM.findCollectionByName('jobs');
+                        }
+                    }
+
+                    _.bindAll(this, 'deleteModel', 'persistModel', 'validate', 'parse');
                     console.log('JobModel has been intialized');
                 },
 
@@ -78,10 +101,8 @@ define(
 
             { //class properties
 
-                newJob: function ($job) {
-
-                    var job = new Job($job);
-                    return job;
+                newJob: function (attributes, options) {
+                    return new Job(attributes, options);
                 }
             });
 

@@ -27,9 +27,9 @@
                         </div>
 
                         <div class="form-group input-group">
-                            <span class="input-group-addon job-profile-update-form">jobname</span>
-                            <input type="text" class="form-control" adhesive-get="job:jobname"
-                                   adhesive-cid="<%= job.cid %>" name="job.jobname" placeholder="jobname">
+                            <span class="input-group-addon job-profile-update-form">Job Name</span>
+                            <input type="text" class="form-control" adhesive-get="job:jobName"
+                                   adhesive-cid="<%= job.cid %>" name="job.jobName" placeholder="Job Name">
                         </div>
 
                         <div class="form-group input-group">
@@ -55,8 +55,8 @@
                     <b><i>there should be something here</i></b>
 
                     <div id="job-view">
-                        <p>jobname:<span adhesive-value="job:jobname"
-                                         adhesive-cid="<%= job.cid %>"><%= job.get('jobname') %></span></p>
+                        <p>job name:<span adhesive-value="job:jobName"
+                                         adhesive-cid="<%= job.cid %>"><%= job.get('jobName') %></span></p>
 
                         <p>email:<span adhesive-value="job:email"
                                        adhesive-cid="<%= job.cid %>"><%= job.get('email') %></span></p>

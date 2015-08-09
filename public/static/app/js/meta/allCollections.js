@@ -10,11 +10,10 @@ console.log('loading allCollections');
 define(
     [
         'app/js/collections/usersCollection',
-        'app/js/collections/jobsCollection',
-        'exports'
+        'app/js/collections/jobsCollection'
     ],
 
-    function (UsersCollection, JobsCollection, exports) {
+    function (UsersCollection, JobsCollection) {
 
 
         return {

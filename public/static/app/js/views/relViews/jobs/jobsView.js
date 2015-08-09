@@ -57,14 +57,19 @@ define(
                     //    }
                     //});
 
+                    this.collection.sortByDateCreated();
+
                     this.model = this.collection.first();
 
                     if(this.model == null){
                         var JobModel = this.collection.model;
                         this.model = new JobModel();
-                        this.collection.add(this.model);
-                        this.model.persistModel();
+
                     }
+
+                    this.collection.add(this.model,{merge:true});
+
+                    this.model.persistModel(null,{forceSave:true});
 
                     console.log('jobs view model cid:',this.model.cid);
 

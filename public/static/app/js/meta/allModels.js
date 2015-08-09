@@ -10,8 +10,7 @@ define(
 
     [
         'app/js/models/UserModel',
-        'app/js/models/JobModel',
-        'exports'
+        'app/js/models/JobModel'
     ],
 
     function (UserModel, JobModel, exports) {

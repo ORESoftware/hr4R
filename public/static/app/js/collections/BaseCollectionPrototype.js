@@ -82,6 +82,18 @@ define(
                 Backbone.Collection.apply(this, arguments);
             },
 
+            sortByCID: function(){
+                this.sortBy(function(model){
+                    return model.cid;
+                });
+            },
+
+            sortByDateCreated: function(){
+                this.sortBy(function(model){
+                    return model.get('created_at');
+                });
+            },
+
             insertModelSocket: function (_id, data, opts) {
 
                 var self = this;

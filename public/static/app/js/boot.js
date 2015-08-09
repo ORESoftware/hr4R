@@ -18,10 +18,11 @@ define('app/js/boot',
         'backbone',
         'app/js/giant',
         '#allModels',
-        '#allCollections'
+        '#allCollections',
+        'app/js/models/NestedModel'
     ],
 
-    function (appState, $, Backbone, giant, models, collections) {
+    function (appState, $, Backbone, giant, allModels, allCollections, NestedModel) {
 
         //TODO: might need to figure out how to set ENV before socket.io tries to make connection to server
 
@@ -38,7 +39,7 @@ define('app/js/boot',
                 success: function (msg) {
                     console.log('authentication message:', msg);
                     //appGlobal.env = msg.env;
-                    appState.set('env',msg.env);
+                    appState.set('env', msg.env);
                     runApplication(msg.isAuthenticated, msg.user);
                 },
                 error: function (err) {
@@ -55,18 +56,18 @@ define('app/js/boot',
 
         var runApplication = function (authenticated, user) {
 
-            function run(){
+            function run() {
                 if (authenticated === true) {
 
 
                     //iterate through all users to find already registered user
-                    collections.users.fetch().done(function () {
+                    allCollections.users.fetch().done(function () {
 
-                        for (var i = 0; i < collections.users.models.length; i++) {
+                        for (var i = 0; i < allCollections.users.models.length; i++) {
 
-                            if (user.username === collections.users.models[i].get('username')) {
+                            if (user.username === allCollections.users.models[i].get('username')) {
                                 //appGlobal.currentUser = collections.users.models[i];
-                                appState.set('currentUser',collections.users.models[i]);
+                                appState.set('currentUser', allCollections.users.models[i]);
                                 break;
                             }
 
@@ -86,53 +87,109 @@ define('app/js/boot',
                 else {
 
                     console.log('not authenticated..!');
-                    appState.set('currentUser',null);
+                    appState.set('currentUser', null);
                     Backbone.Events.trigger('bootRouter', 'index');
                 }
             }
 
-            if(appState.get('env') === 'development'){
-                loadDefaultUsers(run);
+            if (appState.get('env') === 'development') {
+                loadDefaultModels(run);
             }
-            else{
+            else {
                 run();
             }
 
 
         };
 
-        function loadDefaultUsers(callback){
+        function loadDefaultModels(callback) {
 
-            var newUser = models.User.newUser({
-                firstName:'default-first-name',
-                lastName:'default-last-name',
-                username:'default',
-                password:'default',
-                email:'default@temp.com'
+            //var models = [
+            //
+            //    allModels.User.newUser({
+            //        firstName: 'default-first-name',
+            //        lastName: 'default-last-name',
+            //        username: 'default',
+            //        password: 'default',
+            //        email: 'default@temp.com'
+            //    }),
+            //
+            //    allModels.Job.newJob({
+            //        firstName: 'rand-job-name',
+            //        lastName: 'rand-last-name',
+            //        firstName: 'rando first',
+            //        jobName: 'jobbyname'
+            //    })
+            //];
+
+            var models = [
+
+                allModels.User.newUser({
+                    firstName: 'default-first-name',
+                    lastName: 'default-last-name',
+                    username: 'default',
+                    password: 'default',
+                    email: 'default@temp.com'
+                },{collection:allCollections.users}),
+
+                allModels.User.newUser({
+                    firstName: '2default-first-name2',
+                    lastName: '2default-last-name2',
+                    username: '2default2',
+                    password: '2default2',
+                    email: '2default@temp.com'
+                },{collection:allCollections.users}),
+
+                allModels.Job.newJob({
+                    firstName: 'rand-job-name',
+                    lastName: 'rand-last-name',
+                    firstName: 'rando first',
+                    jobName: 'jobbyname'
+                },{collectionName:'jobs'})
+                ,
+
+                allModels.Job.newJob({
+                    firstName: '2rand-job-name2',
+                    lastName: '2rand-last-name2',
+                    animals: new NestedModel({}),
+                    jobName: '2jobbyname2'
+                },{collectionName:'jobs'}),
+
+                allModels.Job.newJob({
+                    firstName: '3rand-job-name3',
+                    lastName: '3rand-last-name3',
+                    animals: new NestedModel({}),
+                    jobName: '3jobbyname3'
+                },{})
+            ];
+
+            models.forEach(function (model, index) {
+                model.persistModel({}, {}, function (err, model, res, options) {
+                    if (err) {
+                        throw err;
+                    }
+                    else if (res.error) {
+                        if (typeof res.error === 'object') {
+                            //Object.keys(res.error).forEach(function(key){
+                            //   console.error('error:',res.error[key]);
+                            //});
+                            console.log('error:', res.error);
+                        }
+                        else {
+                            console.error('error passed in persistModel callback', res.error);
+                        }
+                    }
+                    else {
+                        //collections.users.add(model);
+                        //collections.users.add(newUser);
+                        model.collection.add(model);
+                    }
+                    callback();
+
+                });
             });
 
-            newUser.persistModel({},{},function(err,model,res,options){
-                if(err){
-                    throw err;
-                }
-                else if(res.error){
-                    if(typeof res.error === 'object'){
-                        //Object.keys(res.error).forEach(function(key){
-                        //   console.error('error:',res.error[key]);
-                        //});
-                        console.log('error:',res.error);
-                    }
-                    else{
-                        console.error('error passed in persistModel callback',res.error);
-                    }
-                }
-                else{
-                    //collections.users.add(model);
-                    collections.users.add(newUser);
-                }
-                callback();
 
-            });
         }
 
         return {

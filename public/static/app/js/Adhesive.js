@@ -515,8 +515,10 @@ define(
                                 //    console.error('no submodel found');
                                 //}
 
-                                model.set(modelProp,val);
-                                model.persistModel();
+                                var attributes = {};
+                                attributes[modelProp] = val;
+                                //model.set(modelProp,val);
+                                model.persistModel(attributes);
                             })
                         });
                     }

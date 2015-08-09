@@ -138,10 +138,10 @@ router.post('/', function (req, res, next) {
             email: email,
             firstName: firstName,
             lastName: lastName,
-            created_by: created_by,
-            created_at: created_at,
-            updated_by: updated_by,
-            updated_at: updated_at
+            created_by: 'temp_created_by',
+            created_at: Date.now(),
+            updated_by: 'temp_updated_by',
+            updated_at: Date.now()
         });
 
         newUser.passwordPreHash = password;

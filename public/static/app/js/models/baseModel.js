@@ -31,17 +31,58 @@ define(
 
         var BaseModel = Backbone.Model.extend({
 
+                idAttribute: "_id",
                 needsPersisting: true,
 
-                constructor: function () {
+                /*
+
+                jashkenas commented on Sep 14, 2011
+                 Yes, the collection property exists so that a model knows where to send it's .save() and .fetch() calls.
+                 Feel free to add a model to multiple collections, and override the url() function,
+                 so that saves still happen properly.
+
+                 */
+
+                //urlRoot: function(){
+                //    if(this.collection == null){
+                //        throw new Error('no collection assigned to model');
+                //    }
+                //    return '/' + this.collection.uniqueName +'/'
+                //},
+
+                //url: function(){
+                //    if(this.collection == null){
+                //        throw new Error('no collection assigned to model');
+                //    }
+                //  return this.collection.uniqueName +'/'
+                //},
+
+                constructor: function (attributes, opts) {
+
                     var self = this;
+                    var options = opts || {};
+
+                    this.collection = options.collection;
+                    this.collectionName = options.collectionName;
+
                     this.on('change', function (model, something) {
                         self.needsPersisting = true;
                     });
                     this.on('sync', function () {
                         self.needsPersisting = false;
                     });
+
                     Backbone.Model.apply(this, arguments);
+
+                    //if(this.collection == null && this.collectionName){
+                    //    require(['#allCollections'],function(allCollections){
+                    //        self.collection = allCollections[this.collectionName];
+                    //        Backbone.Model.apply(this, arguments);
+                    //    });
+                    //}
+                    //else{
+                    //    Backbone.Model.apply(this, arguments);
+                    //}
                 },
 
                 //set: function(key, value, options) { //this is also known as (attributes,options)
@@ -159,24 +200,26 @@ define(
 
                     //TODO: need to take into account new attributes here insofar as needs persisting goes
 
-                    if (this.needsPersisting) {
+                    var options = opts || {};
+
+                    if (this.needsPersisting || attributes != null || options.forceSave) {
+
+                        //this.attributes = _.extend({},attributes,this.attributes);
 
                         //TODO: add opts to object below
                         //TODO: need to make this work for new user that logs in
 
-                        if (this._id == null && appState.get('currentUser')) {
+                        if (this.get('_id') == null && appState.get('currentUser')) {
                             this.set('created_at', Date.now());
-                            var str = appState.get('currentUser').get('_id').concat('@').concat(Date.now());
-                            this.set('created_by', str);
+                            var created_by = appState.get('currentUser').get('_id').concat('@').concat(Date.now());
+                            this.set('created_by', created_by);
                         }
 
                         if (appState.get('currentUser')) {
-                            var str = appState.get('currentUser').get('_id').concat('@').concat(Date.now());
-                            this.set('updated_by', str);
+                            var updated_by = appState.get('currentUser').get('_id').concat('@').concat(Date.now());
+                            this.set('updated_by', updated_by);
                         }
 
-                        //this.set('created_by','ooooooh');
-                        //this.set('updated_by','jimmy jazz');
                         this.set('updated_at', Date.now());
 
                         var self = this;

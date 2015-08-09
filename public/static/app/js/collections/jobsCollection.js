@@ -45,6 +45,7 @@ define(
                 console.log('model for JobsCollection is:', this.model);
 
                 this.givenName = '@JobsCollection';
+                this.uniqueName = 'jobs';
 
                 this.options = opts || {};
                 _.bindAll(this, 'persistCollection');

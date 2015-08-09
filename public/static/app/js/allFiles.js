@@ -42,7 +42,8 @@ var getAllFilesFromFolder = function(dir) {
 
 module.exports = function runTheTrap(dir,append){
 
-    dirs = String(dir).split(path.sep);
+    //dirs = String(dir).split(path.sep);
+    dirs = String(dir).split('/');
 
     //dirs = String(__dirname + '/controllers').split(path.sep);
 
@@ -53,26 +54,30 @@ module.exports = function runTheTrap(dir,append){
 
     var array1 = resulz.map(function(item){
 
-        var split = String(item).split(path.sep);
+        //var split = String(item).split(path.sep);
+        var split = String(item).split('/');
 
         for(var i = 0; i< length; i++){
             split.shift();
         }
 
-        item = split.join(path.sep);
+        //item = split.join(path.sep);
+        item = split.join('/');
 
         return String('"' + append + String(item).replace('.js','')).concat('"');
     });
 
     var array2 = resulz.map(function(item,index){
 
-        var split = String(item).split(path.sep);
+        //var split = String(item).split(path.sep);
+        var split = String(item).split('/');
 
         for(var i = 0; i< length; i++){
             split.shift();
         }
 
-        item = split.join(path.sep);
+        //item = split.join(path.sep);
+        item = split.join('/');
 
         var firstPart = String(('"' + append + item + '"').replace('.js',''));
         var secondPart = ': arguments['.concat(index).concat(']');
