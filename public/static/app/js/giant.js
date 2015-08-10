@@ -89,7 +89,9 @@ define(
                         }
                     }
                     else{
-                        throw new Error('no created_by field present:'+data);
+                        return;
+                        //TODO: fix oplog items that don't pass validation but still appear
+                        //throw new Error('no created_by field present:'+data);
                     }
 
                     console.log('INSERT ON SERVER:', data);
@@ -130,7 +132,9 @@ define(
                             return;
                         }
                     }else{
-                        throw new Error('no updated_by field present:'+data);
+                        return;
+                        //TODO: fix oplog items that don't pass validation but still appear
+                        //throw new Error('no updated_by field present:'+data);
                     }
                     console.log('UPDATE FROM SERVER:', data);
                     var ns = oplogDoc.ns;

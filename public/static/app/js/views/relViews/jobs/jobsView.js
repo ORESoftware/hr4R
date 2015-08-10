@@ -49,17 +49,19 @@ define(
 
                     //this.model = new JobModel();
 
-                    //this.model = this.collection.find(function(model){
-                    //
-                    //    var _id = model.get('_id');
-                    //    if(_id){
-                    //        return _id.toString() == '55c13213aaf8352a3a4ab48f';
-                    //    }
-                    //});
+                    this.model = this.collection.find(function(model){
 
-                    this.collection.sortByDateCreated();
+                        var _id = model.get('_id');
+                        if(_id){
+                            return _id.toString() == '55c802267b1e4f140f61b649';
+                        }
+                    });
 
-                    this.model = this.collection.first();
+                    //this.collection.sortByDateCreated();
+
+                    //this.collection.sortByAttribute('_id');
+
+                    //this.model = this.collection.last();
 
                     if(this.model == null){
                         var JobModel = this.collection.model;
@@ -67,9 +69,9 @@ define(
 
                     }
 
-                    this.collection.add(this.model,{merge:true});
-
-                    this.model.persistModel(null,{forceSave:true});
+                    //this.collection.add(this.model,{merge:true});
+                    //
+                    //this.model.persistModel(null,{forceSave:true});
 
                     console.log('jobs view model cid:',this.model.cid);
 
@@ -83,21 +85,21 @@ define(
                     this.adhesive.stick({
                         keyName: 'job',
                         models: {
-                            listenTo: [],
-                            update: [],
-                            //listenTo: [self.model],
-                            //update: [self.model],
-                            //modelEvents: ['model-local-change-broadcast'],
+                            //listenTo: [],
+                            //update: [],
+                            listenTo: [self.model],
+                            update: [self.model],
+                            modelEvents: ['model-socket-change-broadcast'],
                             where: {}
                         },
                         collections: {
-                            listenTo: [self.collection],
-                            update: [self.collection],
-                            //listenTo: [],
-                            //update: [],
+                            //listenTo: [self.collection],
+                            //update: [self.collection],
+                            listenTo: [],
+                            update: [],
                             //TODO: loop with coll-local-change
-                            //collectionEvents: ['coll-change-socket-broadcast', 'coll-local-change-broadcast']
-                            collectionEvents: ['coll-local-change-socket-broadcast']
+                            //collectionEvents: ['coll-local-change-broadcast']
+                            collectionEvents: ['coll-socket-change-broadcast']
                             //where: {cid:self.model.cid},
                             //filterUpdate: function(model){
                             //    return model.cid == self.model.cid;

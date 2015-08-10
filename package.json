@@ -44,6 +44,8 @@
     "gulp": "^3.9.0",
     "gulp-eslint": "^1.0.0",
     "gulp-jshint": "^1.11.2",
+    "gulp-param": "^0.6.3",
+    "gulp-requirejs-metagen": "^1.0.0",
     "idempotent-json": "^0.8.9",
     "mongoose": "^4.1.0",
     "mongoose-validate": "0.0.5",

@@ -79,7 +79,7 @@ define(
                     //        update: [self.collection],
                     //        //listenTo: [],
                     //        //update: [],
-                    //        collectionEvents: ['coll-change-socket-broadcast']
+                    //        collectionEvents: ['coll-socket-change-broadcast']
                     //        //where: {cid:self.model.cid},
                     //        //filterUpdate: function(model){
                     //        //    return model.cid == self.model.cid;

@@ -89,12 +89,12 @@ var registerSchema = function () {
             created_by: {
                 type: String,
                 required: false,
-                default: 'created by unknown user'
+                default: 'created by unknown user at an unknown time'
             },
             updated_by: {
                 type: String,
                 required: false,
-                default: 'updated by unknown user'
+                default: 'updated by unknown user at an unknown time'
             },
             created_at: {
                 type: Date,

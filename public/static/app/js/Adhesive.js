@@ -330,11 +330,13 @@ define(
 
                     var split = String(value).split(':');
 
-                    var prop = split[split.length - 1];
-                    var modelProp = split.pop();
-                    var modelName = split.shift();
-
-                    var props = split;
+                    //var props = split[split.length - 1];
+                    var modelName = split[0];
+                    var prop = split[1];
+                    //var modelProp = split.pop();
+                    //var modelName = split.shift();
+                    //
+                    //var props = split;
 
                     if (domKeyName == modelName) {
 
@@ -346,24 +348,32 @@ define(
                             if (foundModel) {
 
                                 var model = foundModel.model;
+                                var val = model.get(prop);
                                 //var props = Object.keys(foundModel.changed);
 
-                                var subModel = getNestedModels(0,model,props);
+                                console.log('val:',val);
+                                console.log('foundModel:',foundModel);
+                                console.log('model:',model);
+                                func(self, val); //done!
+                                console.log('valentino');
 
-                                var valueTemp = '';
 
-                                if (subModel) {
-                                    if (subModel instanceof Backbone.Model) {
-                                        valueTemp= subModel.get(modelProp);
-                                    }
-                                    else {
-                                        valueTemp = subModel[modelProp];
-                                    }
-                                    func(self, prop); //done!
-                                }
-                                else{
-                                    console.error('no submodel found');
-                                }
+                                //var subModel = getNestedModels(0,model,props);
+                                //
+                                //var valueTemp = '';
+                                //
+                                //if (subModel) {
+                                //    if (subModel instanceof Backbone.Model) {
+                                //        valueTemp= subModel.get(modelProp);
+                                //    }
+                                //    else {
+                                //        valueTemp = subModel[modelProp];
+                                //    }
+                                //    func(self, prop); //done!
+                                //}
+                                //else{
+                                //    console.error('no submodel found');
+                                //}
 
 
                                 //numChanges++;

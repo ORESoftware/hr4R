@@ -44,7 +44,7 @@ define(
                 this.on('model-local-change-broadcast', function (model, something) {
                     var temp = {};
                     temp[model.cid] = {model: model, changed: model.changed};
-                    self.trigger('coll-local-change-broadcast', temp,'coll-local-change-broadcast');
+                    self.trigger('coll-local-change-broadcast', temp, 'coll-local-change-broadcast');
                 });
 
                 this.on('coll-change-socket', function (model, something) {
@@ -57,8 +57,8 @@ define(
                     var func = (_.debounce(function () {
                         var temp = self.changedModelsToBatchUpdateDomWith;
                         self.changedModelsToBatchUpdateDomWith = {};
-                        self.trigger('coll-change-socket-broadcast', temp, 'coll-change-socket-broadcast');
-                    }, 1500))(); //delay DOM updates by at least 100 seconds in order to batch updates
+                        self.trigger('coll-socket-change-broadcast', temp, 'coll-socket-change-broadcast');
+                    }, 100))(); //delay DOM updates by at least 100 seconds in order to batch updates
 
                 });
 
@@ -70,7 +70,7 @@ define(
                     var func = (_.debounce(function () {
                         var temp = self.addedModelsToBatchUpdateDomWith;
                         self.addedModelsToBatchUpdateDomWith = {};
-                        self.trigger('coll-add-socket-broadcast', temp, 'coll-add-socket-broadcast');
+                        self.trigger('coll-socket-add-broadcast', temp, 'coll-socket-add-broadcast');
                     }, 100))(); //delay DOM updates by at least 100 seconds in order to batch updates
 
                 });
@@ -82,15 +82,21 @@ define(
                 Backbone.Collection.apply(this, arguments);
             },
 
-            sortByCID: function(){
-                this.sortBy(function(model){
+            sortByCID: function () {
+                this.sortBy(function (model) {
                     return model.cid;
                 });
             },
 
-            sortByDateCreated: function(){
-                this.sortBy(function(model){
+            sortByDateCreated: function () {
+                this.sortBy(function (model) {
                     return model.get('created_at');
+                });
+            },
+
+            sortByAttribute: function (attr) {
+                this.sortBy(function (model) {
+                    return model.get(attr);
                 });
             },
 
@@ -101,7 +107,7 @@ define(
                 for (var i = 0; i < this.models.length; i++) {
                     var model = this.models[i];
                     if (String(model.get('_id')) == String(_id)) {
-                        model.set(data, opts);
+                        model.set(data, {silent: true, socketChange: true});
                         self.trigger('coll-change-socket', model, {});
                         return;
                     }
@@ -120,7 +126,7 @@ define(
                 for (var i = 0; i < this.models.length; i++) {
                     var model = this.models[i];
                     if (String(model.get('_id')) == String(_id)) {
-                        model.set(data, opts);
+                        model.set(data, {silent: true, socketChange: true});
                         self.trigger('coll-change-socket', model, {});
                         return;
                     }

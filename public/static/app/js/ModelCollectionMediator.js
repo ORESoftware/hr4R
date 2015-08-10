@@ -16,11 +16,11 @@ console.log('loading app/js/models/userModel.js');
 
 define(
     [
-        '#allCollections',
+        //'#allCollections',
         'require'
     ],
 
-    function (allCollections, require) {
+    function (require) {
 
         return {
             findCollectionByName: function(name){

@@ -4,6 +4,8 @@
 var gulp = require('gulp');
 var path = require('path');
 
+//var gulp = require('gulp-param')(require('gulp'), process.argv);
+
 // include plug-ins
 var jshint = require('gulp-jshint');
 
@@ -13,6 +15,8 @@ var source  = require('vinyl-source-stream');
 
 var fs = require('fs');
 var fse = require('fs-extra');
+
+var grm = require('gulp-requirejs-metagen');
 
 
 // JS hint task
@@ -88,19 +92,39 @@ gulp.task('build_requirejs_pipe_views', function () {
 
 });
 
+gulp.task('bbb1',function(cb){
+    grm('./public/static/app/js/views/relViews', 'jsx!app/js/views/','./public/static/app/js/meta/allRelViews.js', function(){
+        cb();
+    })
+});
+
+gulp.task('bbb2',function(cb){
+    grm('./public/static/app/js/controllers', 'app/js/','./public/static/app/js/meta/allControllers.js', function(){
+        cb();
+    })
+});
+
 
 gulp.task('default', function () {
 
-    gulp.run('build_requirejs_pipe_controllers');
+    gulp.run('bbb1', function(){
+       console.log('done with bbb task');
+    });
+
+    gulp.run('bbb2', function(){
+        console.log('done with bbb2 task');
+    });
+
+   /* gulp.run('build_requirejs_pipe_controllers');
     gulp.run('build_requirejs_pipe_views');
 
-    gulp.watch('public/static/app/js/controllers/**/*.js', function () {
+    gulp.watch('public/static/app/js/controllers/!**!/!*.js', function () {
         gulp.run('build_requirejs_pipe_controllers');
     });
 
-    gulp.watch('public/static/app/js/views/relViews/**/*.js', function () {
+    gulp.watch('public/static/app/js/views/relViews/!**!/!*.js', function () {
         gulp.run('build_requirejs_pipe_views');
-    });
+    });*/
 
     //gulp.watch('./public/static/app/js/controllers/**/*.js', ['build_requirejs_pipe']);
 

@@ -120,10 +120,6 @@ router.post('/', function (req, res, next) {
     var username = user.username;
     var password = user.password;
     var email = user.email;
-    var created_by = user.created_by;
-    var created_at = user.created_at;
-    var updated_by = user.updated_by;
-    var updated_at = user.updated_at;
 
     var UserModel = req.site.models.User;
     UserModel.get(function (err, User) {

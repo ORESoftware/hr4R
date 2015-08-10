@@ -31,7 +31,7 @@ define(
 
         var BaseModel = Backbone.Model.extend({
 
-                idAttribute: "_id",
+                idAttribute: '_id',
                 needsPersisting: true,
 
                 /*
@@ -180,6 +180,11 @@ define(
                     //TODO: I added this:
                     if (options && options.localChange) {
                         this.trigger('model-local-change-broadcast', this);
+                    }
+
+                    //TODO: I added this:
+                    if (options && options.socketChange) {
+                        this.trigger('model-socket-change-broadcast', this);
                     }
 
                     if (!silent) {
