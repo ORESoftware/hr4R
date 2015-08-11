@@ -396,6 +396,11 @@ define(
                 var collection = view.collection;
                 var model = view.model;
 
+                if(appState.get('env') === 'development'){
+                    window.currentModel = model;
+                    window.currentCollection = collection;
+                }
+
                 //if (this.viewState.get('footerView') == null) {
                 this.viewState.set('footerView', new standardViews.Footer({model: model, collection: collection}));
                 //}

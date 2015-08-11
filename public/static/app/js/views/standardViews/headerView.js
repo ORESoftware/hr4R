@@ -71,6 +71,9 @@ define(
 
                     var self = this;
 
+                    this.listenTo(this.model, 'change', this.render);
+                    this.listenTo(this.collection, 'change', this.render);
+
                     this.adhesive.stick({
                         keyName: 'socket',
                         plainObjects: {
@@ -78,7 +81,8 @@ define(
                             update: [],
                             events: ['socket-error', 'socket-disconnected', 'socket-connected']
                         },
-                        domElementUpdate: $(self.el),
+                        //domElementUpdate: $(self.el),
+                        domElementUpdate: self.$el,
                         callback: null
                     });
                 },

@@ -6,6 +6,12 @@
 //TODO: http://stackoverflow.com/questions/19827912/package-html-templates-in-require-js-optimizer
 //TODO: http://www.webdeveasy.com/optimize-requirejs-projects/
 
+//TODO: react templates - http://wix.github.io/react-templates/
+//TODO: http://wix.github.io/react-templates/fiddle.html
+
+//TODO: browser cache re-validation - http://stackoverflow.com/questions/49547/making-sure-a-web-page-is-not-cached-across-all-browsers
+
+
 //define(['jquery','backbone','app/js/routers'], function($,Backbone,routers) {
 
 console.log('loading app/js/BOOT.js');
@@ -139,6 +145,15 @@ define('app/js/boot',
                     password: '2default2',
                     email: '2default@temp.com'
                 },{collection:allCollections.users}),
+
+
+                allModels.User.newUser({
+                    firstName: '3default-first-name3',
+                    lastName: '3default-last-name3',
+                    username: '3default3',
+                    password: '3default3',
+                    email: '3default@temp.com'
+                }),
 
                 allModels.Job.newJob({
                     firstName: 'rand-job-name',

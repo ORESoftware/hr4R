@@ -20,7 +20,7 @@
                 <small>
                     <div id="collection-div-id">
                         <% if(locals.collection){ %>
-                        <%= collection.givenName %>
+                        <%= collection.givenName %>(<%= collection.size() %>)
                         <% }
                         else { %>
                         (no collection detected)

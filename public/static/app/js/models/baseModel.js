@@ -233,6 +233,7 @@ define(
                             dataType: "json",
                             //TODO:  model.trigger('sync', model, resp, options);
                             success: function (model, response, options) {
+                                //TODO: response.success vs response.error...needsPersisting will depend on that
                                 self.needsPersisting = false;
                                 if (typeof callback === 'function') {
                                     callback(null, model, IJSON.parse(response), options);
@@ -281,6 +282,7 @@ define(
                      The default implementation is just to pass the response along.
                      */
                     if (resp.success) {
+                        //TODO: response.success vs response.error...needsPersisting will depend on that
                         return resp.success;
                     }
                     else if (resp.error) {

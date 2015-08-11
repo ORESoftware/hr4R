@@ -60,8 +60,8 @@ define(
                     _.bindAll(this, 'render');
 
 
-                    this.listenTo(this.model, 'change', this.render);
-                    this.listenTo(this.collection, 'change', this.render);
+                    //this.listenTo(this.model, 'change', this.render);
+                    //this.listenTo(this.collection, 'change', this.render);
 
 
                     //var self = this;

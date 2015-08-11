@@ -81,6 +81,9 @@ define(
                     domElementListen.on(domEventType, function (event) { //click will only be registered in html is in DOM anyway so...assume it is there
 
                         event.preventDefault();
+                        if (limitToEventTarget) { //TODO: update this with proper condition
+                            event.stopPropagation();
+                        }
 
                         if (typeof callback === 'function') {
                             callback(event);
@@ -88,8 +91,6 @@ define(
                         else {
                             updatePlainObjects(domKeyName, domElementListen, plainObjectsToUpdate, event, limitToEventTarget);
                         }
-
-                        event.stopPropagation();
                     });
                 }
             }
@@ -121,6 +122,9 @@ define(
                     domElementListen.on(domEventType, function (event) { //click will only be registered in html is in DOM anyway so...assume it is there
 
                         event.preventDefault();
+                        if (limitToEventTarget) { //TODO: update this with proper condition
+                            event.stopPropagation();
+                        }
 
                         if (typeof callback === 'function') {
                             callback(event);
@@ -129,7 +133,7 @@ define(
                             updateBackboneModels(domKeyName, domElementListen, modelsToUpdate, event, limitToEventTarget);
                         }
 
-                        event.stopPropagation();
+
                     });
                 }
             }
@@ -164,6 +168,9 @@ define(
                     domElementListen.on(domEventType, function (event) { //click will only be registered if html is in DOM anyway so...assume it is there
 
                         event.preventDefault();
+                        if (limitToEventTarget) {  //TODO: update this with proper condition
+                            event.stopPropagation();
+                        }
 
                         if (typeof callback === 'function') {
                             callback(event);
@@ -172,13 +179,13 @@ define(
                             updateBackboneCollections(domKeyName, domElementListen, collectionsToUpdate, event, limitToEventTarget, filterUpdateFunction);
                         }
 
-                        event.stopPropagation();
                     });
                 }
             }
 
             return this;
         }
+
 
         function updateDOMViaPlainObjectChange(domKeyName, domElementsToPotentiallyUpdate, obj, event) {
 
@@ -208,13 +215,6 @@ define(
                     }
                 });
             });
-
-        }
-
-        function updatePlainObjects(domKeyName, domElementListen, plainObjectsToUpdate, event, limitToEventTarget) {
-
-            throw new Error('shouldnt happen yet!!');
-
         }
 
 
@@ -242,33 +242,49 @@ define(
                     var name = attrib.name;
                     var value = attrib.value;
 
-                    if (name === 'adhesive-value') {
+                    var func = null;
 
-                        var split = String(value).split(':');
+                    switch (name) {
+                        case 'adhesive-value':
+                            func = function (element, val) {
+                                $(element).html(String(val));
+                            };
+                            break;
+                        case 'adhesive-value-checkbox':
+                            func = function (element, val) {
+                                $(element).prop('checked', val);
+                            };
+                            break;
+                        default:
+                            return true; //could be return false if 'adhesive-get' was always first attribute
+                    }
 
-                        var modelName = split[0];
-                        var modelProp = split[1];
+                    var split = String(value).split(':');
 
-                        //if (domKeyName == modelName && _.contains(props, modelProp)) {
+                    var modelName = split[0];
+                    var modelProp = split[1];
 
-                        if (domKeyName == modelName) {
+                    //if (domKeyName == modelName && _.contains(props, modelProp)) {
 
-                            var cid = $(self).attr('adhesive-cid');
+                    if (domKeyName == modelName) {
 
-                            if (cid && String(cid) == model.cid) {
+                        var cid = $(self).attr('adhesive-cid');
 
-                                var prop = model.get(modelProp);
-                                $(self).html(String(prop));
+                        if (cid && String(cid) == model.cid) {
 
-                                numChanges++;
+                            var val = model.get(modelProp);
+                            //$(self).html(String(prop));
+                            func(self, val); //done!
 
-                                //if (numChanges >= maxChanges) {
-                                //    exitLoop = true;
-                                //    return false; //break from each loop, we are done updating DOM for this model
-                                //}
-                            }
+                            numChanges++;
+
+                            //if (numChanges >= maxChanges) {
+                            //    exitLoop = true;
+                            //    return false; //break from each loop, we are done updating DOM for this model
+                            //}
                         }
                     }
+
                 });
             });
         }
@@ -351,9 +367,9 @@ define(
                                 var val = model.get(prop);
                                 //var props = Object.keys(foundModel.changed);
 
-                                console.log('val:',val);
-                                console.log('foundModel:',foundModel);
-                                console.log('model:',model);
+                                console.log('val:', val);
+                                console.log('foundModel:', foundModel);
+                                console.log('model:', model);
                                 func(self, val); //done!
                                 console.log('valentino');
 
@@ -390,6 +406,12 @@ define(
         }
 
 
+        function updatePlainObjects(domKeyName, domElementListen, plainObjectsToUpdate, event, limitToEventTarget) {
+
+            throw new Error('shouldnt happen yet!!');
+
+        }
+
         function updateBackboneModels(domKeyName, domElement, models, event, limitToEventTarget) {
 
             console.log('update-Backbone-Models:', models, event);
@@ -406,7 +428,15 @@ define(
                     switch (name) {
                         case 'adhesive-get':
                             func = function (element) {
+                                //return $(element).text();
                                 return $(element).val();
+                            };
+                            break;
+                        case 'adhesive-get-checkbox':
+                            func = function (element) {
+                                var boolean = $(element).is(':checked');
+                                //$(element).prop('checked', !boolean);
+                                return boolean;
                             };
                             break;
                         default:
@@ -528,6 +558,7 @@ define(
                                 var attributes = {};
                                 attributes[modelProp] = val;
                                 //model.set(modelProp,val);
+                                //TODO: need to set attributes before saving to server, otherwise if server fails, then what? we want optimistic changes in place
                                 model.persistModel(attributes);
                             })
                         });

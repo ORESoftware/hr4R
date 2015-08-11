@@ -70,7 +70,14 @@ define(
 
                     this.set('nestedModel',new NestedModel(this,{}));
 
-                    this.collection = MCM.findCollectionByName('users');
+                    if(this.collection == null){
+                        if(this.collectionName){
+                            this.collection = MCM.findCollectionByName(this.collectionName);
+                        }
+                        else{ //default
+                            this.collection = MCM.findCollectionByName('users');
+                        }
+                    }
 
                     _.bindAll(this, 'deleteModel', 'persistModel', 'validate','parse');
 

@@ -56,7 +56,8 @@ define(
                             cats: true,
                             dogs: false,
                             birds: false
-                        })
+                        }),
+                        isVerified:true
                     }
                 },
 

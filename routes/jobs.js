@@ -79,7 +79,7 @@ router.get('/:job_id', function (req, res, next) {
     //});
 
     if (job) {
-        res.json({success:job});
+        res.json({success: job});
     }
     else {
         res.json({error: 'no job found'});
@@ -98,6 +98,7 @@ router.post('/', function (req, res, next) {
     var animals = job.animals;
     var firstName = job.firstName;
     var lastName = job.lastName;
+    var isVerified = job.isVerified;
     var created_by = job.created_by;
     var created_at = job.created_at;
     var updated_by = job.updated_by;
@@ -113,9 +114,10 @@ router.post('/', function (req, res, next) {
 
         var newJob = new Job({
             jobName: jobName,
-            firstName:firstName,
-            lastName:lastName,
-            animals:animals,
+            firstName: firstName,
+            lastName: lastName,
+            animals: animals,
+            isVerified:isVerified,
             created_by: created_by,
             created_at: created_at,
             updated_by: updated_by,
@@ -155,6 +157,7 @@ router.put('/:job_id', function (req, res, next) {
     var jobName = job.jobName;
     var firstName = job.firstName;
     var lastName = job.lastName;
+    var isVerified = job.isVerified;
     var updated_by = job.updated_by;
     var updated_at = job.updated_at;
 
@@ -164,7 +167,7 @@ router.put('/:job_id', function (req, res, next) {
     jobToUpdate.jobName = jobName;
     jobToUpdate.updated_by = updated_by;
     jobToUpdate.updated_at = updated_at;
-
+    jobToUpdate.isVerified = isVerified;
 
     jobToUpdate.save(function (err, result) {
         if (err) {

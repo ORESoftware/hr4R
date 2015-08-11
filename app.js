@@ -15,6 +15,7 @@ var bodyParser = require('body-parser');
 var ejs = require('ejs');
 //var expressLayouts = require('express-ejs-layouts');
 var express = require('express');
+var compression = require('compression');
 
 
 // Config
@@ -35,7 +36,23 @@ var allowCrossDomain = function (req, res, next) {
 app.use(allowCrossDomain);
 //var router = express.Router();
 
-app.disable('etag');
+
+if (process.env.NODE_ENV !== 'development') {
+    //app.use(compression());
+    app.use(compression({filter: shouldCompress}));
+}
+
+function shouldCompress(req, res) {
+    if (req.headers['x-no-compression']) {
+        // don't compress responses with this request header
+        return false;
+    }
+
+    // fallback to standard filter function
+    return compression.filter(req, res);
+}
+
+app.disable('etag'); //TODO: should ETAG be disabled
 
 app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
@@ -102,18 +119,18 @@ app.use(passport.session());
 
 app.use(function (req, res, next) {
 
-    //console.log(colors.green(''));
-    //console.log(colors.cyan('New request:'));
-    //console.log(colors.cyan('___________________________________________________________'));
-    //console.log(colors.bgYellow('METHOD:'), req.method);
-    //console.log(colors.bgYellow('HEADERS:'), req.headers);
-    //console.log(colors.bgYellow('PARAMS:'), req.params);
-    //console.log(colors.bgYellow('BODY:'), req.body);
-    //console.log(colors.bgYellow('QUERY:'), req.query);
-    //console.log(colors.bgYellow('SECRET:'), req.secret);
-    //console.log(colors.bgYellow('SESSION:'), req.session);
+    console.log(colors.green(''));
+    console.log(colors.cyan('New request:'));
+    console.log(colors.cyan('___________________________________________________________'));
+    console.log(colors.bgYellow('METHOD:'), req.method);
+    console.log(colors.bgYellow('HEADERS:'), req.headers);
+    console.log(colors.bgYellow('PARAMS:'), req.params);
+    console.log(colors.bgYellow('BODY:'), req.body);
+    console.log(colors.bgYellow('QUERY:'), req.query);
+    console.log(colors.bgYellow('SECRET:'), req.secret);
+    console.log(colors.bgYellow('SESSION:'), req.session);
     console.log(colors.yellow('SESSION_ID:'), req.session.id);
-    //console.log(colors.bgYellow('COOKIES:'), req.cookies);
+    console.log(colors.bgYellow('COOKIES:'), req.cookies);
 
     next();
 
@@ -137,7 +154,8 @@ app.use(function (req, res, next) {
             console.log('user id is not equal to passport object, logging out...');
             next(new Error('this should never happen when user is defined'));
             //res.redirect('/logout');
-        } else {
+        }
+        else {
             next();
         }
     }
@@ -216,7 +234,8 @@ if (app.get('env') === 'development') {
                 message: err.message,
                 error: err
             });
-        } else {
+        }
+        else {
             console.error(colors.bgRed(err));
         }
     });

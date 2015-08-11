@@ -36,6 +36,15 @@ var registerSchema = function () {
                 type: String
                 //enum: ['Admin', 'Owner', 'Job']
             },
+            isVerified: {
+                type: Boolean
+            },
+            firstName: {
+                type: String
+            },
+            lastName: {
+                type: String
+            },
             animals:{
               type: Object
             },

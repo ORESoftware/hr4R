@@ -53,7 +53,7 @@ define(
 
                         var _id = model.get('_id');
                         if(_id){
-                            return _id.toString() == '55c802267b1e4f140f61b649';
+                            return _id.toString() == '55c52e4b9f3cb5172362fcbc';
                         }
                     });
 
@@ -89,7 +89,7 @@ define(
                             //update: [],
                             listenTo: [self.model],
                             update: [self.model],
-                            modelEvents: ['model-socket-change-broadcast'],
+                            modelEvents: ['model-socket-change-broadcast','model-local-change-broadcast'],
                             where: {}
                         },
                         collections: {
@@ -98,8 +98,8 @@ define(
                             listenTo: [],
                             update: [],
                             //TODO: loop with coll-local-change
-                            //collectionEvents: ['coll-local-change-broadcast']
-                            collectionEvents: ['coll-socket-change-broadcast']
+                            //collectionEvents: ['coll-local-change-broadcast','coll-socket-change-broadcast']
+                            collectionEvents: []
                             //where: {cid:self.model.cid},
                             //filterUpdate: function(model){
                             //    return model.cid == self.model.cid;
@@ -110,12 +110,13 @@ define(
                         },
                         limitToEventTarget: true, //will limit updates for just the element touched
                         //limitToClass: '.barf',  //will limit what elements get listened to at all
-                        //domElementListen: self.$el,
-                        domElementListen: $(document),
+                        domElementListen: self.$el,
+                        //domElementListen: $(document),
+                        domElementUpdate: self.$el,
                         //domElementUpdate: $(self.el),
-                        domElementUpdate: $(document),
+                        //domElementUpdate: $(document),
 
-                        domEventType: 'keyup',
+                        domEventType: 'click',
                         propagateChangesToServerImmediately: false,
                         callback: null
                     });
