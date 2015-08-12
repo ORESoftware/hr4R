@@ -10,10 +10,12 @@ define(
     [
         'backbone',
         'underscore',
-        'jquery'
+        'jquery',
+        'app/js/AdhesiveDOMController',
+        'app/js/AdhesiveStateController'
     ],
 
-    function (Backbone, _, $) {
+    function (Backbone, _, $, ADC, ASC) {
 
 
         function Adhesive(view, opts) {
@@ -22,6 +24,8 @@ define(
             this.stick = stick.bind(this);
             //TODO: do we need to unbind any elements or since we are using 'this.el' Backbone might take care of this already..?
             this.jQueryBinds = [];
+            this.stateController = new ASC(view);
+            this.domController = new ADC(view);
         }
 
         Adhesive.prototype.unStick = function () {
@@ -35,15 +39,13 @@ define(
         function stick(opts) {
 
             //TODO: give these default values inside this class
-            //limitToEventTarget: true,
-            //domElementListen: self.$el,
-            //domElementUpdate: $(document),
+            var domKeyName = opts.keyName || 'model';
+            var domElementListen = opts.domElementListen || this.view.$el;
+            var domElementUpdate = opts.domElementUpdate || this.view.$el;
+            var domEventType = opts.domEventType || 'click';
+            var limitToEventTarget = opts.limitToEventTarget || true;
+            var propagateChangesToServerImmediately = opts.propagateChangesToServerImmediately || true;
 
-            var domKeyName = opts.keyName;
-            var domElementListen = opts.domElementListen;
-            var domElementUpdate = opts.domElementUpdate;
-            var domEventType = opts.domEventType;
-            var limitToEventTarget = opts.limitToEventTarget;
             var callback = opts.callback;
 
             var limitToClass = opts.limitToClass;
@@ -53,10 +55,7 @@ define(
             var self = this;
 
             var plainObjects = opts.plainObjects;
-            var models = opts.models;
-            var collections = opts.collections;
-
-            if (plainObjects) {
+            if (typeof plainObjects === 'object') {
 
                 var plainObjectsToListenTo = plainObjects.listenTo;
                 var plainObjectEvents = plainObjects.events;
@@ -67,7 +66,7 @@ define(
                     plainObjectEvents = plainObjectEvents.join(' '); //separate event-names by a space
                     _.each(plainObjectsToListenTo, function (obj, index) {
                         self.listenTo(obj, plainObjectEvents, function (event) {
-                            updateDOMViaPlainObjectChange(domKeyName, domElementUpdate, obj, event);
+                            self.domController.updateDOMViaPlainObjectChange(domKeyName, domElementUpdate, obj, event);
                         });
                     });
 
@@ -89,13 +88,14 @@ define(
                             callback(event);
                         }
                         else {
-                            updatePlainObjects(domKeyName, domElementListen, plainObjectsToUpdate, event, limitToEventTarget);
+                            self.stateController.updatePlainObjects(domKeyName, domElementListen, plainObjectsToUpdate, event, limitToEventTarget);
                         }
                     });
                 }
             }
 
-            if (models) {
+            var models = opts.models;
+            if (typeof models === 'object') {
 
                 var modelsToListenTo = models.listenTo;
                 var modelEvents = models.modelEvents;
@@ -107,7 +107,7 @@ define(
                     modelEvents = modelEvents.join(' '); //separate event-names by a space
                     _.each(modelsToListenTo, function (model, index) {
                         self.listenTo(model, modelEvents, function (model) {
-                            updateDOMViaModelChange(domKeyName, model, domElementUpdate);
+                            self.domController.updateDOMViaModelChange(domKeyName, model, domElementUpdate);
                         });
                     });
 
@@ -130,22 +130,21 @@ define(
                             callback(event);
                         }
                         else {
-                            updateBackboneModels(domKeyName, domElementListen, modelsToUpdate, event, limitToEventTarget);
+                            self.stateController.updateBackboneModels(domKeyName, domElementListen, modelsToUpdate, event, limitToEventTarget);
                         }
-
 
                     });
                 }
             }
 
-
-            if (collections) {
+            var collections = opts.collections;
+            if (typeof collections === 'object') {
 
                 var collectionsToListenTo = collections.listenTo;
                 var collectionEvents = collections.collectionEvents;
                 var collectionsToUpdate = collections.update;
                 var filterUpdateFunction = collections.filterUpdateFunction || function () {
-                        return true
+                        return true;
                     };
 
                 if (collectionEvents && collectionEvents.length > 0) {
@@ -153,7 +152,7 @@ define(
                     collectionEvents = collectionEvents.join(' '); //separate event-names by a space
                     _.each(collectionsToListenTo, function (coll, index) {
                         self.listenTo(coll, collectionEvents, function (models, eventName) {
-                            updateDOMViaCollectionChange(self, domKeyName, coll, domElementUpdate, models, eventName);
+                            self.domController.updateDOMViaCollectionChange(domKeyName, coll, domElementUpdate, models, eventName);
                         });
                     });
                 }
@@ -176,7 +175,7 @@ define(
                             callback(event);
                         }
                         else {
-                            updateBackboneCollections(domKeyName, domElementListen, collectionsToUpdate, event, limitToEventTarget, filterUpdateFunction);
+                            self.stateController.updateBackboneCollections(domKeyName, domElementListen, collectionsToUpdate, event, limitToEventTarget, filterUpdateFunction);
                         }
 
                     });
@@ -187,426 +186,404 @@ define(
         }
 
 
-        function updateDOMViaPlainObjectChange(domKeyName, domElementsToPotentiallyUpdate, obj, event) {
+        /*function updateDOMViaPlainObjectChange(domKeyName, domElementsToPotentiallyUpdate, obj, event) {
 
-            domElementsToPotentiallyUpdate.find('*').each(function () {
+         domElementsToPotentiallyUpdate.find('*').each(function () {
 
-                var self = this;
-                var attributes = self.attributes;
+         var self = this;
+         var attributes = self.attributes;
 
-                $.each(attributes, function (i, attrib) {
-                    var name = attrib.name;
-                    var value = attrib.value;
+         $.each(attributes, function (i, attrib) {
+         var name = attrib.name;
+         var value = attrib.value;
 
-                    if (name === 'adhesive-value') {
+         if (name === 'adhesive-value') {
 
-                        var split = String(value).split(':');
+         var split = String(value).split(':');
 
-                        var modelName = split[0];
-                        var modelProp = split[1];
+         var modelName = split[0];
+         var modelProp = split[1];
 
-                        if (domKeyName == modelName) {
+         if (domKeyName == modelName) {
 
-                            //var prop = obj[modelProp];
-                            var prop = event;
-                            $(self).html(String(prop));
+         //var prop = obj[modelProp];
+         var prop = event;
+         $(self).html(String(prop));
 
-                        }
-                    }
-                });
-            });
-        }
+         }
+         }
+         });
+         });
+         }*/
 
 
-        function updateDOMViaModelChange(domKeyName, model, domElementsToPotentiallyUpdate) {
+        /* function updateDOMViaModelChange(domKeyName, model, domElementsToPotentiallyUpdate) {
 
-            console.log('update-DOM-Via-Model-Change:', domElementsToPotentiallyUpdate, 'changes:', model.changed);
+         console.log('update-DOM-Via-Model-Change:', domElementsToPotentiallyUpdate, 'changes:', model.changed);
 
-            //TODO: this function won't get called once the listeners are removed, so no need to check if this is still in the DOM
+         //TODO: this function won't get called once the listeners are removed, so no need to check if this is still in the DOM
 
-            var changes = model.changed;
-            var props = Object.keys(changes);
-            var maxChanges = Object.keys(changes).length;
-            var exitLoop = false;
-            var numChanges = 0;
+         var changes = model.changed;
+         var props = Object.keys(changes);
+         var maxChanges = Object.keys(changes).length;
+         var exitLoop = false;
+         var numChanges = 0;
 
-            domElementsToPotentiallyUpdate.find('*').each(function () {
+         domElementsToPotentiallyUpdate.find('*').each(function () {
 
-                if (exitLoop) {
-                    return false;
-                }
+         if (exitLoop) {
+         return false;
+         }
 
-                var self = this;
+         var self = this;
 
-                $.each(this.attributes, function (i, attrib) {
-                    var name = attrib.name;
-                    var value = attrib.value;
+         $.each(this.attributes, function (i, attrib) {
+         var name = attrib.name;
+         var value = attrib.value;
 
-                    var func = null;
+         var func = null;
 
-                    switch (name) {
-                        case 'adhesive-value':
-                            func = function (element, val) {
-                                $(element).html(String(val));
-                            };
-                            break;
-                        case 'adhesive-value-checkbox':
-                            func = function (element, val) {
-                                $(element).prop('checked', val);
-                            };
-                            break;
-                        default:
-                            return true; //could be return false if 'adhesive-get' was always first attribute
-                    }
+         switch (name) {
+         case 'adhesive-value':
+         func = function (element, val) {
+         $(element).html(String(val));
+         };
+         break;
+         case 'adhesive-value-checkbox':
+         func = function (element, val) {
+         $(element).prop('checked', val);
+         };
+         break;
+         default:
+         return true; //could be return false if 'adhesive-get' was always first attribute
+         }
 
-                    var split = String(value).split(':');
+         var split = String(value).split(':');
 
-                    var modelName = split[0];
-                    var modelProp = split[1];
+         var modelName = split[0];
+         var modelProp = split[1];
 
-                    //if (domKeyName == modelName && _.contains(props, modelProp)) {
+         //if (domKeyName == modelName && _.contains(props, modelProp)) {
 
-                    if (domKeyName == modelName) {
+         if (domKeyName == modelName) {
 
-                        var cid = $(self).attr('adhesive-cid');
+         var cid = $(self).attr('adhesive-cid');
 
-                        if (cid && String(cid) == model.cid) {
+         if (cid && String(cid) == model.cid) {
 
-                            var val = model.get(modelProp);
-                            //$(self).html(String(prop));
-                            func(self, val); //done!
+         var val = model.get(modelProp);
+         //$(self).html(String(prop));
+         func(self, val); //done!
 
-                            numChanges++;
+         numChanges++;
 
-                            //if (numChanges >= maxChanges) {
-                            //    exitLoop = true;
-                            //    return false; //break from each loop, we are done updating DOM for this model
-                            //}
-                        }
-                    }
+         //if (numChanges >= maxChanges) {
+         //    exitLoop = true;
+         //    return false; //break from each loop, we are done updating DOM for this model
+         //}
+         }
+         }
 
-                });
-            });
-        }
-
-
-        function updateDOMViaCollectionChange(self, domKeyName, collection, domElement, modelCIDHash, eventName) {
+         });
+         });
+         }*/
+
+
+        /*function updateDOMViaCollectionChange(self, domKeyName, collection, domElement, modelCIDHash, eventName) {
 
-            console.log('update-DOM-Via-Collection-Change:', domElement, 'models changed:', modelCIDHash);
+         console.log('update-DOM-Via-Collection-Change:', domElement, 'models changed:', modelCIDHash);
 
-            //if (!document.contains(domElement)) {
-            //    console.log('visible document does not contain element, so why update it');
-            //    return;
-            //} //TODO: listeners should be removed once the view is removed
-
-            //var props = Object.keys(changes);
-            //var maxChanges = Object.keys(changes).length;
-
-            //var maxChanges = models.length;
-
-            if (eventName === 'coll-add') {
-                //if we add a model to a collection, for now we just re-render the view, it's just way easier
-                //later on we can use jQuery to add a row to a table instead of just re-rendering the entire view
-                self.view.render();
-                return;
-            }
+         //if (!document.contains(domElement)) {
+         //    console.log('visible document does not contain element, so why update it');
+         //    return;
+         //} //TODO: listeners should be removed once the view is removed
+
+         //var props = Object.keys(changes);
+         //var maxChanges = Object.keys(changes).length;
+
+         //var maxChanges = models.length;
+
+         if (eventName === 'coll-add') {
+         //if we add a model to a collection, for now we just re-render the view, it's just way easier
+         //later on we can use jQuery to add a row to a table instead of just re-rendering the entire view
+         self.view.render();
+         return;
+         }
 
 
-            var exitLoop = false;
-            var numChanges = 0;
+         var exitLoop = false;
+         var numChanges = 0;
 
-            domElement.find('*').each(function () {
+         domElement.find('*').each(function () {
 
-                if (exitLoop) {
-                    return false;
-                }
+         if (exitLoop) {
+         return false;
+         }
 
-                var self = this;
+         var self = this;
 
-                $.each(this.attributes, function (i, attrib) {
-                    var name = attrib.name;
-                    var value = attrib.value;
+         $.each(this.attributes, function (i, attrib) {
+         var name = attrib.name;
+         var value = attrib.value;
 
-                    var func = null;
+         var func = null;
 
-                    switch (name) {
-                        case 'adhesive-value':
-                            func = function (element, val) {
-                                $(element).html(String(val));
-                            };
-                            break;
-                        case 'adhesive-value-checkbox':
-                            func = function (element, val) {
-                                $(element).prop('checked', val);
-                            };
-                            break;
-                        default:
-                            return true; //could be return false if 'adhesive-get' was always first attribute
-                    }
+         switch (name) {
+         case 'adhesive-value':
+         func = function (element, val) {
+         $(element).html(String(val));
+         };
+         break;
+         case 'adhesive-value-checkbox':
+         func = function (element, val) {
+         $(element).prop('checked', val);
+         };
+         break;
+         default:
+         return true; //could be return false if 'adhesive-get' was always first attribute
+         }
 
-                    var split = String(value).split(':');
+         var split = String(value).split(':');
 
-                    //var props = split[split.length - 1];
-                    var modelName = split[0];
-                    var prop = split[1];
-                    //var modelProp = split.pop();
-                    //var modelName = split.shift();
-                    //
-                    //var props = split;
+         //var props = split[split.length - 1];
+         var modelName = split[0];
+         var prop = split[1];
+         //var modelProp = split.pop();
+         //var modelName = split.shift();
+         //
+         //var props = split;
 
-                    if (domKeyName == modelName) {
+         if (domKeyName == modelName) {
 
-                        var cid = $(self).attr('adhesive-cid');
+         var cid = $(self).attr('adhesive-cid');
 
-                        if (cid) {
-                            var foundModel = modelCIDHash[cid];
+         if (cid) {
+         var foundModel = modelCIDHash[cid];
 
-                            if (foundModel) {
+         if (foundModel) {
 
-                                var model = foundModel.model;
-                                var val = model.get(prop);
-                                //var props = Object.keys(foundModel.changed);
+         var model = foundModel.model;
+         var val = model.get(prop);
+         //var props = Object.keys(foundModel.changed);
 
-                                console.log('val:', val);
-                                console.log('foundModel:', foundModel);
-                                console.log('model:', model);
-                                func(self, val); //done!
-                                console.log('valentino');
+         console.log('val:', val);
+         console.log('foundModel:', foundModel);
+         console.log('model:', model);
+         func(self, val); //done!
+         console.log('valentino');
 
 
-                                //var subModel = getNestedModels(0,model,props);
-                                //
-                                //var valueTemp = '';
-                                //
-                                //if (subModel) {
-                                //    if (subModel instanceof Backbone.Model) {
-                                //        valueTemp= subModel.get(modelProp);
-                                //    }
-                                //    else {
-                                //        valueTemp = subModel[modelProp];
-                                //    }
-                                //    func(self, prop); //done!
-                                //}
-                                //else{
-                                //    console.error('no submodel found');
-                                //}
+         //var subModel = getNestedModels(0,model,props);
+         //
+         //var valueTemp = '';
+         //
+         //if (subModel) {
+         //    if (subModel instanceof Backbone.Model) {
+         //        valueTemp= subModel.get(modelProp);
+         //    }
+         //    else {
+         //        valueTemp = subModel[modelProp];
+         //    }
+         //    func(self, prop); //done!
+         //}
+         //else{
+         //    console.error('no submodel found');
+         //}
 
 
-                                //numChanges++;
-                                //if (numChanges >= maxChanges) {
-                                //    exitLoop = true;
-                                //    return false; //break from each loop, we are done updating DOM for this model
-                                //}
-                            }
-                        }
-                    }
+         //numChanges++;
+         //if (numChanges >= maxChanges) {
+         //    exitLoop = true;
+         //    return false; //break from each loop, we are done updating DOM for this model
+         //}
+         }
+         }
+         }
 
-                });
-            });
-        }
+         });
+         });
+         }*/
 
 
-        function updatePlainObjects(domKeyName, domElementListen, plainObjectsToUpdate, event, limitToEventTarget) {
+        /*function updatePlainObjects(domKeyName, domElementListen, plainObjectsToUpdate, event, limitToEventTarget) {
 
-            throw new Error('shouldnt happen yet!!');
+         throw new Error('shouldnt happen yet!!');
 
-        }
+         }*/
 
-        function updateBackboneModels(domKeyName, domElement, models, event, limitToEventTarget) {
 
-            console.log('update-Backbone-Models:', models, event);
+        /* function updateBackboneModels(domKeyName, domElement, models, event, limitToEventTarget) {
 
+         console.log('update-Backbone-Models:', models, event);
 
-            function iterateOverAttributes(element, attributes) {
 
-                $.each(attributes, function (i, attrib) {
-                    var name = attrib.name;
-                    var value = attrib.value;
+         function iterateOverAttributes(element, attributes) {
 
-                    var func = null;
+         $.each(attributes, function (i, attrib) {
+         var name = attrib.name;
+         var value = attrib.value;
 
-                    switch (name) {
-                        case 'adhesive-get':
-                            func = function (element) {
-                                //return $(element).text();
-                                return $(element).val();
-                            };
-                            break;
-                        case 'adhesive-get-checkbox':
-                            func = function (element) {
-                                var boolean = $(element).is(':checked');
-                                //$(element).prop('checked', !boolean);
-                                return boolean;
-                            };
-                            break;
-                        default:
-                            return true;
-                    }
+         var func = null;
 
-                    var split = String(value).split(':');
+         switch (name) {
+         case 'adhesive-get':
+         func = function (element) {
+         //return $(element).text();
+         return $(element).val();
+         };
+         break;
+         case 'adhesive-get-checkbox':
+         func = function (element) {
+         var boolean = $(element).is(':checked');
+         //$(element).prop('checked', !boolean);
+         return boolean;
+         };
+         break;
+         default:
+         return true;
+         }
 
-                    var modelName = split[0];
-                    var modelProp = split[1];
+         var split = String(value).split(':');
 
-                    if (domKeyName == modelName) {
+         var modelName = split[0];
+         var modelProp = split[1];
 
-                        //TODO: don't need to check CID because we might be updating multiple models from the same element?
-                        var val = func(element);
+         if (domKeyName == modelName) {
 
-                        _.each(models, function (model, index) {
-                            model.set(modelProp, val, {localChange: true});
-                            model.persistModel();
-                            console.log('backbone model property:', modelProp, 'set to:', val);
-                        });
-                    }
-                });
-            }
+         //TODO: don't need to check CID because we might be updating multiple models from the same element?
+         var val = func(element);
 
-            if (limitToEventTarget) { //we only get info from the one target element clicked or keyed
+         _.each(models, function (model, index) {
+         model.set(modelProp, val, {localChange: true});
+         model.persistModel();
+         console.log('backbone model property:', modelProp, 'set to:', val);
+         });
+         }
+         });
+         }
 
-                var element = event.target;
-                var attributes = element.attributes;
+         if (limitToEventTarget) { //we only get info from the one target element clicked or keyed
 
-                iterateOverAttributes(element, attributes);
-            }
-            else {
+         var element = event.target;
+         var attributes = element.attributes;
 
-                domElement.find('*').each(function () {
+         iterateOverAttributes(element, attributes);
+         }
+         else {
 
-                    var element = this;
-                    var attributes = element.attributes;
+         domElement.find('*').each(function () {
 
-                    var result = iterateOverAttributes(element, attributes);
+         var element = this;
+         var attributes = element.attributes;
 
-                    //check result to stop looping
-                });
-            }
-        }
+         var result = iterateOverAttributes(element, attributes);
 
+         //check result to stop looping
+         });
+         }
+         }
+         */
 
-        function updateBackboneCollections(domKeyName, domElement, collections, event, limitToEventTarget, filterFunction) {
+        /*     function updateBackboneCollections(domKeyName, domElement, collections, event, limitToEventTarget, filterFunction) {
 
-            console.log('update-Backbone-Collections:', collections, event);
+         console.log('update-Backbone-Collections:', collections, event);
 
 
-            function iterateOverAttributes(element, attributes) {
+         function iterateOverAttributes(element, attributes) {
 
-                $.each(attributes, function (i, attrib) {
-                    var name = attrib.name;
-                    var value = attrib.value;
+         $.each(attributes, function (i, attrib) {
+         var name = attrib.name;
+         var value = attrib.value;
 
-                    var func = null;
+         var func = null;
 
-                    switch (name) {
-                        case 'adhesive-get':
-                            func = function (element) {
-                                //return $(element).text();
-                                return $(element).val();
-                            };
-                            break;
-                        case 'adhesive-get-checkbox':
-                            func = function (element) {
-                                //return $(element).text();
-                                return $(element).is(':checked');
-                            };
-                            break;
-                        default:
-                            return true; //could be return false if 'adhesive-get' was always first attribute
-                    }
+         switch (name) {
+         case 'adhesive-get':
+         func = function (element) {
+         //return $(element).text();
+         return $(element).val();
+         };
+         break;
+         case 'adhesive-get-checkbox':
+         func = function (element) {
+         //return $(element).text();
+         return $(element).is(':checked');
+         };
+         break;
+         default:
+         return true; //could be return false if 'adhesive-get' was always first attribute
+         }
 
-                    var split = String(value).split(':');
+         var split = String(value).split(':');
 
-                    //var modelName = split[0];
-                    //var modelProp = split[1];
+         //var modelName = split[0];
+         //var modelProp = split[1];
 
-                    var prop = split[split.length - 1];
-                    var modelProp = split.pop();
-                    var modelName = split.shift();
+         var prop = split[split.length - 1];
+         var modelProp = split.pop();
+         var modelName = split.shift();
 
-                    var props = split;
+         var props = split;
 
-                    if (domKeyName == modelName) {
+         if (domKeyName == modelName) {
 
-                        var val = func(element);
+         var val = func(element);
 
-                        _.each(collections, function (coll, index) {
+         _.each(collections, function (coll, index) {
 
-                            //TODO instead of always filtering, filter conditionally only if there is a filter function,
-                            // TODO: have to deal with filter returning a plain array instead of Backbone collections
+         //TODO instead of always filtering, filter conditionally only if there is a filter function,
+         // TODO: have to deal with filter returning a plain array instead of Backbone collections
 
-                            coll = coll.filter(filterFunction);
+         coll = coll.filter(filterFunction);
 
-                            //coll.each(function (model) {
-                            _.each(coll, function (model, index) {
+         //coll.each(function (model) {
+         _.each(coll, function (model, index) {
 
-                                //var subModel = getNestedModels(null,0, model, props);
-                                //
-                                //if (subModel) {
-                                //    if (subModel instanceof Backbone.Model) {
-                                //        subModel.set(modelProp, val, {localChange: true});
-                                //    }
-                                //    else {
-                                //        subModel[modelProp] = val;
-                                //        model.trigger('model-local-change-broadcast', model);
-                                //    }
-                                //    model.persistModel();
-                                //}
-                                //else{
-                                //    console.error('no submodel found');
-                                //}
+         //var subModel = getNestedModels(null,0, model, props);
+         //
+         //if (subModel) {
+         //    if (subModel instanceof Backbone.Model) {
+         //        subModel.set(modelProp, val, {localChange: true});
+         //    }
+         //    else {
+         //        subModel[modelProp] = val;
+         //        model.trigger('model-local-change-broadcast', model);
+         //    }
+         //    model.persistModel();
+         //}
+         //else{
+         //    console.error('no submodel found');
+         //}
 
-                                var attributes = {};
-                                attributes[modelProp] = val;
-                                //model.set(modelProp,val);
-                                //TODO: need to set attributes before saving to server, otherwise if server fails, then what? we want optimistic changes in place
-                                model.persistModel(attributes);
-                            })
-                        });
-                    }
-                });
-            }
+         var attributes = {};
+         attributes[modelProp] = val;
+         //model.set(modelProp,val);
+         //TODO: need to set attributes before saving to server, otherwise if server fails, then what? we want optimistic changes in place
+         model.persistModel(attributes);
+         })
+         });
+         }
+         });
+         }
 
-            if (limitToEventTarget) {
+         if (limitToEventTarget) {
 
-                var element = event.target;
-                var attributes = element.attributes;
+         var element = event.target;
+         var attributes = element.attributes;
 
-                iterateOverAttributes(element, attributes);
-            }
-            else {
+         iterateOverAttributes(element, attributes);
+         }
+         else {
 
-                domElement.find('*').each(function () {
+         domElement.find('*').each(function () {
 
-                    var element = this;
-                    var attributes = element.attributes;
+         var element = this;
+         var attributes = element.attributes;
 
-                    iterateOverAttributes(element, attributes);
-                });
-            }
-        }
-
-
-        //TODO: recursion is even harder in JS due to closures
-
-        function getNestedModels(value, index, model, props) {
-
-            var temp = value;
-            var value = model;
-            if (props[index]) {
-                temp = model.get(props[index]);
-
-                ++index;
-                if (props[index]) {
-                    getNestedModels(temp, index, temp, props);
-                }
-                else {
-                    return temp;
-                }
-            }
-            else {
-                return value;
-            }
-        }
+         iterateOverAttributes(element, attributes);
+         });
+         }
+         }*/
 
 
         return Adhesive;

@@ -53,7 +53,7 @@ define(
 
                         var _id = model.get('_id');
                         if(_id){
-                            return _id.toString() == '55c52e4b9f3cb5172362fcbc';
+                            return _id.toString() == '55cacc0dca4ef5f329c6954d';
                         }
                     });
 
@@ -89,7 +89,7 @@ define(
                             //update: [],
                             listenTo: [self.model],
                             update: [self.model],
-                            modelEvents: ['model-socket-change-broadcast','model-local-change-broadcast'],
+                            modelEvents: ['model-socket-change-broadcast','model-local-change-broadcast','change'],
                             where: {}
                         },
                         collections: {
@@ -108,16 +108,16 @@ define(
                             //    return model.cid == self.model.cid;
                             //}
                         },
-                        limitToEventTarget: true, //will limit updates for just the element touched
+                        /*//limitToEventTarget: true, //will limit updates for just the element touched
                         //limitToClass: '.barf',  //will limit what elements get listened to at all
-                        domElementListen: self.$el,
+                        //domElementListen: self.$el,
                         //domElementListen: $(document),
-                        domElementUpdate: self.$el,
+                        //domElementUpdate: self.$el,
                         //domElementUpdate: $(self.el),
                         //domElementUpdate: $(document),
 
-                        domEventType: 'click',
-                        propagateChangesToServerImmediately: false,
+                        //domEventType: 'click',
+                        //propagateChangesToServerImmediately: false,*/
                         callback: null
                     });
 

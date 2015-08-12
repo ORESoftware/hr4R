@@ -25,15 +25,15 @@ var config = require('./config/config_constants.json');
 var app = express();
 
 // Enable CORS
-var allowCrossDomain = function (req, res, next) {
+function allowCrossDomain(req, res, next) {
     res.header("Access-Control-Allow-Origin", config.allowedCORSOrigins);
     res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
     res.header("Access-Control-Allow-Headers", "Content-Type");
     res.header("Access-Control-Allow-Credentials", "true");
     next();
-};
+}
 
-app.use(allowCrossDomain);
+//app.use(allowCrossDomain);
 //var router = express.Router();
 
 
@@ -52,7 +52,7 @@ function shouldCompress(req, res) {
     return compression.filter(req, res);
 }
 
-app.disable('etag'); //TODO: should ETAG be disabled
+app.disable('etag'); //TODO: should ETAG be disabled ?
 
 app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
@@ -117,34 +117,30 @@ app.use(passport.session());
 //app.use(router);
 
 
-app.use(function (req, res, next) {
+if(process.env.NODE_ENV === 'development'){
+    app.use(function (req, res, next) {
 
-    console.log(colors.green(''));
-    console.log(colors.cyan('New request:'));
-    console.log(colors.cyan('___________________________________________________________'));
-    console.log(colors.bgYellow('METHOD:'), req.method);
-    console.log(colors.bgYellow('HEADERS:'), req.headers);
-    console.log(colors.bgYellow('PARAMS:'), req.params);
-    console.log(colors.bgYellow('BODY:'), req.body);
-    console.log(colors.bgYellow('QUERY:'), req.query);
-    console.log(colors.bgYellow('SECRET:'), req.secret);
-    console.log(colors.bgYellow('SESSION:'), req.session);
-    console.log(colors.yellow('SESSION_ID:'), req.session.id);
-    console.log(colors.bgYellow('COOKIES:'), req.cookies);
+        console.log('\n\n');
+        console.log(colors.cyan('New request:'));
+        console.log(colors.cyan('______________________________________________________________________________'));
+        console.log(colors.blue('METHOD:'), req.method);
+        console.log(colors.blue('ORIGINALURL:'), req.originalUrl);
+        console.log(colors.blue('HEADERS:'), req.headers);
+        console.log(colors.blue('PARAMS:'), req.params);
+        console.log(colors.blue('BODY:'), req.body);
+        console.log(colors.blue('QUERY:'), req.query);
+        console.log(colors.blue('SECRET:'), req.secret);
+        console.log(colors.blue('SESSION:'), req.session);
+        console.log(colors.blue('SESSION_ID:'), req.session.id);
+        console.log(colors.blue('COOKIES:'), req.cookies);
+        console.log(colors.cyan('(end of req info)'));
+        console.log('\n\n');
 
-    next();
+        next();
+    });
+}
 
-});
 
-//router.all('/', function (req, res, next) {
-//    console.log('Someone made a request!');
-//    console.log(req.method,req.originalUrl);
-//    next();
-//});
-
-//TODO: why is it user._doc now?
-
-// Passport auth
 app.use(function (req, res, next) {
 
     //this function checks to see, if there is a user logged in and if so, that the session matches the user id
@@ -164,13 +160,12 @@ app.use(function (req, res, next) {
         //we should check the url here to make sure it doesn't start with "/users"
         //next();
 
-        //res.send({msg:'user not authenticated, should be redirected to Backbone index view'});
-
-        console.log(colors.yellow('req.user is null...'));
+        //TODO: res.send({msg:'user not authenticated, should be redirected to Backbone index view'});
         if (String(req.originalUrl).indexOf('/ra/') === 0) {
             console.log(colors.bgYellow('unauthorized user attempted to request /ra/ route, so rendering index page...'));
             res.locals.loggedInUser = null;
-            res.render('index', {title: 'SmartConnect Admin Portal'});
+            return res.render('index', {title: 'SmartConnect Admin Portal'});
+            //TODO: this is probably not sufficient...need to lock user out somehow...?
         }
         else {
             next();
