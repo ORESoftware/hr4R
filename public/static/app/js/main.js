@@ -23,10 +23,11 @@ requirejs.config({
     paths: {
         'async': 'vendor/async',
         'jquery': 'vendor/jquery',
+        //'jquery': 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min',
         'ejs': 'vendor/ejs',
         'text': 'vendor/text',
         'form2js': 'vendor/form2js',
-        'underscore': 'vendor/underscore',
+        'underscore': 'vendor/underscore-min',
         'ijson':'vendor/idempotent-json',
         'backbone': 'vendor/backbone',
         'bootstrap': 'vendor/bootstrap',
@@ -38,6 +39,7 @@ requirejs.config({
         'observe':'vendor/observe',
         'react':'vendor/react-with-addons',
         'socketio':'vendor/socketio',
+        //'socketio' : 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min',
         //'Adhesive':'app/js/Adhesive',
         '#patches' :'app/js/patches',
         '#allRelViews':'app/js/meta/allRelViews',
@@ -47,7 +49,11 @@ requirejs.config({
         '#allCollections': 'app/js/meta/allCollections',
         '#appState':'app/js/appState',
         '#viewState':'app/js/viewState',
-        '#allControllers':'app/js/meta/allControllers'
+        '#allControllers':'app/js/meta/allControllers',
+        'css': 'vendor/css.min',
+        'css-builder': 'vendor/css-builder',
+        'normalize' : 'vendor/normalize',
+        '#allCSS':'app/js/meta/allCSS'
         //'d3':'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min'
     },
 
@@ -69,6 +75,13 @@ requirejs.config({
             exports: "ejs"
         }
     }
+    //map: {
+    //    'css': {
+    //        'css': 'vendor/css.min', // or whatever the path to require-css is
+    //        'css-builder': 'vendor/css-builder',
+    //        'normalize' : 'vendor/normalize'
+    //    }
+    //}
 });
 
 require(['app/js/app','app/js/boot'], function (Application) {
@@ -77,4 +90,5 @@ require(['app/js/app','app/js/boot'], function (Application) {
         console.log('document.ready fired, starting application...');
         Application.start();//
     });
+
 });

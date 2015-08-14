@@ -13,5 +13,6 @@
     "paths" :{
         requireLib : 'vendor/require'
     },
+
     "include": 'requireLib'
 })

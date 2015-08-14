@@ -9,8 +9,24 @@
 //TODO: http://www.toptal.com/front-end/simple-data-flow-in-react-applications-using-flux-and-backbone
 //TODO: http://www.gianlucaguarini.com/blog/rivet-js-backbone-js-made-my-code-awesome/
 //TODO: http://kwilson.me.uk/blog/inject-css-from-your-requirejs-module-into-the-main-app/
+//TODO: http://www.w3.org/wiki/Dynamic_style_-_manipulating_CSS_with_JavaScript
 
-//TODO:
+
+ /*
+  TODO:
+// To cater to internet explorer, you have to set the stylesheet to be disabled as it keeps the css styles in memory so removing the element will not work, it can also cause it to crash in some instances if I remember correctly.
+
+This also works for cross browser.
+
+    e.g
+
+document.styleSheets[0].disabled = true;
+//so in your case using jquery try
+
+$('link[title=mystyle]')[0].disabled=true;
+
+*/
+
 
 console.log('loading app/js/APP.js');
 
@@ -29,13 +45,14 @@ define(
         'app/js/routers/router',
         '#allTemplates',
         '#allControllers',
-        '#allRelViews'
+        '#allRelViews',
+        '#allCSS'
         //'app/js/giant'
 
 
     ],
 
-    function (patches, Observe, Backbone, _, IJSON, React, collections, models, router, allTemplates, allControllers, allRelViews) {
+    function (patches, Observe, Backbone, _, IJSON, React, collections, models, router, allTemplates, allControllers, allRelViews, allCSS) {
 
         /*
          we don't use the majority of these dependencies in this file, but they are loaded here so that r.js can build

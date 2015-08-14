@@ -16,8 +16,8 @@ body {
 
 @font-face {
     font-family: 'iconfont';
-    src: url('../fonts/iconfont.eot?-o2trw');
-    src: url('../fonts/iconfont.eot?#iefix-o2trw') format('embedded-opentype'), url('../fonts/iconfont.ttf?-o2trw') format('truetype'), url('../fonts/iconfont.woff?-o2trw') format('woff'), url('../fonts/iconfont.svg?-o2trw#iconfont') format('svg');
+    src: url('../../fonts/iconfont.eot?-o2trw');
+    src: url('../../fonts/iconfont.eot?#iefix-o2trw') format('embedded-opentype'), url('../../fonts/iconfont.ttf?-o2trw') format('truetype'), url('../../fonts/iconfont.woff?-o2trw') format('woff'), url('../../fonts/iconfont.svg?-o2trw#iconfont') format('svg');
     font-weight: normal;
     font-style: normal
 }
@@ -56,7 +56,7 @@ body > .page {
 }
 
 body.loading > .page {
-    background: url(../img/loader.gif) center center no-repeat
+    background: url(../../img/loader.gif) center center no-repeat
 }
 
 body[role="login"].loading > .page {
@@ -65,7 +65,7 @@ body[role="login"].loading > .page {
 
 body[role="login"].loading > .page::after {
     content: "";
-    background: url(../img/loader.gif) center center no-repeat;
+    background: url(../../img/loader.gif) center center no-repeat;
     opacity: .5;
     top: 0;
     left: 0;

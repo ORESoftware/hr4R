@@ -104,6 +104,12 @@ gulp.task('bbb2',function(cb){
     })
 });
 
+gulp.task('bbb3',function(cb){
+    grm('./public/static/cssx', 'css!','./public/static/app/js/meta/allCSS.js', function(){
+        cb();
+    })
+});
+
 
 gulp.task('default', function () {
 
@@ -113,6 +119,10 @@ gulp.task('default', function () {
 
     gulp.run('bbb2', function(){
         console.log('done with bbb2 task');
+    });
+
+    gulp.run('bbb3', function(){
+        console.log('done with bbb3 task');
     });
 
    /* gulp.run('build_requirejs_pipe_controllers');

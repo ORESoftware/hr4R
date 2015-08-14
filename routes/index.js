@@ -28,6 +28,11 @@ router.get('/', function (req, res, next) {
                 }
                 else {
                     //res.json({msg: user});
+                    if(process.env.NODE_ENV !== 'development'){
+                        //res.header("Content-Encoding", "application/x-gzip");
+                        //res.header("Content-Encoding", "application/x-javascript");
+                        //res.header("Transfer-Encoding", "gzip");
+                    }
                     res.render('index', {title: 'SmartConnect Admin Portal', env: process.env.NODE_ENV});
                 }
             });
@@ -36,11 +41,19 @@ router.get('/', function (req, res, next) {
 
     } else {
         console.log("no passport session found in index route, rendering index page...");
-
+        if(process.env.NODE_ENV !== 'development'){
+            //res.header("Content-Encoding", "application/x-gzip");
+            //res.header("Content-Encoding", "application/x-javascript");
+            //res.header("Transfer-Encoding", "gzip");
+        }
         res.render('index', {title: 'SmartConnect Admin Portal',env: process.env.NODE_ENV});
 
     }
 
 });
+
+/*
+* TODO: The correct usage, as defined in RFC 2616 and actually implemented in the wild, is for the client to send an Accept-Encoding request header
+* */
 
 module.exports = router;

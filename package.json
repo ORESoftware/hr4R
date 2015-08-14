@@ -23,7 +23,8 @@
     "mocha_run_test": "mocha --grep $TEST_NAME",
     "start_expose_gc": "node --expose-gc ./bin/www",
     "eslint_nodejs": "eslint --config ./node.eslintrc --ignore-path ./node.eslintignore .",
-    "eslint_browser": "eslint --config ./browser.eslintrc --ignore-path ./browser.eslintignore ./public"
+    "eslint_browser": "eslint --config ./browser.eslintrc --ignore-path ./browser.eslintignore ./public",
+    "gzip_prod": "gzip -9 ./public/static/app/optimized/optimized.js"
   },
   "dependencies": {
     "async": "^1.4.0",

@@ -4,6 +4,7 @@
 
 //TODO: https://scotch.io/tutorials/learn-to-use-the-new-router-in-expressjs-4
 //TODO: http://bulkan-evcimen.com/using_express_router_instead_of_express_namespace.html
+//TODO: http://mark.aufflick.com/blog/2007/12/06/serve-pre-compressed-content-with-apache
 
 var passport = require('passport');
 var colors = require('colors');
@@ -51,6 +52,13 @@ function shouldCompress(req, res) {
     // fallback to standard filter function
     return compression.filter(req, res);
 }
+
+
+app.get('*.gz', function(req, res, next) {
+    //req.url = req.url + '.gz';
+    res.set('Content-Encoding', 'gzip');
+    next();
+});
 
 app.disable('etag'); //TODO: should ETAG be disabled ?
 
@@ -117,7 +125,7 @@ app.use(passport.session());
 //app.use(router);
 
 
-if(process.env.NODE_ENV === 'development'){
+if (process.env.NODE_ENV === 'development') {
     app.use(function (req, res, next) {
 
         console.log('\n\n');
@@ -164,6 +172,9 @@ app.use(function (req, res, next) {
         if (String(req.originalUrl).indexOf('/ra/') === 0) {
             console.log(colors.bgYellow('unauthorized user attempted to request /ra/ route, so rendering index page...'));
             res.locals.loggedInUser = null;
+            if (process.env.NODE_ENV !== 'development') {
+                res.header("Content-Encoding", "gzip");
+            }
             return res.render('index', {title: 'SmartConnect Admin Portal'});
             //TODO: this is probably not sufficient...need to lock user out somehow...?
         }
@@ -172,6 +183,17 @@ app.use(function (req, res, next) {
         }
     }
 });
+
+
+/* TODO
+ * <FilesMatch "\.css\.jgz$">
+ ForceType text/css
+ </FilesMatch>
+ <FilesMatch "\.js\.jgz$">
+ ForceType application/x-javascript
+ </FilesMatch>
+
+ */
 
 
 //app.locals = {

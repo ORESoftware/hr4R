@@ -2,22 +2,25 @@
 <html>
 <head>
 
-    <!-- stylesheets-->
+     <!--stylesheets-->
     <link rel='stylesheet' href='/static/stylesheets/style.css'/>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,300' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+    <!--<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,300' rel='stylesheet' type='text/css'>-->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">-->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">-->
+    <!--<link href="/static/css/bootstrap/bootstrap-notify.css" rel="stylesheet">-->
+    <!--&lt;!&ndash; for simple sidebar &ndash;&gt;-->
+    <!--<link rel="stylesheet" type="text/css" href="/static/css/portal/simple-sidebar.css" media="screen" />-->
+    <!--<link rel="stylesheet" type="text/css" href="/static/css/userProfileView/user-profile.css" media="screen" />-->
 
+    <!-- old -->
     <!--<link type="text/css" rel="stylesheet" href="bower_components/backbone-modal/backbone.modal.css">-->
     <!--<link type="text/css" rel="stylesheet" href="bower_components/backbone-modal/backbone.modal.theme.css">-->
 
-    <link href="/static/css/bootstrap/bootstrap-notify.css" rel="stylesheet">
 
-    <!-- for simple sidebar -->
-    <link rel="stylesheet" type="text/css" href="/static/css/portal/simple-sidebar.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="/static/css/userProfileView/user-profile.css" media="screen" />
 
 </head>
+
+
 
 
 <body>
@@ -39,7 +42,7 @@
 <% if(env === 'development') {%> <!-- development-->
 <script data-main="/static/app/js/main" src="/static/vendor/require.js"></script>
 <% } else { %> <!-- test && production-->
-<script src="/static/app/optimized/optimized.js"></script>
+<script src="/static/app/optimized/optimized.js.gz"></script>
 <% } %>
 <!-- ////////////////////////////////////////////////////////////////////////////////////-->
 <!-- ////////////////////////////////////////////////////////////////////////////////////-->
