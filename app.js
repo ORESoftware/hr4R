@@ -16,7 +16,7 @@ var bodyParser = require('body-parser');
 var ejs = require('ejs');
 //var expressLayouts = require('express-ejs-layouts');
 var express = require('express');
-var compression = require('compression');
+//var compression = require('compression');
 
 
 // Config
@@ -40,7 +40,7 @@ function allowCrossDomain(req, res, next) {
 
 if (process.env.NODE_ENV !== 'development') {
     //app.use(compression());
-    app.use(compression({filter: shouldCompress}));
+    //app.use(compression({filter: shouldCompress}));
 }
 
 function shouldCompress(req, res) {
@@ -54,11 +54,20 @@ function shouldCompress(req, res) {
 }
 
 
-app.get('*.gz', function(req, res, next) {
+//app.get('*.gz', function(req, res, next) {
+//    //req.url = req.url + '.gz';
+//    res.set('Content-Encoding', 'gzip');
+//    next();
+//});
+
+app.use(/(.*)\.gz$/, function(req, res, next) {
     //req.url = req.url + '.gz';
+    //TODO: might need .jgz for Safari, etc
     res.set('Content-Encoding', 'gzip');
+    console.log('!!! gz encoding set for url:',req.originalUrl);
     next();
 });
+
 
 app.disable('etag'); //TODO: should ETAG be disabled ?
 

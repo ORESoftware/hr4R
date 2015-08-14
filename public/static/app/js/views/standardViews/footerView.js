@@ -104,6 +104,11 @@ define(
                     //});
                 },
                 render: function () {
+
+                    if(!window.documentIsReady){
+                        return;
+                    }
+
                     console.log('attempting to render FooterView.');
 
                     var self = this;

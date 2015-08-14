@@ -4,6 +4,8 @@
  * Module dependencies.
  */
 
+process.env.UV_THREADPOOL_SIZE = 1;
+
 var app = require('../app');
 var debug = require('debug')('sc-ui-express:server');
 var http = require('http');

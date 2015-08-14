@@ -3,7 +3,7 @@
  */
 
 
-console.log('loading app/js/collections/jobsCollection.js');
+console.log('loading app/js/collections/BaseCollection.js');
 
 
 define(

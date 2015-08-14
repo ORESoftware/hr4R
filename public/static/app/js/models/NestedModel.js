@@ -4,7 +4,7 @@
 
 
 
-console.log('loading app/js/models/jobModel.js');
+console.log('loading app/js/models/NestedModel.js');
 
 //TODO: In model, urlRoot is used for the Model. url is used for the instance of the Model.
 //TODO: http://beletsky.net/2012/11/baby-steps-to-backbonejs-model.html
