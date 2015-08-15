@@ -38,10 +38,10 @@ function allowCrossDomain(req, res, next) {
 //var router = express.Router();
 
 
-if (process.env.NODE_ENV !== 'development') {
-    //app.use(compression());
-    app.use(compression({filter: shouldCompress}));
-}
+//if (process.env.NODE_ENV !== 'development') {
+//    //app.use(compression());
+//    app.use(compression({filter: shouldCompress}));
+//}
 
 function shouldCompress(req, res) {
     if (req.headers['x-no-compression']) {
@@ -54,11 +54,18 @@ function shouldCompress(req, res) {
 }
 
 
-app.get('*.gz', function(req, res, next) {
+app.use('*.gz', function(req, res, next) {
     //req.url = req.url + '.gz';
     res.set('Content-Encoding', 'gzip');
     next();
 });
+
+app.use(/(.*)\.gz$/, function(req, res, next) {
+    //req.url = req.url + '.gz';
+    res.set('Content-Encoding', 'gzip');
+    next();
+});
+
 
 app.disable('etag'); //TODO: should ETAG be disabled ?
 
