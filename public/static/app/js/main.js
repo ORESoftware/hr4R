@@ -13,8 +13,11 @@
 //TODO: http://stackoverflow.com/questions/8780775/text-files-in-the-path-configuration-file
 //TODO: http://blog.mayflower.de/3937-Backbone-React.html
 //TODO: https://github.com/philix/jsx-requirejs-plugin
+//TODO: Safari doesn't accept gzip compression?
 
-console.log('loading app/js/main.js');
+window.startDate = Date.now();
+
+console.log('loading app/js/main.js, (1) time:', (Date.now() -window.startDate));
 
 requirejs.config({
     enforceDefine: false,
@@ -84,11 +87,16 @@ requirejs.config({
     //}
 });
 
-require(['app/js/app','app/js/boot'], function (Application) {
+console.log('starting app, time:', (Date.now() -window.startDate));
 
-    $(document).ready(function () {
-        console.log('document.ready fired, starting application...');
-        Application.start();//
-    });
+require(['app/js/app'], function (Application) {
+
+    console.log('Application loaded, (2) time:', (Date.now() -window.startDate));
+
+    //$(document).ready(function () {
+
+        //console.log('document.ready fired, time:', (Date.now() -window.startDate));
+        Application.start();
+    //});
 
 });

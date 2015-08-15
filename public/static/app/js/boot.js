@@ -34,37 +34,60 @@ define('app/js/boot',
 
         var initialize = function () {
 
-            Backbone.history.start();
+            console.log('Boot.initialize() fired', (Date.now() - window.startDate));
+
+            //Backbone.history.start();
             //Backbone.history.start({ pushState: true });
 
-            // Require index page from server
-            $.ajax({
-                url: '/authenticate',
-                type: 'GET',
-                dataType: 'json',
-                success: function (msg) {
-                    console.log('authentication message:', msg);
-                    //appGlobal.env = msg.env;
-                    appState.set('env', msg.env);
-                    runApplication(msg.isAuthenticated, msg.user);
-                },
-                error: function (err) {
-                    console.log('server error:', err);
-                    setTimeout(function () {
-                        alert('server error: ' + String(err));
-                    }, 100);
-                }
-            });
+
+                $.ajax({
+                    url: '/authenticate',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (msg) {
+                        console.log('authentication message:', msg);
+                        //appGlobal.env = msg.env;
+                        appState.set('env', msg.env);
+                        console.log('boot.initialize() waiting for document.ready to fire, time:', (Date.now() - window.startDate));
+                        $(function () {
+                            window.documentIsReady = true;
+                            console.log('document.ready fired, time:', (Date.now() - window.startDate));
+                            runApplication(msg.isAuthenticated, msg.user);
+                        });
+                    },
+                    error: function (err) {
+                        console.log('server error:', err);
+                        setTimeout(function () {
+                            alert('server error: ' + String(err));
+                        }, 100);
+                    }
+                });
+
+
+            //$(function () {
+            //    window.documentIsReady = true;
+            //    //                console.log('document.ready fired, time:', (Date.now() - window.startDate));
+            //    //                runApplication(msg.isAuthenticated, msg.user);
+            //    runApplication(false, null);
+            //});
+
+
         };
 
+        //TODO: does optimized.js.gz file take longer to parse?
+        //TODO: http://superuser.com/questions/205223/pros-and-cons-of-bzip-vs-gzip
         //TODO: effectiveJS not EmbeddedJS...see google for this
         //TODO: create new user with Backbone model
 
         var runApplication = function (authenticated, user) {
 
-            function run() {
-                if (authenticated === true) {
+            console.log('runApplication fired, Backbone History starting', (Date.now() - window.startDate));
 
+            Backbone.history.start();
+
+            function run() {
+
+                if (authenticated === true) {
 
                     //iterate through all users to find already registered user
                     allCollections.users.fetch().done(function () {
@@ -98,6 +121,7 @@ define('app/js/boot',
                 }
             }
 
+            console.log('APPLICATION ENVIRONMENT:', appState.get('env'));
             if (appState.get('env') === 'development') {
                 loadDefaultModels(run);
             }
@@ -136,7 +160,7 @@ define('app/js/boot',
                     username: 'default',
                     password: 'default',
                     email: 'default@temp.com'
-                },{collection:allCollections.users}),
+                }, {collection: allCollections.users}),
 
                 allModels.User.newUser({
                     firstName: '2default-first-name2',
@@ -144,7 +168,7 @@ define('app/js/boot',
                     username: '2default2',
                     password: '2default2',
                     email: '2default@temp.com'
-                },{collection:allCollections.users}),
+                }, {collection: allCollections.users}),
 
 
                 allModels.User.newUser({
@@ -160,7 +184,7 @@ define('app/js/boot',
                     lastName: 'rand-last-name',
                     firstName: 'rando first',
                     jobName: 'jobbyname'
-                },{collectionName:'jobs'})
+                }, {collectionName: 'jobs'})
                 ,
 
                 allModels.Job.newJob({
@@ -168,14 +192,14 @@ define('app/js/boot',
                     lastName: '2rand-last-name2',
                     animals: new NestedModel({}),
                     jobName: '2jobbyname2'
-                },{collectionName:'jobs'}),
+                }, {collectionName: 'jobs'}),
 
                 allModels.Job.newJob({
                     firstName: '3rand-job-name3',
                     lastName: '3rand-last-name3',
                     animals: new NestedModel({}),
                     jobName: '3jobbyname3'
-                },{})
+                }, {})
             ];
 
             models.forEach(function (model, index) {

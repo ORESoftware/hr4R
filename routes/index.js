@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 
 
-
 /* GET home page. */
 router.get('/', function (req, res, next) {
 
@@ -10,9 +9,9 @@ router.get('/', function (req, res, next) {
         console.log("user session exists...checking DB for user");
         var UserModel = req.site.models.User;
 
-        UserModel.get(function(err,model){
+        UserModel.get(function (err, model) {
 
-            if(err){
+            if (err) {
                 throw err;
             }
 
@@ -28,32 +27,44 @@ router.get('/', function (req, res, next) {
                 }
                 else {
                     //res.json({msg: user});
-                    if(process.env.NODE_ENV !== 'development'){
+                    if (process.env.NODE_ENV !== 'development') {
                         //res.header("Content-Encoding", "application/x-gzip");
                         //res.header("Content-Encoding", "application/x-javascript");
                         //res.header("Transfer-Encoding", "gzip");
                     }
-                    res.render('index', {title: 'SmartConnect Admin Portal', env: process.env.NODE_ENV});
+
+                    var obj = null;
+                    var env = process.env.NODE_ENV;
+                    var title = 'SmartConnect Admin Portal';
+                    //TODO: put user auth info in index.ejs?
+
+                    if (req.isAuthenticated() && req.user) {
+                        obj = {isAuthenticated: true, user: req.user, env: env, title: title};
+                    }
+                    else {
+                        obj = {isAuthenticated: false, user: null, env: env, title: title};
+                    }
+
+                    res.render('index', obj);
                 }
             });
 
         });
 
-    } else {
+    }
+    else {
         console.log("no passport session found in index route, rendering index page...");
-        if(process.env.NODE_ENV !== 'development'){
-            //res.header("Content-Encoding", "application/x-gzip");
-            //res.header("Content-Encoding", "application/x-javascript");
-            //res.header("Transfer-Encoding", "gzip");
-        }
-        res.render('index', {title: 'SmartConnect Admin Portal',env: process.env.NODE_ENV});
-
+        //TODO: put user auth info in index.ejs?
+        var env = process.env.NODE_ENV;
+        var title = 'SmartConnect Admin Portal';
+        var obj = {isAuthenticated: false, user: null, env: env, title: title};
+        res.render('index', obj);
     }
 
 });
 
 /*
-* TODO: The correct usage, as defined in RFC 2616 and actually implemented in the wild, is for the client to send an Accept-Encoding request header
-* */
+ * TODO: The correct usage, as defined in RFC 2616 and actually implemented in the wild, is for the client to send an Accept-Encoding request header
+ * */
 
 module.exports = router;

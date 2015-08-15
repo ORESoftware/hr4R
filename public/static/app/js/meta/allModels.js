@@ -3,7 +3,7 @@
  */
 
 
-console.log('loading allModels');
+console.log('loading #allModels');
 
 
 define(

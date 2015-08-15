@@ -35,6 +35,7 @@ define(
     [
         //'d3',
         '#patches',
+        'app/js/boot',
         'observe',
         'backbone',
         'underscore',
@@ -52,7 +53,7 @@ define(
 
     ],
 
-    function (patches, Observe, Backbone, _, IJSON, React, collections, models, router, allTemplates, allControllers, allRelViews, allCSS) {
+    function (patches, boot, Observe, Backbone, _, IJSON, React, collections, models, router, allTemplates, allControllers, allRelViews, allCSS) {
 
         /*
          we don't use the majority of these dependencies in this file, but they are loaded here so that r.js can build
@@ -214,11 +215,16 @@ define(
 
         var start = function () {
             //TODO: boot should be included in optimized build
-            require(['app/js/boot'], function (boot) {
+
+            console.log('app.start() fired, boot.initialize() about to fire, time:', (Date.now() -window.startDate));
+            //require(['app/js/boot'], function (boot) {
+
+                //console.log('boot.initialize() waiting for document.ready to fire, time:', (Date.now() -window.startDate));
                 //$(function() {  //DOM is ready
+                //    console.log('document.ready fired, time:', (Date.now() -window.startDate));
                     boot.initialize();
                 //});
-            });
+            //});
         };
 
         return {

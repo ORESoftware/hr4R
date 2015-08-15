@@ -291,7 +291,15 @@ define(
                             onError(err);
                         }
                         else {
-                            continueOn.bind(self)(opts);
+
+                            if(!window.documentIsReady){
+                                return;
+                            }
+
+                            $(function() {
+                                continueOn.bind(self)(opts);
+                            });
+
                         }
                     }
                 );

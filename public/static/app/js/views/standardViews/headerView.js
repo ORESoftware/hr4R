@@ -88,6 +88,11 @@ define(
                 },
 
                 render: function () {
+
+                    if(!window.documentIsReady){
+                        return;
+                    }
+
                     console.log('attempting to render HeaderView.');
 
                     var self = this;
