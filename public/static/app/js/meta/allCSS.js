@@ -11,18 +11,20 @@ define(
     [
         //'require'
 
-        "css!cssx/alert-bangtidy",
-		"css!cssx/alert-blackgloss",
-		"css!cssx/bootstrap/bootstrap-notify",
-		"css!cssx/bootstrap/bootstrap-theme",
-		"css!cssx/bootstrap/bootstrap-theme.min",
-		"css!cssx/bootstrap/bootstrap",
-		"css!cssx/bootstrap/bootstrap.min",
-		"css!cssx/main",
-		"css!cssx/pictureList/pictureList",
-		"css!cssx/portal/simple-sidebar",
-		"css!cssx/style",
-		"css!cssx/userProfileView/user-profile"
+        "text!cssx/alert-bangtidy.css",
+		"text!cssx/alert-blackgloss.css",
+		"text!cssx/bootstrap/bootstrap-notify.css",
+		"text!cssx/bootstrap/bootstrap-theme.css",
+		"text!cssx/bootstrap/bootstrap-theme.css.map",
+		"text!cssx/bootstrap/bootstrap-theme.min.css",
+		"text!cssx/bootstrap/bootstrap.css",
+		"text!cssx/bootstrap/bootstrap.css.map",
+		"text!cssx/bootstrap/bootstrap.min.css",
+		"text!cssx/main.css",
+		"text!cssx/pictureList/pictureList.css",
+		"text!cssx/portal/simple-sidebar.css",
+		"text!cssx/style.css",
+		"text!cssx/userProfileView/user-profile.css"
     ],
     function(){
 
@@ -30,19 +32,19 @@ define(
 
         return {
 
-            "css!cssx/alert-bangtidy": arguments[0],
-			"css!cssx/alert-blackgloss": arguments[1],
-			"css!cssx/bootstrap/bootstrap-notify": arguments[2],
-			"css!cssx/bootstrap/bootstrap-theme": arguments[3],
-			"css!cssx/bootstrap/bootstrap-theme.min": arguments[4],
-			"css!cssx/bootstrap/bootstrap": arguments[5],
-			"css!cssx/bootstrap/bootstrap.min": arguments[6],
-			"css!cssx/main": arguments[7],
-			"css!cssx/pictureList/pictureList": arguments[8],
-			"css!cssx/portal/simple-sidebar": arguments[9],
-			"css!cssx/style": arguments[10],
-			"css!cssx/userProfileView/user-profile": arguments[11]
+            "text!cssx/alert-bangtidy.css": arguments[0],
+			"text!cssx/alert-blackgloss.css": arguments[1],
+			"text!cssx/bootstrap/bootstrap-notify.css": arguments[2],
+			"text!cssx/bootstrap/bootstrap-theme.css": arguments[3],
+			"text!cssx/bootstrap/bootstrap-theme.css.map": arguments[4],
+			"text!cssx/bootstrap/bootstrap-theme.min.css": arguments[5],
+			"text!cssx/bootstrap/bootstrap.css": arguments[6],
+			"text!cssx/bootstrap/bootstrap.css.map": arguments[7],
+			"text!cssx/bootstrap/bootstrap.min.css": arguments[8],
+			"text!cssx/main.css": arguments[9],
+			"text!cssx/pictureList/pictureList.css": arguments[10],
+			"text!cssx/portal/simple-sidebar.css": arguments[11],
+			"text!cssx/style.css": arguments[12],
+			"text!cssx/userProfileView/user-profile.css": arguments[13]
         }
 });
-
-

@@ -25,10 +25,12 @@ define('app/js/boot',
         'app/js/giant',
         '#allModels',
         '#allCollections',
-        'app/js/models/NestedModel'
+        'app/js/models/NestedModel',
+        'app/js/cssAdder',
+        '#allCSS'
     ],
 
-    function (appState, $, Backbone, giant, allModels, allCollections, NestedModel) {
+    function (appState, $, Backbone, giant, allModels, allCollections, NestedModel, cssAdder, allCSS) {
 
         //TODO: might need to figure out how to set ENV before socket.io tries to make connection to server
 
@@ -40,28 +42,35 @@ define('app/js/boot',
             //Backbone.history.start({ pushState: true });
 
 
-                $.ajax({
-                    url: '/authenticate',
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function (msg) {
-                        console.log('authentication message:', msg);
-                        //appGlobal.env = msg.env;
-                        appState.set('env', msg.env);
-                        console.log('boot.initialize() waiting for document.ready to fire, time:', (Date.now() - window.startDate));
-                        $(function () {
-                            window.documentIsReady = true;
-                            console.log('document.ready fired, time:', (Date.now() - window.startDate));
-                            runApplication(msg.isAuthenticated, msg.user);
-                        });
-                    },
-                    error: function (err) {
-                        console.log('server error:', err);
-                        setTimeout(function () {
-                            alert('server error: ' + String(err));
-                        }, 100);
-                    }
-                });
+            $.ajax({
+                url: '/authenticate',
+                type: 'GET',
+                dataType: 'json',
+                success: function (msg) {
+                    console.log('authentication message:', msg);
+                    //appGlobal.env = msg.env;
+                    appState.set('env', msg.env);
+                    console.log('boot.initialize() waiting for document.ready to fire, time:', (Date.now() - window.startDate));
+
+                    var x = allCSS['text!cssx/portal/simple-sidebar.css'];
+                    //var y = allCSS['text!cssx/bootstrap/bootstrap-notify.css'];
+
+                    cssAdder.add(x);
+                    //cssAdder.add(y);
+
+                    $(function () {
+                        window.documentIsReady = true;
+                        console.log('document.ready fired, time:', (Date.now() - window.startDate));
+                        runApplication(msg.isAuthenticated, msg.user);
+                    });
+                },
+                error: function (err) {
+                    console.log('server error:', err);
+                    setTimeout(function () {
+                        alert('server error: ' + String(err));
+                    }, 100);
+                }
+            });
 
 
             //$(function () {

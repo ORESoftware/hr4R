@@ -9,13 +9,14 @@ define(
         'jquery',
         'underscore',
         'backbone',
-        '#allCollections'
+        '#allCollections',
+        '#allCSS'
         ////////////
 
     ],
-    function ($, _, Backbone, allCollections) {
+    function ($, _, Backbone, allCollections, allCSS) {
         return {
-            getAll: function (id, changeViewFunction) {
+            getAll: function (id, changeViewCallback) {
                 require(['jsx!app/js/views/relViews/getAll/getAll'], function (View) {
                     var view = new View({
                         collection: allCollections.jobs
@@ -26,7 +27,12 @@ define(
                     //var view = new View(viewOpts);
                     var routerOpts = {};
                     routerOpts.view = view;
-                    changeViewFunction(routerOpts);
+                    routerOpts.cssAdds = [
+                        allCSS['text!cssx/alert-bangtidy.css'],
+                        allCSS['text!cssx/bootstrap/bootstrap-notify.css']
+                    ];
+
+                    changeViewCallback(routerOpts);
                 });
             },
             make: function () {

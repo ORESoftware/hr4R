@@ -104,8 +104,14 @@ gulp.task('bbb2',function(cb){
     })
 });
 
+//gulp.task('bbb3',function(cb){
+//    grm('./public/static/cssx', 'css!','./public/static/app/js/meta/allCSS.js', function(){
+//        cb();
+//    })
+//});
+
 gulp.task('bbb3',function(cb){
-    grm('./public/static/cssx', 'css!','./public/static/app/js/meta/allCSS.js', function(){
+    grm('./public/static/cssx', 'text!','./public/static/app/js/meta/allCSS.js', function(){
         cb();
     })
 });

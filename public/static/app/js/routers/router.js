@@ -22,10 +22,11 @@ define(
         'async',
         '#allCollections',
         'ijson',
-        '#standardViews'
+        '#standardViews',
+        'app/js/cssAdder'
     ],
 
-    function (appState, viewState, React, Backbone, async, collections, IJSON, standardViews) {
+    function (appState, viewState, React, Backbone, async, collections, IJSON, standardViews, cssAdder) {
 
 
         var BootRouter = Backbone.Router.extend({
@@ -293,12 +294,16 @@ define(
                         else {
 
                             if(!window.documentIsReady){
+                                //here we don't bother rendering stuff before document is ready?
                                 return;
                             }
-
-                            $(function() {
+                            else{
                                 continueOn.bind(self)(opts);
-                            });
+                            }
+
+                            //$(function() {
+                            //    continueOn.bind(self)(opts);
+                            //});
 
                         }
                     }
@@ -415,6 +420,13 @@ define(
                 //if (this.viewState.get('headerView') == null) {
                 this.viewState.set('headerView', new standardViews.Header());
                 //}
+
+                //**add stylesheets
+                var stylesheetsToAdd = opts.cssAdds || [];
+                var arrayLength = stylesheetsToAdd.length;
+                for (var i = 0; i < arrayLength; i++) {
+                    cssAdder.add(stylesheetsToAdd[i]);
+                }
 
                 //**render header**
                 this.viewState.get('headerView').render();

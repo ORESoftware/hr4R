@@ -53,9 +53,9 @@ requirejs.config({
         '#appState':'app/js/appState',
         '#viewState':'app/js/viewState',
         '#allControllers':'app/js/meta/allControllers',
-        'css': 'vendor/css.min',
-        'css-builder': 'vendor/css-builder',
-        'normalize' : 'vendor/normalize',
+        //'css': 'vendor/css.min',
+        //'css-builder': 'vendor/css-builder',
+        //'normalize' : 'vendor/normalize',
         '#allCSS':'app/js/meta/allCSS'
         //'d3':'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min'
     },
@@ -79,10 +79,10 @@ requirejs.config({
         }
     }
     //map: {
-    //    'css': {
-    //        'css': 'vendor/css.min', // or whatever the path to require-css is
-    //        'css-builder': 'vendor/css-builder',
-    //        'normalize' : 'vendor/normalize'
+    //    '*': {
+    //        'css': 'vendor/css.min' // or whatever the path to require-css is
+    //        //'css-builder': 'vendor/css-builder',
+    //        //'normalize' : 'vendor/normalize'
     //    }
     //}
 });
