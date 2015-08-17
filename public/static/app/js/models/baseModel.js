@@ -65,6 +65,9 @@ define(
                     this.collection = options.collection;
                     this.collectionName = options.collectionName;
 
+                    this.on('model-local-change-broadcast', function (model, something) { //TODO: only set needsPersisting on localChange
+                        self.needsPersisting = true;
+                    });
                     this.on('change', function (model, something) {
                         self.needsPersisting = true;
                     });

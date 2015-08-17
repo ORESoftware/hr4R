@@ -55,7 +55,7 @@ define(
             //TODO: this function won't get called once the listeners are removed, so no need to check if this is still in the DOM
 
             var changes = model.changed;
-            var props = Object.keys(changes);
+            //var props = Object.keys(changes);
             var maxChanges = Object.keys(changes).length;
             var exitLoop = false;
             var numChanges = 0;
@@ -69,6 +69,12 @@ define(
                 var self = this;
 
                 $.each(this.attributes, function (i, attrib) {
+
+                    if(!attrib){
+                        console.log('wtf no attrib defined');
+                        return false;
+                    }
+
                     var name = attrib.name;
                     var value = attrib.value;
 
@@ -82,7 +88,8 @@ define(
                             break;
                         case 'adhesive-value-checkbox':
                             func = function (element, val) {
-                                $(element).prop('checked', val);
+                                //$(element).prop('checked', val);
+                                $(element).attr('checked', val);
                             };
                             break;
                         default:
@@ -108,10 +115,10 @@ define(
 
                             numChanges++;
 
-                            //if (numChanges >= maxChanges) {
-                            //    exitLoop = true;
-                            //    return false; //break from each loop, we are done updating DOM for this model
-                            //}
+                            if (numChanges >= maxChanges) {
+                                exitLoop = true;
+                                return false; //break from each loop, we are done updating DOM for this model
+                            }
                         }
                     }
 

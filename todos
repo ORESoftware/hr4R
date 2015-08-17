@@ -1,4 +1,5 @@
 //////
 
 1. when I am viewing a view and another user deletes the model I am viewing, or deletes a model from the collection I am viewing, what to do?
-
+2. fix backbone nested models
+3. problem is that checkbox is not switching locally, it is appearing in other browsers with the correct value, but the GUI value is not toggling

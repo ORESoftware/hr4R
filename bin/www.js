@@ -1,10 +1,6 @@
-#!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
 
-process.env.UV_THREADPOOL_SIZE = 1;
+//process.env.UV_THREADPOOL_SIZE = 1;
 
 var app = require('../app');
 var debug = require('debug')('sc-ui-express:server');
@@ -30,15 +26,13 @@ if(typeof global.gc === 'function'){
   global.gc(); //garbage collect just for the heck of it
 }
 
-var server = http.createServer(app).listen(port); //var server = http.Server(app);
+var server = http.createServer(app).listen(port); //Listen on provided port, on all network interfaces.
+
+//var server = http.Server(app);
 //var io = require('socket.io').listen(server);  //we need to bind socket.io to the http server
 //
 //require('../lib/controllers/socketio')(io);
 
-
-/**
- * Listen on provided port, on all network interfaces.
- */
 
 //server.listen(port);
 server.on('error', onError);

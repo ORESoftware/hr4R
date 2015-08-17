@@ -56,6 +56,11 @@ define(
             function iterateOverAttributes(element, attributes) {
 
                 $.each(attributes, function (i, attrib) {
+
+                    if(!attrib){
+                        console.log('wtf no attrib defined');
+                        return false;
+                    }
                     var name = attrib.name;
                     var value = attrib.value;
 
