@@ -3,21 +3,22 @@
         <div id="jobs-react-example-div-id">react example goes here</div>
         <div id="jobs-adhesive-example-div-id">adhesive example goes here
 
-            <fieldset>
+            <div>
+
                 <legend>What is Your Favorite Pet?</legend>
-                <input class="barf" type="checkbox" checked=false name="animal" value="Verified!"
+                <input class="checkbox" type="checkbox" onclick="return false;" name="animal" value="Verified!"
                        adhesive-value-checkbox="job:isVerified" adhesive-get-checkbox="job:isVerified"
                        adhesive-cid="<%= job.cid %>">Is-Verified
-                <input class="barf" type="checkbox" checked=false name="animal" value="Cat"
+                <input class="checkbox" type="checkbox" onclick="return false;" name="animal" value="Cat"
                        adhesive-value-checkbox="job:animals:cats" adhesive-get-checkbox="job:animals:cats"
                        adhesive-cid="<%= job.cid %>">Cats
-                <input class="barf" type="checkbox" checked="true" name="animal" value="Dog"
+                <input class="checkbox" type="checkbox" onclick="return false;" name="animal" value="Dog"
                        adhesive-value-checkbox="job:animals:dogs" adhesive-get-checkbox="job:animals:dogs"
                        adhesive-cid="<%= job.cid %>">Dogs
-                <input class="barf" type="checkbox" checked="true" name="animal" value="Bird"
+                <input class="checkbox" type="checkbox" onclick="return false;" name="animal" value="Bird"
                        adhesive-value-checkbox="job:animals:birds" adhesive-get-checkbox="job:animals:birds"
                        adhesive-cid="<%= job.cid %>">Birds
-            </fieldset>
+            </div>
 
             <div class="row">
                 Update Your Personal Information:

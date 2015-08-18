@@ -75,7 +75,7 @@ define(
                             break;
                         case 'adhesive-get-checkbox':
                             func = function (element) {
-                                var boolean = $(element).is(':checked');
+                                var boolean = ($(element).is(':checked'));
                                 //$(element).prop('checked', !boolean);
                                 return boolean;
                             };
@@ -148,7 +148,7 @@ define(
                         case 'adhesive-get-checkbox':
                             func = function (element) {
                                 //return $(element).text();
-                                return $(element).is(':checked');
+                                return ($(element).is(':checked'));
                             };
                             break;
                         default:

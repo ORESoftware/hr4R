@@ -60,6 +60,8 @@ define(
             var exitLoop = false;
             var numChanges = 0;
 
+            //TODO: find ('my custom tag') instead of find('*')
+
             domElementsToPotentiallyUpdate.find('*').each(function () {
 
                 if (exitLoop) {
@@ -88,8 +90,8 @@ define(
                             break;
                         case 'adhesive-value-checkbox':
                             func = function (element, val) {
-                                //$(element).prop('checked', val);
-                                $(element).attr('checked', val);
+                                $(element).prop('checked', val);
+                                //$(element).attr('checked', val);
                             };
                             break;
                         default:

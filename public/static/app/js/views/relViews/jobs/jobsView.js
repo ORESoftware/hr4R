@@ -53,7 +53,7 @@ define(
 
                         var _id = model.get('_id');
                         if(_id){
-                            return _id.toString() == '55d11fa9f5d82d24054deb04';
+                            return _id.toString() == '55cacbe9ca4ef5f329c69544';
                         }
                     });
 
@@ -89,9 +89,10 @@ define(
                             //update: [],
                             listenTo: [self.model],
                             update: [self.model],
-                            //modelEvents: ['model-socket-change-broadcast','model-local-change-broadcast','change'],
+                            //modelEvents: ['model-socket-change-broadcast','model-local-change-broadcast','change'], //works
                             modelEvents: ['model-local-change-broadcast','model-socket-change-broadcast'],
-                            //modelEvents: ['model-socket-change-broadcast','change'],
+                            //modelEvents: ['model-socket-change-broadcast','change'], //works
+                            //modelEvents: ['change'],
                             where: {}
                         },
                         collections: {
