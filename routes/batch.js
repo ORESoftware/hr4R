@@ -70,24 +70,36 @@ router.post('/:collection',function(req,res,next){
 
                 var newModel = new Model(data);
 
-                newModel.save(function (err, result) {
-                    if (err) {
-                        cb(err);
-                    }
-                    else if (result) {
-                        cb(null, {success: result});
-                    }
-                    else {
-                        cb(new Error('grave error in model.save method'));
-                    }
+                //newModel.save(function (err, result) {
+                //    if (err) {
+                //        cb(err);
+                //    }
+                //    else if (result) {
+                //        cb(null, {success: result});
+                //    }
+                //    else {
+                //        cb(new Error('grave error in model.save method'));
+                //    }
+                //});
+
+                newModel.update({},{upsert:true}, function(err,result){
+                        if (err) {
+                            cb(err);
+                        }
+                        else if (result) {
+                            cb(null, result);
+                        }
+                        else {
+                            cb(new Error('grave error in model.save method'));
+                        }
                 });
             },
-            function done(err) {
+            function done(err,results) {
                 if (err) {
                     res.send({error: err.toString()})
                 }
                 else {
-                    res.send({success: {}})
+                    res.send({success: {results:results}})
                 }
 
             });

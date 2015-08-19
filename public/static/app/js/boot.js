@@ -226,7 +226,14 @@ define('app/js/boot',
                     }],
 
                 function done(err, results) {
-                    callback(err, results);
+                    if(err){
+                        throw err;
+                    }
+                    else{
+                        console.log(results);
+                        callback(null);
+                    }
+
                 });
 
         }

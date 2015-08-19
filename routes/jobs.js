@@ -91,18 +91,16 @@ router.get('/:job_id', function (req, res, next) {
 
 router.post('/', function (req, res, next) {
 
-    console.log('about to post new job:', req.body);
-
-    var job = req.body;
-    var jobName = job.jobName;
-    var animals = job.animals;
-    var firstName = job.firstName;
-    var lastName = job.lastName;
-    var isVerified = job.isVerified;
-    var created_by = job.created_by;
-    var created_at = job.created_at;
-    var updated_by = job.updated_by;
-    var updated_at = job.updated_at;
+    var jobData = req.body;
+    //var jobName = job.jobName;
+    //var animals = job.animals;
+    //var firstName = job.firstName;
+    //var lastName = job.lastName;
+    //var isVerified = job.isVerified;
+    //var created_by = job.created_by;
+    //var created_at = job.created_at;
+    //var updated_by = job.updated_by;
+    //var updated_at = job.updated_at;
 
 
     var JobModel = req.site.models.Job;
@@ -112,27 +110,14 @@ router.post('/', function (req, res, next) {
             throw err;
         }
 
-        var newJob = new Job({
-            jobName: jobName,
-            firstName: firstName,
-            lastName: lastName,
-            animals: animals,
-            isVerified:isVerified,
-            created_by: created_by,
-            created_at: created_at,
-            updated_by: updated_by,
-            updated_at: updated_at
-        });
-
+        var newJob = new Job(jobData);
 
         newJob.save(function (err, result) {
             if (err) {
-                console.log("error in job save method:", err);
-                res.send({error: err.errors});
+                console.log(colors.red("error in job save method:", err));
+                res.send({error: err.toString()});
             }
             else if (result) {
-                console.log('Added new job: ', result);
-                delete result.passwordPreHash;
                 res.json({success: result});
             }
             else {
@@ -144,6 +129,8 @@ router.post('/', function (req, res, next) {
 
 
 router.put('/:job_id', function (req, res, next) {
+
+    //TODO: do new Job(data).update({upsert:true}) ?
 
     var jobToUpdate = req.specialParams.job_model;
 
@@ -171,7 +158,7 @@ router.put('/:job_id', function (req, res, next) {
 
     jobToUpdate.save(function (err, result) {
         if (err) {
-            console.log("error in job put method:", err);
+            console.log(colors.bgRed("error in job put method:", err));
             res.json({error: err});
             return next(err);
         }

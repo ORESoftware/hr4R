@@ -208,7 +208,7 @@ define(
                 var saveArray = [];
 
                 this.each(function (model, index) {  //iterate through models, add/push function to async.parallel
-                    if(model.needsPersisting){
+                    if(!(opts.needsPersisting && model.needsPersisting)){
                         saveArray.push(model.toJSON());
                     }
                 });
@@ -223,10 +223,10 @@ define(
                     contentType: "application/json"
 
                 }).done(function (msg, textStatus, jqXHR) {
-                    cb(msg, textStatus, jqXHR);
+                    cb(null, msg, textStatus, jqXHR);
 
                 }).fail(function (jqXHR, textStatus, errorThrown) {
-                    alert('collection batch persist failed.')
+                    alert('collection batch persist failed - ' + errorThrown);
 
                 }).always(function (a, textStatus, b) {
 
