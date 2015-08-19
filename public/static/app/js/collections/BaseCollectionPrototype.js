@@ -178,11 +178,11 @@ define(
 
                 var saveArray = [];
 
-                this.each(function (user, index) {  //iterate through models, add/push function to async.parallel
+                this.each(function (model, index) {  //iterate through models, add/push function to async.parallel
                     saveArray.push(
                         function (callback) {
 
-                            user.persistModel(null, null, function (err, val) {
+                            model.persistModel(null, null, function (err, val) {
                                 callback(err, val);
                             });
                         }
@@ -191,6 +191,45 @@ define(
 
                 async.parallel(saveArray, function (err, results) {
                     cb(err, results);
+                });
+
+            },
+
+            persistCollectionBatch: function (opts, cb) {
+
+                //TODO: use opts to set same value for all models
+
+                var opts = opts || {};
+
+                var self = this;
+
+                var filterFunction = opts.filterFunction;
+
+                var saveArray = [];
+
+                this.each(function (model, index) {  //iterate through models, add/push function to async.parallel
+                    if(model.needsPersisting){
+                        saveArray.push(model.toJSON());
+                    }
+                });
+
+                var json = {models:saveArray};
+
+                $.ajax({
+                    url: self.batchURL,
+                    data: JSON.stringify(json),
+                    dataType: 'json',
+                    type: 'POST',
+                    contentType: "application/json"
+
+                }).done(function (msg, textStatus, jqXHR) {
+                    cb(msg, textStatus, jqXHR);
+
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert('collection batch persist failed.')
+
+                }).always(function (a, textStatus, b) {
+
                 });
 
             }

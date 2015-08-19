@@ -15,6 +15,18 @@
 
 console.log('loading app/js/models/BaseModel.js');
 
+//TODO: http://www.crittercism.com/blog/nested-attributes-in-backbone-js-models
+
+/*
+ this will fire a change event:
+
+ var updatedName = _.clone(myInfo.get("name"));
+ updatedName.first = "Kazuhiro";
+ myInfo.set("name", updatedName);
+
+ */
+
+
 //TODO: In model, urlRoot is used for the Model. url is used for the instance of the Model.
 //TODO: http://beletsky.net/2012/11/baby-steps-to-backbonejs-model.html
 //TODO: http://christianalfoni.github.io/javascript/2014/10/22/nailing-that-validation-with-reactjs.html
@@ -106,6 +118,24 @@ define(
                 //    }
                 //    return json;
                 //};
+
+                parse: function (resp, options) {
+                    /*
+                     parse converts a response into the hash of attributes to be set on the model.
+                     The default implementation is just to pass the response along.
+                     */
+                    if (resp.success) {
+                        //TODO: response.success vs response.error...needsPersisting will depend on that
+                        return resp.success;
+                    }
+                    else if (resp.error) {
+                        return this.attributes;
+                    }
+                    else {
+                        //this will get called when collection parses stuff
+                        return resp;
+                    }
+                },
 
                 toJSON: function () {
                     // return _.omit(this.attributes, this.stale);
@@ -276,26 +306,10 @@ define(
                             callback(err, model, xhr, options);
                         }
                     });
-                },
-
-
-                parse: function (resp, options) {
-                    /*
-                     parse converts a response into the hash of attributes to be set on the model.
-                     The default implementation is just to pass the response along.
-                     */
-                    if (resp.success) {
-                        //TODO: response.success vs response.error...needsPersisting will depend on that
-                        return resp.success;
-                    }
-                    else if (resp.error) {
-                        return this.attributes;
-                    }
-                    else {
-                        //this will get called when collection parses stuff
-                        return resp;
-                    }
                 }
+
+
+
             },
 
             { //class properties

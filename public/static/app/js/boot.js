@@ -27,10 +27,11 @@ define('app/js/boot',
         '#allCollections',
         'app/js/models/NestedModel',
         'app/js/cssAdder',
-        '#allCSS'
+        '#allCSS',
+        'async'
     ],
 
-    function (appState, $, Backbone, giant, allModels, allCollections, NestedModel, cssAdder, allCSS) {
+    function (appState, $, Backbone, giant, allModels, allCollections, NestedModel, cssAdder, allCSS, async) {
 
         //TODO: might need to figure out how to set ENV before socket.io tries to make connection to server
 
@@ -143,24 +144,6 @@ define('app/js/boot',
 
         function loadDefaultModels(callback) {
 
-            //var models = [
-            //
-            //    allModels.User.newUser({
-            //        firstName: 'default-first-name',
-            //        lastName: 'default-last-name',
-            //        username: 'default',
-            //        password: 'default',
-            //        email: 'default@temp.com'
-            //    }),
-            //
-            //    allModels.Job.newJob({
-            //        firstName: 'rand-job-name',
-            //        lastName: 'rand-last-name',
-            //        firstName: 'rando first',
-            //        jobName: 'jobbyname'
-            //    })
-            //];
-
             var models = [
 
                 allModels.User.newUser({
@@ -211,32 +194,40 @@ define('app/js/boot',
                 }, {})
             ];
 
-            models.forEach(function (model, index) {
-                model.persistModel({}, {}, function (err, model, res, options) {
-                    if (err) {
-                        throw err;
-                    }
-                    else if (res.error) {
-                        if (typeof res.error === 'object') {
-                            //Object.keys(res.error).forEach(function(key){
-                            //   console.error('error:',res.error[key]);
-                            //});
-                            console.log('error:', res.error);
-                        }
-                        else {
-                            console.error('error passed in persistModel callback', res.error);
-                        }
-                    }
-                    else {
-                        //collections.users.add(model);
-                        //collections.users.add(newUser);
-                        model.collection.add(model);
-                    }
-                    callback();
+            async.series([
+                    function saveModels(cb) {
 
+                        async.each(models, function (model, cb) {
+                                model.persistModel({}, {}, function (err, model, res, options) {
+                                    if (err) {
+                                        throw err;
+                                    }
+                                    else if (res.error) {
+                                        console.error('error passed in persistModel callback', res.error);
+                                        cb();
+                                    }
+                                    else {
+                                        //collections.users.add(model);
+                                        //collections.users.add(newUser);
+                                        model.collection.add(model);
+                                        cb();
+                                    }
+                                });
+                            },
+                            function done(err) {
+                                cb(err);
+                            });
+                    },
+
+                    function batchSaveCollection(cb) {
+                        allCollections.jobs.persistCollectionBatch({}, function (err, results) {
+                            cb(err, results);
+                        })
+                    }],
+
+                function done(err, results) {
+                    callback(err, results);
                 });
-            });
-
 
         }
 

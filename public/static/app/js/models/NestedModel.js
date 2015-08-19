@@ -55,7 +55,7 @@ define(
 
                 persistModel: function(){
                     throw new Error('called persistModel on a nested model type');
-                },
+                }
 
 
                 //set: function(key, value, options) { //this is also known as (attributes,options)

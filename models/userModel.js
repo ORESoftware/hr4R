@@ -300,8 +300,11 @@ var get = function (cb) {
         UserModel.ensureIndexes(function (err) {
             if (err) {
                 console.log(colors.bgRed(err));
+                cb(err);
             }
-            cb(err, UserModel);
+            else{
+                cb(null, UserModel);
+            }
         });
     }
     else {

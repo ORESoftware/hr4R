@@ -51,6 +51,7 @@
     "mongoose": "^4.1.0",
     "mongoose-validate": "0.0.5",
     "morgan": "^1.6.1",
+    "object-sizeof": "^1.0.6",
     "passport": "^0.2.2",
     "passport-custom": "^1.0.1",
     "passport-local": "^1.0.0",
