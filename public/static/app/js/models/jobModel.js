@@ -52,12 +52,17 @@ define(
                         jobName: null,
                         firstName: null,
                         lastName: null,
-                        animals: new NestedModel(this, {
+                        //animals: new NestedModel(this, {
+                        //    cats: true,
+                        //    dogs: false,
+                        //    birds: false
+                        //}),
+                        animals: {
                             cats: true,
                             dogs: false,
                             birds: false
-                        }),
-                        isVerified:true
+                        },
+                        isVerified: true
                     }
                 },
 
@@ -74,11 +79,11 @@ define(
 
                     //TODO: how to have a default collection?
 
-                    if(this.collection == null){
-                        if(this.collectionName){
+                    if (this.collection == null) {
+                        if (this.collectionName) {
                             this.collection = MCM.findCollectionByName(this.collectionName);
                         }
-                        else{ //default
+                        else { //default
                             this.collection = MCM.findCollectionByName('jobs');
                         }
                     }

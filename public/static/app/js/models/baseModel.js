@@ -15,21 +15,11 @@
 
 console.log('loading app/js/models/BaseModel.js');
 
-//TODO: http://www.crittercism.com/blog/nested-attributes-in-backbone-js-models
-
-/*
- this will fire a change event:
-
- var updatedName = _.clone(myInfo.get("name"));
- updatedName.first = "Kazuhiro";
- myInfo.set("name", updatedName);
-
- */
-
 
 //TODO: In model, urlRoot is used for the Model. url is used for the instance of the Model.
 //TODO: http://beletsky.net/2012/11/baby-steps-to-backbonejs-model.html
 //TODO: http://christianalfoni.github.io/javascript/2014/10/22/nailing-that-validation-with-reactjs.html
+//TODO: http://www.crittercism.com/blog/nested-attributes-in-backbone-js-models
 
 define(
     [
@@ -146,6 +136,14 @@ define(
                         }
                     }
                     return json;
+                },
+
+                setNestedAttrForChange: function(parentAttribute,nestedAttributeString, newValue){
+
+                    var clonedValue = _.clone(this.get(parentAttribute));
+                    eval('clonedValue' + stringPathToNestedAttribute + '= newValue');
+                    this.set(parentAttribute,clonedValue);
+
                 },
 
                 set: function (key, val, options) {
@@ -276,6 +274,9 @@ define(
                                 var err = new Error("Something went wrong while saving the model");
                                 if (typeof callback === 'function') {
                                     callback(err, model, xhr, options);
+                                }
+                                else{
+                                    throw err;
                                 }
                             }
                         });

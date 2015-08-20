@@ -35,7 +35,6 @@ var async = require('async');
 
 router.param('collection', function (req, res, next, collectionName) {
     // typically we might sanity check that user_id is of the right format
-
     next();
 });
 
