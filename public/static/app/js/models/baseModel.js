@@ -34,11 +34,14 @@ define(
         var BaseModel = Backbone.Model.extend({
 
                 idAttribute: '_id',
+
                 needsPersisting: true,
+
+                stale: [], //stale attributes
 
                 /*
 
-                jashkenas commented on Sep 14, 2011
+                 jashkenas commented on Sep 14, 2011
                  Yes, the collection property exists so that a model knows where to send it's .save() and .fetch() calls.
                  Feel free to add a model to multiple collections, and override the url() function,
                  so that saves still happen properly.
@@ -129,7 +132,7 @@ define(
 
                 toJSON: function () {
                     // return _.omit(this.attributes, this.stale);
-                    var json = _.clone(this.attributes);
+                    var json = _.clone(_.omit(this.attributes, this.stale));
                     for (var attr in json) {
                         if ((json[attr] instanceof Backbone.Model) || (json[attr] instanceof Backbone.Collection)) {
                             json[attr] = json[attr].toJSON();
@@ -138,11 +141,11 @@ define(
                     return json;
                 },
 
-                setNestedAttrForChange: function(parentAttribute,nestedAttributeString, newValue){
+                setNestedAttrForChange: function (parentAttribute, nestedAttributeString, newValue, opts) {
 
                     var clonedValue = _.clone(this.get(parentAttribute));
-                    eval('clonedValue' + stringPathToNestedAttribute + '= newValue');
-                    this.set(parentAttribute,clonedValue);
+                    eval('clonedValue.' + nestedAttributeString + '= newValue;');
+                    this.set(parentAttribute, clonedValue, opts);
 
                 },
 
@@ -275,7 +278,7 @@ define(
                                 if (typeof callback === 'function') {
                                     callback(err, model, xhr, options);
                                 }
-                                else{
+                                else {
                                     throw err;
                                 }
                             }
@@ -308,7 +311,6 @@ define(
                         }
                     });
                 }
-
 
 
             },

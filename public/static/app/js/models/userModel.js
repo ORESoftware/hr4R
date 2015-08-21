@@ -15,12 +15,11 @@ define(
         'backbone',
         'ijson',
         'app/js/models/BaseModel',
-        'app/js/models/NestedModel',
         'app/js/ModelCollectionMediator'
         //'#allCollections'
     ],
 
-    function (_, Backbone,IJSON, BaseModel, NestedModel, MCM) {
+    function (_, Backbone,IJSON, BaseModel, MCM) {
 
         var User = BaseModel.extend({
 
@@ -52,8 +51,7 @@ define(
                         created_by:null,
                         updated_by:null,
                         created_at:null,
-                        updated_at:null,
-                        nestedModel: null
+                        updated_at:null
                     }
                 },
 
@@ -68,10 +66,8 @@ define(
                     this.givenName = '@UserModel';
                     this.options = opts || {};
 
-                    this.set('nestedModel',new NestedModel(this,{}));
-
                     if(this.collection == null){
-                        if(this.collectionName){
+                        if(this.collectionName){ //shouldn't this be opts.collectionName?
                             this.collection = MCM.findCollectionByName(this.collectionName);
                         }
                         else{ //default

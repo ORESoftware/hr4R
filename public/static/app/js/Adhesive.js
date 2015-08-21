@@ -43,7 +43,7 @@ define(
             var domElementListen = opts.domElementListen || this.view.$el;
             var domElementUpdate = opts.domElementUpdate || this.view.$el;
             var domEventType = opts.domEventType || 'click';
-            var limitToEventTarget = opts.limitToEventTarget || true;
+            var limitToEventTarget = opts.limitToEventTarget === false ? false : true; //default is true, need to explicitly pass in false for it to be false
             var propagateChangesToServerImmediately = opts.propagateChangesToServerImmediately || true;
 
             var callback = opts.callback;

@@ -15,7 +15,7 @@ define(
 
         //TODO: recursion is even harder in JS due to closures
 
-        function getNestedModels(value, index, model, props) {
+       /* function getNestedModels(value, index, model, props) {
 
             var temp = value;
             var value = model;
@@ -33,7 +33,7 @@ define(
             else {
                 return value;
             }
-        }
+        }*/
 
 
         function AdhesiveStateController(view, opts) {
@@ -76,7 +76,7 @@ define(
                         case 'adhesive-get-checkbox':
                             func = function (element) {
                                 var boolean = ($(element).is(':checked'));
-                                //$(element).prop('checked', !boolean);
+                                $(element).prop('checked', boolean);
                                 return boolean;
                             };
                             break;
@@ -86,16 +86,29 @@ define(
 
                     var split = String(value).split(':');
 
-                    var modelName = split[0];
-                    var modelProp = split[1];
+                    //var modelName = split[0];
+                    //var modelProp = split[1];
 
-                    if (domKeyName == modelName) {
+                    var modelName = split.shift();
+                    var modelProp = split.shift();
+
+                    var nestedModels = split.join('.');
+
+
+                    //if (domKeyName == modelName) {
+
+                    if (value.indexOf(domKeyName) ===0) {
 
                         //TODO: don't need to check CID because we might be updating multiple models from the same element?
                         var val = func(element);
 
                         _.each(models, function (model, index) {
-                            model.set(modelProp, val, {localChange: true});
+                            if(nestedModels.length > 0){
+                                model.setNestedAttrForChange(modelProp,nestedModels, val, {localChange:true});
+                            }
+                            else{
+                                model.set(modelProp, val, {localChange: true});
+                            }
                             model.persistModel();
                             console.log('backbone model property:', modelProp, 'set to:', val);
                         });
@@ -111,6 +124,8 @@ define(
                 iterateOverAttributes(element, attributes);
             }
             else {
+
+                //TODO: find ('my custom tag') or elements with a certain .class instead of find('*')
 
                 domElement.find('*').each(function () {
 

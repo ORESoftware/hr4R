@@ -53,7 +53,7 @@ define(
 
                         var _id = model.get('_id');
                         if(_id){
-                            return _id.toString() == '55d65cfde9cf73322361860b';
+                            return _id.toString() == '55d682f45834870735dc4367';
                         }
                     });
 
@@ -83,15 +83,16 @@ define(
                     var self = this;
 
                     this.adhesive.stick({
-                        keyName: 'job',
+                        //keyName: 'job',
+                        keyName: 'job:isVerified',
                         models: {
                             //listenTo: [],
                             //update: [],
                             listenTo: [self.model],
                             update: [self.model],
                             //modelEvents: ['model-socket-change-broadcast','model-local-change-broadcast','change'], //works
-                            //modelEvents: ['model-local-change-broadcast','model-socket-change-broadcast'],
-                            modelEvents: ['model-socket-change-broadcast','change'], //works
+                            modelEvents: ['model-local-change-broadcast','model-socket-change-broadcast'],
+                            //modelEvents: ['model-socket-change-broadcast','change'], //works
                             //modelEvents: ['change'],
                             where: {}
                         },
@@ -111,7 +112,8 @@ define(
                             //    return model.cid == self.model.cid;
                             //}
                         },
-                        /*//limitToEventTarget: true, //will limit updates for just the element touched
+
+                        limitToEventTarget: false, //will limit updates for just the element touched
                         //limitToClass: '.barf',  //will limit what elements get listened to at all
                         //domElementListen: self.$el,
                         //domElementListen: $(document),
@@ -120,7 +122,7 @@ define(
                         //domElementUpdate: $(document),
 
                         //domEventType: 'click',
-                        //propagateChangesToServerImmediately: false,*/
+                        //propagateChangesToServerImmediately: false,
                         callback: null
                     });
 

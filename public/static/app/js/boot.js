@@ -25,13 +25,12 @@ define('app/js/boot',
         'app/js/giant',
         '#allModels',
         '#allCollections',
-        'app/js/models/NestedModel',
         'app/js/cssAdder',
         '#allCSS',
         'async'
     ],
 
-    function (appState, $, Backbone, giant, allModels, allCollections, NestedModel, cssAdder, allCSS, async) {
+    function (appState, $, Backbone, giant, allModels, allCollections, cssAdder, allCSS, async) {
 
         //TODO: might need to figure out how to set ENV before socket.io tries to make connection to server
 
@@ -182,14 +181,14 @@ define('app/js/boot',
                 allModels.Job.newJob({
                     firstName: '2rand-job-name2',
                     lastName: '2rand-last-name2',
-                    animals: new NestedModel({}),
+                    animals: {birds:true,donkeys:true,rats:true},
                     jobName: '2jobbyname2'
                 }, {collectionName: 'jobs'}),
 
                 allModels.Job.newJob({
                     firstName: '3rand-job-name3',
                     lastName: '3rand-last-name3',
-                    animals: new NestedModel({}),
+                    animals: {cats:true,dogs:true,fish:true,mice:true},
                     jobName: '3jobbyname3'
                 }, {})
             ];

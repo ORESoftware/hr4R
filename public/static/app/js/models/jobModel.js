@@ -22,12 +22,11 @@ define(
         'backbone',
         'ijson',
         'app/js/models/BaseModel',
-        'app/js/models/NestedModel',
         'app/js/ModelCollectionMediator'
         //'#allCollections'
     ],
 
-    function (_, Backbone, IJSON, BaseModel, NestedModel, MCM) {
+    function (_, Backbone, IJSON, BaseModel,MCM) {
 
         var Job = BaseModel.extend({
 
