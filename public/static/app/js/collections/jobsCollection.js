@@ -33,7 +33,7 @@ define(
 
             url: '/jobs',
             //urlRoot: '/jobs',
-            batchURL: '/jobs_batch',
+            batchURL: '/batch/Job',
 
             //constructor: function () {
             //    this.givenName = '@JobsCollection';

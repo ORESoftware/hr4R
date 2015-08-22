@@ -27,7 +27,7 @@ define(
 
             url: '/users',
 
-            batchURL: '/users_batch',
+            batchURL: '/batch/User',
             //urlRoot: '/users',
 
 

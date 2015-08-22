@@ -90,7 +90,7 @@ var JobModel = null;
 
 var get = function (cb) {
 
-    eventBus.emit('jobModel','message from job model via eventBus!');
+    //eventBus.emit('jobModel','message from job model via eventBus!');
 
     if(JobModel === null){
         JobModel = mongoDB.model('jobs', jobSchema);
@@ -101,7 +101,9 @@ var get = function (cb) {
             if(err){
                 console.log(colors.bgRed(err));
             }
-            cb(err,JobModel);
+            else{
+                cb(err,JobModel);
+            }
         });
     }
     else{

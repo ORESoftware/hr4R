@@ -53,7 +53,7 @@ define(
 
                         var _id = model.get('_id');
                         if(_id){
-                            return _id.toString() == '55cacbe9ca4ef5f329c69544';
+                            return _id.toString() == '55d682f45834870735dc4367';
                         }
                     });
 
@@ -83,7 +83,8 @@ define(
                     var self = this;
 
                     this.adhesive.stick({
-                        keyName: 'job',
+                        //keyName: 'job',
+                        keyName: 'job:isVerified',
                         models: {
                             //listenTo: [],
                             //update: [],
@@ -111,7 +112,8 @@ define(
                             //    return model.cid == self.model.cid;
                             //}
                         },
-                        /*//limitToEventTarget: true, //will limit updates for just the element touched
+
+                        limitToEventTarget: false, //will limit updates for just the element touched
                         //limitToClass: '.barf',  //will limit what elements get listened to at all
                         //domElementListen: self.$el,
                         //domElementListen: $(document),
@@ -120,7 +122,7 @@ define(
                         //domElementUpdate: $(document),
 
                         //domEventType: 'click',
-                        //propagateChangesToServerImmediately: false,*/
+                        //propagateChangesToServerImmediately: false,
                         callback: null
                     });
 

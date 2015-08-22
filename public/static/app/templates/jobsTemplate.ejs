@@ -6,18 +6,18 @@
             <div>
 
                 <legend>What is Your Favorite Pet?</legend>
-                <input class="checkbox" type="checkbox" onclick="return false;" name="animal" value="Verified!"
+                <input class="checkbox" type="checkbox" onclick="return false;"
                        adhesive-value-checkbox="job:isVerified" adhesive-get-checkbox="job:isVerified"
                        adhesive-cid="<%= job.cid %>">Is-Verified
-                <input class="checkbox" type="checkbox" onclick="return false;" name="animal" value="Cat"
-                       adhesive-value-checkbox="job:animals:cats" adhesive-get-checkbox="job:animals:cats"
-                       adhesive-cid="<%= job.cid %>">Cats
-                <input class="checkbox" type="checkbox" onclick="return false;" name="animal" value="Dog"
-                       adhesive-value-checkbox="job:animals:dogs" adhesive-get-checkbox="job:animals:dogs"
-                       adhesive-cid="<%= job.cid %>">Dogs
-                <input class="checkbox" type="checkbox" onclick="return false;" name="animal" value="Bird"
-                       adhesive-value-checkbox="job:animals:birds" adhesive-get-checkbox="job:animals:birds"
-                       adhesive-cid="<%= job.cid %>">Birds
+                <!--<input class="checkbox" type="checkbox" onclick="return false;"-->
+                       <!--adhesive-value-checkbox="job:animals:cats" adhesive-get-checkbox="job:animals:cats"-->
+                       <!--adhesive-cid="<%= job.cid %>">Cats-->
+                <!--<input class="checkbox" type="checkbox" onclick="return false;"-->
+                       <!--adhesive-value-checkbox="job:animals:dogs" adhesive-get-checkbox="job:animals:dogs"-->
+                       <!--adhesive-cid="<%= job.cid %>">Dogs-->
+                <!--<input class="checkbox" type="checkbox" onclick="return false;"-->
+                       <!--adhesive-value-checkbox="job:animals:birds" adhesive-get-checkbox="job:animals:birds"-->
+                       <!--adhesive-cid="<%= job.cid %>">Birds-->
             </div>
 
             <div class="row">
@@ -73,6 +73,9 @@
 
                         <p>last name:<span adhesive-value="job:lastName"
                                            adhesive-cid="<%= job.cid %>"><%= job.get('lastName') %></span></p>
+
+                        <p>animals:<span adhesive-value="job:animals"
+                                         adhesive-cid="<%= job.cid %>"><%= job.get('animals') %></span></p>
                     </div>
                 </div>
             </div>

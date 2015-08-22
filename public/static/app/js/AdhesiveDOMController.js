@@ -60,7 +60,7 @@ define(
             var exitLoop = false;
             var numChanges = 0;
 
-            //TODO: find ('my custom tag') instead of find('*')
+            //TODO: find ('my custom tag') or elements with a certain .class instead of find('*')
 
             domElementsToPotentiallyUpdate.find('*').each(function () {
 
@@ -98,14 +98,19 @@ define(
                             return true; //could be return false if 'adhesive-get' was always first attribute
                     }
 
-                    var split = String(value).split(':');
+                    var propsArray = String(value).split(':');
 
-                    var modelName = split[0];
-                    var modelProp = split[1];
+                    //var modelName = split[0];
+                    //var modelProp = split[1];
+
+                    var modelName = propsArray.shift();
+                    var modelProp = propsArray.shift();
+
+                    var nestedProps = propsArray.join('.');
 
                     //if (domKeyName == modelName && _.contains(props, modelProp)) {
 
-                    if (domKeyName == modelName) {
+                    if (value.indexOf(domKeyName) ===0) {
 
                         var cid = $(self).attr('adhesive-cid');
 
@@ -113,14 +118,19 @@ define(
 
                             var val = model.get(modelProp);
                             //$(self).html(String(prop));
+
+                            if(nestedProps.length > 0){
+                              val = eval('val.' + nestedProps);
+                            }
+
                             func(self, val); //done!
 
                             numChanges++;
 
-                            if (numChanges >= maxChanges) {
-                                exitLoop = true;
-                                return false; //break from each loop, we are done updating DOM for this model
-                            }
+                            //if (numChanges >= maxChanges) {
+                            //    exitLoop = true;
+                            //    return false; //break from each loop, we are done updating DOM for this model
+                            //}
                         }
                     }
 

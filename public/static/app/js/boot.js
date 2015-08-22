@@ -25,12 +25,12 @@ define('app/js/boot',
         'app/js/giant',
         '#allModels',
         '#allCollections',
-        'app/js/models/NestedModel',
         'app/js/cssAdder',
-        '#allCSS'
+        '#allCSS',
+        'async'
     ],
 
-    function (appState, $, Backbone, giant, allModels, allCollections, NestedModel, cssAdder, allCSS) {
+    function (appState, $, Backbone, giant, allModels, allCollections, cssAdder, allCSS, async) {
 
         //TODO: might need to figure out how to set ENV before socket.io tries to make connection to server
 
@@ -143,24 +143,6 @@ define('app/js/boot',
 
         function loadDefaultModels(callback) {
 
-            //var models = [
-            //
-            //    allModels.User.newUser({
-            //        firstName: 'default-first-name',
-            //        lastName: 'default-last-name',
-            //        username: 'default',
-            //        password: 'default',
-            //        email: 'default@temp.com'
-            //    }),
-            //
-            //    allModels.Job.newJob({
-            //        firstName: 'rand-job-name',
-            //        lastName: 'rand-last-name',
-            //        firstName: 'rando first',
-            //        jobName: 'jobbyname'
-            //    })
-            //];
-
             var models = [
 
                 allModels.User.newUser({
@@ -199,44 +181,59 @@ define('app/js/boot',
                 allModels.Job.newJob({
                     firstName: '2rand-job-name2',
                     lastName: '2rand-last-name2',
-                    animals: new NestedModel({}),
+                    animals: {birds:true,donkeys:true,rats:true},
                     jobName: '2jobbyname2'
                 }, {collectionName: 'jobs'}),
 
                 allModels.Job.newJob({
                     firstName: '3rand-job-name3',
                     lastName: '3rand-last-name3',
-                    animals: new NestedModel({}),
+                    animals: {cats:true,dogs:true,fish:true,mice:true},
                     jobName: '3jobbyname3'
                 }, {})
             ];
 
-            models.forEach(function (model, index) {
-                model.persistModel({}, {}, function (err, model, res, options) {
-                    if (err) {
+            async.series([
+                    function saveModels(cb) {
+
+                        async.each(models, function (model, cb) {
+                                model.persistModel({}, {}, function (err, model, res, options) {
+                                    if (err) {
+                                        throw err;
+                                    }
+                                    else if (res.error) {
+                                        console.error('error passed in persistModel callback', res.error);
+                                        cb();
+                                    }
+                                    else {
+                                        //collections.users.add(model);
+                                        //collections.users.add(newUser);
+                                        model.collection.add(model);
+                                        cb();
+                                    }
+                                });
+                            },
+                            function done(err) {
+                                cb(err);
+                            });
+                    },
+
+                    function batchSaveCollection(cb) {
+                        allCollections.jobs.persistCollectionBatch({}, function (err, results) {
+                            cb(err, results);
+                        })
+                    }],
+
+                function done(err, results) {
+                    if(err){
                         throw err;
                     }
-                    else if (res.error) {
-                        if (typeof res.error === 'object') {
-                            //Object.keys(res.error).forEach(function(key){
-                            //   console.error('error:',res.error[key]);
-                            //});
-                            console.log('error:', res.error);
-                        }
-                        else {
-                            console.error('error passed in persistModel callback', res.error);
-                        }
+                    else{
+                        console.log(results);
+                        callback(null);
                     }
-                    else {
-                        //collections.users.add(model);
-                        //collections.users.add(newUser);
-                        model.collection.add(model);
-                    }
-                    callback();
 
                 });
-            });
-
 
         }
 

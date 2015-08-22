@@ -16,6 +16,7 @@ var bodyParser = require('body-parser');
 var ejs = require('ejs');
 //var expressLayouts = require('express-ejs-layouts');
 var express = require('express');
+var sizeof = require('object-sizeof');
 //var compression = require('compression');
 
 
@@ -37,7 +38,8 @@ function allowCrossDomain(req, res, next) {
 //app.use(allowCrossDomain);
 //var router = express.Router();
 
-
+app.use(bodyParser.json({limit: '2mb'}));
+app.use(bodyParser.urlencoded({limit: '2mb', extended: true}));
 
 //if (process.env.NODE_ENV !== 'development') {
 //    //app.use(compression());
@@ -132,24 +134,24 @@ app.use(passport.session());
 //app.use(router);
 
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development-extra') {
     app.use(function (req, res, next) {
 
-        console.log('\n\n');
+        console.log('\n\n\n');
         console.log(colors.cyan('New request:'));
         console.log(colors.cyan('______________________________________________________________________________'));
         console.log(colors.blue('METHOD:'), req.method);
         console.log(colors.blue('ORIGINALURL:'), req.originalUrl);
         console.log(colors.blue('HEADERS:'), req.headers);
         console.log(colors.blue('PARAMS:'), req.params);
-        console.log(colors.blue('BODY:'), req.body);
+        console.log(colors.blue('BODY SIZE:'), sizeof(req.body));
         console.log(colors.blue('QUERY:'), req.query);
         console.log(colors.blue('SECRET:'), req.secret);
         console.log(colors.blue('SESSION:'), req.session);
         console.log(colors.blue('SESSION_ID:'), req.session.id);
         console.log(colors.blue('COOKIES:'), req.cookies);
         console.log(colors.cyan('(end of req info)'));
-        console.log('\n\n');
+        console.log('\n');
 
         next();
     });
@@ -233,7 +235,13 @@ app.use('/', require('./routes/index'));
 app.use('/updateUserInfo', require('./routes/updateUserInfo'));
 app.use('/users', require('./routes/users'));
 app.use('/jobs', require('./routes/jobs'));
-app.use('/users_batch', require('./routes/batch'));
+//app.use('/batch/:collectionName', function(req,res,next){
+//    require('./routes/batch')(req,res,next);
+//});
+//app.use('/batch/:collection',function(req,res,next){
+//    require('./routes/batch')(req,res,next);
+//});
+app.use('/batch',require('./routes/batch'));
 app.use('/authenticate', require('./routes/authenticate'));
 app.use('/register', require('./routes/register'));
 app.use('/login', require('./routes/login'));
@@ -252,6 +260,7 @@ app.use(function (req, res, next) {
 // development error handler
 if (app.get('env') === 'development') {
     app.use(function (err, req, res, next) {
+        console.error(colors.bgRed(err));
         if (!res.headersSent) {
             res.status(err.status || 500);
             res.render('error', {
@@ -259,14 +268,12 @@ if (app.get('env') === 'development') {
                 error: err
             });
         }
-        else {
-            console.error(colors.bgRed(err));
-        }
     });
 }
 
 // production error handler
 app.use(function (err, req, res, next) {
+    console.error(colors.bgRed(err));
     if (!res.headersSent) {
         res.status(err.status || 500);
         res.render('error', {
@@ -274,10 +281,6 @@ app.use(function (err, req, res, next) {
             error: {}
         });
     }
-    else {
-        console.error(colors.bgRed(err));
-    }
-
 });
 
 

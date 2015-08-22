@@ -15,9 +15,11 @@
 
 console.log('loading app/js/models/BaseModel.js');
 
+
 //TODO: In model, urlRoot is used for the Model. url is used for the instance of the Model.
 //TODO: http://beletsky.net/2012/11/baby-steps-to-backbonejs-model.html
 //TODO: http://christianalfoni.github.io/javascript/2014/10/22/nailing-that-validation-with-reactjs.html
+//TODO: http://www.crittercism.com/blog/nested-attributes-in-backbone-js-models
 
 define(
     [
@@ -32,11 +34,14 @@ define(
         var BaseModel = Backbone.Model.extend({
 
                 idAttribute: '_id',
+
                 needsPersisting: true,
+
+                stale: [], //stale attributes
 
                 /*
 
-                jashkenas commented on Sep 14, 2011
+                 jashkenas commented on Sep 14, 2011
                  Yes, the collection property exists so that a model knows where to send it's .save() and .fetch() calls.
                  Feel free to add a model to multiple collections, and override the url() function,
                  so that saves still happen properly.
@@ -107,15 +112,41 @@ define(
                 //    return json;
                 //};
 
+                parse: function (resp, options) {
+                    /*
+                     parse converts a response into the hash of attributes to be set on the model.
+                     The default implementation is just to pass the response along.
+                     */
+                    if (resp.success) {
+                        //TODO: response.success vs response.error...needsPersisting will depend on that
+                        return resp.success;
+                    }
+                    else if (resp.error) {
+                        return this.attributes;
+                    }
+                    else {
+                        //this will get called when collection parses stuff
+                        return resp;
+                    }
+                },
+
                 toJSON: function () {
                     // return _.omit(this.attributes, this.stale);
-                    var json = _.clone(this.attributes);
+                    var json = _.clone(_.omit(this.attributes, this.stale));
                     for (var attr in json) {
                         if ((json[attr] instanceof Backbone.Model) || (json[attr] instanceof Backbone.Collection)) {
                             json[attr] = json[attr].toJSON();
                         }
                     }
                     return json;
+                },
+
+                setNestedAttrForChange: function (parentAttribute, nestedAttributeString, newValue, opts) {
+
+                    var clonedValue = _.clone(this.get(parentAttribute));
+                    eval('clonedValue.' + nestedAttributeString + '= newValue;');
+                    this.set(parentAttribute, clonedValue, opts);
+
                 },
 
                 set: function (key, val, options) {
@@ -247,6 +278,9 @@ define(
                                 if (typeof callback === 'function') {
                                     callback(err, model, xhr, options);
                                 }
+                                else {
+                                    throw err;
+                                }
                             }
                         });
                     }
@@ -276,26 +310,9 @@ define(
                             callback(err, model, xhr, options);
                         }
                     });
-                },
-
-
-                parse: function (resp, options) {
-                    /*
-                     parse converts a response into the hash of attributes to be set on the model.
-                     The default implementation is just to pass the response along.
-                     */
-                    if (resp.success) {
-                        //TODO: response.success vs response.error...needsPersisting will depend on that
-                        return resp.success;
-                    }
-                    else if (resp.error) {
-                        return this.attributes;
-                    }
-                    else {
-                        //this will get called when collection parses stuff
-                        return resp;
-                    }
                 }
+
+
             },
 
             { //class properties

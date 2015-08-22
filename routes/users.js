@@ -163,6 +163,8 @@ router.post('/', function (req, res, next) {
 router.put('/:user_id', function (req, res, next) {
 
 
+    //TODO: if model doesn't exist yet, we could turn this into a post instead of put, depends on use case and desired functionality, for now, fail fast
+
     var userToUpdate = req.specialParams.user_model;
 
     if (userToUpdate == null) {
