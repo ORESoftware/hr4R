@@ -19,6 +19,12 @@ define(
             changedModelsToBatchUpdateDomWith: {},
             addedModelsToBatchUpdateDomWith: {},
 
+            sync: function(){
+
+                //TODO: how does Backbone handle REST HTTP responses from saving models/collections? somehow with jQuery...
+                throw new Error('sync has not been implemented yet');
+            },
+
             constructor: function () {
                 var self = this;
 
@@ -33,6 +39,10 @@ define(
                     //var obj = {};
                     //obj[model.cid] = {model:model,changed:model.changed}
                     //self.trigger('coll-add', obj, 'coll-add');
+                });
+
+                this.on('sync', function () {
+                    self.collNeedsPersisting = false;
                 });
 
                 //this.on('model-local-change',function(model,something){
@@ -75,10 +85,6 @@ define(
 
                 });
 
-
-                this.on('sync', function () {
-                    self.collNeedsPersisting = false;
-                });
                 Backbone.Collection.apply(this, arguments);
             },
 

@@ -26,7 +26,6 @@ define(
 
         //TODO: perhaps wait to make socket.io connection after logging in
 
-
         function findCollection(name) {
             var ret = null;
             for (var collection in collections) {
@@ -51,6 +50,7 @@ define(
                 console.log('document.cookie before socketio:', document.cookie);
 
                 socket = io.connect('http://127.0.0.1:3001');
+                //TODO: how to pass user_id in connection request?
 
                 //TODO: match socket session with express session
 
@@ -89,9 +89,10 @@ define(
                         }
                     }
                     else{
-                        return;
+
                         //TODO: fix oplog items that don't pass validation but still appear
-                        //throw new Error('no created_by field present:'+data);
+                        throw new Error('no created_by field present:'+data);
+                        //return;
                     }
 
                     console.log('INSERT ON SERVER:', data);
@@ -172,14 +173,14 @@ define(
             return socket;
         }
 
-        function addEvent(eventName, callback) {
+        function addEvent(eventName, target, callback) {
 
             getConnection().on(eventName, function () {
-                callback(arguments);
+                //callback(arguments);
+                callback.prototype.apply(target,arguments);
             });
 
         }
-
 
         return {
             getSocketIOConn: getConnection,

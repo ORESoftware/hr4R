@@ -7,10 +7,7 @@
 var mongoose = require('mongoose');
 var colors = require('colors');
 var validator = require('mongoose-validate');
-var bcrypt = require('bcrypt');
-var SALT_WORK_FACTOR = 10;
-var REQUIRED_PASSWORD_LENGTH = 8;
-var ACCEPTABLE_EMAIL_DOMAINS = ['temp.com', 'cable.comcast.com', 'comcast.com'];
+
 
 //stuff
 var eventBus = require('../events/eventBus.js');

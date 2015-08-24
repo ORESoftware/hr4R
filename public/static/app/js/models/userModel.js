@@ -60,6 +60,11 @@ define(
                 //    Backbone.Model.apply(this, arguments);
                 //},
 
+                sync: function(){
+
+                    throw new Error('sync has not been implemented yet');
+                },
+
 
                 initialize: function (attributes, opts) {
 

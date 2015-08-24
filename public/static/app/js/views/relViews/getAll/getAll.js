@@ -21,7 +21,9 @@ define(
 
     function (appState, collections, EJS, $, _, Adhesive, Backbone, React, ListView,allTemplates) {
 
-        var template = allTemplates.GetAllTemplate;
+        //var template = allTemplates.GetAllTemplate;
+
+        var template = allTemplates['GetAllTemplate'];
 
         var GetAllView = Backbone.View.extend({
 

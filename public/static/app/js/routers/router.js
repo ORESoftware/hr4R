@@ -258,7 +258,8 @@ define(
                                             return cb(err);
                                         }
                                         //TODO: if websockets are on, then shouldn't need to do fetch at all, can just check for connection
-                                        //TODO: we should only fetch a collection after it has been persisted
+                                        //TODO: we should only fetch a collection after it has been persisted and
+                                        ////TODO: we only need to fetch a collection if it's needed by the next view
                                         coll.fetch()
                                             .done(function () {
                                                 cb();
@@ -273,6 +274,7 @@ define(
                             collectionsToSync.push(
                                 //TODO: if websockets are on, then shouldn't need to do fetch at all, can just check for a current connection
                                 function (cb) {
+                                    //TODO: we only need to fetch a collection if it's needed by the next view; the collections required by the next view will be passed by the controller
                                     coll.fetch()
                                         .done(function (msg) {
                                             cb(null, msg);

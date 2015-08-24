@@ -67,6 +67,10 @@ define(
                     var self = this;
                     var options = opts || {};
 
+                    if(options.needsPersisting === true){
+                        self.needsPersisting = true;
+                    }
+
                     this.collection = options.collection;
                     this.collectionName = options.collectionName;
 
@@ -74,7 +78,7 @@ define(
                         self.needsPersisting = true;
                     });
                     this.on('change', function (model, something) {
-                        self.needsPersisting = true;
+                        self.needsPersisting = true; //TODO: model does not need persisting on every change event...
                     });
                     this.on('sync', function () {
                         self.needsPersisting = false;
@@ -111,6 +115,13 @@ define(
                 //    }
                 //    return json;
                 //};
+
+                newInstance: function(attributes,options){
+                       var Constr = this.constructor;
+                       var model = new Constr(attributes,options);
+                       model.needsPersisting = true;
+                       return model;
+                },
 
                 parse: function (resp, options) {
                     /*
