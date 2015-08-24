@@ -81,7 +81,8 @@ define(
                         self.needsPersisting = true; //TODO: model does not need persisting on every change event...
                     });
                     this.on('sync', function () {
-                        self.needsPersisting = false;
+                        //self.needsPersisting = false;
+                        //TODO: 'sync' event is triggered on a fetch so we need to set needsPersisting to false on a different event
                     });
 
                     Backbone.Model.apply(this, arguments);
@@ -252,7 +253,7 @@ define(
 
                     var options = opts || {};
 
-                    if (this.needsPersisting || attributes != null || options.forceSave) {
+                    if (this.needsPersisting || attributes != null || options.forceSave === true) {
 
                         //this.attributes = _.extend({},attributes,this.attributes);
 
@@ -274,17 +275,20 @@ define(
 
                         var self = this;
                         this.save(attributes, {
-                            wait: true, //prevents optimistic persist
+                            wait: true, //TODO: prevents optimistic persist (?)
                             dataType: "json",
-                            //TODO:  model.trigger('sync', model, resp, options);
                             success: function (model, response, options) {
                                 //TODO: response.success vs response.error...needsPersisting will depend on that
                                 self.needsPersisting = false;
                                 if (typeof callback === 'function') {
                                     callback(null, model, IJSON.parse(response), options);
                                 }
+                                else { //TODO: remove this else
+                                    //throw new Error('no callback passed to persistModel function');
+                                }
                             },
                             error: function (model, xhr, options) {
+                                self.needsPersisting = false; //TODO: don't want to keep trying an error?
                                 var err = new Error("Something went wrong while saving the model");
                                 if (typeof callback === 'function') {
                                     callback(err, model, xhr, options);

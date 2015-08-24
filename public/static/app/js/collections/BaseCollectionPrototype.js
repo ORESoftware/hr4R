@@ -140,7 +140,7 @@ define(
 
                 var ModelType = this.model;
                 var newModel = new ModelType(data);
-                this.add(newModel, {silent: true});
+                this.add(newModel, {silent: true}); //TODO: why silent??
                 this.trigger('coll-add-socket', newModel, {});
             },
 
@@ -180,19 +180,20 @@ define(
 
             persistCollection: function (opts, cb) {
 
-                //TODO: use opts to set same value for all models
+                //TODO: use opts to set same value for all models (?)
 
                 var saveArray = [];
 
                 this.each(function (model, index) {  //iterate through models, add/push function to async.parallel
-                    saveArray.push(
-                        function (callback) {
-
-                            model.persistModel(null, null, function (err, val) {
-                                callback(err, val);
-                            });
-                        }
-                    )
+                    if(model.needsPersisting === true){
+                        saveArray.push(
+                            function (callback) {
+                                model.persistModel(null, null, function (err, val) {
+                                    callback(err, val);
+                                });
+                            }
+                        )
+                    }
                 });
 
                 async.parallel(saveArray, function (err, results) {
