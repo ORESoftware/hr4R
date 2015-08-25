@@ -291,7 +291,7 @@ var UserModel = null;
 
 var get = function (cb) {
 
-    eventBus.emit('userModel', 'message from user model via eventBus!');
+    //eventBus.emit('userModel', 'message from user model via eventBus!');
 
     if (UserModel === null) {
         UserModel = mongoDB.model('users', userSchema);
@@ -305,6 +305,14 @@ var get = function (cb) {
             else{
                 cb(null, UserModel);
             }
+        });
+
+        UserModel.on('index',function(err,msg){
+            if(err){
+                console.log(colors.bgRed(err));
+                throw err;
+            }
+           console.log('index event',msg);
         });
     }
     else {

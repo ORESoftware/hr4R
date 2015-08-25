@@ -12,18 +12,16 @@ define(
 
     function (Backbone, _, async) {
 
+        var addOptions = {add: true, remove: false};
+
         return {
 
             collNeedsPersisting: false,
+            numberOfFetches:0, //TODO: once this is 1 or greater, we don't need to keep fetching, we can let websockets do the work
 
             changedModelsToBatchUpdateDomWith: {},
             addedModelsToBatchUpdateDomWith: {},
 
-            sync: function(){
-
-                //TODO: how does Backbone handle REST HTTP responses from saving models/collections? somehow with jQuery...
-                throw new Error('sync has not been implemented yet');
-            },
 
             constructor: function () {
                 var self = this;
@@ -41,8 +39,16 @@ define(
                     //self.trigger('coll-add', obj, 'coll-add');
                 });
 
+                this.on('localCollAdd', function (model, something) {
+                    self.collNeedsPersisting = true;
+                    //var obj = {};
+                    //obj[model.cid] = {model:model,changed:model.changed}
+                    //self.trigger('coll-add', obj, 'coll-add');
+                });
+
                 this.on('sync', function () {
-                    self.collNeedsPersisting = false;
+                    //self.collNeedsPersisting = false;
+                    //TODO: 'sync' event is fired on collection.fetch so can't set collNeedsPersisting to false in that case
                 });
 
                 //this.on('model-local-change',function(model,something){
@@ -73,7 +79,7 @@ define(
                 });
 
                 this.on('coll-add-socket', function (model, something) {
-                    self.collNeedsPersisting = true;
+                    //self.collNeedsPersisting = true;
 
                     self.addedModelsToBatchUpdateDomWith[model.cid] = {model: model, changed: model.changed};
 
@@ -86,6 +92,19 @@ define(
                 });
 
                 Backbone.Collection.apply(this, arguments);
+            },
+
+            sync: function() {
+                //TODO: how does Backbone handle REST HTTP responses from saving models/collections? somehow with jQuery...
+                return Backbone.sync.apply(this, arguments);
+            },
+
+            add: function(models, options) {
+                var opts = options || {};
+                if(opts.localCollAdd === true){ //TODO: perhaps move this into the set function and find out how many models were merged and how many were brand new
+                    this.trigger('localCollAdd',models,'localCollAdd');
+                }
+                return this.set(models, _.extend({merge: false}, options, addOptions));
             },
 
             sortByCID: function () {
@@ -184,6 +203,8 @@ define(
 
                 var saveArray = [];
 
+                var self = this;
+
                 this.each(function (model, index) {  //iterate through models, add/push function to async.parallel
                     if(model.needsPersisting === true){
                         saveArray.push(
@@ -197,6 +218,7 @@ define(
                 });
 
                 async.parallel(saveArray, function (err, results) {
+                    self.collNeedsPersisting = false;
                     cb(err, results);
                 });
 

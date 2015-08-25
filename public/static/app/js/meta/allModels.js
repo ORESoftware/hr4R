@@ -9,8 +9,8 @@ console.log('loading #allModels');
 define(
 
     [
-        'app/js/models/UserModel',
-        'app/js/models/JobModel'
+        'app/js/models/all/UserModel',
+        'app/js/models/all/JobModel'
     ],
 
     function (UserModel, JobModel, exports) {

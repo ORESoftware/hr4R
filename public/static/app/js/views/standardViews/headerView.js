@@ -177,7 +177,7 @@ define(
 
                                         if (err) {
                                             console.error(err);
-                                            callback(null);
+                                            callback(err);
                                         }
                                         else {
                                             model.clear();
@@ -188,6 +188,8 @@ define(
                                     });
                                 });
                             });
+
+                            coll.reset();
                         }
                     });
 
@@ -195,6 +197,7 @@ define(
 
                         if (err) {
                             console.error(err);
+                            throw err;
                         }
                         else {
                             Backbone.Events.trigger('bootRouter', 'index');

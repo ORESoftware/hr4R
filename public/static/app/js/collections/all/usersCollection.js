@@ -8,7 +8,7 @@ console.log('loading app/js/collections/usersCollection.js');
 
 define(
     [
-        'underscore',
+        '../../../../../../bower_components/underscore/underscore',
         'backbone',
         '#allModels',
         'app/js/collections/BaseCollection'

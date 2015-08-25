@@ -9,8 +9,8 @@ console.log('loading allCollections');
 
 define(
     [
-        'app/js/collections/usersCollection',
-        'app/js/collections/jobsCollection'
+        'app/js/collections/all/usersCollection',
+        'app/js/collections/all/jobsCollection'
     ],
 
     function (UsersCollection, JobsCollection) {

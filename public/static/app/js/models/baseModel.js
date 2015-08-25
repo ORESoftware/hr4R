@@ -31,13 +31,28 @@ define(
 
     function (appState, _, Backbone, IJSON) {
 
+        var methodMap = {
+            'create': 'POST',
+            'update': 'PUT',
+            'patch': 'PATCH',
+            'delete': 'DELETE',
+            'read': 'GET'
+        };
+
+        var urlError = function () {
+            throw new Error('A "url" property or function must be specified');
+        };
+
+
         var BaseModel = Backbone.Model.extend({
 
                 idAttribute: '_id',
 
-                needsPersisting: true,
+                needsPersisting: false,
 
                 stale: [], //stale attributes
+
+                noSave: false, //if noSave is true, this model should never be saved to server
 
                 /*
 
@@ -62,24 +77,30 @@ define(
                 //  return this.collection.uniqueName +'/'
                 //},
 
-                constructor: function (attributes, opts) {
+                constructor: function (attributes, options) {
 
                     var self = this;
-                    var options = opts || {};
+                    var opts = options || {};
 
-                    if(options.needsPersisting === true){
+                    if (opts.needsPersisting === true) {
                         self.needsPersisting = true;
                     }
 
-                    this.collection = options.collection;
-                    this.collectionName = options.collectionName;
+                    this.collection = opts.collection;
+                    this.collectionName = opts.collectionName;
 
                     this.on('model-local-change-broadcast', function (model, something) { //TODO: only set needsPersisting on localChange
                         self.needsPersisting = true;
                     });
-                    this.on('change', function (model, something) {
-                        self.needsPersisting = true; //TODO: model does not need persisting on every change event...
+
+                    this.on('model-socket-change-broadcast', function (model, something) { //TODO: only set needsPersisting on localChange
+
                     });
+
+                    this.on('change', function (model, something) {
+                        //self.needsPersisting = true; //TODO: model does not need persisting on every change event...
+                    });
+
                     this.on('sync', function () {
                         //self.needsPersisting = false;
                         //TODO: 'sync' event is triggered on a fetch so we need to set needsPersisting to false on a different event
@@ -117,12 +138,12 @@ define(
                 //    return json;
                 //};
 
-                newInstance: function(attributes,options){
-                       var Constr = this.constructor;
-                       var model = new Constr(attributes,options);
-                       model.needsPersisting = true;
-                       return model;
-                },
+                //newInstance: function(attributes,options){
+                //       var Constr = this.constructor;
+                //       var model = new Constr(attributes,options);
+                //       model.needsPersisting = true;
+                //       return model;
+                //},
 
                 parse: function (resp, options) {
                     /*
@@ -130,7 +151,7 @@ define(
                      The default implementation is just to pass the response along.
                      */
                     if (resp.success) {
-                        //TODO: response.success vs response.error...needsPersisting will depend on that
+                        //TODO: response.success vs response.error...parse is called on both fetch and save so needsPersisting needs to depend on something else
                         return resp.success;
                     }
                     else if (resp.error) {
@@ -243,9 +264,8 @@ define(
                     this._pending = false;
                     this._changing = false;
                     return this;
-                }
 
-                ,
+                },
 
                 persistModel: function (attributes, opts, callback) {
 
@@ -311,12 +331,14 @@ define(
                 deleteModel: function (opts, callback) {
                     //TODO: add opts to object below
                     //TODO: turn this into https://www.dropbox.com/s/lzzgg2wanjlguf5/Screenshot%202015-07-14%2016.54.57.png?dl=0
+
+                    this.needsPersisting = false;
+
                     this.destroy({
                         wait: true, //prevents optimistic destroy
                         dataType: "json",
                         success: function (model, response, options) {
                             console.log("The model has been destroyed/deleted on/from the server");
-                            self.needsPersisting = false;
                             callback(null, model, response, options);
                         },
                         error: function (model, xhr, options) {
@@ -325,12 +347,105 @@ define(
                             callback(err, model, xhr, options);
                         }
                     });
+                },
+
+                methodToURL: {
+                    'read': '/user/get',
+                    'create': '/user/create',
+                    'update': '/user/update',
+                    'delete': '/user/remove'
+                },
+
+                sync_example1: function(method, model, options) {
+                    options = options || {};
+                    options.url = model.methodToURL[method.toLowerCase()];
+
+                    return Backbone.sync.apply(this, arguments);
+                },
+
+                sync_example2: function (method, model, options) {
+                    if (method === 'read') {
+                        if (window.localStorage.getItem('myData')) {
+                            return window.localStorage.getItem('myData');
+                        } else {
+                            return Backbone.sync.apply(this, arguments);
+                        }
+                    } else {
+                        return Backbone.sync.apply(this, arguments);
+                    }
+                },
+
+                sync: function (method, model, options) {
+
+                    //TODO: update this for Backbone.localStorage?
+
+                    var type = methodMap[method];
+
+                    // Default options, unless specified.
+                    _.defaults(options || (options = {}), {
+                        emulateHTTP: Backbone.emulateHTTP,
+                        emulateJSON: Backbone.emulateJSON
+                    });
+
+                    // Default JSON-request options.
+                    var params = {type: type, dataType: 'json'};
+
+                    // Ensure that we have a URL.
+                    if (!options.url) {
+                        params.url = _.result(model, 'url') || urlError();
+                    }
+
+                    // Ensure that we have the appropriate request data.
+                    if (options.data == null && model && (method === 'create' || method === 'update' || method === 'patch')) {
+                        params.contentType = 'application/json';
+                        params.data = JSON.stringify(options.attrs || model.toJSON(options));
+                    }
+
+                    // For older servers, emulate JSON by encoding the request into an HTML-form.
+                    if (options.emulateJSON) {
+                        params.contentType = 'application/x-www-form-urlencoded';
+                        params.data = params.data ? {model: params.data} : {};
+                    }
+
+                    // For older servers, emulate HTTP by mimicking the HTTP method with `_method`
+                    // And an `X-HTTP-Method-Override` header.
+                    if (options.emulateHTTP && (type === 'PUT' || type === 'DELETE' || type === 'PATCH')) {
+                        params.type = 'POST';
+                        if (options.emulateJSON) params.data._method = type;
+                        var beforeSend = options.beforeSend;
+                        options.beforeSend = function (xhr) {
+                            xhr.setRequestHeader('X-HTTP-Method-Override', type);
+                            if (beforeSend) return beforeSend.apply(this, arguments);
+                        };
+                    }
+
+                    // Don't process data on a non-GET request.
+                    if (params.type !== 'GET' && !options.emulateJSON) {
+                        params.processData = false;
+                    }
+
+                    // Pass along `textStatus` and `errorThrown` from jQuery.
+                    var error = options.error;
+                    options.error = function (xhr, textStatus, errorThrown) {
+                        options.textStatus = textStatus;
+                        options.errorThrown = errorThrown;
+                        if (error) error.call(options.context, xhr, textStatus, errorThrown);
+                    };
+
+                    // Make the request, allowing the user to override any Ajax options.
+                    var xhr = options.xhr = Backbone.ajax(_.extend(params, options));
+                    model.trigger('request', model, xhr, options);
+                    return xhr;
                 }
 
 
             },
 
             { //class properties
+
+                newInstance: function () {
+
+                }
 
             });
 

@@ -8,11 +8,11 @@ var http = require('http');
 var eventBus = require('../events/eventBus.js');
 
 
-eventBus.on('userModel',function(msg){
-
-  console.log('eventBus message!:',msg);
-
-});
+//eventBus.on('userModel',function(msg){
+//
+//  console.log('eventBus message!:',msg);
+//
+//});
 
 
 /**

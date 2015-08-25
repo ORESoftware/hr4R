@@ -18,7 +18,7 @@ console.log('loading app/js/models/jobModel.js');
 
 define(
     [
-        'underscore',
+        '../../../../../../bower_components/underscore/underscore',
         'backbone',
         'ijson',
         'app/js/models/BaseModel',

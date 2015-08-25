@@ -11,7 +11,7 @@ console.log('loading app/js/models/userModel.js');
 
 define(
     [
-        'underscore',
+        '../../../../../../bower_components/underscore/underscore',
         'backbone',
         'ijson',
         'app/js/models/BaseModel',
@@ -19,7 +19,11 @@ define(
         //'#allCollections'
     ],
 
-    function (_, Backbone,IJSON, BaseModel, MCM) {
+    function (_, Backbone, IJSON, BaseModel, MCM) {
+
+        var urlError = function () {
+            throw new Error('A "url" property or function must be specified');
+        };
 
         var User = BaseModel.extend({
 
@@ -29,7 +33,17 @@ define(
                 //urlRoot: '/users?user_id=',
                 stale: ['paid'],
 
-                urlRoot: function(){
+                url: function () {
+                    var base =
+                        _.result(this, 'urlRoot') ||
+                        _.result(this.collection, 'url') ||
+                        urlError();
+                    if (this.isNew()) return base;
+                    var id = this.get(this.idAttribute);
+                    return base.replace(/[^\/]$/, '$&/') + encodeURIComponent(id);
+                },
+
+                urlRoot: function () {
                     //if(this.collection == null){
                     //    throw new Error('no collection assigned to model');
                     //}
@@ -48,10 +62,10 @@ define(
                         email: null,
                         old_password: null,
                         new_password: null,
-                        created_by:null,
-                        updated_by:null,
-                        created_at:null,
-                        updated_at:null
+                        created_by: null,
+                        updated_by: null,
+                        created_at: null,
+                        updated_at: null
                     }
                 },
 
@@ -60,27 +74,22 @@ define(
                 //    Backbone.Model.apply(this, arguments);
                 //},
 
-                sync: function(){
-
-                    throw new Error('sync has not been implemented yet');
-                },
-
 
                 initialize: function (attributes, opts) {
 
                     this.givenName = '@UserModel';
                     this.options = opts || {};
 
-                    if(this.collection == null){
-                        if(this.collectionName){ //shouldn't this be opts.collectionName?
+                    if (this.collection == null) {
+                        if (this.collectionName) { //shouldn't this be opts.collectionName?
                             this.collection = MCM.findCollectionByName(this.collectionName);
                         }
-                        else{ //default
+                        else { //default
                             this.collection = MCM.findCollectionByName('users');
                         }
                     }
 
-                    _.bindAll(this, 'deleteModel', 'persistModel', 'validate','parse');
+                    _.bindAll(this, 'deleteModel', 'persistModel', 'validate', 'parse');
 
 
                     console.log('UserModel has been intialized');
@@ -100,8 +109,8 @@ define(
 
             { //class properties
 
-                newUser: function (attributes,options) {
-                    return new User(attributes,options);
+                newUser: function (attributes, options) {
+                    return new User(attributes, options);
                 }
 
             });

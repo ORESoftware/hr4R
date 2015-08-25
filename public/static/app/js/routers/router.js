@@ -245,6 +245,8 @@ define(
 
                 var collectionsToSync = [];
 
+                //TODO: turn these into batch saves
+
                 Object.keys(collections).forEach(function (key) {
                     if (collections.hasOwnProperty(key)) {
                         var coll = collections[key];

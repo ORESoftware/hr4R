@@ -53,7 +53,9 @@ define(
 
     ],
 
-    function (patches, boot, Observe, Backbone, _, IJSON, React, collections, models, router, allTemplates, allControllers, allRelViews, allCSS) {
+    function (patches, boot, Observe, Backbone, _, IJSON,
+              React, collections, models, router, allTemplates,
+              allControllers, allRelViews, allCSS) {
 
         /*
          we don't use the majority of these dependencies in this file, but they are loaded here so that r.js can build
