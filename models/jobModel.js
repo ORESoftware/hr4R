@@ -102,6 +102,14 @@ var get = function (cb) {
                 cb(err,JobModel);
             }
         });
+
+        JobModel.on('index',function(err,msg){
+            if(err){
+                console.log(colors.bgRed(err));
+                throw err;
+            }
+            console.log('index event',msg);
+        });
     }
     else{
         cb(null,JobModel);

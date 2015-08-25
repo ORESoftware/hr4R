@@ -9,7 +9,6 @@ define(
         'underscore',
         'backbone',
         '#allCollections'
-        //////////
 
     ],
     function ($, _, Backbone,  allCollections) {

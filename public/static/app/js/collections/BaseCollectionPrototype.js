@@ -19,6 +19,7 @@ define(
             collNeedsPersisting: false,
             numberOfFetches:0, //TODO: once this is 1 or greater, we don't need to keep fetching, we can let websockets do the work
 
+            fetchCap:2,
             changedModelsToBatchUpdateDomWith: {},
             addedModelsToBatchUpdateDomWith: {},
 

@@ -23,7 +23,7 @@ define(
 
     function (_, Backbone, models, BaseCollection, allDispatchers) {
 
-        var dispatcher = allDispatchers['app/js/flux/dispatchers/JobsDispatcher'];
+        var dispatcher = allDispatchers['dispatchers/JobsDispatcher'];
 
         var JobsCollection = BaseCollection.extend({
             // Reference to this collection's model.

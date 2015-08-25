@@ -92,14 +92,38 @@ gulp.task('build_requirejs_pipe_views', function () {
 
 });
 
+
+/*
+
+gulp.task('bbb1', function (cb) {
+ grm('../testData/one',
+ 'jsx!app/js/views/',
+ '',
+ true,
+ '../testResults/test_one_results.js',
+ function () {
+ cb();
+ })
+ });
+
+ var opts = {
+ inputFolder: '../testData/one',
+ appendThisToDependencies: 'jsx!app/js/views/',
+ appendThisToReturnedItems: 'dude-',
+ eliminateSharedFolder: true,
+ output: '../testResults/test_one_results.js'
+ };
+
+ */
+
 gulp.task('bbb1',function(cb){
-    grm('./public/static/app/js/views/relViews', 'jsx!app/js/views/','./public/static/app/js/meta/allRelViews.js', function(){
+    grm('./public/static/app/js/views/relViews', 'jsx!app/js/views/', '',false,'./public/static/app/js/meta/allRelViews.js', function(){
         cb();
     })
 });
 
 gulp.task('bbb2',function(cb){
-    grm('./public/static/app/js/controllers', 'app/js/','./public/static/app/js/meta/allControllers.js', function(){
+    grm('./public/static/app/js/controllers', 'app/js/','',false,'./public/static/app/js/meta/allControllers.js', function(){
         cb();
     })
 });
@@ -111,13 +135,13 @@ gulp.task('bbb2',function(cb){
 //});
 
 gulp.task('bbb3',function(cb){
-    grm('./public/static/cssx', 'text!','./public/static/app/js/meta/allCSS.js', function(){
+    grm('./public/static/cssx', 'text!','',false,'./public/static/app/js/meta/allCSS.js', function(){
         cb();
     })
 });
 
 gulp.task('bbb4',function(cb){
-    grm('./public/static/app/js/flux/dispatchers', 'app/js/flux/','./public/static/app/js/meta/allDispatchers.js', function(){
+    grm('./public/static/app/js/flux/dispatchers', 'app/js/flux/','',false,'./public/static/app/js/meta/allDispatchers.js', function(){
         cb();
     })
 });

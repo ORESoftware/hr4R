@@ -11,7 +11,6 @@ define(
         'backbone',
         '#allCollections',
         '#allCSS'
-        ////////////
 
     ],
     function ($, _, Backbone, allCollections, allCSS) {
@@ -28,8 +27,8 @@ define(
                     var routerOpts = {};
                     routerOpts.view = view;
                     routerOpts.cssAdds = [
-                        allCSS['text!cssx/alert-bangtidy.css'],
-                        allCSS['text!cssx/bootstrap/bootstrap-notify.css']
+                        allCSS['cssx/alert-bangtidy.css'],
+                        allCSS['cssx/bootstrap/bootstrap-notify.css']
                     ];
 
                     changeViewCallback(routerOpts);

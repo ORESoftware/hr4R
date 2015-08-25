@@ -52,7 +52,7 @@ define('app/js/boot',
                     appState.set('env', msg.env);
                     console.log('boot.initialize() waiting for document.ready to fire, time:', (Date.now() - window.startDate));
 
-                    var x = allCSS['text!cssx/portal/simple-sidebar.css'];
+                    var x = allCSS['cssx/portal/simple-sidebar.css'];
                     //var y = allCSS['text!cssx/bootstrap/bootstrap-notify.css'];
 
                     cssAdder.add(x);
