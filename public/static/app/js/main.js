@@ -54,6 +54,8 @@ requirejs.config({
         '#appState':'app/js/appState',
         '#viewState':'app/js/viewState',
         '#allControllers':'app/js/meta/allControllers',
+        '#allDispatchers':'app/js/meta/allDispatchers',
+        '#BaseCollection' : 'app/js/collections/BaseCollection',
         //'css': 'vendor/css.min',
         //'css-builder': 'vendor/css-builder',
         //'normalize' : 'vendor/normalize',

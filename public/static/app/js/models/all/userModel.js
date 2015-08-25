@@ -11,7 +11,7 @@ console.log('loading app/js/models/userModel.js');
 
 define(
     [
-        '../../../../../../bower_components/underscore/underscore',
+        'underscore',
         'backbone',
         'ijson',
         'app/js/models/BaseModel',

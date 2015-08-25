@@ -9,8 +9,8 @@ define(function(require){
 
     var Dispatcher = require('flux').Dispatcher;
 
-    var TodoDispatcher = new Dispatcher();
+    var JobsDispatcher = new Dispatcher();
 
-    return TodoDispatcher;
+    return JobsDispatcher;
 
 });

@@ -13,14 +13,17 @@ console.log('loading app/js/collections/jobsCollection.js');
 
 define(
     [
-        '../../../../../../bower_components/underscore/underscore',
+        'underscore',
         'backbone',
         '#allModels',
-        'app/js/collections/BaseCollection'
+        '#BaseCollection',
+        '#allDispatchers'
 
     ],
 
-    function (_, Backbone, models, BaseCollection) {
+    function (_, Backbone, models, BaseCollection, allDispatchers) {
+
+        var dispatcher = allDispatchers['app/js/flux/dispatchers/JobsDispatcher'];
 
         var JobsCollection = BaseCollection.extend({
             // Reference to this collection's model.
@@ -44,6 +47,8 @@ define(
 
                 console.log('model for JobsCollection is:', this.model);
 
+                this.dispatchToken = dispatcher.register(this.dispatchCallback);
+
                 this.givenName = '@JobsCollection';
                 this.uniqueName = 'jobs';
 
@@ -58,6 +63,30 @@ define(
                 this.on('remove', function (model) {
                     console.log('something got removed');
                 });
+
+            },
+
+
+            //TODO:http://www.toptal.com/front-end/simple-data-flow-in-react-applications-using-flux-and-backbone
+
+            dispatchCallback: function(payload){
+
+                var self = this;
+
+                switch(payload.actionType){
+
+                    case 'delete':
+                        self.remove(payload.model)
+                        break;
+                    case 'add':
+                        self.add(payload.model)
+                        break;
+                    case 'update':
+                        self.add(payload.model)
+                        break;
+
+                }
+
 
             },
 

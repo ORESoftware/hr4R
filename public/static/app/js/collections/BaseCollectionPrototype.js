@@ -22,6 +22,8 @@ define(
             changedModelsToBatchUpdateDomWith: {},
             addedModelsToBatchUpdateDomWith: {},
 
+            batchURL: null,
+
 
             constructor: function () {
                 var self = this;
