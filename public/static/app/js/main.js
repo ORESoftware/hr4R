@@ -56,9 +56,7 @@ requirejs.config({
         '#allControllers':'app/js/meta/allControllers',
         '#allDispatchers':'app/js/meta/allDispatchers',
         '#BaseCollection' : 'app/js/collections/BaseCollection',
-        //'css': 'vendor/css.min',
-        //'css-builder': 'vendor/css-builder',
-        //'normalize' : 'vendor/normalize',
+        '@AppDispatcher':'app/js/flux/dispatcher/AppDispatcher',
         '#allCSS':'app/js/meta/allCSS'
         //'d3':'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min'
     },

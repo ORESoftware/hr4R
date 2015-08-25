@@ -22,8 +22,8 @@ define(
         'backbone',
         'ijson',
         'app/js/models/BaseModel',
-        'app/js/ModelCollectionMediator'
-        //'#allCollections'
+        'app/js/ModelCollectionMediator',
+        '@AppDispatcher'
     ],
 
     function (_, Backbone, IJSON, BaseModel,MCM) {

@@ -140,11 +140,11 @@ gulp.task('bbb3',function(cb){
     })
 });
 
-gulp.task('bbb4',function(cb){
-    grm('./public/static/app/js/flux/dispatchers', 'app/js/flux/','',false,'./public/static/app/js/meta/allDispatchers.js', function(){
-        cb();
-    })
-});
+//gulp.task('bbb4',function(cb){
+//    grm('./public/static/app/js/flux/dispatchers', 'app/js/flux/','',false,'./public/static/app/js/meta/allDispatchers.js', function(){
+//        cb();
+//    })
+//});
 
 
 gulp.task('default', function () {
@@ -161,9 +161,9 @@ gulp.task('default', function () {
         console.log('done with bbb3 task');
     });
 
-    gulp.run('bbb4', function(){
-        console.log('done with bbb4 task');
-    });
+    //gulp.run('bbb4', function(){
+    //    console.log('done with bbb4 task');
+    //});
 
    /* gulp.run('build_requirejs_pipe_controllers');
     gulp.run('build_requirejs_pipe_views');

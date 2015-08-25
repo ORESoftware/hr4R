@@ -97,6 +97,30 @@ define(
                 Backbone.Collection.apply(this, arguments);
             },
 
+            dispatchCallback: function(payload){
+
+                var self = this;
+
+                switch(payload.actionType){
+
+                    case 'delete':
+                        self.remove(payload.model);
+                        break;
+                    case 'add':
+                        self.add(payload.model);
+                        break;
+                    case 'update':
+                        self.add(payload.model);
+                        break;
+                    default:
+                        return true;
+
+
+                }
+
+                return true;
+            },
+
             sync: function() {
                 //TODO: how does Backbone handle REST HTTP responses from saving models/collections? somehow with jQuery...
                 return Backbone.sync.apply(this, arguments);
@@ -240,7 +264,7 @@ define(
                 var saveArray = [];
 
                 this.each(function (model, index) {  //iterate through models, add/push function to async.parallel
-                    if(!(opts.needsPersisting && model.needsPersisting)){
+                    if(opts.persistAll || model.needsPersisting){
                         saveArray.push(model.toJSON());
                     }
                 });

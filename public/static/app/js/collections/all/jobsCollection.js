@@ -17,13 +17,13 @@ define(
         'backbone',
         '#allModels',
         '#BaseCollection',
-        '#allDispatchers'
+        '@AppDispatcher'
 
     ],
 
-    function (_, Backbone, models, BaseCollection, allDispatchers) {
+    function (_, Backbone, models, BaseCollection, AppDispatcher) {
 
-        var dispatcher = allDispatchers['dispatchers/JobsDispatcher'];
+        //var dispatcher = allDispatchers['dispatchers/JobsDispatcher'];
 
         var JobsCollection = BaseCollection.extend({
             // Reference to this collection's model.
@@ -47,7 +47,7 @@ define(
 
                 console.log('model for JobsCollection is:', this.model);
 
-                this.dispatchToken = dispatcher.register(this.dispatchCallback);
+                this.dispatchToken = AppDispatcher.register(this.dispatchCallback);
 
                 this.givenName = '@JobsCollection';
                 this.uniqueName = 'jobs';

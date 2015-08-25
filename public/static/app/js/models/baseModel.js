@@ -26,7 +26,8 @@ define(
         '#appState',
         'underscore',
         'backbone',
-        'ijson'
+        'ijson',
+        '@AppDispatcher'
     ],
 
     function (appState, _, Backbone, IJSON) {
@@ -53,6 +54,17 @@ define(
                 stale: [], //stale attributes
 
                 noSave: false, //if noSave is true, this model should never be saved to server
+
+
+                url: function () {
+                    var base =
+                        _.result(this, 'urlRoot') ||
+                        _.result(this.collection, 'url') ||
+                        urlError();
+                    if (this.isNew()) return base;
+                    var id = this.get(this.idAttribute);
+                    return base.replace(/[^\/]$/, '$&/') + encodeURIComponent(id);
+                },
 
                 /*
 
@@ -392,7 +404,8 @@ define(
 
                     // Ensure that we have a URL.
                     if (!options.url) {
-                        params.url = _.result(model, 'url') || urlError();
+                        //params.url = _.result(model, 'url') || urlError();
+                        params.url = (_.isFunction(model.url) ? model.url(method,options) : model.url) || urlError();
                     }
 
                     // Ensure that we have the appropriate request data.

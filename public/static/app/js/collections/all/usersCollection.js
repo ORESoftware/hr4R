@@ -11,27 +11,22 @@ define(
         'underscore',
         'backbone',
         '#allModels',
-        '#BaseCollection'
+        '#BaseCollection',
+        '@AppDispatcher'
     ],
 
-    function (_, Backbone, models, BaseCollection) {
+    function (_, Backbone, models, BaseCollection, AppDispatcher) {
 
         var UsersCollection = BaseCollection.extend({
 
             model: models.User,
-
-            //url: function () {
-            //    //return '/users?user_id=' + this.options.user_id;
-            //    return '/users';
-            //},
-
             url: '/users',
-
             batchURL: '/batch/User',
-            //urlRoot: '/users',
 
 
             initialize: function (models, opts) {
+
+                this.dispatchToken = AppDispatcher.register(this.dispatchCallback);
 
                 this.uniqueName = 'users';
                 this.givenName = '@UsersCollection';

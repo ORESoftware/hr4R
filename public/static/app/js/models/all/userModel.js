@@ -15,8 +15,8 @@ define(
         'backbone',
         'ijson',
         'app/js/models/BaseModel',
-        'app/js/ModelCollectionMediator'
-        //'#allCollections'
+        'app/js/ModelCollectionMediator',
+        '@AppDispatcher'
     ],
 
     function (_, Backbone, IJSON, BaseModel, MCM) {
@@ -33,15 +33,6 @@ define(
                 //urlRoot: '/users?user_id=',
                 stale: ['paid'],
 
-                url: function () {
-                    var base =
-                        _.result(this, 'urlRoot') ||
-                        _.result(this.collection, 'url') ||
-                        urlError();
-                    if (this.isNew()) return base;
-                    var id = this.get(this.idAttribute);
-                    return base.replace(/[^\/]$/, '$&/') + encodeURIComponent(id);
-                },
 
                 urlRoot: function () {
                     //if(this.collection == null){
