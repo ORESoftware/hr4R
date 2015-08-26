@@ -146,6 +146,30 @@ gulp.task('bbb3',function(cb){
 //    })
 //});
 
+gulp.task('bbb5',function(cb){
+    grm('./public/static/app/js/flux/constants', 'app/js/flux/','',false,'./public/static/app/js/meta/allFluxConstants.js', function(){
+        cb();
+    })
+});
+
+gulp.task('bbb6',function(cb){
+    grm('./public/static/app/js/views/reactComponents', 'jsx!app/js/views/','',false,'./public/static/app/js/meta/allReactComponents.js', function(){
+        cb();
+    })
+});
+
+gulp.task('bbb7',function(cb){
+    grm('./public/static/app/templates', 'text!app/','',false,'./public/static/app/js/meta/allTemplates.js', function(){
+        cb();
+    })
+});
+
+gulp.task('bbb8',function(cb){
+    grm('./public/static/app/js/flux/actions', 'app/js/flux/','',false,'./public/static/app/js/meta/allFluxActions.js', function(){
+        cb();
+    })
+});
+
 
 gulp.task('default', function () {
 
@@ -165,16 +189,33 @@ gulp.task('default', function () {
     //    console.log('done with bbb4 task');
     //});
 
-   /* gulp.run('build_requirejs_pipe_controllers');
-    gulp.run('build_requirejs_pipe_views');
-
-    gulp.watch('public/static/app/js/controllers/!**!/!*.js', function () {
-        gulp.run('build_requirejs_pipe_controllers');
+    gulp.run('bbb5', function(){
+        console.log('done with bbb5 task');
     });
 
-    gulp.watch('public/static/app/js/views/relViews/!**!/!*.js', function () {
-        gulp.run('build_requirejs_pipe_views');
-    });*/
+    gulp.run('bbb6', function(){
+        console.log('done with bbb6 task');
+    });
+
+    gulp.run('bbb7', function(){
+        console.log('done with bbb7 task');
+    });
+
+    gulp.run('bbb8', function(){
+        console.log('done with bbb8 task');
+    });
+
+
+    /* gulp.run('build_requirejs_pipe_controllers');
+     gulp.run('build_requirejs_pipe_views');
+
+     gulp.watch('public/static/app/js/controllers/!**!/!*.js', function () {
+         gulp.run('build_requirejs_pipe_controllers');
+     });
+
+     gulp.watch('public/static/app/js/views/relViews/!**!/!*.js', function () {
+         gulp.run('build_requirejs_pipe_views');
+     });*/
 
     //gulp.watch('./public/static/app/js/controllers/**/*.js', ['build_requirejs_pipe']);
 

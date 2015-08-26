@@ -10,15 +10,14 @@ define(
         'ejs',
         'jquery',
         'underscore',
-        'handlebars',
         'backbone',
         'react',
-        'jsx!app/js/views/reactViews/RealTimeSearchView',
+        'jsx!app/js/views/reactComponents/RealTimeSearchView',
         'text!app/templates/overviewTemplate.ejs'
     ],
 
 
-    function (appState, collections,EJS, $, _, Handlebars, Backbone, React, SearchExample, template) {
+    function (appState, collections,EJS, $, _, Backbone, React, SearchExample, template) {
 
 
         var OverviewView = Backbone.View.extend({

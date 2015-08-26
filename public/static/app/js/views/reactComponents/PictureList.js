@@ -8,7 +8,7 @@
 define(
     [
         'react',
-        'jsx!app/js/views/reactViews/Picture'
+        'jsx!app/js/views/reactComponents/Picture'
     ],
 
     function (React, Picture) {

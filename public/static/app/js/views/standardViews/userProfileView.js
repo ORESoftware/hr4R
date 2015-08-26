@@ -16,7 +16,6 @@ define(
         'ejs',
         'jquery',
         'underscore',
-        'handlebars',
         'backbone',
         'backbone-validation',
         'form2js',
@@ -25,7 +24,7 @@ define(
         'text!app/templates/userProfileTemplate.ejs'
     ],
 
-    function (appState, collections, EJS, $, _, Handlebars, Backbone, BackboneValidation, form2js, IJSON, Adhesive, template) {
+    function (appState, collections, EJS, $, _, Backbone, BackboneValidation, form2js, IJSON, Adhesive, template) {
 
 
         var UserProfileView = Backbone.View.extend({

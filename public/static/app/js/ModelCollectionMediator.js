@@ -16,8 +16,9 @@ console.log('loading app/js/ModelCollectionMediator.js');
 
 define(
     [
-        //'#allCollections',
+
         'require'
+
     ],
 
     function (require) {
@@ -27,9 +28,7 @@ define(
                 return require('#allCollections')[name];
             }
         };
-      //return function findCollectionByName(name){
-      //    return allCollections[name];
-      //}
+
     });
 
 /*

@@ -26,7 +26,7 @@ define(
         '@AppDispatcher'
     ],
 
-    function (_, Backbone, IJSON, BaseModel,MCM) {
+    function (_, Backbone, IJSON, BaseModel, MCM, AppDispatcher) {
 
         var Job = BaseModel.extend({
 
@@ -79,13 +79,15 @@ define(
                     //TODO: how to have a default collection?
 
                     if (this.collection == null) {
-                        if (this.collectionName) {
-                            this.collection = MCM.findCollectionByName(this.collectionName);
+                        if (this.options.collectionName) {
+                            this.collection = MCM.findCollectionByName(this.options.collectionName);
                         }
                         else { //default
                             this.collection = MCM.findCollectionByName('jobs');
                         }
                     }
+
+                    this.dispatchToken = AppDispatcher.register(this.dispatchCallback);
 
                     _.bindAll(this, 'deleteModel', 'persistModel', 'validate', 'parse');
                     console.log('JobModel has been intialized');

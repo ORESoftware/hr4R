@@ -13,7 +13,6 @@ define(
         'ejs',
         'jquery',
         'underscore',
-        'handlebars',
         'backbone',
         'backbone-validation',
         'app/js/Adhesive',
@@ -22,9 +21,9 @@ define(
     ],
 
 
-    function (appState, models, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, Adhesive, allTemplates) {
+    function (appState, models, form2js, EJS, $, _, Backbone, BackboneValidation, Adhesive, allTemplates) {
 
-        var template = allTemplates.FooterTemplate;
+        var template = allTemplates['templates/footerTemplate.ejs'];
 
         var FooterView = Backbone.View.extend({
 

@@ -10,15 +10,14 @@ define(
         'ejs',
         'jquery',
         'underscore',
-        'handlebars',
         'backbone',
         'react',
-        'jsx!app/js/views/reactViews/PictureList',
+        'jsx!app/js/views/reactComponents/PictureList',
         'text!app/templates/pictureTemplate.ejs'
     ],
 
 
-    function (appState, collections, EJS, $, _, Handlebars, Backbone, React, PictureList, template) {
+    function (appState, collections, EJS, $, _, Backbone, React, PictureList, template) {
 
 
         var PictureView = Backbone.View.extend({

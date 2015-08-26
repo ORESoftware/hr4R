@@ -6,7 +6,7 @@
 define(
     [
         'react',
-        'jsx!app/js/views/reactViews/Service'
+        'jsx!app/js/views/reactComponents/Service'
     ],
 
     function (React, Service) {

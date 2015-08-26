@@ -14,7 +14,6 @@ define(
         'ejs',
         'jquery',
         'underscore',
-        'handlebars',
         'backbone',
         'backbone-validation',
         '#allTemplates'
@@ -22,10 +21,10 @@ define(
     ],
 
 
-    function (appState, models, collections, form2js, EJS, $, _, Handlebars, Backbone, BackboneValidation, allTemplates) {
+    function (appState, models, collections, form2js, EJS, $, _, Backbone, BackboneValidation, allTemplates) {
 
 
-        var template = allTemplates.PortalTemplate;
+        var template = allTemplates['templates/portalTemplate.ejs'];
 
 
         var PortalView = Backbone.View.extend({

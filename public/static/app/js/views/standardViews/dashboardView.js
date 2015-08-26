@@ -19,18 +19,18 @@ define(
         'ejs',
         'jquery',
         'underscore',
-        'handlebars',
         'backbone',
         'react',
-        'jsx!app/js/views/reactViews/ServiceChooser',
-        //'text!app/templates/dashboardTemplate.ejs'
+        '#allReactComponents',
         '#allTemplates'
     ],
 
 
-    function (appState, collections, standardViews, EJS, $, _, Handlebars, Backbone, React, ServiceChooser, allTemplates) {
+    function (appState, collections, standardViews, EJS, $, _, Backbone, React, allReactComponents, allTemplates) {
 
-        var template = allTemplates.DashboardTemplate;
+        var template = allTemplates['templates/dashboardTemplate.ejs'];
+
+        var ServiceChooser = allReactComponents['reactComponents/ServiceChooser'];
 
         var DashboardView = Backbone.View.extend({
 

@@ -8,6 +8,8 @@
 //TODO: http://stackoverflow.com/questions/7113049/backbone-js-nesting-views-through-templating
 //TODO: https://github.com/facebook/flux/tree/master/examples/flux-todomvc/js
 
+//var viewOptions = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
+
 define(
     [
         '#appState',
@@ -15,12 +17,11 @@ define(
         'ejs',
         'jquery',
         'underscore',
-        'handlebars',
         'backbone',
         'react'
     ],
 
-    function (appState, collections, EJS, $, _, Handlebars, Backbone, React) {
+    function (appState, collections, EJS, $, _, Backbone, React) {
 
 
         var BaseView = Backbone.View.extend({

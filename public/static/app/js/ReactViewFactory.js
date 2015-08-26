@@ -32,7 +32,7 @@ update react components on backbone.js events
 define('app/js/ReactViewFactory',
 
     [
-        'React'
+        'react'
     ],
 
     function (React) {

@@ -17,7 +17,7 @@
 
 window.startDate = Date.now();
 
-console.log('loading app/js/main.js, (1) time:', (Date.now() -window.startDate));
+console.log('loading app/js/main.js, (1) time:', (Date.now() - window.startDate));
 
 requirejs.config({
     enforceDefine: false,
@@ -28,36 +28,39 @@ requirejs.config({
         'jquery': 'vendor/jquery',
         //'jquery': 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min',
         'ejs': 'vendor/ejs',
-        'flux':'vendor/Flux',
+        'flux': 'vendor/Flux',
         'text': 'vendor/text',
         'form2js': 'vendor/form2js',
         'underscore': 'vendor/underscore-min',
-        'ijson':'vendor/idempotent-json',
+        'ijson': 'vendor/idempotent-json',
         'backbone': 'vendor/backbone',
         'bootstrap': 'vendor/bootstrap',
-        'handlebars': 'vendor/handlebars',
         'backbone-validation': 'vendor/backbone-validation-amd',
         'jsx': "vendor/jsx",
-        //'controllers':'app/js/controllers/*',
         'JSXTransformer': 'vendor/JSXTransformer',
-        'observe':'vendor/observe',
-        'react':'vendor/react-with-addons',
-        'socketio':'vendor/socketio',
+        'observe': 'vendor/observe',
+        //'react':'vendor/react-with-addons',
+        'react': 'vendor/react',
+        'socketio': 'vendor/socketio',
+        'events': 'vendor/events-amd',
         //'socketio' : 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min',
         //'Adhesive':'app/js/Adhesive',
-        '#patches' :'app/js/patches',
-        '#allRelViews':'app/js/meta/allRelViews',
-        '#allTemplates':'app/js/meta/allTemplates',
+        '#patches': 'app/js/patches',
+        '#allReactComponents': 'app/js/meta/allReactComponents',
+        '#allRelViews': 'app/js/meta/allRelViews',
+        '#allTemplates': 'app/js/meta/allTemplates',
         '#standardViews': 'app/js/meta/allStandardViews',
         '#allModels': 'app/js/meta/allModels',
         '#allCollections': 'app/js/meta/allCollections',
-        '#appState':'app/js/appState',
-        '#viewState':'app/js/viewState',
-        '#allControllers':'app/js/meta/allControllers',
-        '#allDispatchers':'app/js/meta/allDispatchers',
-        '#BaseCollection' : 'app/js/collections/BaseCollection',
-        '@AppDispatcher':'app/js/flux/dispatcher/AppDispatcher',
-        '#allCSS':'app/js/meta/allCSS'
+        '#appState': 'app/js/appState',
+        '#viewState': 'app/js/viewState',
+        '#allControllers': 'app/js/meta/allControllers',
+        '#allDispatchers': 'app/js/meta/allDispatchers',
+        '#BaseCollection': 'app/js/collections/BaseCollection',
+        '@AppDispatcher': 'app/js/flux/dispatcher/AppDispatcher',
+        '#allCSS': 'app/js/meta/allCSS',
+        '#allFluxActions': 'app/js/meta/allFluxActions',
+        '#allFluxConstants': 'app/js/meta/allFluxConstants'
         //'d3':'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min'
     },
 
@@ -65,6 +68,12 @@ requirejs.config({
         //'homeTemplate':{
         //    'deps': ['text']
         //},
+        '#allReactComponents': {
+            'deps': ['jsx', 'JSXTransformer']
+        },
+        '#standardViews': {
+            'deps': ['jsx', 'JSXTransformer']
+        },
         'underscore': {
             'exports': '_'
         },
@@ -88,16 +97,16 @@ requirejs.config({
     //}
 });
 
-console.log('starting app, time:', (Date.now() -window.startDate));
+console.log('starting app, time:', (Date.now() - window.startDate));
 
 require(['app/js/app'], function (Application) {
 
-    console.log('Application loaded, (2) time:', (Date.now() -window.startDate));
+    console.log('Application loaded, (2) time:', (Date.now() - window.startDate));
 
     //$(document).ready(function () {
 
-        //console.log('document.ready fired, time:', (Date.now() -window.startDate));
-        Application.start();
+    //console.log('document.ready fired, time:', (Date.now() -window.startDate));
+    Application.start();
     //});
 
 });

@@ -14,14 +14,13 @@ define(
         'ejs',
         'jquery',
         'underscore',
-        'handlebars',
         'backbone',
         'backbone-validation',
         'app/js/Adhesive',
         'text!app/templates/registeredUsersTemplate.ejs'
     ],
 
-    function (appState, collections, EJS, $, _, Handlebars, Backbone, BackboneValidation, Adhesive, template) {
+    function (appState, collections, EJS, $, _, Backbone, BackboneValidation, Adhesive, template) {
 
 
         var RegisteredUsersView = Backbone.View.extend({

@@ -9,12 +9,12 @@
 
 define(
     [
-        "app/js/flux/dispatchers/JobsDispatcher"
+        "app/js/flux/constants/FluxCartConstants"
     ],
     function(){
 
         return {
 
-            "dispatchers/JobsDispatcher": arguments[0]
+            "constants/FluxCartConstants": arguments[0]
         }
   });

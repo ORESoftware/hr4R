@@ -13,8 +13,6 @@ define(
     [
         '#appState',
         'socketio',
-        //'app/js/routers/router',
-        //'app/js/allViews',
         '#allCollections',
         'ijson',
         'backbone',

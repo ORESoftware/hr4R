@@ -14,14 +14,13 @@ define(
         'ejs',
         'jquery',
         'underscore',
-        'handlebars',
         'backbone',
         'backbone-validation',
         'text!app/templates/indexTemplate.ejs'
     ],
 
 
-    function (appState, collections, EJS, $, _, Handlebars, Backbone, BackboneValidation, template) {
+    function (appState, collections, EJS, $, _, Backbone, BackboneValidation, template) {
 
 
         //var LoginView = standardViews.Login;

@@ -13,17 +13,15 @@ define(
         'app/js/Adhesive',
         'backbone',
         'react',
-        'jsx!app/js/views/reactViews/listView',
+        'jsx!app/js/views/reactComponents/listView',
         '#allTemplates'
         //'text!app/templates/GetAllTemplate.ejs'
     ],
 
 
-    function (appState, collections, EJS, $, _, Adhesive, Backbone, React, ListView,allTemplates) {
+    function (appState, collections, EJS, $, _, Adhesive, Backbone, React, ListView, allTemplates) {
 
-        //var template = allTemplates.GetAllTemplate;
-
-        var template = allTemplates['GetAllTemplate'];
+        var template = allTemplates['templates/getAllTemplate.ejs'];
 
         var GetAllView = Backbone.View.extend({
 
@@ -59,7 +57,6 @@ define(
                     //self.$el.html(ret);
 
                     //var listView = ListView(self.collection);
-
 
 
                     React.render(

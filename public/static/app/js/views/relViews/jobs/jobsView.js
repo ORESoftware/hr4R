@@ -18,7 +18,7 @@ define(
         'app/js/Adhesive',
         'backbone',
         'react',
-        'jsx!app/js/views/reactViews/JobsList',
+        'jsx!app/js/views/reactComponents/JobsList',
         '#allTemplates'
         //'text!app/templates/jobsTemplate.ejs'
     ],
@@ -26,8 +26,7 @@ define(
 
     function (appState, collections, EJS, $, _, Adhesive, Backbone, React, JobsList, allTemplates) {
 
-        var template = allTemplates.JobsTemplate;
-
+        var template = allTemplates['templates/jobsTemplate.ejs'];
 
         var JobsView = Backbone.View.extend({
 

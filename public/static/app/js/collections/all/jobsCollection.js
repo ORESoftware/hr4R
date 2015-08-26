@@ -69,26 +69,6 @@ define(
 
             //TODO:http://www.toptal.com/front-end/simple-data-flow-in-react-applications-using-flux-and-backbone
 
-            dispatchCallback: function(payload){
-
-                var self = this;
-
-                switch(payload.actionType){
-
-                    case 'delete':
-                        self.remove(payload.model)
-                        break;
-                    case 'add':
-                        self.add(payload.model)
-                        break;
-                    case 'update':
-                        self.add(payload.model)
-                        break;
-
-                }
-
-
-            },
 
 
             // Todos are sorted by their original insertion order.

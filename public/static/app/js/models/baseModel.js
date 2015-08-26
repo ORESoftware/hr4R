@@ -131,6 +131,30 @@ define(
                     //}
                 },
 
+                dispatchCallback: function(payload){
+
+                    var self = this;
+
+                    switch(payload.actionType){
+
+                        case 'delete':
+                            self.remove(payload.model);
+                            break;
+                        case 'add':
+                            self.add(payload.model);
+                            break;
+                        case 'update':
+                            self.add(payload.model);
+                            break;
+                        default:
+                            return true;
+
+
+                    }
+
+                    return true;
+                },
+
                 //set: function(key, value, options) { //this is also known as (attributes,options)
                 //
                 //    if(options && options.localChange){
