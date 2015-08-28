@@ -30,7 +30,9 @@ define(
 
     /** @jsx React.DOM */
 
-    function (appState, models, collections, form2js, EJS, $, _, Backbone, BackboneValidation, React, allReactComponents, allTemplates, allFluxActions) {
+    function (appState, models, collections, form2js, EJS, $, _, Backbone,
+              BackboneValidation, React, allReactComponents, allTemplates, allFluxActions) {
+
 
         var FluxCartApp = allReactComponents['reactComponents/FluxCartApp'];
         var TimerExample = allReactComponents['reactComponents/TimerExample'];
@@ -89,6 +91,8 @@ define(
 
                     var self = this;
 
+                    alert('juluzzx');
+
                     var ret = EJS.render(HomeView.template, {});
 
                     self.$el.html(ret);
@@ -99,27 +103,28 @@ define(
                     // Load Mock API Call
                     CartAPI.getProductData();
 
+                    //////////////////
 
-                /*    React.render(//////
-                        <FluxCartApp />,
-                        $(self.el).find('#react-flux-cart-example-div-id')[0]
-                    );
+                    //React.render(
+                    //    <FluxCartApp />,
+                    //    $(self.el).find('#react-flux-cart-example-div-id')[0]
+                    //);
+                    //
+                    //React.render(
+                    //    <TimerExample start={Date.now()}/>,
+                    //    //self.el
+                    //    //$('#react-timer-example-div-id')[0]
+                    //    $(self.el).find('#react-timer-example-div-id')[0]
+                    //);
+                    //
+                    //React.render(
+                    //    <MenuExample items={ ['Home', 'Services', 'About', 'Contact us'] }/>,
+                    //    //$('#react-menu-example-div-id')[0]
+                    //    //document.getElementById('react-menu-example-div-id')
+                    //    $(self.el).find('#react-menu-example-div-id')[0]
+                    //);
 
-                    React.render(
-                        <TimerExample start={Date.now()}/>,
-                        //self.el
-                        //$('#react-timer-example-div-id')[0]
-                        $(self.el).find('#react-timer-example-div-id')[0]
-                    );
-
-                    React.render(
-                        <MenuExample items={ ['Home', 'Services', 'About', 'Contact us'] }/>,
-                        //$('#react-menu-example-div-id')[0]
-                        //document.getElementById('react-menu-example-div-id')
-                        $(self.el).find('#react-menu-example-div-id')[0]
-                    );*/
-
-                    //////
+                    ///////////
 
                     console.log('HomeView (re)rendered');//
 
@@ -140,10 +145,10 @@ define(
             }
         );
 
-        var CartAPI =  {
+        var CartAPI = {
 
             // Load mock product data from localStorage into ProductStore via Action
-            getProductData: function() {
+            getProductData: function () {
                 var data = JSON.parse(localStorage.getItem('product'));
                 FluxCartActions.receiveProduct(data);
             }
@@ -152,7 +157,7 @@ define(
 
         var ProductData = {
             // Load Mock Product Data Into localStorage
-            init: function() {
+            init: function () {
                 localStorage.clear();
                 localStorage.setItem('product', JSON.stringify([
                     {

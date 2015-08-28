@@ -50,7 +50,7 @@ define(
 
                 socketHotReload.on('hot-reload.ejs', function (data) {
 
-                    window.hotReload([data],function(err,results){
+                    window.hotReloadWithRequire([data],function(err,results){
 
                         var view = viewState.get('headerView');
                         view.template = results[0];
@@ -63,14 +63,19 @@ define(
 
                     alert(data);
 
-                    window.hotReload([data],function(err,results){
+                    window.hotReloadWithDefine([data],function(err,results){
 
-                        results[0].render();
+
+                        require(['#standardViews'],function(allStandardViews){
+                            allStandardViews['Home'] = results[0];
+                            //Backbone.history.stop();
+                            //Backbone.history.start();
+                            //Backbone.Events.trigger('bootRouter','home');
+                            Backbone.history.loadUrl(Backbone.history.fragment);
+                        });
 
                     });
-
                 });
-
             }
 
             return socketHotReload;

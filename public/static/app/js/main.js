@@ -37,6 +37,7 @@ requirejs.config({
         'bootstrap': 'vendor/bootstrap',
         'backbone-validation': 'vendor/backbone-validation-amd',
         'jsx': "vendor/jsx",
+        //'jsx': "vendor/require-jsx",
         'JSXTransformer': 'vendor/JSXTransformer',
         'observe': 'vendor/observe',
         'react':'vendor/react-with-addons',
@@ -74,6 +75,9 @@ requirejs.config({
         //'#standardViews': {
         //    'deps': ['jsx', 'JSXTransformer']
         //},
+        'JSXTransformer': {
+            exports: "JSXTransformer"
+        },
         'underscore': {
             'exports': '_'
         },
@@ -95,21 +99,23 @@ requirejs.config({
     //    '*': {
     //        'css': 'vendor/css.min' // or whatever the path to require-css is
     //        //'css-builder': 'vendor/css-builder',
-    //        //'normalize' : 'vendor/normalize'
+    //        //'normalize' : 'vendor/normalize'jsx!app/js/views/standardViews/homeView
     //    }
     //}
 });
 
 console.log('starting app, time:', (Date.now() - window.startDate));
 
-require(['app/js/app'], function (Application) {
+require(['app/js/app','jsx!app/js/views/standardViews/homeView'], function (Application, HomeView) {
 
     console.log('Application loaded, (2) time:', (Date.now() - window.startDate));
 
     //$(document).ready(function () {
-
+    console.log(HomeView);
     //console.log('document.ready fired, time:', (Date.now() -window.startDate));
     Application.start();
+
+
     //});
 
 });

@@ -159,7 +159,8 @@ gulp.task('watch', function () {
         });
 
         var reconciledPath = folds.join(path.sep);
-        reconciledPath = 'jsx!'+ reconciledPath.substring(0,reconciledPath.length-3);
+        //reconciledPath = 'jsx!'+ reconciledPath.substring(0,reconciledPath.length-3);
+        reconciledPath = reconciledPath.substring(0,reconciledPath.length-3);
 
         io.sockets.emit('hot-reload.JS',reconciledPath);
     });
