@@ -14,5 +14,11 @@
         requireLib : 'vendor/require'
     },
 
-    "include": 'requireLib'
+    "include": 'requireLib',
+    //"stubModules": ['jsx', 'text', 'JSXTransformer'],
+    //"modules": [
+    //    {
+    //        name: "main"
+    //    }
+    //]
 })

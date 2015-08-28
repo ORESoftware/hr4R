@@ -23,7 +23,9 @@ define(
         'exports'
     ],
 
-    function (DashboardView, HeaderView, FooterView, RegisteredUsersView, IndexView, LoginView, HomeView, PictureView, PortalView, UserProfileView, OverviewView, exports) {
+    function (DashboardView, HeaderView, FooterView, RegisteredUsersView,
+              IndexView, LoginView, HomeView, PictureView, PortalView,
+              UserProfileView, OverviewView, exports) {
 
 
         //exports.allViews = {

@@ -42,6 +42,8 @@ define(
 
         var socket = null;
 
+        var socketHotReload = null;
+
         function getConnection() {
 
             if (socket == null) {

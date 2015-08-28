@@ -132,7 +132,10 @@ define('app/js/boot',
 
             console.log('APPLICATION ENVIRONMENT:', appState.get('env'));
             if (appState.get('env') === 'development') {
-                loadDefaultModels(run);
+                require(['app/js/hotReloadHandler'],function(hrh){
+                    hrh.getConnection();
+                    loadDefaultModels(run);
+                })
             }
             else {
                 run();

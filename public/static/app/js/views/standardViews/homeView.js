@@ -28,6 +28,8 @@ define(
     ],
 
 
+    /** @jsx React.DOM */
+
     function (appState, models, collections, form2js, EJS, $, _, Backbone, BackboneValidation, React, allReactComponents, allTemplates, allFluxActions) {
 
         var FluxCartApp = allReactComponents['reactComponents/FluxCartApp'];
@@ -38,6 +40,7 @@ define(
 
         var template = allTemplates['templates/homeTemplate.ejs'];
 
+        /** @jsx React.DOM */
         var HomeView = Backbone.View.extend({
 
                 //id: 'HomeViewID',
@@ -96,8 +99,8 @@ define(
                     // Load Mock API Call
                     CartAPI.getProductData();
 
-                    // Render FluxCartApp Controller View
-                    React.render(
+
+                /*    React.render(//////
                         <FluxCartApp />,
                         $(self.el).find('#react-flux-cart-example-div-id')[0]
                     );
@@ -114,10 +117,11 @@ define(
                         //$('#react-menu-example-div-id')[0]
                         //document.getElementById('react-menu-example-div-id')
                         $(self.el).find('#react-menu-example-div-id')[0]
-                    );
+                    );*/
 
+                    //////
 
-                    console.log('HomeView (re)rendered');
+                    console.log('HomeView (re)rendered');//
 
 
                     return this;

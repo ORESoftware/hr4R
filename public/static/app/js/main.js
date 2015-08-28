@@ -39,8 +39,8 @@ requirejs.config({
         'jsx': "vendor/jsx",
         'JSXTransformer': 'vendor/JSXTransformer',
         'observe': 'vendor/observe',
-        //'react':'vendor/react-with-addons',
-        'react': 'vendor/react',
+        'react':'vendor/react-with-addons',
+        //'react': 'vendor/react',
         'socketio': 'vendor/socketio',
         'events': 'vendor/events-amd',
         //'socketio' : 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min',
@@ -68,12 +68,12 @@ requirejs.config({
         //'homeTemplate':{
         //    'deps': ['text']
         //},
-        '#allReactComponents': {
-            'deps': ['jsx', 'JSXTransformer']
-        },
-        '#standardViews': {
-            'deps': ['jsx', 'JSXTransformer']
-        },
+        //'#allReactComponents': {
+        //    'deps': ['jsx', 'JSXTransformer']
+        //},
+        //'#standardViews': {
+        //    'deps': ['jsx', 'JSXTransformer']
+        //},
         'underscore': {
             'exports': '_'
         },
@@ -87,6 +87,9 @@ requirejs.config({
         ejs: {
             exports: "ejs"
         }
+    },
+    jsx: {
+        fileExtension: '.js'
     }
     //map: {
     //    '*': {

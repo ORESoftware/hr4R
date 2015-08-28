@@ -12,20 +12,34 @@
 //TODO: http://www.w3.org/wiki/Dynamic_style_-_manipulating_CSS_with_JavaScript
 
 
- /*
-  TODO:
-// To cater to internet explorer, you have to set the stylesheet to be disabled as it keeps the css styles in memory so removing the element will not work, it can also cause it to crash in some instances if I remember correctly.
+/*
+TODO
 
-This also works for cross browser.
+hot reloading with RequireJS -
 
-    e.g
+ http://stackoverflow.com/questions/19966133/how-to-reload-a-file-via-require-js-triggered-from-the-browsers-js-console
 
-document.styleSheets[0].disabled = true;
-//so in your case using jquery try
 
-$('link[title=mystyle]')[0].disabled=true;
+
 
 */
+
+/*
+ TODO:
+
+ To cater to internet explorer, you have to set the stylesheet to be disabled as it keeps the css styles in memory so removing the element will not work,
+ it can also cause it to crash in some instances if I remember correctly.
+
+ This also works for cross browser.
+
+ e.g
+
+ document.styleSheets[0].disabled = true;
+ //so in your case using jquery try
+
+ $('link[title=mystyle]')[0].disabled=true;
+
+ */
 
 
 console.log('loading app/js/APP.js');
@@ -35,6 +49,7 @@ define(
     [
         //'d3',
         '#patches',
+        'app/js/hotReload',
         'app/js/boot',
         'observe',
         'backbone',
@@ -53,9 +68,14 @@ define(
 
     ],
 
-    function (patches, boot, Observe, Backbone, _, IJSON,
+    function (patches, hotReload, boot, Observe, Backbone, _, IJSON,
               React, collections, models, router, allTemplates,
               allControllers, allRelViews, allCSS) {
+
+
+        'debugger;'; //debugger should stop here
+        debugger; //debugger should stop here
+        "debugger;";
 
         /*
          we don't use the majority of these dependencies in this file, but they are loaded here so that r.js can build
@@ -74,27 +94,26 @@ define(
         //});
 
 
-
         //window.throwGlobalError(new Error('whoa'));
 
         if (typeof String.prototype.startsWith !== 'function') {
             // see below for better implementation!
-            String.prototype.startsWith = function (str){
+            String.prototype.startsWith = function (str) {
                 return this.indexOf(str) === 0;
             };
         }
 
-        if(window.location.hash && String(window.location.hash).length > 1 && String(window.location.hash).charAt(0) ==='#'){
+        if (window.location.hash && String(window.location.hash).length > 1 && String(window.location.hash).charAt(0) === '#') {
             var hash = String(window.location.hash).substring(1);
-            console.log('original_hash_request:',hash);
-            if(hash == 'index'){
+            console.log('original_hash_request:', hash);
+            if (hash == 'index') {
                 hash = 'home';  //prevent user from being stuck at the index page after logging in
             }
-            saveToLocalStorage('original_hash_request',hash);
+            saveToLocalStorage('original_hash_request', hash);
         }
-        else{
+        else {
             console.log('no hash in URL seen, setting desired hash to "home"');
-            saveToLocalStorage('original_hash_request','home');
+            saveToLocalStorage('original_hash_request', 'home');
         }
 
         Backbone.setCollectionOptions = function (model, options) {
@@ -114,13 +133,13 @@ define(
             //
             //console.log(this);
 
-           //_.defaults(view, opts, _.result(view, 'defaults'));
-           //
-           // console.log(view);
+            //_.defaults(view, opts, _.result(view, 'defaults'));
+            //
+            // console.log(view);
 
-            for(var prop in temp){
-                if(temp.hasOwnProperty(prop) && prop !== undefined){
-                    if(temp[prop]!==undefined){
+            for (var prop in temp) {
+                if (temp.hasOwnProperty(prop) && prop !== undefined) {
+                    if (temp[prop] !== undefined) {
                         this[prop] = temp[prop];
                         //console.log('new view property:',this[prop]);
                     }
@@ -218,14 +237,14 @@ define(
         var start = function () {
             //TODO: boot should be included in optimized build
 
-            console.log('app.start() fired, boot.initialize() about to fire, time:', (Date.now() -window.startDate));
+            console.log('app.start() fired, boot.initialize() about to fire, time:', (Date.now() - window.startDate));
             //require(['app/js/boot'], function (boot) {
 
-                //console.log('boot.initialize() waiting for document.ready to fire, time:', (Date.now() -window.startDate));
-                //$(function() {  //DOM is ready
-                //    console.log('document.ready fired, time:', (Date.now() -window.startDate));
-                    boot.initialize();
-                //});
+            //console.log('boot.initialize() waiting for document.ready to fire, time:', (Date.now() -window.startDate));
+            //$(function() {  //DOM is ready
+            //    console.log('document.ready fired, time:', (Date.now() -window.startDate));
+            boot.initialize();
+            //});
             //});
         };
 

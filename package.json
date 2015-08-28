@@ -23,7 +23,8 @@
     "start_expose_gc": "node --expose-gc ./bin/www",
     "eslint_nodejs": "eslint --config ./node.eslintrc --ignore-path ./node.eslintignore .",
     "eslint_browser": "eslint --config ./browser.eslintrc --ignore-path ./browser.eslintignore ./public",
-    "gzip": "gzip -9 ./public/static/app/optimized/optimized.js"
+    "gzip": "gzip -9 ./public/static/app/optimized/optimized.js",
+    "madge": "madge --circular --format amd ./"
   },
   "dependencies": {
     "async": "^1.4.0",
@@ -66,6 +67,7 @@
     "debug": "^2.2.0",
     "gulp": "^3.9.0",
     "gulp-jshint": "^1.11.2",
+    "gulp-livereload": "^3.8.0",
     "mocha": "^2.2.5"
   }
 }

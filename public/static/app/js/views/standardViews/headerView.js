@@ -50,6 +50,7 @@ define(
 
                 events: {
                     'click #logout-button-id': 'onClickLogout',
+                    'click #hot-reload-button-id': 'onClickHotReload',
                     'click #reset-all-button-id': 'onClickResetAll',
                     'click #reset-front-end-button-id': 'onClickResetFrontEnd',
                     'click #reset-back-end-button-id': 'onClickResetBackEnd',
@@ -62,6 +63,8 @@ define(
                 },
 
                 initialize: function (opts) {
+
+                    this.template = template;
 
                     this.setViewProps(opts); //has side effects
                     _.bindAll(this, 'render', 'onClickResetAll', 'onClickResetFrontEnd', 'onClickResetBackEnd');
@@ -88,7 +91,7 @@ define(
 
                 render: function () {
 
-                    if(!window.documentIsReady){
+                    if (!window.documentIsReady) {
                         return;
                     }
 
@@ -96,7 +99,7 @@ define(
 
                     var self = this;
 
-                    var ret = EJS.render(HeaderView.template, {
+                    var ret = EJS.render(self.template, {
                         appState: appState,
                         viewState: viewState,
                         socketConnection: giant.getSocketIOConn().id
@@ -111,10 +114,10 @@ define(
                 onClickDisconnectSocket: function (event) {
                     event.preventDefault();
 
-                    try{
+                    try {
                         giant.getSocketIOConn().disconnect();
                     }
-                    catch(err){
+                    catch (err) {
                         return alert('socket failed disconnect --->' + err.toString());
                     }
                     return alert('socket disconnected successfully');
@@ -151,6 +154,20 @@ define(
                     }).always(function (a, textStatus, b) {
                         self.render();
                     });
+                },
+                onClickHotReload: function (event) {
+
+                   var toReload = ['text!app/templates/headerTemplate.ejs'];
+
+                    var self = this;
+
+                    window.hotReload(toReload,function(err,results){
+
+                        HeaderView.template = results[0];
+                        self.render();
+
+                    });
+
                 },
                 onClickResetAll: function (event) {
                     event.preventDefault();
@@ -227,7 +244,6 @@ define(
                 template: template
             });
 
-        //HeaderView.template = template;
 
         return HeaderView;
     });

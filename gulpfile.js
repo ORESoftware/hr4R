@@ -1,96 +1,38 @@
 //https://github.com/gulpjs/gulp/issues/1186
 
 
+//core
 var gulp = require('gulp');
 var path = require('path');
+var fs = require('fs');
+var socketio = require('socket.io')
 
-//var gulp = require('gulp-param')(require('gulp'), process.argv);
-
-// include plug-ins
+//plugins
 var jshint = require('gulp-jshint');
-
 var replaceStream = require('replacestream');
 var replace = require('gulp-replace');
 var source  = require('vinyl-source-stream');
 
-var fs = require('fs');
+//misc
 var fse = require('fs-extra');
-
 var grm = require('gulp-requirejs-metagen');
 
 
-// JS hint task
-gulp.task('jshint', function () {
-    gulp.src('./src/scripts/*.js')
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'));
+
+var io = socketio.listen('3002',function(err,msg){
+    if(err){
+        console.error(err);
+    }
+    console.log(msg);
 });
 
-
-// JS hint task
-gulp.task('build_requirejs_old', function () {
-    gulp.src('./src/scripts/*.js')
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'));
+io.on('connection', function(socket){
+    console.log('a user connected');
+    socket.on('disconnect', function(){
+        console.log('user disconnected');
+    });
 });
 
-
-gulp.task('build_requirejs', function () {
-
-    require('./public/static/app/js/allFiles.js')('./public/static/app/js/controllers', 'app/js/');
-
-    var fs = require('fs');
-
-    var str1 = fs.readFileSync('./public/static/app/js/helperStuff/requirejsTemplate.txt');
-
-    var str2 = fs.readFileSync('./public/static/app/js/temp1.txt');
-    var str3 = String(str1).replace('****', str2);
-
-    var str4 = fs.readFileSync('./public/static/app/js/temp2.txt');
-    str3 = str3.replace('$$$$', str4);
-
-    console.log(str3);
-    fs.writeFileSync('./public/static/app/js/allControllers.js', str3);
-
-});
-
-gulp.task('build_requirejs_pipe_controllers', function () {
-
-    var str = require('./public/static/app/js/allFiles.js')('./public/static/app/js/controllers', 'app/js/');
-
-    var stars = str.split(';')[0];
-    var dollars = str.split(';')[1];
-
-
-    fs.createReadStream(path.resolve('./public/static/app/js/meta/requirejsTemplate.txt'))
-        .pipe(
-        replaceStream('****', stars))
-        .pipe(
-        replaceStream('$$$$', dollars))
-        .pipe(
-        fse.createOutputStream('./public/static/app/js/meta/allControllers.js')
-    );
-
-});
-
-gulp.task('build_requirejs_pipe_views', function () {
-
-    var str = require('./public/static/app/js/allFiles.js')('./public/static/app/js/views/relViews', 'jsx!app/js/views/');
-
-    var stars = str.split(';')[0];
-    var dollars = str.split(';')[1];
-
-
-    fs.createReadStream(path.resolve('./public/static/app/js/meta/requirejsTemplate.txt'))
-        .pipe(
-        replaceStream('****', stars))
-        .pipe(
-        replaceStream('$$$$', dollars))
-        .pipe(
-        fse.createOutputStream('./public/static/app/js/meta/allRelViews.js')
-    );
-
-});
 
 
 /*
@@ -171,7 +113,61 @@ gulp.task('bbb8',function(cb){
 });
 
 
-gulp.task('default', function () {
+
+
+gulp.task('watch', function () {
+
+
+    gulp.watch('./public/static/**/*.ejs').on('change', function(file) {
+
+        var folderz = String(file.path).split(path.sep);
+        var folds = [];
+
+        var add = false;
+        var prev = null;
+        folderz.forEach(function(folder,index){
+            if(add === true){
+                folds.push(folder);
+            }
+            if(folder === 'static' && prev === 'public'){
+                add = true;
+            }
+            prev = folder;
+        });
+
+        var reconciledPath = folds.join(path.sep);
+        reconciledPath = 'text!'+reconciledPath;
+
+        io.sockets.emit('hot-reload.ejs',reconciledPath);
+    });
+
+    gulp.watch('./public/static/app/js/views/**/*.js').on('change', function(file) {
+
+        var folderz = String(file.path).split(path.sep);
+        var folds = [];
+
+        var add = false;
+        var prev = null;
+        folderz.forEach(function(folder,index){
+            if(add === true){
+                folds.push(folder);
+            }
+            if(folder === 'static' && prev === 'public'){
+                add = true;
+            }
+            prev = folder;
+        });
+
+        var reconciledPath = folds.join(path.sep);
+        reconciledPath = 'jsx!'+ reconciledPath.substring(0,reconciledPath.length-3);
+
+        io.sockets.emit('hot-reload.JS',reconciledPath);
+    });
+
+});
+
+
+gulp.task('default', ['watch'], function () {
 
     gulp.run('bbb1', function(){
        console.log('done with bbb task');

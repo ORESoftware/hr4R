@@ -18,7 +18,7 @@ define(
         'require'
 
     ],
-    function (React, FluxCart, FluxProduct, allCollections, allModels, CartStore, ProductStore) {
+    function (React,FluxCart, FluxProduct, allCollections, allModels, CartStore, ProductStore) {
 
         //alert('peas');
 
