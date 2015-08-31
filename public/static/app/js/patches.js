@@ -51,7 +51,7 @@ define(function(){
             document.write('<p>' + arguments[i] +'</p>');
         }
         document.close();
-        return true;
+        return false;
     };
 
 });

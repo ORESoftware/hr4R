@@ -88,11 +88,17 @@ define(
             //},
 
             home: function () {
-                this.changeView({
-                    //view:allViews.Home,
-                    //view: new allViews.Home({el: '#main-content-id'}),
-                    view: new standardViews.Home(),
-                    useSidebar: true
+                var self = this;
+                require(['#allCSS'],function(allCSS){
+                    self.changeView({
+                        //view:allViews.Home,
+                        //view: new allViews.Home({el: '#main-content-id'}),
+                        view: new standardViews.Home(),
+                        useSidebar: true,
+                        cssAdds:[
+                            allCSS['cssx/portal/simple-sidebar.css']
+                        ]
+                    });
                 });
             },
 
@@ -428,7 +434,7 @@ define(
                 var stylesheetsToAdd = opts.cssAdds || [];
                 var arrayLength = stylesheetsToAdd.length;
                 for (var i = 0; i < arrayLength; i++) {
-                    cssAdder.add(stylesheetsToAdd[i]);
+                    cssAdder.addVia(stylesheetsToAdd[i]);
                 }
 
                 //**render header**

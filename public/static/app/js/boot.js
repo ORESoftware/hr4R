@@ -55,7 +55,7 @@ define('app/js/boot',
                     var x = allCSS['cssx/portal/simple-sidebar.css'];
                     //var y = allCSS['text!cssx/bootstrap/bootstrap-notify.css'];
 
-                    cssAdder.add(x);
+                    cssAdder.addViaText('cssx/portal/simple-sidebar.css',x);
                     //cssAdder.add(y);
 
                     $(function () {

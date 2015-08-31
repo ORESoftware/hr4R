@@ -23,6 +23,16 @@ define(
 
     function ($,async) {
 
+
+        window.hotReloadSimple = function(item,callback){
+
+                    require.undef(item);
+                    require([item],function(file){
+                        callback(null,file);
+                    });
+        };
+
+
         window.hotReloadWithRequire = function(fileArray,callback){
 
             var funcs = [];

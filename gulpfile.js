@@ -138,7 +138,7 @@ gulp.task('watch', function () {
         var reconciledPath = folds.join(path.sep);
         reconciledPath = 'text!'+reconciledPath;
 
-        io.sockets.emit('hot-reload.ejs',reconciledPath);
+        io.sockets.emit('hot-reload (.ejs)',reconciledPath);
     });
 
     gulp.watch('./public/static/app/js/views/**/*.js').on('change', function(file) {
@@ -162,7 +162,31 @@ gulp.task('watch', function () {
         //reconciledPath = 'jsx!'+ reconciledPath.substring(0,reconciledPath.length-3);
         reconciledPath = reconciledPath.substring(0,reconciledPath.length-3);
 
-        io.sockets.emit('hot-reload.JS',reconciledPath);
+        io.sockets.emit('hot-reload (.js)',reconciledPath);
+    });
+
+    gulp.watch('./public/static/cssx/**/*.css').on('change', function(file) {
+
+        var folderz = String(file.path).split(path.sep);
+        var folds = [];
+
+        var add = false;
+        var prev = null;
+        folderz.forEach(function(folder,index){
+            if(add === true){
+                folds.push(folder);
+            }
+            if(folder === 'static' && prev === 'public'){
+                add = true;
+            }
+            prev = folder;
+        });
+
+        var reconciledPath = folds.join(path.sep);
+        reconciledPath = 'text!'+ reconciledPath;
+        //reconciledPath = reconciledPath.substring(0,reconciledPath.length-3);
+
+        io.sockets.emit('hot-reload (.css)',reconciledPath);
     });
 
 });

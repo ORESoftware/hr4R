@@ -273,7 +273,9 @@ var requirejs, require, define;
 
             //Adjust any relative paths.
             if (name) {
-                name = name.split('/');
+                name = String(name).split('/');
+                //console.log(typeof name);
+                //name = name.split('/');
                 lastIndex = name.length - 1;
 
                 // If wanting node ID compatibility, strip .js from end

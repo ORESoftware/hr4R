@@ -16,10 +16,12 @@ define(
         '#allCollections',
         'ijson',
         'backbone',
-        'underscore'
+        'underscore',
+        '#allCSS',
+        'app/js/cssAdder'
     ],
 
-    function (appState, viewState, io, collections, IJSON, Backbone, _) {
+    function (appState, viewState, io, collections, IJSON, Backbone, _, allCSS, cssAdder) {
 
 
         var socketHotReload = null;
@@ -48,7 +50,7 @@ define(
                 });
 
 
-                socketHotReload.on('hot-reload.ejs', function (data) {
+                socketHotReload.on('hot-reload (.ejs)', function (data) {
 
                     window.hotReloadWithRequire([data],function(err,results){
 
@@ -59,7 +61,7 @@ define(
 
                 });
 
-                socketHotReload.on('hot-reload.JS', function (data) {
+                socketHotReload.on('hot-reload (.js)', function (data) {
 
                     alert(data);
 
@@ -74,6 +76,26 @@ define(
                             Backbone.history.loadUrl(Backbone.history.fragment);
                         });
 
+                    });
+                });
+
+                socketHotReload.on('hot-reload (.css)', function (data) {
+
+
+                    window.hotReloadSimple([data],function(err,result){
+
+                        cssAdder.removeByAttr(data);
+
+                        require(['#allCSS'],function(allCSS){
+                            allCSS['cssx/portal/simple-sidebar.css'] = result;
+                            //allCSS[5] = result;
+                            //allCSS[6] = result;
+
+                            //Backbone.history.stop();
+                            //Backbone.history.start();
+                            //Backbone.Events.trigger('bootRouter','home');
+                            Backbone.history.loadUrl(Backbone.history.fragment);
+                        });
                     });
                 });
             }
