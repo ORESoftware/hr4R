@@ -10,7 +10,7 @@
 define(
     [
         "text!app/templates/dashboardTemplate.ejs",
-		"text!app/templates/footerTempate.ejs",
+		"text!app/templates/footerTemplate.ejs",
 		"text!app/templates/getAllTemplate.ejs",
 		"text!app/templates/headerTemplate.ejs",
 		"text!app/templates/homeTemplate.ejs",
@@ -28,7 +28,7 @@ define(
         return {
 
             "templates/dashboardTemplate.ejs": arguments[0],
-			"templates/footerTempate.ejs": arguments[1],
+			"templates/footerTemplate.ejs": arguments[1],
 			"templates/getAllTemplate.ejs": arguments[2],
 			"templates/headerTemplate.ejs": arguments[3],
 			"templates/homeTemplate.ejs": arguments[4],
