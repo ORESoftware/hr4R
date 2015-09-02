@@ -105,19 +105,19 @@ define(
                     /////////////////////////
 
                     React.render(
-                        <FluxCartApp />,
+                        React.createElement(FluxCartApp, null),
                         $(self.el).find('#react-flux-cart-example-div-id')[0]
                     );
 
                     React.render(
-                        <TimerExample start={Date.now()}/>,
+                        React.createElement(TimerExample, {start: Date.now()}),
                         //self.el
                         //$('#react-timer-example-div-id')[0]
                         $(self.el).find('#react-timer-example-div-id')[0]
                     );
 
                     React.render(
-                        <MenuExample items={ ['Home', 'Services', 'About', 'Contact us'] }/>,
+                        React.createElement(MenuExample, {items:  ['Home', 'Services', 'About', 'Contact us'] }),
                         //$('#react-menu-example-div-id')[0]
                         //document.getElementById('react-menu-example-div-id')
                         $(self.el).find('#react-menu-example-div-id')[0]

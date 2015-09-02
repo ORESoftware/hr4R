@@ -3,40 +3,29 @@
  */
 
 
-console.log('loading #standardViews');
+console.log('loading #allStandardViews');
 
 
 define(
 
     [
-        'jsx!app/js/views/standardViews/dashboardView',
-        'app/js/views/standardViews/headerView',
-        'app/js/views/standardViews/footerView',
-        'app/js/views/standardViews/registeredUsersView',
-        'app/js/views/standardViews/indexView',
-        'app/js/views/standardViews/loginView',
-        'jsx!app/js/views/standardViews/homeView',
-        'jsx!app/js/views/standardViews/pictureView',
-        'app/js/views/standardViews/portalView',
-        'app/js/views/standardViews/userProfileView',
-        'jsx!app/js/views/standardViews/overviewView',
-        'exports'
+        'jsx!app/js/jsx/standardViews/dashboardView',
+        'jsx!app/js/jsx/standardViews/headerView',
+        'jsx!app/js/jsx/standardViews/footerView',
+        'jsx!app/js/jsx/standardViews/registeredUsersView',
+        'jsx!app/js/jsx/standardViews/indexView',
+        'jsx!app/js/jsx/standardViews/loginView',
+        'jsx!app/js/jsx/standardViews/homeView',
+        'jsx!app/js/jsx/standardViews/pictureView',
+        'jsx!app/js/jsx/standardViews/portalView',
+        'jsx!app/js/jsx/standardViews/userProfileView',
+        'jsx!app/js/jsx/standardViews/overviewView'
+
     ],
 
     function (DashboardView, HeaderView, FooterView, RegisteredUsersView,
               IndexView, LoginView, HomeView, PictureView, PortalView,
               UserProfileView, OverviewView, exports) {
-
-
-        //exports.allViews = {
-        //
-        //        Header: HeaderView,
-        //        Footer: FooterView,
-        //        Index: IndexView,
-        //        Login: LoginView,
-        //        Home: HomeView,
-        //        RegisteredUsers: RegisteredUsersView
-        //};
 
 
         return {

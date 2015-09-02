@@ -9,8 +9,8 @@
 
 define(
     [
-        "jsx!app/js/views/relViews/getAll/getAll",
-		"jsx!app/js/views/relViews/jobs/jobsView"
+        "jsx!app/js/jsx/relViews/getAll/getAll",
+		"jsx!app/js/jsx/relViews/jobs/jobsView"
     ],
     function(){
 

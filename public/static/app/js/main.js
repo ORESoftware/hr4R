@@ -21,7 +21,7 @@ console.log('loading app/js/main.js, (1) time:', (Date.now() - window.startDate)
 
 requirejs.config({
     enforceDefine: false,
-    waitSeconds: 7,
+    waitSeconds: 997,
     baseUrl: '/static',
     paths: {
         'async': 'vendor/async',
@@ -50,7 +50,7 @@ requirejs.config({
         '#allReactComponents': 'app/js/meta/allReactComponents',
         '#allRelViews': 'app/js/meta/allRelViews',
         '#allTemplates': 'app/js/meta/allTemplates',
-        '#standardViews': 'app/js/meta/allStandardViews',
+        '#allStandardViews': 'app/js/meta/allStandardViews',
         '#allModels': 'app/js/meta/allModels',
         '#allCollections': 'app/js/meta/allCollections',
         '#appState': 'app/js/appState',
@@ -72,7 +72,7 @@ requirejs.config({
         //'#allReactComponents': {
         //    'deps': ['jsx', 'JSXTransformer']
         //},
-        //'#standardViews': {
+        //'#allStandardViews': {
         //    'deps': ['jsx', 'JSXTransformer']
         //},
         'JSXTransformer': {
@@ -106,7 +106,7 @@ requirejs.config({
 
 console.log('starting app, time:', (Date.now() - window.startDate));
 
-require(['app/js/app','jsx!app/js/views/standardViews/homeView'], function (Application, HomeView) {
+require(['app/js/app','jsx!app/js/jsx/standardViews/homeView'], function (Application, HomeView) {
 
     console.log('Application loaded, (2) time:', (Date.now() - window.startDate));
 

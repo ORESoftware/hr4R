@@ -18,30 +18,61 @@ console.log('loading app/js/giant.js');
 define(
     [
         'jquery',
-        'async'
+        'async',
+        'underscore'
     ],
 
-    function ($,async) {
+    function ($, async,_) {
 
 
-        window.hotReloadSimple = function(item,callback){
+        window.hotReloadSimple = function (item, callback) {
+            console.log('item 1:',item);
 
-                    require.undef(item);
-                    require([item],function(file){
-                        callback(null,file);
-                    });
+            //var orig = _.clone(item);
+
+            //if (item.indexOf('jsx!' === 0)) {
+            //    item = item.substring(4);
+            //}
+            console.log('item 2:',item);
+            require.undef(item);
+
+            //console.log('orig:',orig);
+            require([item], function (file) {
+                callback(null, file);
+            });
+        };
+
+        window.hotReloadSimpleDefine = function (item, callback) {
+            console.log('item 1:',item);
+
+            //var orig = _.clone(item);
+
+            //if (item.indexOf('jsx!' === 0)) {
+            //    item = item.substring(4);
+            //}
+            console.log('item 2:',item);
+            require.undef(item);
+
+            //console.log('orig:',orig);
+            define('qqq',[item], function (file) {
+                return file;
+            });
+
+            require(['qqq'], function (file) {
+                callback(null, file);
+            });
         };
 
 
-        window.hotReloadWithRequire = function(fileArray,callback){
+        window.hotReloadWithRequire = function (fileArray, callback) {
 
             var funcs = [];
 
-            fileArray.forEach(function(item,index){
-                funcs.push(function(cb){
+            fileArray.forEach(function (item, index) {
+                funcs.push(function (cb) {
                     require.undef(item);
-                    require([item],function(file){
-                        cb(null,file);
+                    require([item], function (file) {
+                        cb(null, file);
                     });
 
                     //define([item],function(file){
@@ -51,18 +82,18 @@ define(
                 });
             });
 
-            async.parallel(funcs,function done(err,results){
-                callback(err,results);
+            async.parallel(funcs, function done(err, results) {
+                callback(err, results);
             })
 
         };
 
-        window.hotReloadWithDefine = function(fileArray,callback){
+        window.hotReloadWithDefine = function (fileArray, callback) {
 
             var funcs = [];
 
-            fileArray.forEach(function(item,index){
-                funcs.push(function(cb){
+            fileArray.forEach(function (item, index) {
+                funcs.push(function (cb) {
 
                     require.undef(item);
                     require.undef(String(item).substring(3));
@@ -74,15 +105,15 @@ define(
                     //      cb(null,file);
                     //});
 
-                    require([item],function(file){
-                        cb(null,file);
+                    require([item], function (file) {
+                        cb(null, file);
                     });
 
                 });
             });
 
-            async.parallel(funcs,function done(err,results){
-                callback(err,results);
+            async.parallel(funcs, function done(err, results) {
+                callback(err, results);
             })
 
         };

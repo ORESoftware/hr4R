@@ -52,24 +52,42 @@ define(
 
                 socketHotReload.on('hot-reload (.ejs)', function (data) {
 
-                    window.hotReloadWithRequire([data],function(err,results){
+                    window.hotReloadSimple(data,function(err,result){
 
                         var view = viewState.get('headerView');
-                        view.template = results[0];
+                        view.template = result;
                         view.render();
                     });
 
+                });
+
+                socketHotReload.on('hot-reload (.jsx)', function (data) {
+
+                    alert(data);
+
+                    window.hotReloadSimple(data,function(err,result){
+
+
+                        require(['#allStandardViews'],function(allStandardViews){
+                            allStandardViews['Home'] = result;
+                            //Backbone.history.stop();
+                            //Backbone.history.start();
+                            //Backbone.Events.trigger('bootRouter','home');
+                            Backbone.history.loadUrl(Backbone.history.fragment);
+                        });
+
+                    });
                 });
 
                 socketHotReload.on('hot-reload (.js)', function (data) {
 
                     alert(data);
 
-                    window.hotReloadWithDefine([data],function(err,results){
+                    window.hotReloadSimpleDefine(data,function(err,result){
 
 
-                        require(['#standardViews'],function(allStandardViews){
-                            allStandardViews['Home'] = results[0];
+                        require(['#allStandardViews'],function(allStandardViews){
+                            allStandardViews['Home'] = result;
                             //Backbone.history.stop();
                             //Backbone.history.start();
                             //Backbone.Events.trigger('bootRouter','home');
@@ -82,7 +100,7 @@ define(
                 socketHotReload.on('hot-reload (.css)', function (data) {
 
 
-                    window.hotReloadSimple([data],function(err,result){
+                    window.hotReloadSimple(data,function(err,result){
 
                         cssAdder.removeByAttr(data);
 

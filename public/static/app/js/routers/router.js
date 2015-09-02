@@ -21,7 +21,7 @@ define(
         'async',
         '#allCollections',
         'ijson',
-        '#standardViews',
+        '#allStandardViews',
         'app/js/cssAdder'
     ],
 
@@ -89,11 +89,11 @@ define(
 
             home: function () {
                 var self = this;
-                require(['#allCSS'],function(allCSS){
+                require(['#allCSS','#allStandardViews'],function(allCSS,allStandardViews){
                     self.changeView({
                         //view:allViews.Home,
                         //view: new allViews.Home({el: '#main-content-id'}),
-                        view: new standardViews.Home(),
+                        view: new allStandardViews.Home(),
                         useSidebar: true,
                         cssAdds:[
                             allCSS['cssx/portal/simple-sidebar.css']

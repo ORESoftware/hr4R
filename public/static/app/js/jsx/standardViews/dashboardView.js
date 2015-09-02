@@ -61,7 +61,7 @@ define(
                     ];
 
                     React.render(
-                        <ServiceChooser items={ services } />,
+                        React.createElement(ServiceChooser, {items:  services }),
                         $(self.el).find('#service-chooser-example-div-id')[0]
                     );
 
