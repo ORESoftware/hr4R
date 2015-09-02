@@ -100,7 +100,7 @@ define(
                     // Load Mock API Call
                     CartAPI.getProductData();
 
-                    ////////////////////////////
+                    /////////////////////////////
 
                     React.render(
                         <FluxCartApp />,
@@ -115,6 +115,7 @@ define(
                         $(self.el).find('#react-timer-example-div-id')[0]
                     );
 
+
                     React.render(
                         <MenuExample items={ ['Home', 'Services', 'About', 'Contact us'] }/>,
                         //$('#react-menu-example-div-id')[0]
@@ -122,7 +123,7 @@ define(
                         $(self.el).find('#react-menu-example-div-id')[0]
                     );
 
-                    ///////////////////
+                    ////////////////////
 
                     console.log('HomeView (re)rendered');
 

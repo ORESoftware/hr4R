@@ -47,7 +47,6 @@ console.log('loading app/js/APP.js');
 
 define(
     [
-        //'d3',
         '#patches',
         'app/js/hotReload',
         'app/js/boot',
@@ -63,9 +62,6 @@ define(
         '#allControllers',
         '#allRelViews',
         '#allCSS'
-        //'app/js/giant'
-
-
     ],
 
     function (patches, hotReload, boot, Observe, Backbone, _, IJSON,
@@ -73,9 +69,9 @@ define(
               allControllers, allRelViews, allCSS) {
 
 
-        'debugger;'; //debugger should stop here
+        /////////////////////////////////////
         debugger; //debugger should stop here
-        "debugger;";
+        /////////////////////////////////////
 
         /*
          we don't use the majority of these dependencies in this file, but they are loaded here so that r.js can build
