@@ -9,21 +9,21 @@
 
 define(
     [
-        "jsx!app/js/jsx/reactComponents/FluxCart",
-		"jsx!app/js/jsx/reactComponents/FluxCartApp",
-		"jsx!app/js/jsx/reactComponents/FluxProduct",
-		"jsx!app/js/jsx/reactComponents/Item",
-		"jsx!app/js/jsx/reactComponents/Job",
-		"jsx!app/js/jsx/reactComponents/JobsList",
-		"jsx!app/js/jsx/reactComponents/listView",
-		"jsx!app/js/jsx/reactComponents/MenuExample",
-		"jsx!app/js/jsx/reactComponents/Picture",
-		"jsx!app/js/jsx/reactComponents/PictureList",
-		"jsx!app/js/jsx/reactComponents/RealTimeSearchView",
-		"jsx!app/js/jsx/reactComponents/Service",
-		"jsx!app/js/jsx/reactComponents/ServiceChooser",
-		"jsx!app/js/jsx/reactComponents/TimerExample",
-		"jsx!app/js/jsx/reactComponents/todoList"
+        "app/js/jsx/reactComponents/FluxCart",
+		"app/js/jsx/reactComponents/FluxCartApp",
+		"app/js/jsx/reactComponents/FluxProduct",
+		"app/js/jsx/reactComponents/Item",
+		"app/js/jsx/reactComponents/Job",
+		"app/js/jsx/reactComponents/JobsList",
+		"app/js/jsx/reactComponents/listView",
+		"app/js/jsx/reactComponents/MenuExample",
+		"app/js/jsx/reactComponents/Picture",
+		"app/js/jsx/reactComponents/PictureList",
+		"app/js/jsx/reactComponents/RealTimeSearchView",
+		"app/js/jsx/reactComponents/Service",
+		"app/js/jsx/reactComponents/ServiceChooser",
+		"app/js/jsx/reactComponents/TimerExample",
+		"app/js/jsx/reactComponents/todoList"
     ],
     function(){
 

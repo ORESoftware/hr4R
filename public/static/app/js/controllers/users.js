@@ -14,7 +14,7 @@ define(
     function ($, _, Backbone,  allCollections) {
         return {
             getAll: function (id, changeViewFunction) {
-                require(['jsx!app/js/views/relViews/getAll/getAll'], function (View) {
+                require(['app/js/jsx/relViews/getAll/getAll'], function (View) {
                     var view = new View({
                         collection: allCollections.users
                     });
@@ -40,7 +40,7 @@ define(
             },
             Users: function (id, changeViewFunction) {
 
-                require(['jsx!app/js/views/Users/UsersView'], function (View) {
+                require(['app/js/jsx/Users/UsersView'], function (View) {
 
                     var viewOpts = {};
                     viewOpts.id = id;

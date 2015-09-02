@@ -8,8 +8,8 @@ define(
     [
         'react',
         //'#allReactComponents',
-        "jsx!app/js/views/reactComponents/FluxCart",
-        "jsx!app/js/views/reactComponents/FluxProduct",
+        "app/js/jsx/reactComponents/FluxCart",
+        "app/js/jsx/reactComponents/FluxProduct",
         //'app/js/ReactComponentMediator',
         '#allCollections',
         '#allModels',

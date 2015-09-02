@@ -4,8 +4,8 @@
 
 //TODO:https://www.safaribooksonline.com/library/view/developing-backbonejs-applications/9781449328535/ch04s03.html
 //TODO: http://www.svlada.com/require-js-optimization-part2/#t2
-
 //TODO: http://tutorialzine.com/2014/07/5-practical-examples-for-learning-facebooks-react-framework/
+
 
 console.log('loading homeView');
 
@@ -90,7 +90,7 @@ define(
 
                     var self = this;
 
-                    alert('PXpppppXX');/////////////////
+                    alert('PXpppppXX');///////////////
 
                     var ret = EJS.render(HomeView.template, {});
 
@@ -102,7 +102,7 @@ define(
                     // Load Mock API Call
                     CartAPI.getProductData();
 
-                    /////////////////////////
+                    ////////////////////////////
 
                     React.render(
                         React.createElement(FluxCartApp, null),
@@ -123,7 +123,7 @@ define(
                         $(self.el).find('#react-menu-example-div-id')[0]
                     );
 
-                    //////////////////
+                    ///////////////////
 
                     console.log('HomeView (re)rendered');
 

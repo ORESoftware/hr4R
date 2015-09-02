@@ -1,7 +1,10 @@
-//https://github.com/gulpjs/gulp/issues/1186
-//https://medium.com/@webprolific/getting-gulpy-a2010c13d3d5
+/**
+ * Created by amills001c on 6/9/15.
+ */
 
-//TODO:https://github.com/wix/react-templates
+//TODO: https://github.com/gulpjs/gulp/issues/1186
+//TODO: https://medium.com/@webprolific/getting-gulpy-a2010c13d3d5
+//TODO: https://github.com/wix/react-templates
 
 
 //core
@@ -72,7 +75,7 @@ var metagens = {
         inputFolder: './public/static/app/js/flux/constants',
         appendThisToDependencies: 'app/js/flux/',
         appendThisToReturnedItems: '',
-        eliminateSharedFolder: true,
+        eliminateSharedFolder: false,
         output: './public/static/app/js/meta/allFluxConstants.js'
     },
     "flux-actions": {
@@ -84,14 +87,14 @@ var metagens = {
     },
     "relative-views": {
         inputFolder: './public/static/app/js/jsx/relViews',
-        appendThisToDependencies: 'jsx!app/js/jsx/',
+        appendThisToDependencies: 'app/js/jsx/',
         appendThisToReturnedItems: '',
         eliminateSharedFolder: false,
         output: './public/static/app/js/meta/allRelViews.js'
     },
     "react-components": {
         inputFolder: './public/static/app/js/jsx/reactComponents',
-        appendThisToDependencies: 'jsx!app/js/jsx/',
+        appendThisToDependencies: 'app/js/jsx/',
         appendThisToReturnedItems: '',
         eliminateSharedFolder: false,
         output: './public/static/app/js/meta/allReactComponents.js'
@@ -141,9 +144,15 @@ gulp.task('watch:all', function () {
 
 });
 
+function replaceAll(str, target, replacement) {
+    return str.split(target).join(replacement);
+}
 
 function reconcilePathForRequireJS(file) {
-    var folderz = String(file.path).split('/');
+
+    var filepath = replaceAll(path.normalize(String(path.resolve(file.path))), '\\', '/');
+
+    var folderz = String(filepath).split('/');
     var folds = [];
 
     var add = false;
@@ -173,21 +182,22 @@ gulp.task('watch:hot-reload', function () {
         io.sockets.emit('hot-reload (.ejs)', reconciledPath);
     });
 
-    gulp.watch('./public/static/app/js/jsx/**/*.js').on('change', function (file) {
+    gulp.watch('./public/static/app/js/views/**/*.js').on('change', function (file) {
 
         var reconciledPath = reconcilePathForRequireJS(file);
-        reconciledPath = 'jsx!' + reconciledPath.substring(0, reconciledPath.length - 3);
+        reconciledPath = reconciledPath.replace('views', 'jsx');
+        reconciledPath = reconciledPath.substring(0, reconciledPath.length - 3);
 
         io.sockets.emit('hot-reload (.jsx)', reconciledPath);
     });
 
-    gulp.watch('./public/static/app/js/views/**/*.js').on('change', function (file) {
-
-        var reconciledPath = reconcilePathForRequireJS(file);
-        reconciledPath = 'jsx!' + reconciledPath.substring(0, reconciledPath.length - 3);
-
-        io.sockets.emit('hot-reload (.js)', reconciledPath);
-    });
+    //gulp.watch('./public/static/app/js/views/**/*.js').on('change', function (file) {
+    //
+    //    var reconciledPath = reconcilePathForRequireJS(file);
+    //    reconciledPath = 'jsx!' + reconciledPath.substring(0, reconciledPath.length - 3);
+    //
+    //    io.sockets.emit('hot-reload (.js)', reconciledPath);
+    //});
 
     gulp.watch('./public/static/cssx/**/*.css').on('change', function (file) {
 
@@ -199,19 +209,33 @@ gulp.task('watch:hot-reload', function () {
 
 });
 
-gulp.task('transpile-jsx', ['metagen:all'], function () {
+gulp.task('transpile-jsx', function () {
     return gulp.src('./public/static/app/js/views/**/*.js')
         .pipe(react({harmony: false}))
         .pipe(gulp.dest('./public/static/app/js/jsx'));
 });
 
 
-gulp.task('dependenttask', ['mytask'], function () {
-    //do stuff after 'mytask' is done.
+function transpileFile(file) {
+
+    var dest = file.path.replace('views', 'jsx');
+
+    return gulp.src(file.path)
+        .pipe(react({harmony: false}))
+        .pipe(gulp.dest(dest));
+}
+
+
+//gulp.watch('./public/static/app/js/views/**/*.js',function(file){
+//    transpileFile(file);
+//});
+
+gulp.watch('./public/static/app/js/views/**/*.js', function (file) {
+    gulp.start('transpile-jsx');
 });
 
 
-gulp.task('metagen:all', function (done) {
+gulp.task('metagen:all', ['transpile-jsx'], function (done) {
 
     var taskNames = Object.keys(metagens);
     var funcs = [];
@@ -230,7 +254,7 @@ gulp.task('metagen:all', function (done) {
 });
 
 
-gulp.task('default', ['transpile-jsx', 'metagen:all', 'watch:all', 'watch:hot-reload'], function (done) {
+gulp.task('default', ['transpile-jsx', 'watch:all', 'watch:hot-reload'], function (done) {
 
     done();
 

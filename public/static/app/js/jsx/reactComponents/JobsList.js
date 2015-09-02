@@ -13,7 +13,7 @@
 define(
     [
         'react',
-        'jsx!app/js/views/reactComponents/Job'
+        'app/js/jsx/reactComponents/Job'
     ],
 
     function (React, Job) {

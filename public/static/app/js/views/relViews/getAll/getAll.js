@@ -13,9 +13,8 @@ define(
         'app/js/Adhesive',
         'backbone',
         'react',
-        'jsx!app/js/views/reactComponents/listView',
+        'app/js/jsx/reactComponents/listView',
         '#allTemplates'
-        //'text!app/templates/GetAllTemplate.ejs'
     ],
 
 

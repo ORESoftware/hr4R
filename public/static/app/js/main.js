@@ -36,9 +36,6 @@ requirejs.config({
         'backbone': 'vendor/backbone',
         'bootstrap': 'vendor/bootstrap',
         'backbone-validation': 'vendor/backbone-validation-amd',
-        'jsx': "vendor/jsx",
-        //'jsx': "vendor/require-jsx",
-        'JSXTransformer': 'vendor/JSXTransformer',
         'observe': 'vendor/observe',
         'react':'vendor/react-with-addons',
         //'react': 'vendor/react',
@@ -66,18 +63,7 @@ requirejs.config({
     },
 
     'shim': {
-        //'homeTemplate':{
-        //    'deps': ['text']
-        //},
-        //'#allReactComponents': {
-        //    'deps': ['jsx', 'JSXTransformer']
-        //},
-        //'#allStandardViews': {
-        //    'deps': ['jsx', 'JSXTransformer']
-        //},
-        'JSXTransformer': {
-            exports: "JSXTransformer"
-        },
+
         'underscore': {
             'exports': '_'
         },
@@ -91,22 +77,13 @@ requirejs.config({
         ejs: {
             exports: "ejs"
         }
-    },
-    jsx: {
-        fileExtension: '.js'
     }
-    //map: {
-    //    '*': {
-    //        'css': 'vendor/css.min' // or whatever the path to require-css is
-    //        //'css-builder': 'vendor/css-builder',
-    //        //'normalize' : 'vendor/normalize'jsx!app/js/views/standardViews/homeView
-    //    }
-    //}
+
 });
 
 console.log('starting app, time:', (Date.now() - window.startDate));
 
-require(['app/js/app','jsx!app/js/jsx/standardViews/homeView'], function (Application, HomeView) {
+require(['app/js/app'], function (Application, HomeView) {
 
     console.log('Application loaded, (2) time:', (Date.now() - window.startDate));
 

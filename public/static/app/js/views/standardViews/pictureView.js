@@ -12,7 +12,7 @@ define(
         'underscore',
         'backbone',
         'react',
-        'jsx!app/js/views/reactComponents/PictureList',
+        'app/js/jsx/reactComponents/PictureList',
         'text!app/templates/pictureTemplate.ejs'
     ],
 

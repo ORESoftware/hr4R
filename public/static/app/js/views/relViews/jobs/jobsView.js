@@ -18,9 +18,8 @@ define(
         'app/js/Adhesive',
         'backbone',
         'react',
-        'jsx!app/js/views/reactComponents/JobsList',
+        'app/js/jsx/reactComponents/JobsList',
         '#allTemplates'
-        //'text!app/templates/jobsTemplate.ejs'
     ],
 
 

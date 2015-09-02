@@ -12,7 +12,7 @@ define(
         'underscore',
         'backbone',
         'react',
-        'jsx!app/js/views/reactComponents/RealTimeSearchView',
+        'app/js/jsx/reactComponents/RealTimeSearchView',
         'text!app/templates/overviewTemplate.ejs'
     ],
 

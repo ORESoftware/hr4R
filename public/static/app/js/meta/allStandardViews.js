@@ -9,17 +9,17 @@ console.log('loading #allStandardViews');
 define(
 
     [
-        'jsx!app/js/jsx/standardViews/dashboardView',
-        'jsx!app/js/jsx/standardViews/headerView',
-        'jsx!app/js/jsx/standardViews/footerView',
-        'jsx!app/js/jsx/standardViews/registeredUsersView',
-        'jsx!app/js/jsx/standardViews/indexView',
-        'jsx!app/js/jsx/standardViews/loginView',
-        'jsx!app/js/jsx/standardViews/homeView',
-        'jsx!app/js/jsx/standardViews/pictureView',
-        'jsx!app/js/jsx/standardViews/portalView',
-        'jsx!app/js/jsx/standardViews/userProfileView',
-        'jsx!app/js/jsx/standardViews/overviewView'
+        'app/js/jsx/standardViews/dashboardView',
+        'app/js/jsx/standardViews/headerView',
+        'app/js/jsx/standardViews/footerView',
+        'app/js/jsx/standardViews/registeredUsersView',
+        'app/js/jsx/standardViews/indexView',
+        'app/js/jsx/standardViews/loginView',
+        'app/js/jsx/standardViews/homeView',
+        'app/js/jsx/standardViews/pictureView',
+        'app/js/jsx/standardViews/portalView',
+        'app/js/jsx/standardViews/userProfileView',
+        'app/js/jsx/standardViews/overviewView'
 
     ],
 

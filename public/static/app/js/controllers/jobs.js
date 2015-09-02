@@ -16,7 +16,7 @@ define(
     function ($, _, Backbone, allCollections, allCSS) {
         return {
             getAll: function (id, changeViewCallback) {
-                require(['jsx!app/js/views/relViews/getAll/getAll'], function (View) {
+                require(['app/js/jsx/relViews/getAll/getAll'], function (View) {
                     var view = new View({
                         collection: allCollections.jobs
                     });
@@ -35,7 +35,7 @@ define(
                 });
             },
             make: function () {
-                require(['jsx!app/js/views/relViews/getAll'], function (view) {
+                require(['app/js/jsx/relViews/getAll'], function (view) {
                     view.render();
                 });
             },
@@ -46,7 +46,7 @@ define(
             },
             jobs: function (id, changeViewFunction) {
 
-                require(['jsx!app/js/views/relViews/jobs/jobsView'], function (View) {
+                require(['app/js/jsx/relViews/jobs/jobsView'], function (View) {
 
                     var viewOpts = {};
                     viewOpts.id = id;
