@@ -63,7 +63,7 @@ define(
 
                 socketHotReload.on('hot-reload (.jsx)', function (data) {
 
-                    alert(data);
+                    //alert(data);
 
                     window.hotReloadSimple(data,function(err,result){
 
@@ -81,7 +81,7 @@ define(
 
                 socketHotReload.on('hot-reload (.js)', function (data) {
 
-                    alert(data);
+                    //alert(data);
 
                     window.hotReloadSimpleDefine(data,function(err,result){
 

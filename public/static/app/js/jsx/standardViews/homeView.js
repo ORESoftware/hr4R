@@ -90,8 +90,6 @@ define(
 
                     var self = this;
 
-                    alert('PXpppppXX');///////////////
-
                     var ret = EJS.render(HomeView.template, {});
 
                     self.$el.html(ret);
@@ -108,6 +106,7 @@ define(
                         React.createElement(FluxCartApp, null),
                         $(self.el).find('#react-flux-cart-example-div-id')[0]
                     );
+
 
                     React.render(
                         React.createElement(TimerExample, {start: Date.now()}),
