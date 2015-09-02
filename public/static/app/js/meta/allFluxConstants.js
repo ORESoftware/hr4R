@@ -15,6 +15,6 @@ define(
 
         return {
 
-            "constants/FluxCartConstants": arguments[0]
+            "FluxCartConstants": arguments[0]
         }
   });

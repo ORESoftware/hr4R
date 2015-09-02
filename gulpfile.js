@@ -45,168 +45,98 @@ io.on('connection', function (socket) {
  */
 
 
-/*
+var metagens = {
 
- gulp.task('bbb1', function (cb) {
- grm('../testData/one',
- 'jsx!app/js/views/',
- '',
- true,
- '../testResults/test_one_results.js',
- function () {
- cb();
- })
- });
-
- var opts = {
- inputFolder: '../testData/one',
- appendThisToDependencies: 'jsx!app/js/views/',
- appendThisToReturnedItems: 'dude-',
- eliminateSharedFolder: true,
- output: '../testResults/test_one_results.js'
- };
-
- */
-
-
-gulp.task('[metagen] css', function () {
-
-    //cb = _.once(cb);
-
-    var filepath = './public/static/cssx';
-
-    gulp.watch(filepath + '/**/*.*').on('change', function (file) {
-        meta();
-    });
-
-    function meta() {
-        grm(filepath, 'text!', '', false, './public/static/app/js/meta/allCSS.js', function () {
-            //cb();
-        })
+    "controllers": {
+        inputFolder: './public/static/app/js/controllers',
+        appendThisToDependencies: 'app/js/',
+        appendThisToReturnedItems: '',
+        eliminateSharedFolder: false,
+        output: './public/static/app/js/meta/allControllers.js'
+    },
+    "templates": {
+        inputFolder: './public/static/app/templates',
+        appendThisToDependencies: 'text!app/',
+        appendThisToReturnedItems: '',
+        eliminateSharedFolder: false,
+        output: './public/static/app/js/meta/allTemplates.js'
+    },
+    "css": {
+        inputFolder: './public/static/cssx',
+        appendThisToDependencies: 'text!',
+        appendThisToReturnedItems: '',
+        eliminateSharedFolder: false,
+        output: './public/static/app/js/meta/allCSS.js'
+    },
+    "flux-constants": {
+        inputFolder: './public/static/app/js/flux/constants',
+        appendThisToDependencies: 'app/js/flux/',
+        appendThisToReturnedItems: '',
+        eliminateSharedFolder: true,
+        output: './public/static/app/js/meta/allFluxConstants.js'
+    },
+    "flux-actions": {
+        inputFolder: './public/static/app/js/flux/actions',
+        appendThisToDependencies: 'app/js/flux/',
+        appendThisToReturnedItems: '',
+        eliminateSharedFolder: false,
+        output: './public/static/app/js/meta/allFluxActions.js'
+    },
+    "relative-views": {
+        inputFolder: './public/static/app/js/jsx/relViews',
+        appendThisToDependencies: 'jsx!app/js/jsx/',
+        appendThisToReturnedItems: '',
+        eliminateSharedFolder: false,
+        output: './public/static/app/js/meta/allRelViews.js'
+    },
+    "react-components": {
+        inputFolder: './public/static/app/js/jsx/reactComponents',
+        appendThisToDependencies: 'jsx!app/js/jsx/',
+        appendThisToReturnedItems: '',
+        eliminateSharedFolder: false,
+        output: './public/static/app/js/meta/allReactComponents.js'
     }
 
-    meta();
-
-});
+};
 
 
-gulp.task('[metagen] flux-constants', function () {
-
-    //cb = _.once(cb);
-
-    var filepath = './public/static/app/js/flux/constants';
-
-    gulp.watch(filepath + '/**/*.*').on('change', function (file) {
-        meta();
-    });
-
-
-    function meta() {
-        grm(filepath, 'app/js/flux/', '', false, './public/static/app/js/meta/allFluxConstants.js', function () {
-            //cb();
-        })
-    }
-
-    meta();
-
-});
-
-
-gulp.task('[metagen] flux-actions', function () {
-
-    //cb = _.once(cb);
-
-    var filepath = './public/static/app/js/flux/actions';
-
-
-    gulp.watch(filepath + '/**/*.*').on('change', function (file) {
-        meta();
-    });
-
-
-    function meta() {
-        grm(filepath, 'app/js/flux/', '', false, './public/static/app/js/meta/allFluxActions.js', function () {
-            //cb();
-        })
-    }
-
-    meta();
-
-});
-
-
-gulp.task('[metagen] react-components', function () {
-
-    //cb = _.once(cb);
-
-    //var filepath = './public/static/app/js/views/reactComponents';
-    var filepath = './public/static/app/js/jsx/reactComponents';
-
-    function meta() {
-        grm(filepath, 'jsx!app/js/jsx/', '', false, './public/static/app/js/meta/allReactComponents.js', function () {
-            //cb();
-        })
-    }
-
-    gulp.watch(filepath + '/**/*.*').on('change', function (file) {
-        meta();
-    });
-
-    meta();
-
-});
-
-
-gulp.task('[metagen] relative-views', function () {
-
-    //cb = _.once(cb);
-
-    //var filepath = './public/static/app/js/views/relViews';
-    var filepath = './public/static/app/js/jsx/relViews';
-
-    function meta() {
-        grm(filepath, 'jsx!app/js/jsx/', '', false, './public/static/app/js/meta/allRelViews.js', function () {
-            //cb();
-        })
-    }
-
-    gulp.watch(filepath + '/**/*.*').on('change', function (file) {
-        meta();
-    });
-
-    meta();
-
-});
+function runMetagen(opts, cb) {
+    grm(opts, function (err, res) {
+        if (typeof cb === 'function') {
+            cb(err, res)
+        }
+    })
+}
 
 
 gulp.task('watch:all', function () {
 
     gulp.watch('./public/static/app/templates/**/*.*').on('change', function (file) {
-        gulp.start('[metagen] templates');
+        runMetagen(metagens.templates, null);
     });
 
     gulp.watch('./public/static/app/js/controllers/**/*.*').on('change', function (file) {
-        gulp.start('[metagen] controllers');
+        runMetagen(metagens.controllers, null);
     });
 
     gulp.watch('./public/static/app/js/jsx/relViews/**/*.*').on('change', function (file) {
-        gulp.start('[metagen] relative-views');
+        runMetagen(metagens['relative-views'], null);
     });
 
-});
+    gulp.watch('./public/static/app/js/jsx/reactComponents/**/*.*').on('change', function (file) {
+        runMetagen(metagens['react-components'], null);
+    });
 
+    gulp.watch('./public/static/cssx/**/*.*').on('change', function (file) {
+        runMetagen(metagens['css'], null);
+    });
 
-gulp.task('[metagen] controllers', function (done) {
-    grm('./public/static/app/js/controllers', 'app/js/', '', false, './public/static/app/js/meta/allControllers.js', function () {
-        done();
-    })
-});
+    gulp.watch('./public/static/app/js/flux/constants/**/*.*').on('change', function (file) {
+        runMetagen(metagens['flux-constants'], null);
+    });
 
-
-gulp.task('[metagen] templates', function (done) {
-
-    grm('./public/static/app/templates', 'text!app/', '', false, './public/static/app/js/meta/allTemplates.js', function (err, msg) {
-        done(err, msg);
+    gulp.watch('./public/static/app/js/flux/actions/**/*.*').on('change', function (file) {
+        runMetagen(metagens['flux-actions'], null);
     });
 
 });
@@ -283,21 +213,15 @@ gulp.task('dependenttask', ['mytask'], function () {
 
 gulp.task('metagen:all', function (done) {
 
-    var taskNames = Object.keys(this.tasks);
-
-    console.log(taskNames);
-
+    var taskNames = Object.keys(metagens);
     var funcs = [];
 
     taskNames.forEach(function (name, index) {
-        if (name.indexOf('[metagen]') === 0) {
-            funcs.push(function (cb) {
-                gulp.start(name, function (err, msg) {
-                    console.log('done with gulp task:', name);
-                    cb();
-                });
-            })
-        }
+        funcs.push(function (cb) {
+            runMetagen(metagens[name], function (err, res) {
+                cb(err, res)
+            });
+        })
     });
 
     async.parallel(funcs, function (err, results) {
@@ -306,8 +230,9 @@ gulp.task('metagen:all', function (done) {
 });
 
 
-gulp.task('default', ['transpile-jsx', 'metagen:all', 'watch:hot-reload'], function () {
+gulp.task('default', ['transpile-jsx', 'metagen:all', 'watch:all', 'watch:hot-reload'], function (done) {
 
+    done();
 
 });
 
