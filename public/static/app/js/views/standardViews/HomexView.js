@@ -33,13 +33,8 @@ define(
               BackboneValidation, React, allReactComponents, allTemplates, allFluxActions) {
 
 
-        var FluxCartApp = allReactComponents['reactComponents/FluxCartApp'];
-        var TimerExample = allReactComponents['reactComponents/TimerExample'];
-        var MenuExample = allReactComponents['reactComponents/MenuExample'];
-
         var FluxCartActions = allFluxActions['actions/FluxCartActions'];
 
-        var template = allTemplates['templates/homeTemplate.ejs'];
 
         /** @jsx React.DOM */
         var HomeView = Backbone.View.extend({
@@ -85,50 +80,53 @@ define(
                 },
 
 
-                render: function () {
-                    console.log('attempting to render HomeView.');
+                render: function (cb) {
 
                     var self = this;
 
-                    var ret = EJS.render(HomeView.template, {});
+                    require(['#allTemplates','#allReactComponents'],function(allTemplates, allReactComponents){
 
-                    self.$el.html(ret);
+                        var ret = EJS.render(allTemplates['templates/homeTemplate.ejs'], {});
 
-                    // Load Mock Product Data into localStorage
-                    ProductData.init();
+                        self.$el.html(ret);
 
-                    // Load Mock API Call
-                    CartAPI.getProductData();
+                        // Load Mock Product Data into localStorage
+                        ProductData.init();
 
-                    /////////////////////////////
+                        // Load Mock API Call
+                        CartAPI.getProductData();
 
-                    React.render(
-                        <FluxCartApp />,
-                        $(self.el).find('#react-flux-cart-example-div-id')[0]
-                    );
+                        var FluxCartApp = allReactComponents['reactComponents/FluxCartApp'];
+                        var TimerExample = allReactComponents['reactComponents/TimerExample'];
+                        var MenuExample = allReactComponents['reactComponents/MenuExample'];
 
-
-                    React.render(
-                        <TimerExample start={Date.now()}/>,
-                        //self.el
-                        //$('#react-timer-example-div-id')[0]
-                        $(self.el).find('#react-timer-example-div-id')[0]
-                    );
+                        React.render(
+                            <FluxCartApp />,
+                            $(self.el).find('#react-flux-cart-example-div-id')[0]
+                        );
 
 
-                    React.render(
-                        <MenuExample items={ ['Home', 'Services', 'About', 'Contact us'] }/>,
-                        //$('#react-menu-example-div-id')[0]
-                        //document.getElementById('react-menu-example-div-id')
-                        $(self.el).find('#react-menu-example-div-id')[0]
-                    );
-
-                    ////////////////////
-
-                    console.log('HomeView (re)rendered');
+                        React.render(
+                            <TimerExample start={Date.now()}/>,
+                            //self.el
+                            //$('#react-timer-example-div-id')[0]
+                            $(self.el).find('#react-timer-example-div-id')[0]
+                        );
 
 
-                    return this;
+                        React.render(
+                            <MenuExample items={ ['Home', 'Services', 'About', 'Contact us'] }/>,
+                            //$('#react-menu-example-div-id')[0]
+                            //document.getElementById('react-menu-example-div-id')
+                            $(self.el).find('#react-menu-example-div-id')[0]
+                        );
+
+                        if(typeof cb === 'function'){
+                            cb();
+                        }
+
+                    });
+
                 },
                 handleModelSyncSuccess: function () {
                     console.log('model sync success');
@@ -140,7 +138,7 @@ define(
             },
 
             { //class properties
-                template: template
+                //template: template
             }
         );
 

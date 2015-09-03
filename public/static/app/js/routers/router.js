@@ -344,7 +344,6 @@ define(
 
         function continueOn(opts) {
 
-
             /*
 
              each controller action has a collection defined for it
@@ -357,16 +356,13 @@ define(
 
              and fetching should only happen for collections that are needed for the next view
 
+             TODO: ejs.update()
+             TODO: http://danhough.com/blog/backbone-view-inheritance/
+
              */
 
 
-            //TODO: ejs.update()
-            //TODO: http://danhough.com/blog/backbone-view-inheritance/
-
-
-            //if (appGlobal.currentUser == null || appGlobal.authorized === false) {
-
-            //if (appState.get('authorized') !== true) {
+            var self = this;
 
             if (!appState.currentUserSessionIsOK()) {
                 if (this.viewState.get('mainView') != null) {
@@ -385,10 +381,13 @@ define(
                     this.viewState.set('headerView', new standardViews['HeaderView']());
                 }
                 this.viewState.get('headerView').render();
-                //this.viewState.get('mainView').render();
-                $('#main-div-id').html(this.viewState.get('mainView').render().el);
-                this.viewState.get('footerView').render();
 
+                //$('#main-div-id').html(this.viewState.get('mainView').render().el);
+                this.viewState.get('mainView').render(function(){
+                    $('#main-div-id').html(self.viewState.get('mainView').el);
+                });
+
+                this.viewState.get('footerView').render();
 
             }
             else { //user is authenticated/authorized
@@ -441,12 +440,24 @@ define(
                 this.viewState.get('headerView').render();
 
                 //**render mainView**
+                //if (this.viewState.get('mainView').givenName !== '@IndexView') {
+                //    $('#main-content-id').html(this.viewState.get('mainView').render().el);
+                //}
+                //else {
+                //    $('#main-div-id').html(this.viewState.get('mainView').render().el);
+                //}
+
                 if (this.viewState.get('mainView').givenName !== '@IndexView') {
-                    $('#main-content-id').html(this.viewState.get('mainView').render().el);
+                    this.viewState.get('mainView').render(function(){
+                        $('#main-content-id').html(self.viewState.get('mainView').el)
+                    });
                 }
                 else {
-                    $('#main-div-id').html(this.viewState.get('mainView').render().el);
+                    this.viewState.get('mainView').render(function(){
+                        $('#main-div-id').html(self.viewState.get('mainView').el);
+                    });
                 }
+
 
                 //**render footer**
                 this.viewState.get('footerView').render();

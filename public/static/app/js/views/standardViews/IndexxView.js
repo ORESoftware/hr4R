@@ -14,21 +14,14 @@ define(
         'jquery',
         'underscore',
         'backbone',
-        'backbone-validation',
-        'text!app/templates/indexTemplate.ejs'
+        'backbone-validation'
     ],
 
 
-    function (appState, collections, EJS, $, _, Backbone, BackboneValidation, template) {
+    function (appState, collections, EJS, $, _, Backbone, BackboneValidation) {
 
-
-        //var LoginView = standardViews.Login;
-        //var RegisteredUsersView = standardViews.RegisteredUsers;
 
         var IndexView = Backbone.View.extend({
-
-
-                //el: '#main-div-id',
 
                 defaults: function () {
                     return {
@@ -67,34 +60,32 @@ define(
 
                 //http://stackoverflow.com/questions/7113049/backbone-js-nesting-views-through-templating
 
-                render: function () {
-                    console.log('attempting to render IndexView.');
+                render: function (cb) {
 
                     var data = this.collection.models;
                     var self = this;
 
-                    var ret = EJS.render(IndexView.template, {
-                        users: data
-                    });
 
-                    this.$el.html(ret);
+                    require(['#allTemplates','#allStandardViews'],function(allTemplates,asv){
 
+                        var ret = EJS.render(allTemplates['templates/indexTemplate.ejs'], {
+                            users: data
+                        });
 
-                    require(['#allStandardViews'],function(asv){
+                        self.$el.html(ret);
 
-                        self.childViews.childLoginView = new asv['LoginView']({el: this.$('#child-view-login-container')});
+                        self.childViews.childLoginView = new asv['LoginView']({el: self.$('#child-view-login-container')});
                         self.childViews.childLoginView.render();
                         self.childViews.childLoginView.delegateEvents();
 
-                        self.childViews.childRegisteredUsersView = new asv['RegisteredUsersView']({el: this.$('#child-view-registered-users-container')});
+                        self.childViews.childRegisteredUsersView = new asv['RegisteredUsersView']({el: self.$('#child-view-registered-users-container')});
                         self.childViews.childRegisteredUsersView.render();
                         self.childViews.childRegisteredUsersView.delegateEvents();
+
+                        if(typeof cb === 'function'){
+                            cb();
+                        }
                     });
-
-                    console.log('IndexView rendered');
-
-                    return this;
-
                 },
 
                 onFetchSuccess: function () {
@@ -109,7 +100,7 @@ define(
                 }
             },
             { //class properties
-                template: template
+                //template: template
             });
 
 

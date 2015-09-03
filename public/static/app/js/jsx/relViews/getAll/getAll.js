@@ -44,18 +44,9 @@ define(
 
                 },
 
-                render: function () {
+                render: function (cb) {
 
                     var self = this;
-
-                    //var ret = EJS.render(GetAllView.template, {
-                    //    model: self.model,
-                    //    collection: self.collection
-                    //});
-                    //
-                    //self.$el.html(ret);
-
-                    //var listView = ListView(self.collection);
 
 
                     React.render(
@@ -65,7 +56,9 @@ define(
                     );
 
                     //TODO: make React.render work with this.el or this.$el
-                    return this;
+                    if(typeof cb === 'function'){
+                        cb();
+                    }
                 }
             },
             {

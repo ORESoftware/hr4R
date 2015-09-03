@@ -29,20 +29,20 @@ define(
 
         return {
 
-            "reactComponents/FluxCart": arguments[0],
-			"reactComponents/FluxCartApp": arguments[1],
-			"reactComponents/FluxProduct": arguments[2],
-			"reactComponents/Item": arguments[3],
-			"reactComponents/Job": arguments[4],
-			"reactComponents/JobsList": arguments[5],
-			"reactComponents/MenuExample": arguments[6],
-			"reactComponents/Picture": arguments[7],
-			"reactComponents/PictureList": arguments[8],
-			"reactComponents/RealTimeSearchView": arguments[9],
-			"reactComponents/Service": arguments[10],
-			"reactComponents/ServiceChooser": arguments[11],
-			"reactComponents/TimerExample": arguments[12],
-			"reactComponents/listView": arguments[13],
-			"reactComponents/todoList": arguments[14]
+            "FluxCart": arguments[0],
+			"FluxCartApp": arguments[1],
+			"FluxProduct": arguments[2],
+			"Item": arguments[3],
+			"Job": arguments[4],
+			"JobsList": arguments[5],
+			"MenuExample": arguments[6],
+			"Picture": arguments[7],
+			"PictureList": arguments[8],
+			"RealTimeSearchView": arguments[9],
+			"Service": arguments[10],
+			"ServiceChooser": arguments[11],
+			"TimerExample": arguments[12],
+			"listView": arguments[13],
+			"todoList": arguments[14]
         }
   });

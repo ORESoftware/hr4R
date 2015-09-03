@@ -96,7 +96,7 @@ var metagens = {
         inputFolder: './public/static/app/js/jsx/reactComponents',
         appendThisToDependencies: 'app/js/jsx/',
         appendThisToReturnedItems: '',
-        eliminateSharedFolder: false,
+        eliminateSharedFolder: true,
         output: './public/static/app/js/meta/allReactComponents.js'
     },
     "standard-views": {

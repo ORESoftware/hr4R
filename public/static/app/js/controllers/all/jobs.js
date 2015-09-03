@@ -35,23 +35,6 @@ define(
                         allCSS['cssx/bootstrap/bootstrap-notify.css']
                     ]
                 };
-              /*  require([], function (View) {
-                    var view = new View({
-
-                    });
-                    //view.render();
-                    //var viewOpts = {};
-                    //viewOpts.id = id;
-                    //var view = new View(viewOpts);
-                    var routerOpts = {};
-                    routerOpts.view = view;
-                    routerOpts.cssAdds = [
-                        allCSS['cssx/alert-bangtidy.css'],
-                        allCSS['cssx/bootstrap/bootstrap-notify.css']
-                    ];
-
-                    changeViewCallback(routerOpts);
-                });*/
                 this.control(viewPath,viewOpts,routerOpts,changeViewCallback);
             },
             make: function () {

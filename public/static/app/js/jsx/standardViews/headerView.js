@@ -86,7 +86,7 @@ define(
                     });
                 },
 
-                render: function () {
+                render: function (cb) {
 
                     if (!window.documentIsReady) {
                         return;
@@ -104,10 +104,15 @@ define(
                         });
                         self.$el.html(ret);
                         console.log('re-rendered headerView.');
+                        if(typeof cb === 'function'){
+                            cb();
+                        }
+                    },function(err){
+                        if(typeof cb === 'function'){
+                            cb(err);
+                        }
                     });
 
-
-                    return this;
                 },
 
                 onClickDisconnectSocket: function (event) {
