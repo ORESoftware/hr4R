@@ -10,7 +10,6 @@ define(
     [
         '#appState',
         '#allCollections',
-        //'#allStandardViews',
         'ejs',
         'jquery',
         'underscore',

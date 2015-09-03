@@ -98,6 +98,13 @@ var metagens = {
         appendThisToReturnedItems: '',
         eliminateSharedFolder: false,
         output: './public/static/app/js/meta/allReactComponents.js'
+    },
+    "standard-views": {
+        inputFolder: './public/static/app/js/jsx/standardViews',
+        appendThisToDependencies: 'app/js/jsx/',
+        appendThisToReturnedItems: '',
+        eliminateSharedFolder: true,
+        output: './public/static/app/js/meta/allStandardViews.js'
     }
 
 };
@@ -128,6 +135,10 @@ gulp.task('watch:all', function () {
 
     gulp.watch('./public/static/app/js/jsx/reactComponents/**/*.*').on('change', function (file) {
         runMetagen(metagens['react-components'], null);
+    });
+
+    gulp.watch('./public/static/app/js/jsx/standardViews/**/*.*').on('change', function (file) {
+        runMetagen(metagens['standard-views'], null);
     });
 
     gulp.watch('./public/static/cssx/**/*.*').on('change', function (file) {
@@ -170,14 +181,6 @@ function reconcilePathForRequireJS(file) {
     return folds.join('/');
 }
 
-function transpileFile(file) {
-
-    var dest = file.path.replace('views', 'jsx');
-
-    return gulp.src(file.path)
-        .pipe(react({harmony: false}))
-        .pipe(gulp.dest(dest));
-}
 
 
 gulp.task('watch:hot-reload', function () {
@@ -225,20 +228,21 @@ gulp.task('transpile-jsx', function (cb) {
 });
 
 
+function transpileFile(file) {
+
+    var dest = file.path.replace('views', 'jsx');
+
+    return gulp.src(file.path)
+        .pipe(react({harmony: false}))
+        .pipe(gulp.dest(dest));
+}
+
+
 function transpileJSX(){
     return gulp.src('./public/static/app/js/views/**/*.js')
         .pipe(react({harmony: false}))
         .pipe(gulp.dest('./public/static/app/js/jsx'));
 }
-
-
-//gulp.watch('./public/static/app/js/views/**/*.js',function(file){
-//    transpileFile(file);
-//});
-
-//gulp.watch('./public/static/app/js/views/**/*.js', function (file) {
-//    gulp.start('transpile-jsx');
-//});
 
 
 gulp.task('metagen:all', ['transpile-jsx'], function (done) {
@@ -251,11 +255,11 @@ gulp.task('metagen:all', ['transpile-jsx'], function (done) {
             runMetagen(metagens[name], function (err, res) {
                 cb(err, res)
             });
-        })
+        });
     });
 
     async.parallel(funcs, function (err, results) {
-        done();
+        done(err);
     });
 });
 
