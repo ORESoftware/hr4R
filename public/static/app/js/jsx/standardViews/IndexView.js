@@ -80,15 +80,13 @@ define(
                     this.$el.html(ret);
 
 
-                    require(['#allStandardViews'],function(standardViews){
+                    require(['#allStandardViews'],function(asv){
 
-                        self.childViews.childLoginView = new standardViews.Login({el: this.$('#child-view-login-container')});
-                        //this.childViews.childLoginView = new LoginView({el: $('#child-view-login-container')});
+                        self.childViews.childLoginView = new asv['LoginView']({el: this.$('#child-view-login-container')});
                         self.childViews.childLoginView.render();
                         self.childViews.childLoginView.delegateEvents();
 
-                        self.childViews.childRegisteredUsersView = new standardViews.RegisteredUsers({el: this.$('#child-view-registered-users-container')});
-                        //this.childViews.childRegisteredUsersView = new RegisteredUsersView({el: $('#child-view-registered-users-container')});
+                        self.childViews.childRegisteredUsersView = new asv['RegisteredUsersView']({el: this.$('#child-view-registered-users-container')});
                         self.childViews.childRegisteredUsersView.render();
                         self.childViews.childRegisteredUsersView.delegateEvents();
                     });

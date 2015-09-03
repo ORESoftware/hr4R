@@ -121,37 +121,37 @@ function runMetagen(opts, cb) {
 
 gulp.task('watch:all', function () {
 
-    gulp.watch('./public/static/app/templates/**/*.*').on('change', function (file) {
-        runMetagen(metagens.templates, null);
-    });
-
-    gulp.watch('./public/static/app/js/controllers/**/*.*').on('change', function (file) {
-        runMetagen(metagens.controllers, null);
-    });
-
-    gulp.watch('./public/static/app/js/jsx/relViews/**/*.*').on('change', function (file) {
-        runMetagen(metagens['relative-views'], null);
-    });
-
-    gulp.watch('./public/static/app/js/jsx/reactComponents/**/*.*').on('change', function (file) {
-        runMetagen(metagens['react-components'], null);
-    });
-
-    gulp.watch('./public/static/app/js/jsx/standardViews/**/*.*').on('change', function (file) {
-        runMetagen(metagens['standard-views'], null);
-    });
-
-    gulp.watch('./public/static/cssx/**/*.*').on('change', function (file) {
-        runMetagen(metagens['css'], null);
-    });
-
-    gulp.watch('./public/static/app/js/flux/constants/**/*.*').on('change', function (file) {
-        runMetagen(metagens['flux-constants'], null);
-    });
-
-    gulp.watch('./public/static/app/js/flux/actions/**/*.*').on('change', function (file) {
-        runMetagen(metagens['flux-actions'], null);
-    });
+    //gulp.watch('./public/static/app/templates/**/*.*').on('change', function (file) {
+    //    runMetagen(metagens.templates, null);
+    //});
+    //
+    //gulp.watch('./public/static/app/js/controllers/**/*.*').on('change', function (file) {
+    //    runMetagen(metagens.controllers, null);
+    //});
+    //
+    //gulp.watch('./public/static/app/js/jsx/relViews/**/*.*').on('change', function (file) {
+    //    runMetagen(metagens['relative-views'], null);
+    //});
+    //
+    //gulp.watch('./public/static/app/js/jsx/reactComponents/**/*.*').on('change', function (file) {
+    //    runMetagen(metagens['react-components'], null);
+    //});
+    //
+    //gulp.watch('./public/static/app/js/jsx/standardViews/**/*.*').on('change', function (file) {
+    //    runMetagen(metagens['standard-views'], null);
+    //});
+    //
+    //gulp.watch('./public/static/cssx/**/*.*').on('change', function (file) {
+    //    runMetagen(metagens['css'], null);
+    //});
+    //
+    //gulp.watch('./public/static/app/js/flux/constants/**/*.*').on('change', function (file) {
+    //    runMetagen(metagens['flux-constants'], null);
+    //});
+    //
+    //gulp.watch('./public/static/app/js/flux/actions/**/*.*').on('change', function (file) {
+    //    runMetagen(metagens['flux-actions'], null);
+    //});
 
 });
 

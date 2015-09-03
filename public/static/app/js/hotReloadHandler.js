@@ -24,6 +24,53 @@ define(
     function (appState, viewState, io, collections, IJSON, Backbone, _, allCSS, cssAdder) {
 
 
+        function replaceAll(str, target, replacement) {
+            return str.split(target).join(replacement);
+        }
+
+        function reconcilePath($filepath,fold1,fold2) {
+
+            var filepath = replaceAll($filepath, '\\', '/');
+
+            var folderz = String(filepath).split('/');
+            var folds = [];
+
+            var add = false;
+            var prev = null;
+            folderz.forEach(function (folder, index) {
+                if (add === true) {
+                    folds.push(folder);
+                }
+                if (prev === fold1 && (folder === fold2 || !fold2)) {
+                    add = true;
+                }
+                prev = folder;
+            });
+
+            return folds.join('/');
+        }
+
+        function reconcilePath1($filepath,fold1) {
+
+            var filepath = replaceAll($filepath, '\\', '/');
+
+            var folderz = String(filepath).split('/');
+            var folds = [];
+
+            var add = false;
+            folderz.forEach(function (folder, index) {
+                if (add === true) {
+                    folds.push(folder);
+                }
+                if (folder === fold1) {
+                    add = true;
+                }
+            });
+
+            return folds.join('/');
+        }
+
+
         var socketHotReload = null;
 
         function getConnection() {
@@ -54,25 +101,40 @@ define(
 
                     window.hotReloadSimple(data,function(err,result){
 
-                        var view = viewState.get('headerView');
-                        view.template = result;
-                        view.render();
+                        //var view = viewState.get('headerView');
+                        //view.template = result;
+                        //view.render();
+
+                        if(err){
+                            alert(err);
+                            return;
+                        }
+
+                        data = String(data).replace('text!','');
+                        var filename = reconcilePath1(data,'app');
+
+                        require(['#allTemplates'],function(allTemplates){
+                            allTemplates[filename] = result;
+                            Backbone.history.loadUrl(Backbone.history.fragment);
+                        });
+
                     });
 
                 });
 
                 socketHotReload.on('hot-reload (.jsx)', function (data) {
 
-                    //alert(data);
-
                     window.hotReloadSimple(data,function(err,result){
 
+                        if(err){
+                            alert(err);
+                            return;
+                        }
 
-                        require(['#allStandardViews'],function(allStandardViews){
-                            allStandardViews['Home'] = result;
-                            //Backbone.history.stop();
-                            //Backbone.history.start();
-                            //Backbone.Events.trigger('bootRouter','home');
+                        var filename = reconcilePath(data,'jsx','standardViews');
+
+                        require(['#allStandardViews'],function(asv){
+                            asv[filename] = result;
                             Backbone.history.loadUrl(Backbone.history.fragment);
                         });
 
@@ -83,8 +145,12 @@ define(
 
                     //alert(data);
 
-                    window.hotReloadSimpleDefine(data,function(err,result){
+                    window.hotReloadSimple(data,function(err,result){
 
+                        if(err){
+                            alert(err);
+                            return;
+                        }
 
                         require(['#allStandardViews'],function(allStandardViews){
                             allStandardViews['Home'] = result;

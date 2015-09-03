@@ -23,7 +23,6 @@ define(
         'backbone-validation',
         'app/js/giant',
         '#allTemplates'
-        //'text!app/templates/header.ejs'
     ],
 
 
@@ -64,8 +63,6 @@ define(
 
                 initialize: function (opts) {
 
-                    this.template = template;
-
                     this.setViewProps(opts); //has side effects
                     _.bindAll(this, 'render', 'onClickResetAll', 'onClickResetFrontEnd', 'onClickResetBackEnd');
 
@@ -99,14 +96,16 @@ define(
 
                     var self = this;
 
-                    var ret = EJS.render(self.template, {
-                        appState: appState,
-                        viewState: viewState,
-                        socketConnection: giant.getSocketIOConn().id
+                    require(['#allTemplates'],function(allTemplates){
+                        var ret = EJS.render(allTemplates['templates/headerTemplate.ejs'], {
+                            appState: appState,
+                            viewState: viewState,
+                            socketConnection: giant.getSocketIOConn().id
+                        });
+                        self.$el.html(ret);
+                        console.log('re-rendered headerView.');
                     });
-                    self.$el.html(ret);
 
-                    console.log('re-rendered headerView.');
 
                     return this;
                 },
@@ -157,16 +156,16 @@ define(
                 },
                 onClickHotReload: function (event) {
 
-                   var toReload = ['text!app/templates/headerTemplate.ejs'];
-
-                    var self = this;
-
-                    window.hotReload(toReload,function(err,results){
-
-                        HeaderView.template = results[0];
-                        self.render();
-
-                    });
+                   //var toReload = ['text!app/templates/headerTemplate.ejs'];
+                   //
+                   // var self = this;
+                   //
+                   // window.hotReload(toReload,function(err,results){
+                   //
+                   //     HeaderView.template = results[0];
+                   //     self.render();
+                   //
+                   // });
 
                 },
                 onClickResetAll: function (event) {

@@ -41,9 +41,6 @@ define(
                 callback(null, file);
             });
 
-            define([item],function(item){
-                return item;
-            });
         };
 
         window.hotReloadSimpleDefine = function (item, callback) {

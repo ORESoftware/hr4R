@@ -26,7 +26,7 @@ define(
     ],
 
 
-    function (appState, collections, standardViews, EJS, $, _, Backbone, React, allReactComponents, allTemplates) {
+    function (appState, allCollections, asv, EJS, $, _, Backbone, React, allReactComponents, allTemplates) {
 
         var template = allTemplates['templates/dashboardTemplate.ejs'];
 
@@ -54,10 +54,10 @@ define(
                     self.$el.html(ret);
 
                     var services = [
-                        { name: 'Web Development', price: 300 },
-                        { name: 'Design', price: 400 },
-                        { name: 'Integration', price: 250 },
-                        { name: 'Training', price: 220 }
+                        {name: 'Web Development', price: 300},
+                        {name: 'Design', price: 400},
+                        {name: 'Integration', price: 250},
+                        {name: 'Training', price: 220}
                     ];
 
                     React.render(
@@ -70,7 +70,7 @@ define(
                 }
             },
             { //class properties
-                template:template
+                template: template
             });
 
         return DashboardView;

@@ -89,11 +89,11 @@ define(
 
             home: function () {
                 var self = this;
-                require(['#allCSS','#allStandardViews'],function(allCSS,allStandardViews){
+                require(['#allCSS','#allStandardViews'],function(allCSS,asv){
                     self.changeView({
                         //view:allViews.Home,
                         //view: new allViews.Home({el: '#main-content-id'}),
-                        view: new allStandardViews.Home(),
+                        view: new asv['HomeView'](),
                         useSidebar: true,
                         cssAdds:[
                             allCSS['cssx/portal/simple-sidebar.css']
@@ -104,7 +104,7 @@ define(
 
             pictures: function () {
                 this.changeView({
-                    view: new standardViews.Picture(),
+                    view: new standardViews['PictureView'](),
                     useSidebar: true
                 });
             },
@@ -112,7 +112,7 @@ define(
             userProfile: function () {
                 this.changeView({
                     //view: allViews.UserProfile,
-                    view: new standardViews.UserProfile(
+                    view: new standardViews['UserProfileView'](
                         {
                             //el:'#main-content-id',
                             model: appState.get('currentUser'),
@@ -127,7 +127,7 @@ define(
             index: function () {
                 this.changeView({
                     //view:allViews.Index,
-                    view: new standardViews.Index({collection: collections.users}),
+                    view: new standardViews['IndexView']({collection: collections.users}),
                     useSidebar: false
                 });
             },
@@ -135,7 +135,7 @@ define(
             dashboard: function () {
                 this.changeView({
                     //view:allViews.Index,
-                    view: new standardViews.Dashboard({}),
+                    view: new standardViews['DashboardView']({}),
                     useSidebar: true
                 });
             },
@@ -143,7 +143,7 @@ define(
             overview: function () {
                 this.changeView({
                     //view:allViews.Index,
-                    view: new standardViews.Overview(),
+                    view: new standardViews['OverviewView'](),
                     useSidebar: true
                 });
             },
@@ -159,7 +159,7 @@ define(
                 this.changeView({
                     //view:allViews.Home,
                     //view: new allViews.Home({el: '#main-content-id'}),
-                    view: new standardViews.Home(),
+                    view: new standardViews['HomeView'](),
                     useSidebar: true
                 });
             },
@@ -375,14 +375,14 @@ define(
                 if (this.viewState.get('mainParentView') != null) {
                     this.destroyView(this.viewState.get('mainParentView'));
                 }
-                this.viewState.set('mainView', new standardViews.Index());
+                this.viewState.set('mainView', new standardViews['IndexView']());
                 window.location.hash = 'index'; //TODO why do we need this line?
 
                 if (this.viewState.get('footerView') == null) {
-                    this.viewState.set('footerView', new standardViews.Footer());
+                    this.viewState.set('footerView', new standardViews['FooterView']());
                 }
                 if (this.viewState.get('headerView') == null) {
-                    this.viewState.set('headerView', new standardViews.Header());
+                    this.viewState.set('headerView', new standardViews['HeaderView']());
                 }
                 this.viewState.get('headerView').render();
                 //this.viewState.get('mainView').render();
@@ -400,7 +400,7 @@ define(
 
                 if (opts.useSidebar === true) {
                     //this.destroyView(this.viewState.get('mainParentView'));
-                    this.viewState.set('mainParentView', new standardViews.Portal());
+                    this.viewState.set('mainParentView', new standardViews['PortalView']());
                     var temp = this.viewState.get('mainParentView');
                     temp.render();
                 }
@@ -424,10 +424,10 @@ define(
                 }
 
                 //if (this.viewState.get('footerView') == null) {
-                this.viewState.set('footerView', new standardViews.Footer({model: model, collection: collection}));
+                this.viewState.set('footerView', new standardViews['FooterView']({model: model, collection: collection}));
                 //}
                 //if (this.viewState.get('headerView') == null) {
-                this.viewState.set('headerView', new standardViews.Header());
+                this.viewState.set('headerView', new standardViews['HeaderView']());
                 //}
 
                 //**add stylesheets
