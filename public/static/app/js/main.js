@@ -58,7 +58,8 @@ requirejs.config({
         '@AppDispatcher': 'app/js/flux/dispatcher/AppDispatcher',
         '#allCSS': 'app/js/meta/allCSS',
         '#allFluxActions': 'app/js/meta/allFluxActions',
-        '#allFluxConstants': 'app/js/meta/allFluxConstants'
+        '#allFluxConstants': 'app/js/meta/allFluxConstants',
+        '#SuperController' : 'app/js/controllers/SuperController'
         //'d3':'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min'
     },
 

@@ -9,14 +9,14 @@
 
 define(
     [
-        "app/js/controllers/jobs",
-		"app/js/controllers/users"
+        "app/js/controllers/all/jobs",
+		"app/js/controllers/all/users"
     ],
     function(){
 
         return {
 
-            "controllers/jobs": arguments[0],
-			"controllers/users": arguments[1]
+            "jobs": arguments[0],
+			"users": arguments[1]
         }
   });

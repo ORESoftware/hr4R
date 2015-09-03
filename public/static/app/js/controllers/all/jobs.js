@@ -10,15 +10,34 @@ define(
         'underscore',
         'backbone',
         '#allCollections',
-        '#allCSS'
+        '#allCSS',
+        '#SuperController'
 
     ],
-    function ($, _, Backbone, allCollections, allCSS) {
-        return {
+    function ($, _, Backbone, allCollections, allCSS, SuperController) {
+
+
+        function Controller(){
+
+        }
+
+        Controller.prototype = {
+
             getAll: function (id, changeViewCallback) {
-                require(['app/js/jsx/relViews/getAll/getAll'], function (View) {
+
+                var viewPath = 'app/js/jsx/relViews/getAll/getAll';
+                var viewOpts = {
+                    collection: allCollections.jobs
+                };
+                var routerOpts = {
+                    cssAdds: [
+                        allCSS['cssx/alert-bangtidy.css'],
+                        allCSS['cssx/bootstrap/bootstrap-notify.css']
+                    ]
+                };
+              /*  require([], function (View) {
                     var view = new View({
-                        collection: allCollections.jobs
+
                     });
                     //view.render();
                     //var viewOpts = {};
@@ -32,7 +51,8 @@ define(
                     ];
 
                     changeViewCallback(routerOpts);
-                });
+                });*/
+                this.control(viewPath,viewOpts,routerOpts,changeViewCallback);
             },
             make: function () {
                 require(['app/js/jsx/relViews/getAll'], function (view) {
@@ -61,4 +81,8 @@ define(
                 return 'eureka!';
             }
         };
+
+        _.extendOwn(Controller.prototype,SuperController.prototype);
+
+        return new Controller();
     });

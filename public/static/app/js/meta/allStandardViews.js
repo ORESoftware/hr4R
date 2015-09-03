@@ -9,11 +9,11 @@
 
 define(
     [
-        "app/js/jsx/standardViews/dashboardView",
+        "app/js/jsx/standardViews/IndexView",
+		"app/js/jsx/standardViews/dashboardView",
 		"app/js/jsx/standardViews/footerView",
 		"app/js/jsx/standardViews/headerView",
 		"app/js/jsx/standardViews/homeView",
-		"app/js/jsx/standardViews/IndexView",
 		"app/js/jsx/standardViews/loginView",
 		"app/js/jsx/standardViews/overviewView",
 		"app/js/jsx/standardViews/pictureView",
@@ -25,16 +25,16 @@ define(
 
         return {
 
-            "DashboardView": arguments[0],
-			"FooterView": arguments[1],
-			"HeaderView": arguments[2],
-			"HomeView": arguments[3],
-			"IndexView": arguments[4],
-			"LoginView": arguments[5],
-			"OverviewView": arguments[6],
-			"PictureView": arguments[7],
-			"PortalView": arguments[8],
-			"RegisteredUsersView": arguments[9],
-			"UserProfileView": arguments[10]
+            "IndexView": arguments[0],
+			"dashboardView": arguments[1],
+			"footerView": arguments[2],
+			"headerView": arguments[3],
+			"homeView": arguments[4],
+			"loginView": arguments[5],
+			"overviewView": arguments[6],
+			"pictureView": arguments[7],
+			"portalView": arguments[8],
+			"registeredUsersView": arguments[9],
+			"userProfileView": arguments[10]
         }
   });

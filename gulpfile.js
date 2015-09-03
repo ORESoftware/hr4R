@@ -50,11 +50,11 @@ io.on('connection', function (socket) {
 
 var metagens = {
 
-    "controllers": {
-        inputFolder: './public/static/app/js/controllers',
-        appendThisToDependencies: 'app/js/',
+    "CONTROLLERS": {
+        inputFolder: './public/static/app/js/controllers/all',
+        appendThisToDependencies: 'app/js/controllers/',
         appendThisToReturnedItems: '',
-        eliminateSharedFolder: false,
+        eliminateSharedFolder: true,
         output: './public/static/app/js/meta/allControllers.js'
     },
     "templates": {
@@ -220,13 +220,15 @@ gulp.task('watch:hot-reload', function () {
 });
 
 
-
 gulp.task('transpile-jsx', function (cb) {
-     return gulp.src('./public/static/app/js/views/**/*.js')
-        .pipe(react({harmony: false}))
-        .pipe(gulp.dest('./public/static/app/js/jsx'));
+     return transpileJSX();
 });
 
+function transpileJSX(){
+    return gulp.src('./public/static/app/js/views/**/*.js')
+        .pipe(react({harmony: false}))
+        .pipe(gulp.dest('./public/static/app/js/jsx'));
+}
 
 function transpileFile(file) {
 
@@ -237,12 +239,6 @@ function transpileFile(file) {
         .pipe(gulp.dest(dest));
 }
 
-
-function transpileJSX(){
-    return gulp.src('./public/static/app/js/views/**/*.js')
-        .pipe(react({harmony: false}))
-        .pipe(gulp.dest('./public/static/app/js/jsx'));
-}
 
 
 gulp.task('metagen:all', ['transpile-jsx'], function (done) {
@@ -264,7 +260,7 @@ gulp.task('metagen:all', ['transpile-jsx'], function (done) {
 });
 
 
-gulp.task('default', ['transpile-jsx', 'watch:all', 'watch:hot-reload'], function (done) {
+gulp.task('default', ['metagen:all', 'watch:all', 'watch:hot-reload'], function (done) {
 
     done();
 

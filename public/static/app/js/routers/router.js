@@ -58,7 +58,7 @@ define(
                 //actionName = actionName || Config.Defaults.Action;
 
                 var self = this;
-                require(["app/js/controllers/" + controllerName], function (cntr) {
+                require(["app/js/controllers/all/" + controllerName], function (cntr) {
                     //require(["controllers/" + controllerName], function (ctl) {
                     //var code = "ctl." + actionName + "();";
                     //eval(code);
