@@ -120,6 +120,7 @@ define(
 
                 socketHotReload.on('start-progress-bar',function(data){
                     startProgressBar();
+                    $("#hot-reload-progress-bar").css('background-color','#f3f3f3');
                     updateProgressBar(20);
                 });
 
@@ -148,6 +149,7 @@ define(
                             allTemplates[filename] = result;
                             updateProgressBar(80);
                             Backbone.history.loadUrl(Backbone.history.fragment);
+
                             updateProgressBar(100);
                         });
 

@@ -103,10 +103,11 @@ define(
                             socketConnection: giant.getSocketIOConn().id
                         });
                         self.$el.html(ret);
-                        console.log('re-rendered headerView.');
+
                         if(typeof cb === 'function'){
                             cb();
                         }
+
                     },function(err){
                         console.error(err);
                         throw err;

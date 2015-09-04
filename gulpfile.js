@@ -195,7 +195,7 @@ gulp.task('watch:hot-reload', function () {
 
         setTimeout(function(){
             io.sockets.emit('hot-reload (.ejs)', reconciledPath);
-        },300);
+        },100);
 
     });
 
@@ -225,7 +225,7 @@ gulp.task('watch:hot-reload', function () {
 
         setTimeout(function(){
             io.sockets.emit('hot-reload (.css)', reconciledPath);
-        },300);
+        },100);
 
     });
 
