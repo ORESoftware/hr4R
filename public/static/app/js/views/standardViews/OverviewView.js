@@ -63,7 +63,7 @@ define(
                         var SearchExample = allReactComponents['RealTimeSearchView'];
 
                         React.render(
-                            React.createElement(SearchExample, {items:  libraries }),
+                            <SearchExample items={ libraries }/>,
                             $(self.el).find('#real-time-search-example-div-id')[0]
                         );
 

@@ -71,6 +71,15 @@ define(
         }
 
 
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        function deCapitalizeFirstLetter(string) {
+            return string.charAt(0).toLowerCase() + string.slice(1);
+        }
+
+
         var socketHotReload = null;
 
         function getConnection() {
@@ -96,8 +105,28 @@ define(
                     console.info('socket disconnected'.toUpperCase());
                 });
 
+                function startProgressBar(){
+                    $("#hot-reload-progress-bar").show();
+                }
+
+
+                function stopProgressBar(){
+                    $("#hot-reload-progress-bar").hide();
+                }
+
+                function updateProgressBar(value){
+                    $("#hot-reload-progress-bar").prop('value',value);
+                }
+
+                socketHotReload.on('start-progress-bar',function(data){
+                    startProgressBar();
+                    updateProgressBar(20);
+                });
+
 
                 socketHotReload.on('hot-reload (.ejs)', function (data) {
+
+                    updateProgressBar(40);
 
                     window.hotReloadSimple(data,function(err,result){
 
@@ -110,12 +139,16 @@ define(
                             return;
                         }
 
+                        updateProgressBar(60);
+
                         data = String(data).replace('text!','');
                         var filename = reconcilePath1(data,'app');
 
                         require(['#allTemplates'],function(allTemplates){
                             allTemplates[filename] = result;
+                            updateProgressBar(80);
                             Backbone.history.loadUrl(Backbone.history.fragment);
+                            updateProgressBar(100);
                         });
 
                     });
@@ -124,6 +157,8 @@ define(
 
                 socketHotReload.on('hot-reload (.jsx)', function (data) {
 
+                    updateProgressBar(40);
+
                     window.hotReloadSimple(data,function(err,result){
 
                         if(err){
@@ -131,19 +166,25 @@ define(
                             return;
                         }
 
-                        var filename = reconcilePath(data,'jsx','standardViews');
+                        updateProgressBar(60);
+
+                        var filename = deCapitalizeFirstLetter(reconcilePath(data,'jsx','standardViews'));
+
 
                         require(['#allStandardViews'],function(asv){
                             asv[filename] = result;
+                            updateProgressBar(80);
                             Backbone.history.loadUrl(Backbone.history.fragment);
+                            updateProgressBar(100);
                         });
 
                     });
                 });
 
-                socketHotReload.on('hot-reload (.js)', function (data) {
 
-                    //alert(data);
+                socketHotReload.on('hot-reload (.css)', function (data) {
+
+                    updateProgressBar(40);
 
                     window.hotReloadSimple(data,function(err,result){
 
@@ -152,33 +193,17 @@ define(
                             return;
                         }
 
-                        require(['#allStandardViews'],function(allStandardViews){
-                            allStandardViews['Home'] = result;
-                            //Backbone.history.stop();
-                            //Backbone.history.start();
-                            //Backbone.Events.trigger('bootRouter','home');
-                            Backbone.history.loadUrl(Backbone.history.fragment);
-                        });
+                        updateProgressBar(60);
 
-                    });
-                });
+                        var filename = String(data).replace('text!','');
 
-                socketHotReload.on('hot-reload (.css)', function (data) {
-
-
-                    window.hotReloadSimple(data,function(err,result){
-
-                        cssAdder.removeByAttr(data);
+                        //cssAdder.removeByAttr(data); //app will already remove all temp CSS for each view going through router
 
                         require(['#allCSS'],function(allCSS){
-                            allCSS['cssx/portal/simple-sidebar.css'] = result;
-                            //allCSS[5] = result;
-                            //allCSS[6] = result;
-
-                            //Backbone.history.stop();
-                            //Backbone.history.start();
-                            //Backbone.Events.trigger('bootRouter','home');
+                            allCSS[filename] = result;
+                            updateProgressBar(80);
                             Backbone.history.loadUrl(Backbone.history.fragment);
+                            updateProgressBar(100);
                         });
                     });
                 });

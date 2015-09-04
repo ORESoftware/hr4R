@@ -104,7 +104,7 @@ var metagens = {
         appendThisToDependencies: 'app/js/jsx/',
         appendThisToReturnedItems: '',
         eliminateSharedFolder: true,
-        output: './public/static/app/js/meta/allStandardViews.js'
+        output: './public/static/app/js/meta/allStandardViews2.js'
     }
 
 };
@@ -191,7 +191,12 @@ gulp.task('watch:hot-reload', function () {
         var reconciledPath = reconcilePathForRequireJS(file);
         reconciledPath = 'text!' + reconciledPath;
 
-        io.sockets.emit('hot-reload (.ejs)', reconciledPath);
+        io.sockets.emit('start-progress-bar');
+
+        setTimeout(function(){
+            io.sockets.emit('hot-reload (.ejs)', reconciledPath);
+        },300);
+
     });
 
     gulp.watch('./public/static/app/js/views/**/*.js').on('change', function (file) {
@@ -199,6 +204,8 @@ gulp.task('watch:hot-reload', function () {
         var reconciledPath = reconcilePathForRequireJS(file);
         reconciledPath = reconciledPath.replace('views', 'jsx');
         reconciledPath = reconciledPath.substring(0, reconciledPath.length - 3);
+
+        io.sockets.emit('start-progress-bar');
 
         var stream = transpileJSX();
 
@@ -214,7 +221,12 @@ gulp.task('watch:hot-reload', function () {
         var reconciledPath = reconcilePathForRequireJS(file);
         reconciledPath = 'text!' + reconciledPath;
 
-        io.sockets.emit('hot-reload (.css)', reconciledPath);
+        io.sockets.emit('start-progress-bar');
+
+        setTimeout(function(){
+            io.sockets.emit('hot-reload (.css)', reconciledPath);
+        },300);
+
     });
 
 });

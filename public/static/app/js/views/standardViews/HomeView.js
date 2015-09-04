@@ -21,16 +21,13 @@ define(
         'backbone',
         'backbone-validation',
         'react',
-        '#allReactComponents',
-        '#allTemplates',
         '#allFluxActions'
     ],
 
 
     /** @jsx React.DOM */
 
-    function (appState, models, collections, form2js, EJS, $, _, Backbone,
-              BackboneValidation, React, allReactComponents, allTemplates, allFluxActions) {
+    function (appState, models, collections, form2js, EJS, $, _, Backbone, BackboneValidation, React, allFluxActions) {
 
 
         var FluxCartActions = allFluxActions['actions/FluxCartActions'];
@@ -84,9 +81,11 @@ define(
 
                     var self = this;
 
-                    require(['#allTemplates','#allReactComponents'],function(allTemplates, allReactComponents){
+                    require(['#allTemplates', '#allReactComponents'], function (allTemplates, allReactComponents) {
 
-                        var ret = EJS.render(allTemplates['templates/homeTemplate.ejs'], {});
+                        var template = allTemplates['templates/homeTemplate.ejs'];
+
+                        var ret = EJS.render(template, {});
 
                         self.$el.html(ret);
 
@@ -96,9 +95,10 @@ define(
                         // Load Mock API Call
                         CartAPI.getProductData();
 
-                        var FluxCartApp = allReactComponents['reactComponents/FluxCartApp'];
-                        var TimerExample = allReactComponents['reactComponents/TimerExample'];
-                        var MenuExample = allReactComponents['reactComponents/MenuExample'];
+                        var FluxCartApp = allReactComponents['FluxCartApp'];
+                        var TimerExample = allReactComponents['TimerExample'];
+                        var MenuExample = allReactComponents['MenuExample'];
+
 
                         React.render(
                             <FluxCartApp />,
@@ -108,23 +108,22 @@ define(
 
                         React.render(
                             <TimerExample start={Date.now()}/>,
-                            //self.el
-                            //$('#react-timer-example-div-id')[0]
                             $(self.el).find('#react-timer-example-div-id')[0]
                         );
 
 
                         React.render(
                             <MenuExample items={ ['Home', 'Services', 'About', 'Contact us'] }/>,
-                            //$('#react-menu-example-div-id')[0]
-                            //document.getElementById('react-menu-example-div-id')
                             $(self.el).find('#react-menu-example-div-id')[0]
                         );
 
-                        if(typeof cb === 'function'){
+                        if (typeof cb === 'function') {
                             cb();
                         }
 
+                    }, function (err) {
+                        console.error(err);
+                        throw err;
                     });
 
                 },
@@ -141,6 +140,7 @@ define(
                 //template: template
             }
         );
+
 
         var CartAPI = {
 

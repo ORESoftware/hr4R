@@ -35,23 +35,32 @@ define(function(){
          document.write is actually what we want to use here,
          because it overwrites everything else on the screen
          */
-        if(errorMsg){
-            console.log(errorMsg.toString());
-        }
-        if(url){
-            url = url.toString();
-        }
 
-        document.open();
-        document.write('<h1> error message:' + errorMsg + '</h1>');
-        document.write('<h2> url:' + url +'</h2>');
-        document.write('line number:' + lineNumber);
-        document.write('<p>All args:</p>');
-        for(var i = 0; i < arguments.length; i++){
-            document.write('<p>' + arguments[i] +'</p>');
-        }
-        document.close();
-        return false;
+        alert(errorMsg+'\n\nurl: '+url+ '\n\nLine number: '+lineNumber);
+
+        //var html = "<div>" +errorMsg+'\n\nurl:'+url+ '\n\nLine number:'+lineNumber +"</div>"
+        //
+        //$('body').html(html);
+
+        return true;
+
+        //if(errorMsg){
+        //    console.log(errorMsg.toString());
+        //}
+        //if(url){
+        //    url = url.toString();
+        //}
+        //
+        //document.open();
+        //document.write('<h1> error message:' + errorMsg + '</h1>');
+        //document.write('<h2> url:' + url +'</h2>');
+        //document.write('line number:' + lineNumber);
+        //document.write('<p>All args:</p>');
+        //for(var i = 0; i < arguments.length; i++){
+        //    document.write('<p>' + arguments[i] +'</p>');
+        //}
+        //document.close();
+        //return true;
     };
 
 });

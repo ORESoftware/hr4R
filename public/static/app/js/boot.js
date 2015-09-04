@@ -52,12 +52,6 @@ define('app/js/boot',
                     appState.set('env', msg.env);
                     console.log('boot.initialize() waiting for document.ready to fire, time:', (Date.now() - window.startDate));
 
-                    var x = allCSS['cssx/portal/simple-sidebar.css'];
-                    //var y = allCSS['text!cssx/bootstrap/bootstrap-notify.css'];
-
-                    cssAdder.addViaText('cssx/portal/simple-sidebar.css',x);
-                    //cssAdder.add(y);
-
                     $(function () {
                         window.documentIsReady = true;
                         console.log('document.ready fired, time:', (Date.now() - window.startDate));
@@ -72,14 +66,14 @@ define('app/js/boot',
                 }
             });
 
+            //add css while we are waiting...
+            var css = [
+                allCSS['cssx/portal/simple-sidebar.css'],
+                allCSS['cssx/bootstrap/bootstrap-notify.css'],
+                //allCSS['cssx/pictureList/pictureList.css']
+            ];
 
-            //$(function () {
-            //    window.documentIsReady = true;
-            //    //                console.log('document.ready fired, time:', (Date.now() - window.startDate));
-            //    //                runApplication(msg.isAuthenticated, msg.user);
-            //    runApplication(false, null);
-            //});
-
+            cssAdder.addAllVia(css, true);
 
         };
 
@@ -132,7 +126,7 @@ define('app/js/boot',
 
             console.log('APPLICATION ENVIRONMENT:', appState.get('env'));
             if (appState.get('env') === 'development') {
-                require(['app/js/hotReloadHandler'],function(hrh){
+                require(['app/js/hotReloadHandler'], function (hrh) {
                     hrh.getConnection();
                     loadDefaultModels(run);
                 })
@@ -184,14 +178,14 @@ define('app/js/boot',
                 allModels.Job.newJob({
                     firstName: '2rand-job-name2',
                     lastName: '2rand-last-name2',
-                    animals: {birds:true,donkeys:true,rats:true},
+                    animals: {birds: true, donkeys: true, rats: true},
                     jobName: '2jobbyname2'
                 }, {collectionName: 'jobs'}),
 
                 allModels.Job.newJob({
                     firstName: '3rand-job-name3',
                     lastName: '3rand-last-name3',
-                    animals: {cats:true,dogs:true,fish:true,mice:true},
+                    animals: {cats: true, dogs: true, fish: true, mice: true},
                     jobName: '3jobbyname3'
                 }, {})
             ];
@@ -228,10 +222,10 @@ define('app/js/boot',
                     }],
 
                 function done(err, results) {
-                    if(err){
+                    if (err) {
                         throw err;
                     }
-                    else{
+                    else {
                         console.log(results);
                         callback(null);
                     }

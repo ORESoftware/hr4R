@@ -23,7 +23,6 @@ define(
             control: function (viewPath, viewOpts, routerOpts, cb) {
                 require([viewPath], function (View) {
                     var view = new View(viewOpts);
-                    var routerOpts = {};
                     routerOpts.view = view;
                     cb(routerOpts);
                 });

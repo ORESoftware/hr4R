@@ -24,12 +24,12 @@ define(
         Controller.prototype = {
 
             getAll: function (id, changeViewCallback) {
-
                 var viewPath = 'app/js/jsx/relViews/getAll/getAll';
                 var viewOpts = {
                     collection: allCollections.jobs
                 };
                 var routerOpts = {
+                    useSidebar: true,
                     cssAdds: [
                         allCSS['cssx/alert-bangtidy.css'],
                         allCSS['cssx/bootstrap/bootstrap-notify.css']
@@ -37,28 +37,31 @@ define(
                 };
                 this.control(viewPath,viewOpts,routerOpts,changeViewCallback);
             },
+
             make: function () {
                 require(['app/js/jsx/relViews/getAll'], function (view) {
                     view.render();
                 });
             },
+
             about: function () {
                 require(['views/home/about'], function (view) {
                     view.render();
                 });
             },
-            jobs: function (id, changeViewFunction) {
 
-                require(['app/js/jsx/relViews/jobs/jobsView'], function (View) {
+            jobs: function (id, changeViewCallback) {
 
-                    var viewOpts = {};
-                    viewOpts.id = id;
-                    var view = new View(viewOpts);
-                    var routerOpts = {};
-                    routerOpts.view = view;
-                    changeViewFunction(routerOpts);
-                });
+                var viewPath = 'app/js/jsx/relViews/jobs/jobsView';
+                var viewOpts = {};
+                viewOpts.id = id;
+                var routerOpts = {
+                    useSidebar: true
+                };
+                this.control(viewPath,viewOpts,routerOpts,changeViewCallback);
             },
+
+
             default: function (id) {
                 console.log('id is:!!!', id);
                 return 'eureka!';

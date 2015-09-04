@@ -40,7 +40,7 @@ define(
                         self.$el.html(ret);
 
                         React.render(
-                            React.createElement(PictureList, {apiKey: "642176ece1e7445e99244cec26f4de1f"}),
+                            <PictureList apiKey="642176ece1e7445e99244cec26f4de1f"/>,
                             $(self.el).find('#picture-list-example-div-id')[0]
                         );
 

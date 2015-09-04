@@ -59,7 +59,6 @@ define(
 
                 var self = this;
                 require(["app/js/controllers/all/" + controllerName], function (cntr) {
-                    //require(["controllers/" + controllerName], function (ctl) {
                     //var code = "ctl." + actionName + "();";
                     //eval(code);
                     if (typeof cntr[actionName] === 'function') {
@@ -76,24 +75,11 @@ define(
                 console.log('hit the canonical route.');
             },
 
-            //refreshCurrentPage: function () {
-            //
-            //    //TODO:refresh current page when user calls reset-all or whatever
-            //
-            //    var currentView = this.viewState.get('mainView');
-            //    var currentViewName = currentView.givenName;
-            //    currentViewName = currentViewName.replace('View', '').replace('@', '');
-            //    //TODO: need to fix url of this page
-            //    this.changeView(new allViews[currentViewName]());
-            //},
-
             home: function () {
                 var self = this;
                 require(['#allCSS','#allStandardViews'],function(allCSS,asv){
                     self.changeView({
-                        //view:allViews.Home,
-                        //view: new allViews.Home({el: '#main-content-id'}),
-                        view: new asv['HomeView'](),
+                        view: new asv['homeView'](),
                         useSidebar: true,
                         cssAdds:[
                             allCSS['cssx/portal/simple-sidebar.css']
@@ -103,16 +89,22 @@ define(
             },
 
             pictures: function () {
-                this.changeView({
-                    view: new standardViews['PictureView'](),
-                    useSidebar: true
+                var self = this;
+                require(['#allCSS','#allStandardViews'],function(allCSS,asv){
+                    self.changeView({
+                        view: new asv['pictureView'](),
+                        useSidebar: true,
+                        cssAdds:[
+                            allCSS['cssx/pictureList/pictureList.css']
+                        ]
+                    });
                 });
             },
 
             userProfile: function () {
                 this.changeView({
                     //view: allViews.UserProfile,
-                    view: new standardViews['UserProfileView'](
+                    view: new standardViews['userProfileView'](
                         {
                             //el:'#main-content-id',
                             model: appState.get('currentUser'),
@@ -135,7 +127,7 @@ define(
             dashboard: function () {
                 this.changeView({
                     //view:allViews.Index,
-                    view: new standardViews['DashboardView']({}),
+                    view: new standardViews['dashboardView']({}),
                     useSidebar: true
                 });
             },
@@ -143,7 +135,7 @@ define(
             overview: function () {
                 this.changeView({
                     //view:allViews.Index,
-                    view: new standardViews['OverviewView'](),
+                    view: new standardViews['overviewView'](),
                     useSidebar: true
                 });
             },
@@ -159,7 +151,7 @@ define(
                 this.changeView({
                     //view:allViews.Home,
                     //view: new allViews.Home({el: '#main-content-id'}),
-                    view: new standardViews['HomeView'](),
+                    view: new standardViews['homeView'](),
                     useSidebar: true
                 });
             },
@@ -364,6 +356,11 @@ define(
 
             var self = this;
 
+
+            cssAdder.removeAllTempCSS();
+
+
+
             if (!appState.currentUserSessionIsOK()) {
                 if (this.viewState.get('mainView') != null) {
                     this.destroyView(this.viewState.get('mainView'));
@@ -375,10 +372,10 @@ define(
                 window.location.hash = 'index'; //TODO why do we need this line?
 
                 if (this.viewState.get('footerView') == null) {
-                    this.viewState.set('footerView', new standardViews['FooterView']());
+                    this.viewState.set('footerView', new standardViews['footerView']());
                 }
                 if (this.viewState.get('headerView') == null) {
-                    this.viewState.set('headerView', new standardViews['HeaderView']());
+                    this.viewState.set('headerView', new standardViews['headerView']());
                 }
                 this.viewState.get('headerView').render();
 
@@ -399,7 +396,7 @@ define(
 
                 if (opts.useSidebar === true) {
                     //this.destroyView(this.viewState.get('mainParentView'));
-                    this.viewState.set('mainParentView', new standardViews['PortalView']());
+                    this.viewState.set('mainParentView', new standardViews['portalView']());
                     var temp = this.viewState.get('mainParentView');
                     temp.render();
                 }
@@ -423,18 +420,14 @@ define(
                 }
 
                 //if (this.viewState.get('footerView') == null) {
-                this.viewState.set('footerView', new standardViews['FooterView']({model: model, collection: collection}));
+                this.viewState.set('footerView', new standardViews['footerView']({model: model, collection: collection}));
                 //}
                 //if (this.viewState.get('headerView') == null) {
-                this.viewState.set('headerView', new standardViews['HeaderView']());
+                this.viewState.set('headerView', new standardViews['headerView']());
                 //}
 
                 //**add stylesheets
-                var stylesheetsToAdd = opts.cssAdds || [];
-                var arrayLength = stylesheetsToAdd.length;
-                for (var i = 0; i < arrayLength; i++) {
-                    cssAdder.addVia(stylesheetsToAdd[i]);
-                }
+                cssAdder.addAllVia(opts.cssAdds || []);
 
                 //**render header**
                 this.viewState.get('headerView').render();

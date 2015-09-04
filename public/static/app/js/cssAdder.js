@@ -16,14 +16,37 @@ define(function () {
 
     }
 
-    function addVia(text) {
+    function removeAllTempCSS(){
+
+        $('#temp-css').children().each(function(){
+            $(this).remove();
+        });
+
+    }
+
+
+    function addAllVia(stylesheetsToAdd,isPerm){
+        var arrayLength = stylesheetsToAdd.length;
+        for (var i = 0; i < arrayLength; i++) {
+            addVia(stylesheetsToAdd[i],isPerm);
+        }
+    }
+
+    function addVia(text,isPerm) {
 
         var sheet = document.createElement('style');
         sheet.setAttribute("type", "text/css");
         //sheet.setAttribute("id", designtr);
         //sheet.setAttribute("designtr", designtr);
         sheet.innerHTML = text;
-        document.body.appendChild(sheet);
+        //document.body.appendChild(sheet);
+        if(isPerm){
+            $('#perm-css').append(sheet);
+        }
+        else{
+            $('#temp-css').append(sheet);
+        }
+
     }
 
     function addViaText(designtr, text) {
@@ -72,6 +95,8 @@ define(function () {
     }
 
     return {
+        addAllVia:addAllVia,
+        removeAllTempCSS:removeAllTempCSS,
         addVia:addVia,
         add: add,
         removeByAttr:removeByAttr,

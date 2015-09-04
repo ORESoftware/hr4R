@@ -21,13 +21,16 @@ define(
         'backbone',
         'backbone-validation',
         'react',
+        '#allReactComponents',
+        '#allTemplates',
         '#allFluxActions'
     ],
 
 
     /** @jsx React.DOM */
 
-    function (appState, models, collections, form2js, EJS, $, _, Backbone, BackboneValidation, React, allFluxActions) {
+    function (appState, models, collections, form2js, EJS, $, _, Backbone,
+              BackboneValidation, React, allReactComponents, allTemplates, allFluxActions) {
 
 
         var FluxCartActions = allFluxActions['actions/FluxCartActions'];
@@ -81,11 +84,9 @@ define(
 
                     var self = this;
 
-                    require(['#allTemplates', '#allReactComponents'], function (allTemplates, allReactComponents) {
+                    require(['#allTemplates','#allReactComponents'],function(allTemplates, allReactComponents){
 
-                        var template = allTemplates['templates/homeTemplate.ejs'];
-
-                        var ret = EJS.render(template, {});
+                        var ret = EJS.render(allTemplates['templates/homeTemplate.ejs'], {});
 
                         self.$el.html(ret);
 
@@ -95,10 +96,9 @@ define(
                         // Load Mock API Call
                         CartAPI.getProductData();
 
-                        var FluxCartApp = allReactComponents['FluxCartApp'];
-                        var TimerExample = allReactComponents['TimerExample'];
-                        var MenuExample = allReactComponents['MenuExample'];
-
+                        var FluxCartApp = allReactComponents['reactComponents/FluxCartApp'];
+                        var TimerExample = allReactComponents['reactComponents/TimerExample'];
+                        var MenuExample = allReactComponents['reactComponents/MenuExample'];
 
                         React.render(
                             React.createElement(FluxCartApp, null),
@@ -108,22 +108,23 @@ define(
 
                         React.render(
                             React.createElement(TimerExample, {start: Date.now()}),
+                            //self.el
+                            //$('#react-timer-example-div-id')[0]
                             $(self.el).find('#react-timer-example-div-id')[0]
                         );
 
 
                         React.render(
                             React.createElement(MenuExample, {items:  ['Home', 'Services', 'About', 'Contact us'] }),
+                            //$('#react-menu-example-div-id')[0]
+                            //document.getElementById('react-menu-example-div-id')
                             $(self.el).find('#react-menu-example-div-id')[0]
                         );
 
-                        if (typeof cb === 'function') {
+                        if(typeof cb === 'function'){
                             cb();
                         }
 
-                    }, function (err) {
-                        console.error(err);
-                        throw err;
                     });
 
                 },
@@ -140,7 +141,6 @@ define(
                 //template: template
             }
         );
-
 
         var CartAPI = {
 

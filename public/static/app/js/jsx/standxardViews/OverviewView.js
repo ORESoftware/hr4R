@@ -59,7 +59,7 @@ define(
                     self.$el.html(ret);
 
                     React.render(
-                        <SearchExample items={ libraries }/>,
+                        React.createElement(SearchExample, {items:  libraries }),
                         $(self.el).find('#real-time-search-example-div-id')[0]
                     );
 

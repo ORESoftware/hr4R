@@ -126,28 +126,38 @@ define(
 
                 },
 
-                render: function () {
+                render: function (cb) {
 
                     var self = this;
 
-                    var ret = EJS.render(JobsView.template, {
-                        job:self.model,
-                        jobs:self.collection,
-                        model: self.model,
-                        collection: self.collection
+                    require(['#allTemplates', '#allReactComponents'], function (allTemplates, allReactComponents) {
+
+                        var template = allTemplates['templates/jobsTemplate.ejs'];
+
+                        var ret = EJS.render(template, {
+                            job:self.model,
+                            jobs:self.collection,
+                            model: self.model,
+                            collection: self.collection
+                        });
+
+                        self.$el.html(ret);
+
+                        React.render(
+                            <JobsList />,
+                            $(self.el).find('#jobs-react-example-div-id')[0]
+                        );
+
+                        //TODO: make React.render work with this.el or this.$el
+
+                        if(typeof cb === 'function'){
+                            cb();
+                        }
+
+                    },function(err){
+                        console.error(err);
+                        throw err;
                     });
-
-                    self.$el.html(ret);
-
-                    React.render(
-                        <JobsList />,
-                        $(self.el).find('#jobs-react-example-div-id')[0]
-                    );
-
-                    //TODO: make React.render work with this.el or this.$el
-
-                    return this;
-
                 }
             },
             {
