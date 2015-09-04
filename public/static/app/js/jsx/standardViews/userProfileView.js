@@ -107,7 +107,7 @@ define(
 
                     var self = this;
 
-                    require(['#allTemplates','#allReactComponents'],function(allTemplates,allReactComponents){
+                    require(['#allTemplates','#allViews'],function(allTemplates, allViews){
 
                         var template = allTemplates['templates/userProfileTemplate.ejs'];
 

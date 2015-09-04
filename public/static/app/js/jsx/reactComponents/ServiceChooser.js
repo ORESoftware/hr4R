@@ -35,6 +35,8 @@ define(
                     return React.createElement(Service, {name: s.name, price: s.price, active: s.active, addTotal: self.addTotal});
                 });
 
+                //return ();
+
                 return (React.createElement("div", null, 
                     React.createElement("h1", null, "Our services"), 
 

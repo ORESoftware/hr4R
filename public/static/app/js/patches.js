@@ -36,6 +36,8 @@ define(function(){
          because it overwrites everything else on the screen
          */
 
+        console.error(errorMsg+'\n\nurl: '+url+ '\n\nLine number: '+lineNumber);
+
         alert(errorMsg+'\n\nurl: '+url+ '\n\nLine number: '+lineNumber);
 
         //var html = "<div>" +errorMsg+'\n\nurl:'+url+ '\n\nLine number:'+lineNumber +"</div>"

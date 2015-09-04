@@ -81,7 +81,7 @@ define(
 
                     var self = this;
 
-                    require(['#allTemplates', '#allReactComponents'], function (allTemplates, allReactComponents) {
+                    require(['#allTemplates', '#allViews'], function (allTemplates, allViews) {
 
                         var template = allTemplates['templates/homeTemplate.ejs'];
 
@@ -95,9 +95,9 @@ define(
                         // Load Mock API Call
                         CartAPI.getProductData();
 
-                        var FluxCartApp = allReactComponents['FluxCartApp'];
-                        var TimerExample = allReactComponents['TimerExample'];
-                        var MenuExample = allReactComponents['MenuExample'];
+                        var FluxCartApp = allViews['reactComponents/FluxCartApp'];
+                        var TimerExample = allViews['reactComponents/TimerExample'];
+                        var MenuExample = allViews['reactComponents/MenuExample'];
 
 
                         React.render(

@@ -52,7 +52,7 @@ define(
 
                     var self = this;
 
-                    require(['#allTemplates','#allReactComponents'],function(allTemplates,allReactComponents){
+                    require(['#allTemplates','#allViews'],function(allTemplates,allViews){
 
                         var template = allTemplates['templates/overviewTemplate.ejs'];
 
@@ -60,7 +60,7 @@ define(
 
                         self.$el.html(ret);
 
-                        var SearchExample = allReactComponents['RealTimeSearchView'];
+                        var SearchExample = allViews['reactComponents/RealTimeSearchView'];
 
                         React.render(
                             <SearchExample items={ libraries }/>,

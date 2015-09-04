@@ -14,7 +14,7 @@ var fs = require('fs');
 var socketio = require('socket.io');
 var async = require('async');
 var _ = require('underscore');
-
+var EE = require('events').EventEmitter;
 
 //plugins
 var jshint = require('gulp-jshint');
@@ -85,27 +85,34 @@ var metagens = {
         eliminateSharedFolder: false,
         output: './public/static/app/js/meta/allFluxActions.js'
     },
-    "relative-views": {
-        inputFolder: './public/static/app/js/jsx/relViews',
-        appendThisToDependencies: 'app/js/jsx/',
-        appendThisToReturnedItems: '',
-        eliminateSharedFolder: false,
-        output: './public/static/app/js/meta/allRelViews.js'
-    },
-    "react-components": {
-        inputFolder: './public/static/app/js/jsx/reactComponents',
-        appendThisToDependencies: 'app/js/jsx/',
+    "all-views": {
+        inputFolder: './public/static/app/js/jsx',
+        appendThisToDependencies: 'app/js/',
         appendThisToReturnedItems: '',
         eliminateSharedFolder: true,
-        output: './public/static/app/js/meta/allReactComponents.js'
-    },
-    "standard-views": {
-        inputFolder: './public/static/app/js/jsx/standardViews',
-        appendThisToDependencies: 'app/js/jsx/',
-        appendThisToReturnedItems: '',
-        eliminateSharedFolder: true,
-        output: './public/static/app/js/meta/allStandardViews2.js'
+        output: './public/static/app/js/meta/allViews.js'
     }
+    //"relative-views": {
+    //    inputFolder: './public/static/app/js/jsx/relViews',
+    //    appendThisToDependencies: 'app/js/jsx/',
+    //    appendThisToReturnedItems: '',
+    //    eliminateSharedFolder: false,
+    //    output: './public/static/app/js/meta/allRelViews.js'
+    //},
+    //"react-components": {
+    //    inputFolder: './public/static/app/js/jsx/reactComponents',
+    //    appendThisToDependencies: 'app/js/jsx/',
+    //    appendThisToReturnedItems: '',
+    //    eliminateSharedFolder: true,
+    //    output: './public/static/app/js/meta/allReactComponents.js'
+    //},
+    //"standard-views": {
+    //    inputFolder: './public/static/app/js/jsx/standardViews',
+    //    appendThisToDependencies: 'app/js/jsx/',
+    //    appendThisToReturnedItems: '',
+    //    eliminateSharedFolder: true,
+    //    output: './public/static/app/js/meta/allStandardViews2.js'
+    //}
 
 };
 
@@ -182,7 +189,6 @@ function reconcilePathForRequireJS(file) {
 }
 
 
-
 gulp.task('watch:hot-reload', function () {
 
 
@@ -193,9 +199,9 @@ gulp.task('watch:hot-reload', function () {
 
         io.sockets.emit('start-progress-bar');
 
-        setTimeout(function(){
+        setTimeout(function () {
             io.sockets.emit('hot-reload (.ejs)', reconciledPath);
-        },100);
+        }, 100);
 
     });
 
@@ -207,9 +213,13 @@ gulp.task('watch:hot-reload', function () {
 
         io.sockets.emit('start-progress-bar');
 
-        var stream = transpileJSX();
+        var ee = transpileJSX();
 
-        stream.on('end',function(){
+        ee.on('error', function (err) {
+            io.sockets.emit('.jsx transform error', JSON.stringify(err))
+        });
+
+        ee.on('end', function () {
             io.sockets.emit('hot-reload (.jsx)', reconciledPath);
         });
 
@@ -223,9 +233,9 @@ gulp.task('watch:hot-reload', function () {
 
         io.sockets.emit('start-progress-bar');
 
-        setTimeout(function(){
+        setTimeout(function () {
             io.sockets.emit('hot-reload (.css)', reconciledPath);
-        },100);
+        }, 100);
 
     });
 
@@ -233,14 +243,39 @@ gulp.task('watch:hot-reload', function () {
 
 
 gulp.task('transpile-jsx', function (cb) {
-     return transpileJSX();
+    var ee =  transpileJSX();
+    ee.on('error', function (err) {
+        cb(err);
+    });
+
+    ee.on('end', function () {
+        cb(null);
+    });
 });
 
-function transpileJSX(){
-    return gulp.src('./public/static/app/js/views/**/*.js')
-        .pipe(react({harmony: false}))
-        .pipe(gulp.dest('./public/static/app/js/jsx'));
+function transpileJSX() {
+
+    var ee = new EE();
+
+    gulp.src('./public/static/app/js/views/**/*.js')
+
+        .pipe(react({harmony: false})).on('error', function (err) {
+
+            ee.emit('error',err);
+        })
+        .pipe(gulp.dest('./public/static/app/js/jsx')).on('error', function (err) {
+
+            ee.emit('error',err);
+
+        }).on('end', function () {
+
+            ee.emit('end');
+
+        });
+
+    return ee;
 }
+
 
 function transpileFile(file) {
 
@@ -250,7 +285,6 @@ function transpileFile(file) {
         .pipe(react({harmony: false}))
         .pipe(gulp.dest(dest));
 }
-
 
 
 gulp.task('metagen:all', ['transpile-jsx'], function (done) {

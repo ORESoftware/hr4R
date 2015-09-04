@@ -66,7 +66,7 @@ define(
                     var self = this;
 
 
-                    require(['#allTemplates','#allStandardViews'],function(allTemplates,asv){
+                    require(['#allTemplates','#allViews'],function(allTemplates,allViews){
 
                         var template = allTemplates['templates/indexTemplate.ejs'];
 
@@ -76,11 +76,11 @@ define(
 
                         self.$el.html(ret);
 
-                        self.childViews.childLoginView = new asv['loginView']({el: self.$('#child-view-login-container')});
+                        self.childViews.childLoginView = new allViews['standardViews/loginView']({el: self.$('#child-view-login-container')});
                         self.childViews.childLoginView.render();
                         self.childViews.childLoginView.delegateEvents();
 
-                        self.childViews.childRegisteredUsersView = new asv['registeredUsersView']({el: self.$('#child-view-registered-users-container')});
+                        self.childViews.childRegisteredUsersView = new allViews['standardViews/registeredUsersView']({el: self.$('#child-view-registered-users-container')});
                         self.childViews.childRegisteredUsersView.render();
                         self.childViews.childRegisteredUsersView.delegateEvents();
 

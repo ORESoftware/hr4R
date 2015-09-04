@@ -60,13 +60,13 @@ define(
         'app/js/routers/router',
         '#allTemplates',
         '#allControllers',
-        '#allRelViews',
+        '#allViews',
         '#allCSS'
     ],
 
     function (patches, hotReload, boot, Observe, Backbone, _, IJSON,
               React, collections, models, router, allTemplates,
-              allControllers, allRelViews, allCSS) {
+              allControllers, allViews, allCSS) {
 
 
         /////////////////////////////////////

@@ -30,10 +30,10 @@ define(
 
                     var self = this;
 
-                    require(['#allTemplates', '#allReactComponents'], function (allTemplates, allReactComponents) {
+                    require(['#allTemplates', '#allViews'], function (allTemplates, allViews) {
 
                         var template = allTemplates['templates/pictureTemplate.ejs'];
-                        var PictureList = allReactComponents['PictureList'];
+                        var PictureList = allViews['reactComponents/PictureList'];
 
                         var ret = EJS.render(template, {});
 

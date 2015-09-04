@@ -105,6 +105,11 @@ define(
                     console.info('socket disconnected'.toUpperCase());
                 });
 
+                socketHotReload.on('.jsx transform error', function (data) {
+                    window.throwGlobalError(new Error(data));
+                });
+
+
                 function startProgressBar(){
                     $("#hot-reload-progress-bar").show();
                 }
@@ -170,11 +175,11 @@ define(
 
                         updateProgressBar(60);
 
-                        var filename = deCapitalizeFirstLetter(reconcilePath(data,'jsx','standardViews'));
+                        var filename = deCapitalizeFirstLetter(reconcilePath1(data,'jsx'));
 
 
-                        require(['#allStandardViews'],function(asv){
-                            asv[filename] = result;
+                        require(['#allViews'],function(allViews){
+                            allViews[filename] = result;
                             updateProgressBar(80);
                             Backbone.history.loadUrl(Backbone.history.fragment);
                             updateProgressBar(100);

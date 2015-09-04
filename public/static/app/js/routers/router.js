@@ -21,11 +21,10 @@ define(
         'async',
         '#allCollections',
         'ijson',
-        '#allStandardViews',
         'app/js/cssAdder'
     ],
 
-    function (appState, viewState, Backbone, async, collections, IJSON, standardViews, cssAdder) {
+    function (appState, viewState, Backbone, async, collections, IJSON, cssAdder) {
 
 
         var BootRouter = Backbone.Router.extend({
@@ -77,9 +76,9 @@ define(
 
             home: function () {
                 var self = this;
-                require(['#allCSS','#allStandardViews'],function(allCSS,asv){
+                require(['#allCSS','#allViews'],function(allCSS,allViews){
                     self.changeView({
-                        view: new asv['homeView'](),
+                        view: new allViews['standardViews/homeView'](),
                         useSidebar: true,
                         cssAdds:[
                             allCSS['cssx/portal/simple-sidebar.css']
@@ -90,9 +89,9 @@ define(
 
             pictures: function () {
                 var self = this;
-                require(['#allCSS','#allStandardViews'],function(allCSS,asv){
+                require(['#allCSS','#allViews'],function(allCSS,allViews){
                     self.changeView({
-                        view: new asv['pictureView'](),
+                        view: new allViews['standardViews/pictureView'](),
                         useSidebar: true,
                         cssAdds:[
                             allCSS['cssx/pictureList/pictureList.css']
@@ -102,41 +101,52 @@ define(
             },
 
             userProfile: function () {
-                this.changeView({
-                    //view: allViews.UserProfile,
-                    view: new standardViews['userProfileView'](
-                        {
-                            //el:'#main-content-id',
-                            model: appState.get('currentUser'),
-                            collection: collections.users
-                        }
-                    ),
-                    useSidebar: true
+                var self = this;
+                require(['#allCSS','#allViews'],function(allCSS,allViews) {
+                    self.changeView({
+                        view: new allViews['standardViews/userProfileView'](
+                            {
+                                model: appState.get('currentUser'),
+                                collection: collections.users
+                            }
+                        ),
+                        useSidebar: true
+                    });
                 });
             },
 
 
             index: function () {
-                this.changeView({
-                    //view:allViews.Index,
-                    view: new standardViews['IndexView']({collection: collections.users}),
-                    useSidebar: false
+                var self = this;
+                require(['#allCSS','#allViews'],function(allCSS,allViews) {
+                    self.changeView({
+                        view: new allViews['standardViews/IndexView'](
+                            {
+                                collection: collections.users
+                            }
+                        ),
+                        useSidebar: false
+                    });
                 });
             },
 
             dashboard: function () {
-                this.changeView({
-                    //view:allViews.Index,
-                    view: new standardViews['dashboardView']({}),
-                    useSidebar: true
+                var self = this;
+                require(['#allCSS','#allViews'],function(allCSS,allViews) {
+                    self.changeView({
+                        view: new allViews['standardViews/dashboardView']({}),
+                        useSidebar: true
+                    });
                 });
             },
 
             overview: function () {
-                this.changeView({
-                    //view:allViews.Index,
-                    view: new standardViews['overviewView'](),
-                    useSidebar: true
+                var self = this;
+                require(['#allCSS','#allViews'],function(allCSS,allViews) {
+                    self.changeView({
+                        view: new allViews['standardViews/overviewView'](),
+                        useSidebar: true
+                    });
                 });
             },
 
@@ -146,13 +156,13 @@ define(
 
 
             defaultRoute: function () {
-
                 alert('route not found so navigating to home view');
-                this.changeView({
-                    //view:allViews.Home,
-                    //view: new allViews.Home({el: '#main-content-id'}),
-                    view: new standardViews['homeView'](),
-                    useSidebar: true
+                var self = this;
+                require(['#allCSS','#allViews'],function(allCSS,allViews) {
+                    self.changeView({
+                        view: new allViews['standardViews/homeView'](),
+                        useSidebar: true
+                    });
                 });
             },
 
@@ -368,23 +378,28 @@ define(
                 if (this.viewState.get('mainParentView') != null) {
                     this.destroyView(this.viewState.get('mainParentView'));
                 }
-                this.viewState.set('mainView', new standardViews['IndexView']());
-                window.location.hash = 'index'; //TODO why do we need this line?
 
-                if (this.viewState.get('footerView') == null) {
-                    this.viewState.set('footerView', new standardViews['footerView']());
-                }
-                if (this.viewState.get('headerView') == null) {
-                    this.viewState.set('headerView', new standardViews['headerView']());
-                }
-                this.viewState.get('headerView').render();
+                require(['#allViews'],function(allViews){
 
-                //$('#main-div-id').html(this.viewState.get('mainView').render().el);
-                this.viewState.get('mainView').render(function(){
-                    $('#main-div-id').html(self.viewState.get('mainView').el);
+                    self.viewState.set('mainView', new allViews['standardViews/IndexView']());
+                    window.location.hash = 'index'; //TODO why do we need this line?
+
+                    if (self.viewState.get('footerView') == null) {
+                        self.viewState.set('footerView', new allViews['standardViews/footerView']());
+                    }
+                    if (self.viewState.get('headerView') == null) {
+                        self.viewState.set('headerView', new allViews['standardViews/headerView']());
+                    }
+                    self.viewState.get('headerView').render();
+
+                    //$('#main-div-id').html(this.viewState.get('mainView').render().el);
+                    self.viewState.get('mainView').render(function(){
+                        $('#main-div-id').html(self.viewState.get('mainView').el);
+                    });
+
+                    self.viewState.get('footerView').render();
                 });
 
-                this.viewState.get('footerView').render();
 
             }
             else { //user is authenticated/authorized
@@ -394,67 +409,71 @@ define(
                     throw new Error('null view in router');
                 }
 
-                if (opts.useSidebar === true) {
-                    //this.destroyView(this.viewState.get('mainParentView'));
-                    this.viewState.set('mainParentView', new standardViews['portalView']());
-                    var temp = this.viewState.get('mainParentView');
-                    temp.render();
-                }
-                else {
-                    this.destroyView(this.viewState.get('mainParentView'));
-                    this.viewState.set('mainParentView', null);
-                }
+                require(['#allViews'],function(allViews){
 
-                if (this.viewState.get('mainView') != null) {
-                    this.destroyView(this.viewState.get('mainView'));
-                    this.viewState.get('mainView').remove();
-                }
-                this.viewState.set('mainView', view);
+                    if (opts.useSidebar === true) {
+                        //this.destroyView(this.viewState.get('mainParentView'));
+                        self.viewState.set('mainParentView', new allViews['standardViews/portalView']());
+                        var temp = self.viewState.get('mainParentView');
+                        temp.render();
+                    }
+                    else {
+                        self.destroyView(self.viewState.get('mainParentView'));
+                        self.viewState.set('mainParentView', null);
+                    }
 
-                var collection = view.collection;
-                var model = view.model;
+                    if (self.viewState.get('mainView') != null) {
+                        self.destroyView(self.viewState.get('mainView'));
+                        self.viewState.get('mainView').remove();
+                    }
+                    self.viewState.set('mainView', view);
 
-                if(appState.get('env') === 'development'){
-                    window.currentModel = model;
-                    window.currentCollection = collection;
-                }
+                    var collection = view.collection;
+                    var model = view.model;
 
-                //if (this.viewState.get('footerView') == null) {
-                this.viewState.set('footerView', new standardViews['footerView']({model: model, collection: collection}));
-                //}
-                //if (this.viewState.get('headerView') == null) {
-                this.viewState.set('headerView', new standardViews['headerView']());
-                //}
+                    if(appState.get('env') === 'development'){
+                        window.currentModel = model;
+                        window.currentCollection = collection;
+                    }
 
-                //**add stylesheets
-                cssAdder.addAllVia(opts.cssAdds || []);
+                    //if (this.viewState.get('footerView') == null) {
+                    self.viewState.set('footerView', new allViews['standardViews/footerView']({model: model, collection: collection}));
+                    //}
+                    //if (this.viewState.get('headerView') == null) {
+                    self.viewState.set('headerView', new allViews['standardViews/headerView']());
+                    //}
 
-                //**render header**
-                this.viewState.get('headerView').render();
+                    //**add stylesheets
+                    cssAdder.addAllVia(opts.cssAdds || []);
 
-                //**render mainView**
-                //if (this.viewState.get('mainView').givenName !== '@IndexView') {
-                //    $('#main-content-id').html(this.viewState.get('mainView').render().el);
-                //}
-                //else {
-                //    $('#main-div-id').html(this.viewState.get('mainView').render().el);
-                //}
+                    //**render header**
+                    self.viewState.get('headerView').render();
 
-                if (this.viewState.get('mainView').givenName !== '@IndexView') {
-                    this.viewState.get('mainView').render(function(){
-                        $('#main-content-id').html(self.viewState.get('mainView').el)
-                    });
-                }
-                else {
-                    this.viewState.get('mainView').render(function(){
-                        $('#main-div-id').html(self.viewState.get('mainView').el);
-                    });
-                }
+                    //**render mainView**
+                    //if (this.viewState.get('mainView').givenName !== '@IndexView') {
+                    //    $('#main-content-id').html(this.viewState.get('mainView').render().el);
+                    //}
+                    //else {
+                    //    $('#main-div-id').html(this.viewState.get('mainView').render().el);
+                    //}
+
+                    if (self.viewState.get('mainView').givenName !== '@IndexView') {
+                        self.viewState.get('mainView').render(function(){
+                            $('#main-content-id').html(self.viewState.get('mainView').el)
+                        });
+                    }
+                    else {
+                        self.viewState.get('mainView').render(function(){
+                            $('#main-div-id').html(self.viewState.get('mainView').el);
+                        });
+                    }
 
 
-                //**render footer**
-                this.viewState.get('footerView').render();
+                    //**render footer**
+                    self.viewState.get('footerView').render();
 
+
+                });
             }
         }
 

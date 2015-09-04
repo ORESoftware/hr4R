@@ -9,33 +9,19 @@ console.log('loading app/js/ReactComponentMediator.js');
 //TODO: http://beletsky.net/2012/11/baby-steps-to-backbonejs-model.html
 //TODO: http://christianalfoni.github.io/javascript/2014/10/22/nailing-that-validation-with-reactjs.html
 
-//define(['exports','#allReactComponents'],function (exports,allReactComponents) {
-//
-//
-//    exports.allReactComponents = allReactComponents;
-//        //return {
-//        //    findReactComponentByName: function(name){
-//        //
-//        //        return require('#allReactComponents')[name];
-//        //    }
-//        //};
-//        //return function findCollectionByName(name){
-//        //    return allCollections[name];
-//        //}
-//    });
 
 define(
     [
 
         'require',
-        '#allReactComponents'
+        '#allViews'
     ],
 
-    function (require, allReactComponents) {
+    function (require) {
 
         return {
             findReactComponentByName: function (name) {
-                return require('#allReactComponents')[name];
+                return require('#allViews')[name];
             }
         };
 

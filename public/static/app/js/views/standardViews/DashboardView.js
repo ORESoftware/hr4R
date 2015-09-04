@@ -15,17 +15,15 @@ define(
     [
         '#appState',
         '#allCollections',
-        '#allStandardViews',
         'ejs',
         'jquery',
         'underscore',
         'backbone',
-        'react',
-        '#allReactComponents'
+        'react'
     ],
 
 
-    function (appState, allCollections, asv, EJS, $, _, Backbone, React, allReactComponents) {
+    function (appState, allCollections, EJS, $, _, Backbone, React) {
 
 
         var DashboardView = Backbone.View.extend({
@@ -45,10 +43,10 @@ define(
 
                     var self = this;
 
-                    require(['#allTemplates', '#allReactComponents'], function (allTemplates, allReactComponents) {
+                    require(['#allTemplates', '#allViews'], function (allTemplates, allViews) {
 
                         var template = allTemplates['templates/dashboardTemplate.ejs'];
-                        var ServiceChooser = allReactComponents['ServiceChooser'];
+                        var ServiceChooser = allViews['reactComponents/ServiceChooser'];
 
                         var ret = EJS.render(template, {});
 

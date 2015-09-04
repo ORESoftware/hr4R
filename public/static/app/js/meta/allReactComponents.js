@@ -15,7 +15,6 @@ define(
 		"app/js/jsx/reactComponents/Item",
 		"app/js/jsx/reactComponents/Job",
 		"app/js/jsx/reactComponents/JobsList",
-		"app/js/jsx/reactComponents/listView",
 		"app/js/jsx/reactComponents/MenuExample",
 		"app/js/jsx/reactComponents/Picture",
 		"app/js/jsx/reactComponents/PictureList",
@@ -23,6 +22,7 @@ define(
 		"app/js/jsx/reactComponents/Service",
 		"app/js/jsx/reactComponents/ServiceChooser",
 		"app/js/jsx/reactComponents/TimerExample",
+		"app/js/jsx/reactComponents/listView",
 		"app/js/jsx/reactComponents/todoList"
     ],
     function(){
@@ -35,14 +35,14 @@ define(
 			"Item": arguments[3],
 			"Job": arguments[4],
 			"JobsList": arguments[5],
-			"listView": arguments[6],
-			"MenuExample": arguments[7],
-			"Picture": arguments[8],
-			"PictureList": arguments[9],
-			"RealTimeSearchView": arguments[10],
-			"Service": arguments[11],
-			"ServiceChooser": arguments[12],
-			"TimerExample": arguments[13],
+			"MenuExample": arguments[6],
+			"Picture": arguments[7],
+			"PictureList": arguments[8],
+			"RealTimeSearchView": arguments[9],
+			"Service": arguments[10],
+			"ServiceChooser": arguments[11],
+			"TimerExample": arguments[12],
+			"listView": arguments[13],
 			"todoList": arguments[14]
         }
   });
