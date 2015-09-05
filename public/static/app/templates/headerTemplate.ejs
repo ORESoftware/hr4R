@@ -2,10 +2,10 @@
     <div>
         <div id="header-div-id" class="page-header">
             <div class="col-md-2">
-            <% if(appState.get('currentUser') !== null) { %>
-            <div>Logged In As: <%= appState.get('currentUser').get('firstName') + " " + appState.get('currentUser').get('lastName') %>(<%= appState.get('currentUser').get('username')%>)</div>
+            <% if(locals.appState.get('currentUser') !== null) { %>
+            <div>Logged In As: <%= locals.appState.get('currentUser').get('firstName') + " " + locals.appState.get('currentUser').get('lastName') %>(<%= locals.appState.get('currentUser').get('username')%>)</div>
             <button id="logout-button-id">Logout</button>
-            <% if(viewState.get('mainParentView') !== null && viewState.get('mainParentView').givenName === '@PortalView') {%>
+            <% if(locals.viewState.get('mainParentView') !== null && locals.viewState.get('mainParentView').givenName === '@PortalView') {%>
                 <div>
                     <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
                     <script>

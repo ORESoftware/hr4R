@@ -6,10 +6,11 @@
 define(
     [
         'react',
-        'app/js/jsx/reactComponents/Service'
+        'require'
+        //'app/js/jsx/reactComponents/Service'
     ],
 
-    function (React, Service) {
+    function (React,require) {
         /** @jsx React.DOM */
 
 
@@ -23,9 +24,22 @@ define(
                 this.setState({total: this.state.total + price});
             },
 
+            renderAsync: function () {
+
+                var self = this;
+
+                require(['app/js/jsx/reactComponents/Service'], function (Service) {
+
+                    self.render(Service);
+
+                });
+            },
+
             render: function () {
 
                 var self = this;
+
+                var Service = require('app/js/jsx/reactComponents/Service');
 
                 var services = this.props.items.map(function (s) {
 
