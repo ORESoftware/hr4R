@@ -118,15 +118,15 @@ var metagens = {
 
 
 function runMetagen(opts, cb) {
-    grm(opts, function (err, res) {
+    grm(opts, function (err) {
         if (typeof cb === 'function') {
-            cb(err, res)
+            cb(err);
         }
-    })
+    });
 }
 
 
-gulp.task('watch:all', function () {
+gulp.task('watch:metagen', function () {
 
     //gulp.watch('./public/static/app/templates/**/*.*').on('change', function (file) {
     //    runMetagen(metagens.templates, null);
@@ -189,7 +189,7 @@ function reconcilePathForRequireJS(file) {
 }
 
 
-gulp.task('watch:hot-reload', function () {
+gulp.task('watch:hot-reload', function (done) {
 
 
     gulp.watch('./public/static/**/*.ejs').on('change', function (file) {
@@ -238,6 +238,8 @@ gulp.task('watch:hot-reload', function () {
         }, 100);
 
     });
+
+    done();
 
 });
 
@@ -294,21 +296,23 @@ gulp.task('metagen:all', ['transpile-jsx'], function (done) {
 
     taskNames.forEach(function (name, index) {
         funcs.push(function (cb) {
-            runMetagen(metagens[name], function (err, res) {
-                cb(err, res)
+            grm(metagens[name], function (err) {
+                cb(err);
             });
         });
     });
 
-    async.parallel(funcs, function (err, results) {
+    async.parallel(funcs, function (err) {
         done(err);
     });
 });
 
 
-gulp.task('default', ['metagen:all', 'watch:all', 'watch:hot-reload'], function (done) {
-
+gulp.task('default', ['metagen:all', 'watch:hot-reload'], function (done) {
     done();
+});
 
+gulp.task('start:server',['metagen:all'],function(done){
+    done();
 });
 

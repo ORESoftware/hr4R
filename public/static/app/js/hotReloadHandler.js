@@ -184,7 +184,6 @@ define(
                             Backbone.history.loadUrl(Backbone.history.fragment);
                             updateProgressBar(100);
                         });
-
                     });
                 });
 

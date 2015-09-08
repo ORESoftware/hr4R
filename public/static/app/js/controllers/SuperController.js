@@ -3,13 +3,11 @@
  */
 
 
-define(
-    [
+define([
         'jquery',
         'underscore',
         'backbone',
         '#allCollections'
-
     ],
     function ($, _, Backbone, allCollections) {
 

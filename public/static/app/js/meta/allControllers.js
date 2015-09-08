@@ -10,6 +10,8 @@
 define(
     [
         "app/js/controllers/all/jobs",
+		"app/js/controllers/all/more/cars",
+		"app/js/controllers/all/more/evenMore/spaceships",
 		"app/js/controllers/all/users"
     ],
     function(){
@@ -17,6 +19,8 @@ define(
         return {
 
             "jobs": arguments[0],
-			"users": arguments[1]
+			"more/cars": arguments[1],
+			"more/evenMore/spaceships": arguments[2],
+			"users": arguments[3]
         }
   });

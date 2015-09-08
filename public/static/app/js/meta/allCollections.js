@@ -7,8 +7,7 @@
 console.log('loading allCollections');
 
 
-define(
-    [
+define([
         'app/js/collections/all/usersCollection',
         'app/js/collections/all/jobsCollection'
     ],
