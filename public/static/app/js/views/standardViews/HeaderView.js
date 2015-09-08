@@ -85,7 +85,7 @@ define(
                     });
                 },
 
-                render: function (cb) {
+                render: function () {
 
                     if (!window.documentIsReady) {
                         return;
@@ -93,25 +93,19 @@ define(
 
                     var self = this;
 
-                    require(['#allTemplates'],function(allTemplates){
+                    var allTemplates = require('#allTemplates');
+                    var allViews = require('#allViews');
 
-                        var template = allTemplates['templates/headerTemplate.ejs'];
+                    var template = allTemplates['templates/headerTemplate.ejs'];
 
-                        var ret = EJS.render(template, {
-                            appState: appState,
-                            viewState: viewState,
-                            socketConnection: giant.getSocketIOConn().id
-                        });
-                        self.$el.html(ret);
-
-                        if(typeof cb === 'function'){
-                            cb();
-                        }
-
-                    },function(err){
-                        console.error(err);
-                        throw err;
+                    var ret = EJS.render(template, {
+                        appState: appState,
+                        viewState: viewState,
+                        socketConnection: giant.getSocketIOConn().id
                     });
+                    self.$el.html(ret);
+
+                    return this;
 
                 },
 
@@ -161,16 +155,16 @@ define(
                 },
                 onClickHotReload: function (event) {
 
-                   //var toReload = ['text!app/templates/headerTemplate.ejs'];
-                   //
-                   // var self = this;
-                   //
-                   // window.hotReload(toReload,function(err,results){
-                   //
-                   //     HeaderView.template = results[0];
-                   //     self.render();
-                   //
-                   // });
+                    //var toReload = ['text!app/templates/headerTemplate.ejs'];
+                    //
+                    // var self = this;
+                    //
+                    // window.hotReload(toReload,function(err,results){
+                    //
+                    //     HeaderView.template = results[0];
+                    //     self.render();
+                    //
+                    // });
 
                 },
                 onClickResetAll: function (event) {

@@ -26,34 +26,29 @@ define(
                     _.bindAll(this, 'render');
                 },
 
-                render: function (cb) {
+                render: function () {
 
                     var self = this;
 
-                    require(['#allTemplates', '#allViews'], function (allTemplates, allViews) {
 
-                        var template = allTemplates['templates/pictureTemplate.ejs'];
-                        var PictureList = allViews['reactComponents/PictureList'];
+                    var allTemplates = require('#allTemplates');
+                    var allViews = require('#allViews');
 
-                        var ret = EJS.render(template, {});
+                    var template = allTemplates['templates/pictureTemplate.ejs'];
+                    var PictureList = allViews['reactComponents/PictureList'];
 
-                        self.$el.html(ret);
+                    var ret = EJS.render(template, {});
 
-                        React.render(
-                            React.createElement(PictureList, {apiKey: "642176ece1e7445e99244cec26f4de1f"}),
-                            $(self.el).find('#picture-list-example-div-id')[0]
-                        );
+                    self.$el.html(ret);
 
-                        //TODO: make React.render work with this.el or this.$el
+                    React.render(
+                        React.createElement(PictureList, {apiKey: "642176ece1e7445e99244cec26f4de1f"}),
+                        $(self.el).find('#picture-list-example-div-id')[0]
+                    );
 
-                        if (typeof cb === 'function') {
-                            cb();
-                        }
+                    //TODO: make React.render work with this.el or this.$el
 
-                    }, function (err) {
-                        console.error(err);
-                        throw err;
-                    });
+                    return this;
 
                 }
             },

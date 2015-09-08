@@ -15,13 +15,11 @@ define(
         'jquery',
         'underscore',
         'backbone',
-        'backbone-validation',
-        '#allTemplates'
-        //'text!app/templates/portal.ejs'
+        'backbone-validation'
     ],
 
 
-    function (appState, models, collections, form2js, EJS, $, _, Backbone, BackboneValidation, allTemplates) {
+    function (appState, models, collections, form2js, EJS, $, _, Backbone, BackboneValidation) {
 
 
         var template = allTemplates['templates/portalTemplate.ejs'];
@@ -65,16 +63,21 @@ define(
                 },
 
                 render: function () {
-                    console.log('attempting to render PortalView.');
 
                     var self = this;
 
-                    var ret = EJS.render(PortalView.template, {});
+                    var allTemplates = require('#allTemplates');
+                    var allViews = require('#allViews');
+
+                    var template = allTemplates['templates/portalTemplate.ejs'];
+
+                    var ret = EJS.render(template, {});
                     $('#main-div-id').html(ret);
-                    console.log('PortalView (re)rendered');
+
 
                     return this;
                 },
+
                 handleModelSyncSuccess: function () {
                     console.log('model sync success');
                 },

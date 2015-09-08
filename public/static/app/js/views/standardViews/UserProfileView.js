@@ -104,31 +104,25 @@ define(
                 },
                 render: function (cb) {
 
-
                     var self = this;
 
-                    require(['#allTemplates','#allViews'],function(allTemplates, allViews){
+                    var allTemplates = require('#allTemplates');
+                    var allViews = require('#allViews');
 
-                        var template = allTemplates['templates/userProfileTemplate.ejs'];
+                    var template = allTemplates['templates/userProfileTemplate.ejs'];
 
-                        var ret = EJS.render(template, {
-                            user: self.model,
-                            model:self.model,
-                            collection:self.collection
-                        });
-
-                        self.$el.html(ret);
-
-                        if(typeof cb === 'function'){
-                            cb();
-                        }
-
-                    },function(err){
-                        console.error(err);
-                        throw err;
+                    var ret = EJS.render(template, {
+                        user: self.model,
+                        model: self.model,
+                        collection: self.collection
                     });
 
+                    self.$el.html(ret);
+
+                    return this;
+
                 },
+
                 onClickSubmitForm: function (event) {
                     event.preventDefault();
 

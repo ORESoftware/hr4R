@@ -11,6 +11,7 @@
     "start_test": "NODE_ENV=test node ./bin/www",
     "swdev": "node pre-dev&&set NODE_ENV=development&&nodemon",
     "swprod": "set NODE_ENV=production&&node ./bin/www",
+    "startdev": "node pre-dev && NODE_ENV=development && node ./bin/www",
     "start_dev": "node pre-dev && NODE_ENV=development && nodemon",
     "build": "r.js -o ./build/build.js",
     "build_windows": "r.js.cmd -o ./build/build.js",

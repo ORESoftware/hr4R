@@ -38,40 +38,35 @@ define(
 
                 //http://stackoverflow.com/questions/7113049/backbone-js-nesting-views-through-templating
 
-                render: function (cb) {
+                render: function () {
 
 
                     var self = this;
 
-                    require(['#allTemplates', '#allViews'], function (allTemplates, allViews) {
+                    var allTemplates = require('#allTemplates');
+                    var allViews = require('#allViews');
 
-                        var template = allTemplates['templates/dashboardTemplate.ejs'];
-                        var ServiceChooser = allViews['reactComponents/ServiceChooser'];
 
-                        var ret = EJS.render(template, {});
+                    var template = allTemplates['templates/dashboardTemplate.ejs'];
+                    var ServiceChooser = allViews['reactComponents/ServiceChooser'];
 
-                        self.$el.html(ret);
+                    var ret = EJS.render(template, {});
 
-                        var services = [
-                            {name: 'Web Development', price: 300},
-                            {name: 'Design', price: 400},
-                            {name: 'Integration', price: 250},
-                            {name: 'Training', price: 220}
-                        ];
+                    self.$el.html(ret);
 
-                        React.render(
-                            React.createElement(ServiceChooser, {items:  services }),
-                            $(self.el).find('#service-chooser-example-div-id')[0]
-                        );
+                    var services = [
+                        {name: 'Web Development', price: 300},
+                        {name: 'Design', price: 400},
+                        {name: 'Integration', price: 250},
+                        {name: 'Training', price: 220}
+                    ];
 
-                        if (typeof cb === 'function') {
-                            cb();
-                        }
+                    React.render(
+                        React.createElement(ServiceChooser, {items:  services }),
+                        $(self.el).find('#service-chooser-example-div-id')[0]
+                    );
 
-                    },function(err){
-                        console.error(err);
-                        throw err;
-                    });
+                    return this;
 
                 }
             },

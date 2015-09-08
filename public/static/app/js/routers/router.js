@@ -391,10 +391,10 @@ define(
                     }
                     self.viewState.get('headerView').render();
 
-                    //$('#main-div-id').html(this.viewState.get('mainView').render().el);
-                    self.viewState.get('mainView').render(function () {
-                        $('#main-div-id').html(self.viewState.get('mainView').el);
-                    });
+                    $('#main-div-id').html(self.viewState.get('mainView').render().el);
+                    //self.viewState.get('mainView').render(function () {
+                    //    $('#main-div-id').html(self.viewState.get('mainView').el);
+                    //});
 
                     self.viewState.get('footerView').render();
                 });
@@ -437,15 +437,14 @@ define(
                         window.currentCollection = collection;
                     }
 
-                    //if (this.viewState.get('footerView') == null) {
                     self.viewState.set('footerView', new allViews['standardViews/footerView']({
                         model: model,
                         collection: collection
                     }));
-                    //}
-                    //if (this.viewState.get('headerView') == null) {
+
+
                     self.viewState.set('headerView', new allViews['standardViews/headerView']());
-                    //}
+
 
                     //**add stylesheets
                     cssAdder.addAllVia(opts.cssAdds || []);
@@ -475,7 +474,6 @@ define(
 
                     //**render footer**
                     self.viewState.get('footerView').render();
-
 
                 });
             }

@@ -104,32 +104,26 @@ define(
                 },
                 render: function (cb) {
 
-                    if(!window.documentIsReady){
+                    if (!window.documentIsReady) {
                         return;
                     }
 
                     var self = this;
 
-                    require(['#allTemplates'],function(allTemplates){
+                    var allTemplates = require('#allTemplates');
+                    var allViews = require('#allViews');
 
-                        var template = allTemplates['templates/footerTemplate.ejs'];
+                    var template = allTemplates['templates/footerTemplate.ejs'];
 
-                        var ret = EJS.render(template, {
-                            appState:appState,
-                            model: self.model,
-                            collection: self.collection
-                        });
-
-                        self.$el.html(ret);
-
-                        if(typeof cb === 'function'){
-                            cb();
-                        }
-
-                    },function(err){
-                        console.error(err);
-                        throw err;
+                    var ret = EJS.render(template, {
+                        appState: appState,
+                        model: self.model,
+                        collection: self.collection
                     });
+
+                    self.$el.html(ret);
+
+                    return this;
                 },
 
                 onClickFooter: function (event) {

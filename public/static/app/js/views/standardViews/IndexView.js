@@ -60,38 +60,31 @@ define(
 
                 //http://stackoverflow.com/questions/7113049/backbone-js-nesting-views-through-templating
 
-                render: function (cb) {
+                render: function () {
 
                     var data = this.collection.models;
                     var self = this;
 
+                    var allTemplates = require('#allTemplates');
+                    var allViews = require('#allViews');
 
-                    require(['#allTemplates','#allViews'],function(allTemplates,allViews){
+                    var template = allTemplates['templates/indexTemplate.ejs'];
 
-                        var template = allTemplates['templates/indexTemplate.ejs'];
-
-                        var ret = EJS.render(template, {
-                            users: data
-                        });
-
-                        self.$el.html(ret);
-
-                        self.childViews.childLoginView = new allViews['standardViews/loginView']({el: self.$('#child-view-login-container')});
-                        self.childViews.childLoginView.render();
-                        self.childViews.childLoginView.delegateEvents();
-
-                        self.childViews.childRegisteredUsersView = new allViews['standardViews/registeredUsersView']({el: self.$('#child-view-registered-users-container')});
-                        self.childViews.childRegisteredUsersView.render();
-                        self.childViews.childRegisteredUsersView.delegateEvents();
-
-                        if(typeof cb === 'function'){
-                            cb();
-                        }
-                    },
-                    function(err){
-                        console.error(err);
-                        throw err;
+                    var ret = EJS.render(template, {
+                        users: data
                     });
+
+                    self.$el.html(ret);
+
+                    self.childViews.childLoginView = new allViews['standardViews/loginView']({el: self.$('#child-view-login-container')});
+                    self.childViews.childLoginView.render();
+                    self.childViews.childLoginView.delegateEvents();
+
+                    self.childViews.childRegisteredUsersView = new allViews['standardViews/registeredUsersView']({el: self.$('#child-view-registered-users-container')});
+                    self.childViews.childRegisteredUsersView.render();
+                    self.childViews.childRegisteredUsersView.delegateEvents();
+
+                    return this;
                 },
 
                 onFetchSuccess: function () {

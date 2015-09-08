@@ -80,29 +80,22 @@ define(
 
                     var self = this;
 
-                    require(['#allTemplates', '#allViews'], function (allTemplates, allViews) {
+                    var allTemplates = require('#allTemplates');
+                    var allViews = require('#allViews');
 
-                        var data = self.collection.models;
+                    var data = self.collection.models;
 
-                        var template = allTemplates['templates/registeredUsersTemplate.ejs'];
+                    var template = allTemplates['templates/registeredUsersTemplate.ejs'];
 
-                        var ret = EJS.render(template, {
-                            users: data,
-                            model: self.model,
-                            collection: self.collection
-                        });
-
-                        self.$el.html(ret);
-
-                        if (typeof cb === 'function') {
-                            cb();
-                        }
-
-                    }, function (err) {
-                        console.error(err);
-                        throw err;
+                    var ret = EJS.render(template, {
+                        users: data,
+                        model: self.model,
+                        collection: self.collection
                     });
 
+                    self.$el.html(ret);
+
+                    return this;
                 }
             },
             { //class properties

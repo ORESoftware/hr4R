@@ -15,7 +15,7 @@ define(
     ],
 
 
-    function (appState, collections,EJS, $, _, Backbone, React) {
+    function (appState, collections, EJS, $, _, Backbone, React) {
 
 
         var OverviewView = Backbone.View.extend({
@@ -29,7 +29,7 @@ define(
                     //this.model = new models.UserModel();
                 },
 
-                render: function (cb) {
+                render: function () {
 
                     var libraries = [
 
@@ -52,25 +52,24 @@ define(
 
                     var self = this;
 
-                    require(['#allTemplates','#allViews'],function(allTemplates,allViews){
 
-                        var template = allTemplates['templates/overviewTemplate.ejs'];
+                    var allTemplates = require('#allTemplates');
+                    var allViews = require('#allViews');
 
-                        var ret = EJS.render(template, {});
+                    var template = allTemplates['templates/overviewTemplate.ejs'];
 
-                        self.$el.html(ret);
+                    var ret = EJS.render(template, {});
 
-                        var SearchExample = allViews['reactComponents/RealTimeSearchView'];
+                    self.$el.html(ret);
 
-                        React.render(
-                            React.createElement(SearchExample, {items:  libraries }),
-                            $(self.el).find('#real-time-search-example-div-id')[0]
-                        );
+                    var SearchExample = allViews['reactComponents/RealTimeSearchView'];
 
-                        if (typeof cb === 'function') {
-                            cb();
-                        }
-                    });
+                    React.render(
+                        React.createElement(SearchExample, {items:  libraries }),
+                        $(self.el).find('#real-time-search-example-div-id')[0]
+                    );
+
+                    return this;
 
 
                     //TODO: make React.render work with this.el or this.$el
