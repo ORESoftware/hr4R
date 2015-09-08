@@ -22,10 +22,11 @@ var replaceStream = require('replacestream');
 var replace = require('gulp-replace');
 var source = require('vinyl-source-stream');
 var react = require('gulp-react');
+var nodemon = require('gulp-nodemon');
 
 //misc
 var fse = require('fs-extra');
-var grm = require('gulp-requirejs-metagen');
+var grm = require('requirejs-metagen');
 
 
 var io = socketio.listen('3002', function (err, msg) {
@@ -247,10 +248,12 @@ gulp.task('watch:hot-reload', function (done) {
 gulp.task('transpile-jsx', function (cb) {
     var ee =  transpileJSX();
     ee.on('error', function (err) {
+        console.log('err in transpile',err);
         cb(err);
     });
 
-    ee.on('end', function () {
+    ee.on('end', function (msg) {
+        console.log('end in transpile',msg);
         cb(null);
     });
 });
@@ -294,17 +297,33 @@ gulp.task('metagen:all', ['transpile-jsx'], function (done) {
     var taskNames = Object.keys(metagens);
     var funcs = [];
 
-    taskNames.forEach(function (name, index) {
+    taskNames.forEach(function (name) {
         funcs.push(function (cb) {
             grm(metagens[name], function (err) {
+                console.log('done with metagen -->',metagens[name]);
                 cb(err);
             });
         });
     });
 
-    async.parallel(funcs, function (err) {
+    async.parallel(funcs, function (err,results) {
+        console.log('done metagen:all',err,results);
         done(err);
     });
+});
+
+
+
+gulp.task('nodemon', ['metagen:all'], function () {
+
+    nodemon({
+
+        script: 'bin/www.js',
+        ext: 'js',
+        env: { 'NODE_ENV': 'development' }
+
+    }).on('restart', ['metagen:all']);
+
 });
 
 

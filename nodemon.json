@@ -1,0 +1,6 @@
+{
+  "verbose": true,
+  "ignore": ["public/*", "test/*"],
+  "execMap": {
+  }
+}

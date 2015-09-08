@@ -7,24 +7,18 @@
   },
   "scripts": {
     "prestart": "",
-    "start": "NODE_ENV=production node ./bin/www",
-    "prestart_test": "",
+    "start": "node ./bin/www",
     "start_test": "NODE_ENV=test node ./bin/www",
-    "swdev": "node pre-dev&&set NODE_ENV=development&&node ./bin/www",
-    "swprod": "node gulp start:server&&set NODE_ENV=production&&node ./bin/www",
-    "prestart_dev": "",
-    "start_dev": "gulp && NODE_ENV=development node ./bin/www",
-    "prestart_nodemon": "",
-    "start_nodemon": "NODE_ENV=development nodemon ./bin/www",
-    "start_nodemon_windows": "set NODE_ENV=development&&nodemon ./bin/www",
+    "swdev": "node pre-dev&&set NODE_ENV=development&&nodemon",
+    "swprod": "set NODE_ENV=production&&node ./bin/www",
+    "start_dev": "node pre-dev && NODE_ENV=development && nodemon",
     "build": "r.js -o ./build/build.js",
     "build_windows": "r.js.cmd -o ./build/build.js",
     "mocha_run_test": "mocha --grep $TEST_NAME",
     "start_expose_gc": "node --expose-gc ./bin/www",
     "eslint_nodejs": "eslint --config ./node.eslintrc --ignore-path ./node.eslintignore .",
     "eslint_browser": "eslint --config ./browser.eslintrc --ignore-path ./browser.eslintignore ./public",
-    "gzip": "gzip -9 ./public/static/app/optimized/optimized.js",
-    "madge": "madge --circular --format amd ./"
+    "gzip": "gzip -9 ./public/static/app/optimized/optimized.js"
   },
   "dependencies": {
     "async": "^1.4.0",
@@ -63,6 +57,7 @@
   "devDependencies": {
     "debug": "^2.2.0",
     "gulp": "^3.9.0",
+    "gulp-nodemon": "^2.0.4",
     "gulp-react": "^3.0.1",
     "mocha": "^2.2.5"
   }
