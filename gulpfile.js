@@ -16,9 +16,7 @@ var async = require('async');
 var _ = require('underscore');
 var EE = require('events').EventEmitter;
 
-//plugins
-var jshint = require('gulp-jshint');
-var replaceStream = require('replacestream');
+//gulp plugins
 var replace = require('gulp-replace');
 var source = require('vinyl-source-stream');
 var react = require('gulp-react');
@@ -29,19 +27,7 @@ var fse = require('fs-extra');
 var grm = require('requirejs-metagen');
 
 
-var io = socketio.listen('3002', function (err, msg) {
-    if (err) {
-        console.error(err);
-    }
-    console.log(msg);
-});
 
-io.on('connection', function (socket) {
-    console.log('a user connected');
-    socket.on('disconnect', function () {
-        console.log('user disconnected');
-    });
-});
 
 /*
  Gulp uses vinyl-fs, from which it inherits the gulp.src() and gulp.dest() methods.
@@ -190,7 +176,21 @@ function reconcilePathForRequireJS(file) {
 }
 
 
-gulp.task('watch:hot-reload', function (done) {
+gulp.task('watch:hot-reload', function () {
+
+    var io = socketio.listen('3002', function (err, msg) {
+        if (err) {
+            console.error(err);
+        }
+        console.log(msg);
+    });
+
+    io.on('connection', function (socket) {
+        console.log('a user connected');
+        socket.on('disconnect', function () {
+            console.log('user disconnected');
+        });
+    });
 
 
     gulp.watch('./public/static/**/*.ejs').on('change', function (file) {
@@ -240,7 +240,6 @@ gulp.task('watch:hot-reload', function (done) {
 
     });
 
-    done();
 
 });
 
@@ -248,12 +247,10 @@ gulp.task('watch:hot-reload', function (done) {
 gulp.task('transpile-jsx', function (cb) {
     var ee =  transpileJSX();
     ee.on('error', function (err) {
-        console.log('err in transpile',err);
         cb(err);
     });
 
     ee.on('end', function (msg) {
-        console.log('end in transpile',msg);
         cb(null);
     });
 });
@@ -300,14 +297,12 @@ gulp.task('metagen:all', ['transpile-jsx'], function (done) {
     taskNames.forEach(function (name) {
         funcs.push(function (cb) {
             grm(metagens[name], function (err) {
-                console.log('done with metagen -->',metagens[name]);
                 cb(err);
             });
         });
     });
 
-    async.parallel(funcs, function (err,results) {
-        console.log('done metagen:all',err,results);
+    async.parallel(funcs, function (err) {
         done(err);
     });
 });

@@ -76,11 +76,11 @@ define(
 
             home: function () {
                 var self = this;
-                require(['#allCSS','#allViews'],function(allCSS,allViews){
+                require(['#allCSS', '#allViews'], function (allCSS, allViews) {
                     self.changeView({
                         view: new allViews['standardViews/homeView'](),
                         useSidebar: true,
-                        cssAdds:[
+                        cssAdds: [
                             allCSS['cssx/portal/simple-sidebar.css']
                         ]
                     });
@@ -89,11 +89,11 @@ define(
 
             pictures: function () {
                 var self = this;
-                require(['#allCSS','#allViews'],function(allCSS,allViews){
+                require(['#allCSS', '#allViews'], function (allCSS, allViews) {
                     self.changeView({
                         view: new allViews['standardViews/pictureView'](),
                         useSidebar: true,
-                        cssAdds:[
+                        cssAdds: [
                             allCSS['cssx/pictureList/pictureList.css']
                         ]
                     });
@@ -102,7 +102,7 @@ define(
 
             userProfile: function () {
                 var self = this;
-                require(['#allCSS','#allViews'],function(allCSS,allViews) {
+                require(['#allCSS', '#allViews'], function (allCSS, allViews) {
                     self.changeView({
                         view: new allViews['standardViews/userProfileView'](
                             {
@@ -118,7 +118,7 @@ define(
 
             index: function () {
                 var self = this;
-                require(['#allCSS','#allViews'],function(allCSS,allViews) {
+                require(['#allCSS', '#allViews'], function (allCSS, allViews) {
                     self.changeView({
                         view: new allViews['standardViews/IndexView'](
                             {
@@ -132,7 +132,7 @@ define(
 
             dashboard: function () {
                 var self = this;
-                require(['#allCSS','#allViews'],function(allCSS,allViews) {
+                require(['#allCSS', '#allViews'], function (allCSS, allViews) {
                     self.changeView({
                         view: new allViews['standardViews/dashboardView']({}),
                         useSidebar: true
@@ -142,7 +142,7 @@ define(
 
             overview: function () {
                 var self = this;
-                require(['#allCSS','#allViews'],function(allCSS,allViews) {
+                require(['#allCSS', '#allViews'], function (allCSS, allViews) {
                     self.changeView({
                         view: new allViews['standardViews/overviewView'](),
                         useSidebar: true
@@ -158,7 +158,7 @@ define(
             defaultRoute: function () {
                 alert('route not found so navigating to home view');
                 var self = this;
-                require(['#allCSS','#allViews'],function(allCSS,allViews) {
+                require(['#allCSS', '#allViews'], function (allCSS, allViews) {
                     self.changeView({
                         view: new allViews['standardViews/homeView'](),
                         useSidebar: true
@@ -304,11 +304,11 @@ define(
                         }
                         else {
 
-                            if(!window.documentIsReady){
+                            if (!window.documentIsReady) {
                                 //here we don't bother rendering stuff before document is ready?
                                 return;
                             }
-                            else{
+                            else {
                                 continueOn.bind(self)(opts);
                             }
 
@@ -370,7 +370,6 @@ define(
             cssAdder.removeAllTempCSS();
 
 
-
             if (!appState.currentUserSessionIsOK()) {
                 if (this.viewState.get('mainView') != null) {
                     this.destroyView(this.viewState.get('mainView'));
@@ -379,7 +378,7 @@ define(
                     this.destroyView(this.viewState.get('mainParentView'));
                 }
 
-                require(['#allViews'],function(allViews){
+                require(['#allViews'], function (allViews) {
 
                     self.viewState.set('mainView', new allViews['standardViews/IndexView']());
                     window.location.hash = 'index'; //TODO why do we need this line?
@@ -393,7 +392,7 @@ define(
                     self.viewState.get('headerView').render();
 
                     //$('#main-div-id').html(this.viewState.get('mainView').render().el);
-                    self.viewState.get('mainView').render(function(){
+                    self.viewState.get('mainView').render(function () {
                         $('#main-div-id').html(self.viewState.get('mainView').el);
                     });
 
@@ -409,7 +408,9 @@ define(
                     throw new Error('null view in router');
                 }
 
-                require(['#allViews'],function(allViews){
+                require(['#allViews', '#allTemplates'], function (allViews, allTemplates) {
+
+                    //we can do dependency injection by passing allViews and allTemplates to render function of Backbone
 
                     if (opts.useSidebar === true) {
                         //this.destroyView(this.viewState.get('mainParentView'));
@@ -431,13 +432,16 @@ define(
                     var collection = view.collection;
                     var model = view.model;
 
-                    if(appState.get('env') === 'development'){
+                    if (appState.get('env') === 'development') {
                         window.currentModel = model;
                         window.currentCollection = collection;
                     }
 
                     //if (this.viewState.get('footerView') == null) {
-                    self.viewState.set('footerView', new allViews['standardViews/footerView']({model: model, collection: collection}));
+                    self.viewState.set('footerView', new allViews['standardViews/footerView']({
+                        model: model,
+                        collection: collection
+                    }));
                     //}
                     //if (this.viewState.get('headerView') == null) {
                     self.viewState.set('headerView', new allViews['standardViews/headerView']());
@@ -450,23 +454,23 @@ define(
                     self.viewState.get('headerView').render();
 
                     //**render mainView**
-                    //if (this.viewState.get('mainView').givenName !== '@IndexView') {
-                    //    $('#main-content-id').html(this.viewState.get('mainView').render().el);
-                    //}
-                    //else {
-                    //    $('#main-div-id').html(this.viewState.get('mainView').render().el);
-                    //}
-
                     if (self.viewState.get('mainView').givenName !== '@IndexView') {
-                        self.viewState.get('mainView').render(function(){
-                            $('#main-content-id').html(self.viewState.get('mainView').el)
-                        });
+                        $('#main-content-id').html(self.viewState.get('mainView').render().el);
                     }
                     else {
-                        self.viewState.get('mainView').render(function(){
-                            $('#main-div-id').html(self.viewState.get('mainView').el);
-                        });
+                        $('#main-div-id').html(self.viewState.get('mainView').render().el);
                     }
+
+                    //if (self.viewState.get('mainView').givenName !== '@IndexView') {
+                    //    self.viewState.get('mainView').render(function(){
+                    //        $('#main-content-id').html(self.viewState.get('mainView').el)
+                    //    });
+                    //}
+                    //else {
+                    //    self.viewState.get('mainView').render(function(){
+                    //        $('#main-div-id').html(self.viewState.get('mainView').el);
+                    //    });
+                    //}
 
 
                     //**render footer**

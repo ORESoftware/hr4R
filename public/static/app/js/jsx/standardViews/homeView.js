@@ -77,54 +77,49 @@ define(
                 },
 
 
-                render: function (cb) {
+                render: function () {
 
                     var self = this;
 
-                    require(['#allTemplates', '#allViews'], function (allTemplates, allViews) {
 
-                        var template = allTemplates['templates/homeTemplate.ejs'];
+                    var allTemplates = require('#allTemplates');
+                    var allViews = require('#allViews');
 
-                        var ret = EJS.render(template, {});
+                    var template = allTemplates['templates/homeTemplate.ejs'];
 
-                        self.$el.html(ret);
+                    var ret = EJS.render(template, {});
 
-                        // Load Mock Product Data into localStorage
-                        ProductData.init();
+                    self.$el.html(ret);
 
-                        // Load Mock API Call
-                        CartAPI.getProductData();
+                    // Load Mock Product Data into localStorage
+                    ProductData.init();
 
-                        var FluxCartApp = allViews['reactComponents/FluxCartApp'];
-                        var TimerExample = allViews['reactComponents/TimerExample'];
-                        var MenuExample = allViews['reactComponents/MenuExample'];
+                    // Load Mock API Call
+                    CartAPI.getProductData();
 
-
-                        React.render(
-                            React.createElement(FluxCartApp, null),
-                            $(self.el).find('#react-flux-cart-example-div-id')[0]
-                        );
+                    var FluxCartApp = allViews['reactComponents/FluxCartApp'];
+                    var TimerExample = allViews['reactComponents/TimerExample'];
+                    var MenuExample = allViews['reactComponents/MenuExample'];
 
 
-                        React.render(
-                            React.createElement(TimerExample, {start: Date.now()}),
-                            $(self.el).find('#react-timer-example-div-id')[0]
-                        );
+                    React.render(
+                        React.createElement(FluxCartApp, null),
+                        $(self.el).find('#react-flux-cart-example-div-id')[0]
+                    );
 
 
-                        React.render(
-                            React.createElement(MenuExample, {items:  ['Home', 'Services', 'About', 'Contact us'] }),
-                            $(self.el).find('#react-menu-example-div-id')[0]
-                        );
+                    React.render(
+                        React.createElement(TimerExample, {start: Date.now()}),
+                        $(self.el).find('#react-timer-example-div-id')[0]
+                    );
 
-                        if (typeof cb === 'function') {
-                            cb();
-                        }
 
-                    }, function (err) {
-                        console.error(err);
-                        throw err;
-                    });
+                    React.render(
+                        React.createElement(MenuExample, {items:  ['Home', 'Services', 'About', 'Contact us'] }),
+                        $(self.el).find('#react-menu-example-div-id')[0]
+                    );
+
+                    return this;
 
                 },
                 handleModelSyncSuccess: function () {
