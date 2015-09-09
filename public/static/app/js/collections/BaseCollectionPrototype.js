@@ -224,6 +224,25 @@ define(
                 });
             },
 
+            fetchOptimized: function(cb){
+                if(this.numberOfFetches < 1){
+                    this.fetch()
+                        .done(function(){
+
+                        })
+                        .fail(function(){
+
+                        })
+                        .always(function(){
+
+                        })
+                }
+                else{
+                    cb(null);
+                }
+
+            },
+
             persistCollection: function (opts, cb) {
 
                 //TODO: use opts to set same value for all models (?)
