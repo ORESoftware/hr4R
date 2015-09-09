@@ -3,10 +3,11 @@
  */
 
 
-define(function(){
+define(['#appState'], function (appState) {
 
 
-    window.no_op = function () {};
+    window.no_op = function () {
+    };
 
     window.no_op_err = function () {
         throw new Error('this no_op function should not have been called.')
@@ -22,8 +23,8 @@ define(function(){
         return JSON.parse(val);
     };
 
-    window.throwGlobalError = function(err){
-        if(!(err instanceof Error)){
+    window.throwGlobalError = function (err) {
+        if (!(err instanceof Error)) {
             throw new Error('need to pass this function an instance of Error');
         }
         console.log(err.toString());
@@ -36,9 +37,35 @@ define(function(){
          because it overwrites everything else on the screen
          */
 
-        console.error(errorMsg+'\n\nurl: '+url+ '\n\nLine number: '+lineNumber);
+        if (appState.get('env') === 'development') {
+            console.error(errorMsg + '\n\nurl: ' + url + '\n\nLine number: ' + lineNumber);
 
-        alert(errorMsg+'\n\nurl: '+url+ '\n\nLine number: '+lineNumber);
+            //require(['jquery','jqueryUI','jqueryUI_smooth'], function () {
+            //
+            //    $("#error-dialog").dialog({
+            //        dialogClass: "no-close",
+            //        buttons: [
+            //            {
+            //                text: "OK",
+            //                click: function () {
+            //                    $(this).dialog("close");
+            //                }
+            //            }
+            //        ]
+            //    }).show('bounce',{},500);
+            //
+            //    setTimeout(function () {
+            //        $("#error-dialog").hide();
+            //    }, 3000);
+            //});
+
+            //var str = errorMsg + '\n\nurl: ' + url + '\n\nLine number: ' + lineNumber;
+            //
+            //$('#error-dialog').html(str);
+
+            alert(errorMsg+'\n\nurl: '+url+ '\n\nLine number: '+lineNumber);
+        }
+
 
         //var html = "<div>" +errorMsg+'\n\nurl:'+url+ '\n\nLine number:'+lineNumber +"</div>"
         //

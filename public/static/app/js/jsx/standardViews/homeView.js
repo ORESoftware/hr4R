@@ -48,12 +48,12 @@ define(
                     }
                 },
 
-                //el: '#main-div-id',
-
                 constructor: function (opts) {
                     this.givenName = '@HomeView';
                     Backbone.View.apply(this, arguments);
                 },
+
+
 
                 initialize: function (opts) {
 
@@ -76,6 +76,7 @@ define(
                     //console.log(msg);
                 },
 
+                nodes: ['#react-timer-example-div-id','#react-menu-example-div-id'],
 
                 render: function () {
 
@@ -155,7 +156,7 @@ define(
                         id: '0011001',
                         name: 'Scotch.io Signature Lager',
                         image: 'scotch-beer.png',
-                        description: 'The finest lager money can buy. Hints of keyboard aerosol, with a whiff of iKlear wipes on the nose. If you pass out while drinking this beverage, Chris Sevilleja personally tucks you in.',
+                        description: 'The finest lager money can buy.',
                         variants: [
                             {
                                 sku: '123123',

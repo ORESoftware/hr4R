@@ -7,6 +7,7 @@
 //TODO: https://github.com/wix/react-templates
 //TODO: http://10consulting.com/2014/02/11/pipes-and-filters-to-cure-node-async-woes/
 
+
 //core
 var gulp = require('gulp');
 var path = require('path');
@@ -23,10 +24,7 @@ var react = require('gulp-react');
 var nodemon = require('gulp-nodemon');
 
 //misc
-var fse = require('fs-extra');
 var grm = require('requirejs-metagen');
-
-
 
 
 /*
@@ -79,27 +77,6 @@ var metagens = {
         eliminateSharedFolder: true,
         output: './public/static/app/js/meta/allViews.js'
     }
-    //"relative-views": {
-    //    inputFolder: './public/static/app/js/jsx/relViews',
-    //    appendThisToDependencies: 'app/js/jsx/',
-    //    appendThisToReturnedItems: '',
-    //    eliminateSharedFolder: false,
-    //    output: './public/static/app/js/meta/allRelViews.js'
-    //},
-    //"react-components": {
-    //    inputFolder: './public/static/app/js/jsx/reactComponents',
-    //    appendThisToDependencies: 'app/js/jsx/',
-    //    appendThisToReturnedItems: '',
-    //    eliminateSharedFolder: true,
-    //    output: './public/static/app/js/meta/allReactComponents.js'
-    //},
-    //"standard-views": {
-    //    inputFolder: './public/static/app/js/jsx/standardViews',
-    //    appendThisToDependencies: 'app/js/jsx/',
-    //    appendThisToReturnedItems: '',
-    //    eliminateSharedFolder: true,
-    //    output: './public/static/app/js/meta/allStandardViews2.js'
-    //}
 
 };
 
@@ -309,7 +286,7 @@ gulp.task('metagen:all', ['transpile-jsx'], function (done) {
 
 
 
-gulp.task('nodemon', ['metagen:all'], function () {
+gulp.task('nodemon', ['metagen:all','watch:hot-reload'], function () {
 
     nodemon({
 

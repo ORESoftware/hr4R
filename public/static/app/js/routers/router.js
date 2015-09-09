@@ -21,10 +21,11 @@ define(
         'async',
         '#allCollections',
         'ijson',
-        'app/js/cssAdder'
+        'app/js/cssAdder',
+        'react'
     ],
 
-    function (appState, viewState, Backbone, async, collections, IJSON, cssAdder) {
+    function (appState, viewState, Backbone, async, collections, IJSON, cssAdder, React) {
 
 
         var BootRouter = Backbone.Router.extend({
@@ -223,9 +224,17 @@ define(
                     if (view.adhesive) {
                         view.adhesive.unStick();
                     }
+
+                    //remove all React components
+                    (view.nodes || []).forEach(function(node){
+                        var result = React.unmountComponentAtNode( $(view.el).find(node)[0]);
+                        console.log('node=',node,'result=',result);
+                    });
+
                     view.undelegateEvents();
                     view.$el.removeData().unbind();
                     view.stopListening();
+
 
                     var cv = view.childViews;
 
@@ -410,7 +419,7 @@ define(
 
                 require(['#allViews', '#allTemplates'], function (allViews, allTemplates) {
 
-                    //we can do dependency injection by passing allViews and allTemplates to render function of Backbone
+                    //TODO: we can do dependency injection by passing allViews and allTemplates to render function of Backbone
 
                     if (opts.useSidebar === true) {
                         //this.destroyView(this.viewState.get('mainParentView'));

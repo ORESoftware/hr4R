@@ -71,9 +71,7 @@ define(
                 return (
 
                     React.createElement("div", null, 
-                        /*<MenuExample items={ ['Home', 'Services', 'About', 'Contact us'] } />,*/
-                        React.createElement("p", null, "This example was started ", React.createElement("b", null, seconds, " seconds"), " ago."), 
-                        /*<MenuExample items={ ['Home', 'Services', 'About', 'Contact us'] } />*/","
+                        React.createElement("p", null, "This example was started ", React.createElement("b", null, seconds, " seconds"), " ago.")
                     )
 
                 );

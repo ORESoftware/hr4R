@@ -66,14 +66,28 @@ define('app/js/boot',
                 }
             });
 
+            //require(['jqueryUI_CSS','jqueryUI_smooth'],function(jqueryUI_CSS,jqueryUI_smooth){
+            //    //add css while we are waiting...
+            //    var css = [
+            //        allCSS['cssx/portal/simple-sidebar.css'],
+            //        allCSS['cssx/bootstrap/bootstrap-notify.css'],
+            //        //allCSS['cssx/pictureList/pictureList.css']
+            //        //jqueryUI_CSS,
+            //        //jqueryUI_smooth
+            //    ];
+            //
+            //    cssAdder.addAllVia(css, true);
+            //});
+
             //add css while we are waiting...
             var css = [
                 allCSS['cssx/portal/simple-sidebar.css'],
-                allCSS['cssx/bootstrap/bootstrap-notify.css'],
+                allCSS['cssx/bootstrap/bootstrap-notify.css']
                 //allCSS['cssx/pictureList/pictureList.css']
             ];
 
             cssAdder.addAllVia(css, true);
+
 
         };
 

@@ -71,9 +71,7 @@ define(
                 return (
 
                     <div>
-                        {/*<MenuExample items={ ['Home', 'Services', 'About', 'Contact us'] } />,*/}
                         <p>This example was started <b>{seconds} seconds</b> ago.</p>
-                        {/*<MenuExample items={ ['Home', 'Services', 'About', 'Contact us'] } />*/},
                     </div>
 
                 );

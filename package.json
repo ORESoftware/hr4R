@@ -48,7 +48,6 @@
     "redis": "^0.12.1",
     "replacestream": "^4.0.0",
     "request": "^2.60.0",
-    "requirejs-metagen": "^1.1.4",
     "serve-favicon": "^2.3.0",
     "socket.io": "^1.3.5",
     "underscore": "^1.8.3"

@@ -6,7 +6,7 @@
 
 define(
     [
-        '../../../../../../bower_components/react/react',
+        'react',
         //'#allReactComponents',
         "app/js/jsx/reactComponents/FluxCart",
         "app/js/jsx/reactComponents/FluxProduct",

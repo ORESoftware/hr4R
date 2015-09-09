@@ -11,10 +11,13 @@
     "mainConfigFile": "../public/static/app/js/main.js",
     "out": "../public/static/app/optimized/optimized.js",
     "paths" :{
-        requireLib : 'vendor/require'
+        requireLib : 'vendor/require',
+        jqueryUI: "empty:",
+        jqueryUI_CSS: "empty:"
     },
 
     "include": 'requireLib',
+    "stubModules":['text']
     //"stubModules": ['jsx', 'text', 'JSXTransformer'],
     //"modules": [
     //    {
