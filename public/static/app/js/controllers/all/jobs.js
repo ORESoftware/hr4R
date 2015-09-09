@@ -35,7 +35,7 @@ define(
                         allCSS['cssx/bootstrap/bootstrap-notify.css']
                     ]
                 };
-                this.control(viewPath, viewOpts, routerOpts, changeViewCallback);
+                SuperController.control(viewPath, viewOpts, routerOpts, changeViewCallback);
             },
 
             make: function () {
@@ -58,7 +58,7 @@ define(
                 var routerOpts = {
                     useSidebar: true
                 };
-                this.control(viewPath, viewOpts, routerOpts, changeViewCallback);
+                SuperController.control(viewPath, viewOpts, routerOpts, changeViewCallback);
             },
 
 
@@ -68,7 +68,7 @@ define(
             }
         };
 
-        _.extend(Controller.prototype, SuperController.prototype);
+        //_.extend(Controller.prototype, SuperController.prototype);
 
         return new Controller();
     });

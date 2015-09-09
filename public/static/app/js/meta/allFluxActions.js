@@ -15,6 +15,6 @@ define(
 
         return {
 
-            "actions/FluxCartActions": arguments[0]
+            "FluxCartActions": arguments[0]
         }
   });

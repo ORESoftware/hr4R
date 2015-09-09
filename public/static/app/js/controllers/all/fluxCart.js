@@ -33,7 +33,28 @@ define(
                         useSidebar: true,
                         cssAdds: [
                             allCSS['cssx/alert-bangtidy.css'],
-                            allCSS['cssx/bootstrap/bootstrap-notify.css']
+                            allCSS['cssx/bootstrap/bootstrap-notify.css'],
+                            allCSS['cssx/fluxCart/fluxCart.css']
+                        ]
+                    },
+                    callback: changeViewCallback
+                });
+            },
+
+            show: function (id, changeViewCallback) {
+
+                SuperController.control({
+                    viewPath: 'app/js/jsx/relViews/FluxCart/FluxCartMain',
+                    viewOpts: {
+                        collection: null,
+                        model:null
+                    },
+                    routerOpts: {
+                        useSidebar: true,
+                        cssAdds: [
+                            allCSS['cssx/alert-bangtidy.css'],
+                            allCSS['cssx/bootstrap/bootstrap-notify.css'],
+                            allCSS['cssx/fluxCart/fluxCart.css']
                         ]
                     },
                     callback: changeViewCallback
@@ -46,7 +67,7 @@ define(
             }
         };
 
-        _.extend(Controller.prototype, SuperController);
+        //_.extend(Controller.prototype, SuperController.prototype);
 
         return new Controller();
     });

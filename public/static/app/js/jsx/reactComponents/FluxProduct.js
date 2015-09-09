@@ -10,7 +10,7 @@ define(
     ],
     function (React, allFluxActions) {
 
-        var FluxCartActions = allFluxActions['actions/FluxCartActions'];
+        var FluxCartActions = allFluxActions['FluxCartActions'];
 
         // Flux product view
         var FluxProduct = React.createClass({displayName: "FluxProduct",
@@ -20,8 +20,7 @@ define(
                 var sku = this.props.selected.sku;
                 var update = {
                     name: this.props.product.name,
-                    //type: this.props.selected.type,
-                    type: 'foo',
+                    type: this.props.selected.type,
                     price: this.props.selected.price
                 };
                 FluxCartActions.addToCart(sku, update);
@@ -39,31 +38,31 @@ define(
                 this.props.selected.inventory - this.props.cartitems[this.props.selected.sku].quantity :
                     this.props.selected.inventory;
                 return (
-                    React.createElement("div", {className: "flux-product"}, 
-                        React.createElement("img", {src: 'img/' + this.props.product.image}), 
+                    React.createElement("div", {className: "flux-product"}
 
-                        React.createElement("div", {className: "flux-product-detail"}, 
-                            React.createElement("h1", {className: "name"}, this.props.product.name), 
 
-                            React.createElement("p", {className: "description"}, this.props.product.description), 
-
-                            React.createElement("p", {className: "price"}, "Price: $", this.props.selected.price), 
-                            React.createElement("select", {onChange: this.selectVariant}, 
-                                this.props.product.variants.map(function (variant, index) {
-                                    return (
-                                        React.createElement("option", {key: index, value: index}, variant.type)
-                                    )
-                                })
-                            ), 
-                            React.createElement("button", {type: "button", onClick: this.addToCart, disabled: ats  > 0 ? '' : 'disabled'}, 
-                                ats > 0 ? 'Add To Cart' : 'Sold Out'
-                            )
-                        )
                     )
                 );
             }
-
         });
+
+        /*  <div className="flux-product-detail">
+         <h1 className="name">{this.props.product.name}</h1>
+
+         <p className="description">{this.props.product.description}</p>
+
+         <p className="price">Price: ${this.props.selected.price}</p>
+         <select onChange={this.selectVariant}>
+         {this.props.product.variants.map(function (variant, index) {
+         return (
+         <option key={index} value={index}>{variant.type}</option>
+         )
+         })}
+         </select>
+         <button type="button" onClick={this.addToCart} disabled={ats  > 0 ? '' : 'disabled'}>
+         {ats > 0 ? 'Add To Cart' : 'Sold Out'}
+         </button>
+         </div>*/
 
         return FluxProduct;
     });

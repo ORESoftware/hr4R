@@ -12,6 +12,7 @@ define(function () {
         CART_VISIBLE: 'CART_VISIBLE',   // Shows or hides the cart
         SET_SELECTED: 'SET_SELECTED',   // Selects a product option
         RECEIVE_DATA: 'RECEIVE_DATA', // Loads our mock data
-        SELECT_PRODUCT: 'SELECT_PRODUCT'
+        SELECT_PRODUCT: 'SELECT_PRODUCT',
+        GET_PRODUCTS:'GET_PRODUCTS'
     }
 });

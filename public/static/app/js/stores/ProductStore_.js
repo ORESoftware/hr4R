@@ -16,7 +16,7 @@ define(
 
         var EventEmitter = events.EventEmitter;
 
-        var FluxCartConstants = allFluxConstants['constants/FluxCartConstants'];
+        var FluxCartConstants = allFluxConstants['FluxCartConstants'];
 
         // Define initial data points
         var _product = {};

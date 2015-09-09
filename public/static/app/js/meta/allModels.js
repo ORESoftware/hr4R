@@ -1,23 +1,24 @@
 /**
- * Created by amills001c on 7/6/15.
+ * Created by denman on 8/1/2015.
+ *
+ * NOTE: anything written in this file will get overwritten because this file is just metadata
+ *  ...so don't bother writing any notes or anything important in this file - it will be overwritten.
+ *
  */
 
 
-console.log('loading #allModels');
-
-
 define(
-
     [
-        'app/js/models/all/UserModel',
-        'app/js/models/all/JobModel'
+        "app/js/models/all/CartProduct",
+		"app/js/models/all/Job",
+		"app/js/models/all/User"
     ],
-
-    function (UserModel, JobModel, exports) {
-
+    function(){
 
         return {
-            User:UserModel,
-            Job: JobModel
-        };
-    });
+
+            "CartProduct": arguments[0],
+			"Job": arguments[1],
+			"User": arguments[2]
+        }
+  });

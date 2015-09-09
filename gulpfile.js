@@ -35,12 +35,26 @@ var grm = require('requirejs-metagen');
 
 var metagens = {
 
-    "CONTROLLERS": {
+    "controllers": {
         inputFolder: './public/static/app/js/controllers/all',
         appendThisToDependencies: 'app/js/controllers/',
         appendThisToReturnedItems: '',
         eliminateSharedFolder: true,
         output: './public/static/app/js/meta/allControllers.js'
+    },
+    "models": {
+        inputFolder: './public/static/app/js/models/all',
+        appendThisToDependencies: 'app/js/models/',
+        appendThisToReturnedItems: '',
+        eliminateSharedFolder: true,
+        output: './public/static/app/js/meta/allModels.js'
+    },
+    "collections": {
+        inputFolder: './public/static/app/js/collections/all',
+        appendThisToDependencies: 'app/js/collections/',
+        appendThisToReturnedItems: '',
+        eliminateSharedFolder: true,
+        output: './public/static/app/js/meta/allCollections.js'
     },
     "templates": {
         inputFolder: './public/static/app/templates',
@@ -60,14 +74,14 @@ var metagens = {
         inputFolder: './public/static/app/js/flux/constants',
         appendThisToDependencies: 'app/js/flux/',
         appendThisToReturnedItems: '',
-        eliminateSharedFolder: false,
+        eliminateSharedFolder: true,
         output: './public/static/app/js/meta/allFluxConstants.js'
     },
     "flux-actions": {
         inputFolder: './public/static/app/js/flux/actions',
         appendThisToDependencies: 'app/js/flux/',
         appendThisToReturnedItems: '',
-        eliminateSharedFolder: false,
+        eliminateSharedFolder: true,
         output: './public/static/app/js/meta/allFluxActions.js'
     },
     "all-views": {

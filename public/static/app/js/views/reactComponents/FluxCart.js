@@ -10,21 +10,18 @@ define(
     ],
     function (React, allFluxActions) {
 
-        var FluxCartActions = allFluxActions['actions/FluxCartActions'];
+        var FluxCartActions = allFluxActions['FluxCartActions'];
 
         var FluxCart = React.createClass({
 
-            // Hide cart via Actions
             closeCart: function () {
                 FluxCartActions.updateCartVisible(false);
             },
 
-            // Show cart via Actions
             openCart: function () {
                 FluxCartActions.updateCartVisible(true);
             },
 
-            // Remove item from Cart via Actions
             removeFromCart: function (sku) {
                 FluxCartActions.removeFromCart(sku);
                 FluxCartActions.updateCartVisible(false);

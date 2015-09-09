@@ -16,6 +16,7 @@ define(
 		"text!cssx/bootstrap/bootstrap-theme.min.css",
 		"text!cssx/bootstrap/bootstrap.css",
 		"text!cssx/bootstrap/bootstrap.min.css",
+		"text!cssx/fluxCart/fluxCart.css",
 		"text!cssx/main.css",
 		"text!cssx/pictureList/pictureList.css",
 		"text!cssx/portal/simple-sidebar.css",
@@ -33,10 +34,11 @@ define(
 			"cssx/bootstrap/bootstrap-theme.min.css": arguments[4],
 			"cssx/bootstrap/bootstrap.css": arguments[5],
 			"cssx/bootstrap/bootstrap.min.css": arguments[6],
-			"cssx/main.css": arguments[7],
-			"cssx/pictureList/pictureList.css": arguments[8],
-			"cssx/portal/simple-sidebar.css": arguments[9],
-			"cssx/style.css": arguments[10],
-			"cssx/userProfileView/user-profile.css": arguments[11]
+			"cssx/fluxCart/fluxCart.css": arguments[7],
+			"cssx/main.css": arguments[8],
+			"cssx/pictureList/pictureList.css": arguments[9],
+			"cssx/portal/simple-sidebar.css": arguments[10],
+			"cssx/style.css": arguments[11],
+			"cssx/userProfileView/user-profile.css": arguments[12]
         }
   });

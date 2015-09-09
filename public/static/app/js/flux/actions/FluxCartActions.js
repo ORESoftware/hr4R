@@ -10,16 +10,23 @@ define(
     ],
     function(AppDispatcher,allFluxConstants){
 
-        var FluxCartConstants = allFluxConstants['constants/FluxCartConstants'];
+        var FluxCartConstants = allFluxConstants['FluxCartConstants'];
 
         // Define actions object
         var FluxCartActions = {
 
-            // Receive inital product data
-            receiveProduct: function(data) {
+            //// Receive inital product data
+            //receiveProduct: function(data) {
+            //    AppDispatcher.handleAction({
+            //        actionType: FluxCartConstants.RECEIVE_DATA,
+            //        data: data
+            //    });
+            //},
+
+            getProducts: function() {
                 AppDispatcher.handleAction({
-                    actionType: FluxCartConstants.RECEIVE_DATA,
-                    data: data
+                    actionType: FluxCartConstants.GET_PRODUCTS,
+                    data: null
                 });
             },
 
@@ -60,6 +67,5 @@ define(
 
 
       return FluxCartActions;
-
 
     });

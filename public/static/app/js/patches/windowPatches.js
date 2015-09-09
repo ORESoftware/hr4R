@@ -71,7 +71,7 @@ define(['#appState'], function (appState) {
         //
         //$('body').html(html);
 
-        return true;
+        return false;
 
         //if(errorMsg){
         //    console.log(errorMsg.toString());

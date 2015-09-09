@@ -14,14 +14,7 @@ console.log('loading app/js/ModelCollectionMediator.js');
 //TODO: http://beletsky.net/2012/11/baby-steps-to-backbonejs-model.html
 //TODO: http://christianalfoni.github.io/javascript/2014/10/22/nailing-that-validation-with-reactjs.html
 
-define(
-    [
-
-        'require'
-
-    ],
-
-    function (require) {
+define(function (require) {
 
         return {
             findCollectionByName: function(name){

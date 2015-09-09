@@ -22,6 +22,7 @@ define([
 
                 if(typeof viewPath === 'object'){
                     var options = viewPath;
+                    var viewPath = options.viewPath;
                     viewOpts = options.viewOpts;
                     routerOpts = options.routerOpts;
                     cb = options.callback;
@@ -33,14 +34,15 @@ define([
                     cb(routerOpts);
                 });
             },
+
             default: function (id) {
                 alert('controller has not yet implemented a default')
             }
         };
 
 
-        //return new SuperController();
+        return new SuperController();
 
-        return SuperController;
+        //return SuperController;
 
     });

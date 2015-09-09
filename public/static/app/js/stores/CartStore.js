@@ -1,64 +1,132 @@
 /**
- * Created by amills001c on 8/25/15.
+ * Created by amills001c on 9/9/15.
  */
+
+
+/**
+ * Created by amills001c on 7/17/15.
+ */
+
+
+/**
+ * Created by amills001c on 6/9/15.
+ */
+
+
+console.log('loading app/js/collections/jobsCollection.js');
 
 
 define(
     [
         'underscore',
         'backbone',
+        '#allModels',
+        '#BaseCollection',
         '@AppDispatcher',
-        '#allFluxConstants',
-        'events'
+        '#allFluxConstants'
+
     ],
 
-    function (_, Backbone, AppDispatcher, allFluxConstants, events) {
-
-        var EventEmitter = events.EventEmitter;
-
-        var FluxCartConstants = allFluxConstants['constants/FluxCartConstants'];
+    function (_, Backbone, models, BaseCollection, AppDispatcher, allFluxConstants) {
 
 
-        // Define initial data points
-        var products = {};
+        var FluxCartConstants = allFluxConstants['FluxCartConstants'];
+
+
+        var dispatchCallback = function (payload) {
+
+            var action = payload.action;
+
+            switch (action.actionType) {
+
+                case FluxCartConstants.GET_PRODUCTS:
+                    fetchModels(null);
+                    break;
+
+                case FluxCartConstants.SELECT_PRODUCT:
+                    setSelected(action.data);
+                    break;
+
+                case FluxCartConstants.CART_ADD:
+                    add(action.sku, action.update);
+                    break;
+
+                case FluxCartConstants.CART_VISIBLE:
+                    setCartVisible(action.cartVisible);
+                    break;
+
+                case FluxCartConstants.CART_REMOVE:
+                    removeItem(action.sku);
+                    break;
+
+                default:
+                    return true;
+            }
+
+            return true;
+        };
+
+
         var cartVisible = false;
+        var selected = null;
 
-        // Add product to cart
-        function add(sku, update) {
-            update.quantity = sku in products ? products[sku].quantity + 1 : 1;
-            products[sku] = _.extend({}, products[sku], update)
-        }
 
-        // Set cart visibility
-        function setCartVisible($cartVisible) {
-            cartVisible = $cartVisible;
-        }
+        var CartStore = BaseCollection.extend({
 
-        // Remove item from cart
-        function removeItem(sku) {
-            delete products[sku];
-        }
 
-        // Extend Cart Store with EventEmitter to add eventing capabilities
-        var CartStore = _.extend({}, EventEmitter.prototype, {
+            model: models.CartProduct,
+            url: '/products',
+            batchURL: '/batch/Products',
 
-            // Return cart items
+
+            initialize: function (models, opts) {
+
+                console.log('model for JobsCollection is:', this.model);
+
+                this.dispatchToken = AppDispatcher.register(dispatchCallback);
+
+                this.givenName = '@CartStore';
+                this.uniqueName = '+CartStore';
+
+                this.options = opts || {};
+                _.bindAll(this, 'persistCollection');
+
+            },
+
+            // Return Product data
+            getProduct: function (sku) {
+                //return this.find(function(model){
+                //   return model.get('sku') == sku;
+                //});
+                return {};
+            },
+
+            // Return selected Product
+            getSelected: function () {
+                //return this.models[0];
+                return {};
+            },
+
+            addChangeListener: function (name, callback) {
+                this.listenTo(this, name, callback);
+            },
+
+            removeChangeListener: function (name, callback) {
+                this.stopListening(this, name, callback);
+            },
+
             getCartItems: function () {
-                return products;
+                return this.models;
             },
 
-            // Return # of items in cart
             getCartCount: function () {
-                return Object.keys(products).length;
+                return this.models.length;
             },
 
-            // Return cart cost total
             getCartTotal: function () {
                 var total = 0;
-                for (product in products) {
-                    if (products.hasOwnProperty(product)) {
-                        total += products[product].price * products[product].quantity;
-                    }
+                for (var model in this.models) {
+                    total += model.get('price') * model.get('quantity');
                 }
                 return total.toFixed(2);
             },
@@ -68,56 +136,45 @@ define(
                 return cartVisible;
             },
 
-            // Emit Change event
-            emitChange: function () {
-                this.emit('change');
-            },
+            //TODO:http://www.toptal.com/front-end/simple-data-flow-in-react-applications-using-flux-and-backbone
 
-            // Add change listener
-            addChangeListener: function (callback) {
-                this.on('change', callback);
-            },
-
-            // Remove change listener
-            removeChangeListener: function (callback) {
-                this.removeListener('change', callback);
-            }
-
+            // Todos are sorted by their original insertion order.
+            comparator: 'order'
         });
 
-        // Register callback with AppDispatcher
-        AppDispatcher.register(function (payload) {
-            var action = payload.action;
-            var text;
 
-            switch (action.actionType) {
+        var cartStore = new CartStore();
 
-                // Respond to CART_ADD action
-                case FluxCartConstants.CART_ADD:
-                    add(action.sku, action.update);
-                    break;
+        var products = cartStore.models;
 
-                // Respond to CART_VISIBLE action
-                case FluxCartConstants.CART_VISIBLE:
-                    setCartVisible(action.cartVisible);
-                    break;
+        function fetchModels(){
 
-                // Respond to CART_REMOVE action
-                case FluxCartConstants.CART_REMOVE:
-                    removeItem(action.sku);
-                    break;
+        }
 
-                default:
-                    return true;
-            }
+        function add(sku, update) {
+            var models = cartStore.where({sku: sku});
+            if (models.length > 1) throw new Error('too many skus')
+            models.forEach(function (model) {
+                var quantity = model.get('quantity');
+                model.set('quantity', quantity + 1);
+            });
+        }
 
-            // If action was responded to, emit change event
-            CartStore.emitChange();
+        function setCartVisible($cartVisible) {
+            cartVisible = $cartVisible;
+        }
 
-            return true;
+        function removeItem(sku) {
+            var items = cartStore.where({sku: sku});
+            cartStore.remove(items);
+        }
 
-        });
 
-        return CartStore;
+        // Method to set the currently selected product variation
+        function setSelected(sku) {
+            selected = cartStore.where({sku: sku});
+        }
 
+
+        return cartStore;
     });

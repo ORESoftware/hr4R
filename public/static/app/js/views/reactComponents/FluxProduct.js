@@ -10,7 +10,7 @@ define(
     ],
     function (React, allFluxActions) {
 
-        var FluxCartActions = allFluxActions['actions/FluxCartActions'];
+        var FluxCartActions = allFluxActions['FluxCartActions'];
 
         // Flux product view
         var FluxProduct = React.createClass({
@@ -20,8 +20,7 @@ define(
                 var sku = this.props.selected.sku;
                 var update = {
                     name: this.props.product.name,
-                    //type: this.props.selected.type,
-                    type: 'foo',
+                    type: this.props.selected.type,
                     price: this.props.selected.price
                 };
                 FluxCartActions.addToCart(sku, update);
@@ -40,30 +39,30 @@ define(
                     this.props.selected.inventory;
                 return (
                     <div className="flux-product">
-                        <img src={'img/' + this.props.product.image}/>
 
-                        <div className="flux-product-detail">
-                            <h1 className="name">{this.props.product.name}</h1>
 
-                            <p className="description">{this.props.product.description}</p>
-
-                            <p className="price">Price: ${this.props.selected.price}</p>
-                            <select onChange={this.selectVariant}>
-                                {this.props.product.variants.map(function (variant, index) {
-                                    return (
-                                        <option key={index} value={index}>{variant.type}</option>
-                                    )
-                                })}
-                            </select>
-                            <button type="button" onClick={this.addToCart} disabled={ats  > 0 ? '' : 'disabled'}>
-                                {ats > 0 ? 'Add To Cart' : 'Sold Out'}
-                            </button>
-                        </div>
                     </div>
                 );
             }
-
         });
+
+        /*  <div className="flux-product-detail">
+         <h1 className="name">{this.props.product.name}</h1>
+
+         <p className="description">{this.props.product.description}</p>
+
+         <p className="price">Price: ${this.props.selected.price}</p>
+         <select onChange={this.selectVariant}>
+         {this.props.product.variants.map(function (variant, index) {
+         return (
+         <option key={index} value={index}>{variant.type}</option>
+         )
+         })}
+         </select>
+         <button type="button" onClick={this.addToCart} disabled={ats  > 0 ? '' : 'disabled'}>
+         {ats > 0 ? 'Add To Cart' : 'Sold Out'}
+         </button>
+         </div>*/
 
         return FluxProduct;
     });
