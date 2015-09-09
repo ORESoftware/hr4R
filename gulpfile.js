@@ -326,7 +326,4 @@ gulp.task('default', ['metagen:all', 'watch:hot-reload'], function (done) {
     done();
 });
 
-gulp.task('start:server',['metagen:all'],function(done){
-    done();
-});
 

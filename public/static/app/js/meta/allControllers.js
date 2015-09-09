@@ -9,18 +9,16 @@
 
 define(
     [
-        "app/js/controllers/all/jobs",
-		"app/js/controllers/all/more/cars",
-		"app/js/controllers/all/more/evenMore/spaceships",
+        "app/js/controllers/all/fluxCart",
+		"app/js/controllers/all/jobs",
 		"app/js/controllers/all/users"
     ],
     function(){
 
         return {
 
-            "jobs": arguments[0],
-			"more/cars": arguments[1],
-			"more/evenMore/spaceships": arguments[2],
-			"users": arguments[3]
+            "fluxCart": arguments[0],
+			"jobs": arguments[1],
+			"users": arguments[2]
         }
   });

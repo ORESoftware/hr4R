@@ -15,14 +15,13 @@ define(
         'jquery',
         'underscore',
         'backbone',
-        'backbone-validation'
+        'backbone-validation',
+        'require'
     ],
 
 
-    function (appState, models, collections, form2js, EJS, $, _, Backbone, BackboneValidation) {
+    function (appState, models, collections, form2js, EJS, $, _, Backbone, BackboneValidation,require) {
 
-
-        var template = allTemplates['templates/portalTemplate.ejs'];
 
 
         var PortalView = Backbone.View.extend({
@@ -87,7 +86,7 @@ define(
             },
 
             { //class properties
-                template: template
+                //template: template
             }
         );
 

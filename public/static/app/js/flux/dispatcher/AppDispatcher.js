@@ -9,6 +9,9 @@
 //TODO: https://scotch.io/tutorials/getting-to-know-flux-the-react-js-architecture
 //TODO: https://medium.com/brigade-engineering/what-is-the-flux-application-architecture-b57ebca85b9e
 
+//TODO: prevent changes in collection/models from triggering the re-rendering of views that are not in currentView/mainView
+//TODO it's a waste to (re)render a view that can't be seen by the user anyway right
+
 
 define(function(require){
 

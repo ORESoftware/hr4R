@@ -6,7 +6,7 @@
 
 define(
     [
-        'react',
+        '../../../../../../bower_components/react/react',
         //'#allReactComponents',
         "app/js/jsx/reactComponents/FluxCart",
         "app/js/jsx/reactComponents/FluxProduct",
@@ -18,18 +18,12 @@ define(
         'require'
 
     ],
-    function (React,FluxCart, FluxProduct, allCollections, allModels, CartStore, ProductStore) {
+    function (React, FluxCart, FluxProduct, allCollections, allModels, CartStore, ProductStore, require) {
 
-        //alert('peas');
 
         //var FluxCart = RCM.findReactComponentByName('reactComponents/FluxCart');
         //var FluxProduct = RCM.findReactComponentByName('reactComponents/FluxProduct');
 
-        //var FluxCart = RCM.allReactComponents['reactComponents/FluxCart'];
-        //var FluxProduct = RCM.allReactComponents['reactComponents/FluxProduct'];
-
-        //alert(FluxCart);
-        //alert(FluxProduct);
 
         // Method to retrieve state from Stores
         function getCartState() {
@@ -44,7 +38,7 @@ define(
         }
 
         // Define main Controller View
-        var FluxCartApp = React.createClass({
+        var FluxCartApp = React.createClass({displayName: "FluxCartApp",
 
             // Get initial state from stores
             getInitialState: function () {
@@ -66,12 +60,12 @@ define(
             // Render our child components, passing state via props
             render: function () {
                 return (
-                    <div className="flux-cart-app">
-                        <FluxCart products={this.state.cartItems} count={this.state.cartCount}
-                                  total={this.state.cartTotal} visible={this.state.cartVisible}/>
-                        <FluxProduct product={this.state.product} cartitems={this.state.cartItems}
-                                     selected={this.state.selectedProduct}/>
-                    </div>
+                    React.createElement("div", {className: "flux-cart-app"}, 
+                        React.createElement(FluxCart, {products: this.state.cartItems, count: this.state.cartCount, 
+                                  total: this.state.cartTotal, visible: this.state.cartVisible}), 
+                        React.createElement(FluxProduct, {product: this.state.product, cartitems: this.state.cartItems, 
+                                     selected: this.state.selectedProduct})
+                    )
                 );
             },
 

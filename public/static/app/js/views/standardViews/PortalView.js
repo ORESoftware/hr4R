@@ -86,7 +86,7 @@ define(
             },
 
             { //class properties
-                template: template
+                //template: template
             }
         );
 

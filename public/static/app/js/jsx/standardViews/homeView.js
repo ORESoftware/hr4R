@@ -81,7 +81,6 @@ define(
 
                     var self = this;
 
-
                     var allTemplates = require('#allTemplates');
                     var allViews = require('#allViews');
 
@@ -97,15 +96,15 @@ define(
                     // Load Mock API Call
                     CartAPI.getProductData();
 
-                    var FluxCartApp = allViews['reactComponents/FluxCartApp'];
+                    //var FluxCartApp = allViews['reactComponents/FluxCartApp'];
                     var TimerExample = allViews['reactComponents/TimerExample'];
                     var MenuExample = allViews['reactComponents/MenuExample'];
 
 
-                    React.render(
-                        React.createElement(FluxCartApp, null),
-                        $(self.el).find('#react-flux-cart-example-div-id')[0]
-                    );
+                    //React.render(
+                    //    <FluxCartApp />,
+                    //    $(self.el).find('#react-flux-cart-example-div-id')[0]
+                    //);
 
 
                     React.render(

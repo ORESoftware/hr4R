@@ -19,6 +19,14 @@ define([
         SuperController.prototype = {
 
             control: function (viewPath, viewOpts, routerOpts, cb) {
+
+                if(typeof viewPath === 'object'){
+                    var options = viewPath;
+                    viewOpts = options.viewOpts;
+                    routerOpts = options.routerOpts;
+                    cb = options.callback;
+                }
+
                 require([viewPath], function (View) {
                     var view = new View(viewOpts);
                     routerOpts.view = view;
@@ -30,6 +38,8 @@ define([
             }
         };
 
+
+        //return new SuperController();
 
         return SuperController;
 

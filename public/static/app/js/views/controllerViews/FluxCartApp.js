@@ -6,7 +6,7 @@
 
 define(
     [
-        'react',
+        '../../../../../../bower_components/react/react',
         //'#allReactComponents',
         "app/js/jsx/reactComponents/FluxCart",
         "app/js/jsx/reactComponents/FluxProduct",
@@ -38,7 +38,7 @@ define(
         }
 
         // Define main Controller View
-        var FluxCartApp = React.createClass({displayName: "FluxCartApp",
+        var FluxCartApp = React.createClass({
 
             // Get initial state from stores
             getInitialState: function () {
@@ -60,12 +60,12 @@ define(
             // Render our child components, passing state via props
             render: function () {
                 return (
-                    React.createElement("div", {className: "flux-cart-app"}, 
-                        React.createElement(FluxCart, {products: this.state.cartItems, count: this.state.cartCount, 
-                                  total: this.state.cartTotal, visible: this.state.cartVisible}), 
-                        React.createElement(FluxProduct, {product: this.state.product, cartitems: this.state.cartItems, 
-                                     selected: this.state.selectedProduct})
-                    )
+                    <div className="flux-cart-app">
+                        <FluxCart products={this.state.cartItems} count={this.state.cartCount}
+                                  total={this.state.cartTotal} visible={this.state.cartVisible}/>
+                        <FluxProduct product={this.state.product} cartitems={this.state.cartItems}
+                                     selected={this.state.selectedProduct}/>
+                    </div>
                 );
             },
 

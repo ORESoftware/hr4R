@@ -37,13 +37,15 @@ requirejs.config({
         'bootstrap': 'vendor/bootstrap',
         'backbone-validation': 'vendor/backbone-validation-amd',
         'observe': 'vendor/observe',
-        'react':'vendor/react-with-addons',
+        'react': 'vendor/react-with-addons',
         //'react': 'vendor/react',
         'socketio': 'vendor/socketio',
         'events': 'vendor/events-amd',
         //'socketio' : 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min',
         //'Adhesive':'app/js/Adhesive',
-        '#patches': 'app/js/patches',
+        '#jsPatches': 'app/js/patches/jsPatches',
+        '#backbonePatches': 'app/js/patches/backbonePatches',
+        '#windowPatches': 'app/js/patches/windowPatches',
         //'#allReactComponents': 'app/js/meta/allReactComponents',
         //'#allRelViews': 'app/js/meta/allRelViews',
         '#allTemplates': 'app/js/meta/allTemplates',
@@ -60,7 +62,7 @@ requirejs.config({
         '#allCSS': 'app/js/meta/allCSS',
         '#allFluxActions': 'app/js/meta/allFluxActions',
         '#allFluxConstants': 'app/js/meta/allFluxConstants',
-        '#SuperController' : 'app/js/controllers/SuperController'
+        '#SuperController': 'app/js/controllers/SuperController'
         //'d3':'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min'
     },
 
@@ -85,16 +87,13 @@ requirejs.config({
 
 console.log('starting app, time:', (Date.now() - window.startDate));
 
-require(['app/js/app'], function (Application, HomeView) {
+
+require(['app/js/application'], function (Application) {
 
     console.log('Application loaded, (2) time:', (Date.now() - window.startDate));
 
-    //$(document).ready(function () {
-    console.log(HomeView);
-    //console.log('document.ready fired, time:', (Date.now() -window.startDate));
     Application.start();
 
-
-    //});
-
 });
+
+

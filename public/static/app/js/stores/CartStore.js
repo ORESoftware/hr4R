@@ -20,23 +20,23 @@ define(
 
 
         // Define initial data points
-        var _products = {};
-        var _cartVisible = false;
+        var products = {};
+        var cartVisible = false;
 
         // Add product to cart
         function add(sku, update) {
-            update.quantity = sku in _products ? _products[sku].quantity + 1 : 1;
-            _products[sku] = _.extend({}, _products[sku], update)
+            update.quantity = sku in products ? products[sku].quantity + 1 : 1;
+            products[sku] = _.extend({}, products[sku], update)
         }
 
         // Set cart visibility
-        function setCartVisible(cartVisible) {
-            _cartVisible = cartVisible;
+        function setCartVisible($cartVisible) {
+            cartVisible = $cartVisible;
         }
 
         // Remove item from cart
         function removeItem(sku) {
-            delete _products[sku];
+            delete products[sku];
         }
 
         // Extend Cart Store with EventEmitter to add eventing capabilities
@@ -44,20 +44,20 @@ define(
 
             // Return cart items
             getCartItems: function () {
-                return _products;
+                return products;
             },
 
             // Return # of items in cart
             getCartCount: function () {
-                return Object.keys(_products).length;
+                return Object.keys(products).length;
             },
 
             // Return cart cost total
             getCartTotal: function () {
                 var total = 0;
-                for (product in _products) {
-                    if (_products.hasOwnProperty(product)) {
-                        total += _products[product].price * _products[product].quantity;
+                for (product in products) {
+                    if (products.hasOwnProperty(product)) {
+                        total += products[product].price * products[product].quantity;
                     }
                 }
                 return total.toFixed(2);
@@ -65,7 +65,7 @@ define(
 
             // Return cart visibility state
             getCartVisible: function () {
-                return _cartVisible;
+                return cartVisible;
             },
 
             // Emit Change event

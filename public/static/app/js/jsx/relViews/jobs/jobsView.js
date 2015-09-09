@@ -17,15 +17,12 @@ define(
         'underscore',
         'app/js/Adhesive',
         'backbone',
-        'react',
-        'app/js/jsx/reactComponents/JobsList',
-        '#allTemplates'
+        'react'
     ],
 
 
-    function (appState, collections, EJS, $, _, Adhesive, Backbone, React, JobsList, allTemplates) {
+    function (appState, collections, EJS, $, _, Adhesive, Backbone, React) {
 
-        var template = allTemplates['templates/jobsTemplate.ejs'];
 
         var JobsView = Backbone.View.extend({
 
@@ -47,10 +44,10 @@ define(
 
                     //this.model = new JobModel();
 
-                    this.model = this.collection.find(function(model){
+                    this.model = this.collection.find(function (model) {
 
                         var _id = model.get('_id');
-                        if(_id){
+                        if (_id) {
                             return _id.toString() == '55d7ee70636fe6cc2558d41e';
                         }
                     });
@@ -61,7 +58,7 @@ define(
 
                     //this.model = this.collection.last();
 
-                    if(this.model == null){
+                    if (this.model == null) {
                         var JobModel = this.collection.model;
                         this.model = new JobModel();
 
@@ -71,7 +68,7 @@ define(
                     //
                     //this.model.persistModel(null,{forceSave:true});
 
-                    console.log('jobs view model cid:',this.model.cid);
+                    console.log('jobs view model cid:', this.model.cid);
 
                     //this.collection.add(this.model);
 
@@ -89,7 +86,7 @@ define(
                             listenTo: [self.model],
                             update: [self.model],
                             //modelEvents: ['model-socket-change-broadcast','model-local-change-broadcast','change'], //works
-                            modelEvents: ['model-local-change-broadcast','model-socket-change-broadcast'],
+                            modelEvents: ['model-local-change-broadcast', 'model-socket-change-broadcast'],
                             //modelEvents: ['model-socket-change-broadcast','change'], //works
                             //modelEvents: ['change'],
                             where: {}
@@ -126,42 +123,37 @@ define(
 
                 },
 
-                render: function (cb) {
+                render: function () {
 
-                    var self = this;
+                    var self = this;//
 
-                    require(['#allTemplates', '#allViews'], function (allTemplates, allViews) {
+                    var allTemplates = require('#allTemplates');
+                    var allViews = require('#allViews');
 
-                        var template = allTemplates['templates/jobsTemplate.ejs'];
+                    var template = allTemplates['templates/jobsTemplate.ejs'];
+                    var JobsList = allViews['reactComponents/JobsList'];
 
-                        var ret = EJS.render(template, {
-                            job:self.model,
-                            jobs:self.collection,
-                            model: self.model,
-                            collection: self.collection
-                        });
-
-                        self.$el.html(ret);
-
-                        React.render(
-                            React.createElement(JobsList, null),
-                            $(self.el).find('#jobs-react-example-div-id')[0]
-                        );
-
-                        //TODO: make React.render work with this.el or this.$el
-
-                        if(typeof cb === 'function'){
-                            cb();
-                        }
-
-                    },function(err){
-                        console.error(err);
-                        throw err;
+                    var ret = EJS.render(template, {
+                        job: self.model,
+                        jobs: self.collection,
+                        model: self.model,
+                        collection: self.collection
                     });
+
+                    self.$el.html(ret);
+
+                    React.render(
+                        React.createElement(JobsList, null),
+                        $(self.el).find('#jobs-react-example-div-id')[0]
+                    );
+
+                    //TODO: make React.render work with this.el or this.$el
+
+                    return this;
                 }
             },
             {
-                template: template
+                //template: template
             });
 
 

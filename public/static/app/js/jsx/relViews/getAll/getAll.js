@@ -44,21 +44,25 @@ define(
 
                 },
 
-                render: function (cb) {
+                render: function () {
 
                     var self = this;
 
+                    var allTemplates = require('#allTemplates');
+                    var allViews = require('#allViews');
 
+                    var ListView = allViews['reactComponents/listView'];
+
+                    //<ListView items={ ['Home', 'Services', 'About', 'Contact us'] }/>,
                     React.render(
-                        //<ListView items={ ['Home', 'Services', 'About', 'Contact us'] }/>,
                         React.createElement(ListView, {items:  self.collection.models}),
                         self.el
                     );
 
                     //TODO: make React.render work with this.el or this.$el
-                    if(typeof cb === 'function'){
-                        cb();
-                    }
+
+                    return this;
+
                 }
             },
             {
