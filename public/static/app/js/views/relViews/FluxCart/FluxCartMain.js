@@ -34,7 +34,7 @@ define(
                     return {
                         collection: null,
                         model: null
-                    }
+                    };
                 },
 
                 constructor: function (opts) {

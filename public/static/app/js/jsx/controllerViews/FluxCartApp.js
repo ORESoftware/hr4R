@@ -89,8 +89,7 @@ define(
             };
         }
 
-        var FluxCartApp = React.createClass({
-            displayName: "FluxCartApp",
+        var FluxCartApp = React.createClass({displayName: "FluxCartApp",
 
             alexSaysReady: false,
 
@@ -121,6 +120,7 @@ define(
                 CartStore.removeChangeListener('rc-listen', this._onChange);
             },
 
+            // Render our child components, passing state via props
             render: function () {
 
                 if (!this.alexSaysReady) {
@@ -132,15 +132,11 @@ define(
                 var FluxProduct = allViews['reactComponents/FluxProduct'];
 
                 return (
-                    React.createElement("div", {className: "flux-cart-app"},
-                        React.createElement(FluxCart, {
-                            products: this.state.cartItems, count: this.state.cartCount,
-                            total: this.state.cartTotal, visible: this.state.cartVisible
-                        }),
-                        React.createElement(FluxProduct, {
-                            product: this.state.product, cartitems: this.state.cartItems,
-                            selected: this.state.selected
-                        })
+                    React.createElement("div", {className: "flux-cart-app"}, 
+                        React.createElement(FluxCart, {products: this.state.cartItems, count: this.state.cartCount, 
+                                  total: this.state.cartTotal, visible: this.state.cartVisible}), 
+                        React.createElement(FluxProduct, {product: this.state.product, cartitems: this.state.cartItems, 
+                                     selected: this.state.selected})
                     )
                 );
             },

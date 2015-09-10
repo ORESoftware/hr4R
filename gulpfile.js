@@ -304,12 +304,13 @@ function runAllMetagens(done) {
 }
 
 
+
 gulp.task('metagen:all', ['transpile-jsx'], function (done) {
     runAllMetagens(done);
 });
 
 
-gulp.task('nodemon', ['metagen:all'], function () {
+gulp.task('nodemon', ['metagen:all', 'watch:hot-reload'], function () {
 
     nodemon({
 
@@ -318,13 +319,13 @@ gulp.task('nodemon', ['metagen:all'], function () {
         ignore: ['public/*','*.git/*','*.idea/*'],
         env: {'NODE_ENV': 'development'}
 
-    }).on('restart', ['metagen:all']);
+    }).on('restart', []);
 
 });
 
 
-gulp.task('default', ['metagen:all',/* 'watch:metagen',*/ 'watch:hot-reload'], function (done) {
-    done();
-});
+//gulp.task('default', ['metagen:all',/* 'watch:metagen',*/ 'watch:hot-reload'], function (done) {
+//    done();
+//});
 
 
