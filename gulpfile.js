@@ -166,6 +166,16 @@ function reconcilePathForRequireJS(file) {
     return folds.join('/');
 }
 
+gulp.task('watch:metagen', function () {
+    gulp.watch('./public/static/app/js/**/*.js').on('change', function (file) {
+        runAllMetagens(function (err) {
+            if (err) {
+                console.error(err);
+            }
+        });
+    });
+});
+
 
 gulp.task('watch:hot-reload', function () {
 
@@ -236,7 +246,7 @@ gulp.task('watch:hot-reload', function () {
 
 
 gulp.task('transpile-jsx', function (cb) {
-    var ee =  transpileJSX();
+    var ee = transpileJSX();
     ee.on('error', function (err) {
         cb(err);
     });
@@ -246,6 +256,7 @@ gulp.task('transpile-jsx', function (cb) {
     });
 });
 
+
 function transpileJSX() {
 
     var ee = new EE();
@@ -253,17 +264,13 @@ function transpileJSX() {
     gulp.src('./public/static/app/js/views/**/*.js')
 
         .pipe(react({harmony: false})).on('error', function (err) {
-
-            ee.emit('error',err);
+            ee.emit('error', err);
         })
         .pipe(gulp.dest('./public/static/app/js/jsx')).on('error', function (err) {
-
-            ee.emit('error',err);
+            ee.emit('error', err);
 
         }).on('end', function () {
-
             ee.emit('end');
-
         });
 
     return ee;
@@ -279,9 +286,7 @@ function transpileFile(file) {
         .pipe(gulp.dest(dest));
 }
 
-
-gulp.task('metagen:all', ['transpile-jsx'], function (done) {
-
+function runAllMetagens(done) {
     var taskNames = Object.keys(metagens);
     var funcs = [];
 
@@ -296,24 +301,29 @@ gulp.task('metagen:all', ['transpile-jsx'], function (done) {
     async.parallel(funcs, function (err) {
         done(err);
     });
+}
+
+
+gulp.task('metagen:all', ['transpile-jsx'], function (done) {
+    runAllMetagens(done);
 });
 
 
-
-gulp.task('nodemon', ['metagen:all','watch:hot-reload'], function () {
+gulp.task('nodemon', ['metagen:all'], function () {
 
     nodemon({
 
         script: 'bin/www.js',
         ext: 'js',
-        env: { 'NODE_ENV': 'development' }
+        ignore: ['public/*','*.git/*','*.idea/*'],
+        env: {'NODE_ENV': 'development'}
 
     }).on('restart', ['metagen:all']);
 
 });
 
 
-gulp.task('default', ['metagen:all', 'watch:hot-reload'], function (done) {
+gulp.task('default', ['metagen:all',/* 'watch:metagen',*/ 'watch:hot-reload'], function (done) {
     done();
 });
 

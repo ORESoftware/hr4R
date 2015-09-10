@@ -28,7 +28,10 @@ define(
             },
 
             render: function () {
-                var self = this, products = this.props.products;
+
+                var self = this;
+                var products = this.props.products;
+
                 return (
                     React.createElement("div", {className: "flux-cart " + (this.props.visible ? 'active' : '')}, 
                         React.createElement("div", {className: "mini-cart"}, 

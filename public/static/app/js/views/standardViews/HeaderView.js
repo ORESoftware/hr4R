@@ -72,6 +72,8 @@ define(
                     this.listenTo(this.model, 'change', this.render);
                     this.listenTo(this.collection, 'change', this.render);
 
+                    this.listenTo(giant.socketEvents, 'socket-disconnected', this.onSocketDisconnected);
+
                     this.adhesive.stick({
                         keyName: 'socket',
                         plainObjects: {
@@ -109,6 +111,10 @@ define(
 
                 },
 
+                onSocketDisconnected: function () {
+                    alert('socket disconnected successfully');
+                },
+
                 onClickDisconnectSocket: function (event) {
                     event.preventDefault();
 
@@ -116,9 +122,10 @@ define(
                         giant.getSocketIOConn().disconnect();
                     }
                     catch (err) {
-                        return alert('socket failed disconnect --->' + err.toString());
+                        alert('socket failed disconnect --->' + err.toString());
+                        return;
                     }
-                    return alert('socket disconnected successfully');
+
                 },
 
                 onClickLogout: function (event) {

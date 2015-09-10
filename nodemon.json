@@ -1,9 +1,10 @@
 {
   "verbose": true,
   "ignore": [
+    "public/*",
     "test/*",
-    ".idea/*",
-    ".git/*"
+    "*.idea/*",
+    "*.git/*"
   ],
   "execMap": {
   }

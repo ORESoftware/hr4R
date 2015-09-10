@@ -81,7 +81,7 @@ define(
         function getCartState() {
             return {
                 product: CartStore.getProduct(),
-                selectedProduct: CartStore.getSelected(),
+                selected: CartStore.getSelected(),
                 cartItems: CartStore.getCartItems(),
                 cartCount: CartStore.getCartCount(),
                 cartTotal: CartStore.getCartTotal(),
@@ -89,8 +89,9 @@ define(
             };
         }
 
-        // Define main Controller View
         var FluxCartApp = React.createClass({
+
+            alexSaysReady: false,
 
             // Get initial state from stores
             getInitialState: function () {
@@ -99,26 +100,32 @@ define(
 
             // Add change listeners to stores
             componentDidMount: function () {
-                CartStore.fetch()
-                    .done(function () {
-                        if (this.isMounted()) {
-                            this.setState(getCartState());
-                        }
-                    })
-                    .fail(function (err) {
+                var self = this;
+                CartStore.fetchOptimized(function (err) {
+                    if (err) {
                         throw err;
-                    }).always(function(){
-                        CartStore.addChangeListener('rc-listen',this._onChange);
-                    });
+                    }
+                    else {
+                        //if (self.isMounted()) {
+                        self.alexSaysReady = true;
+                        self.setState(getCartState());
+                        CartStore.addChangeListener('rc-listen', self._onChange);
+                        //}
+                    }
+                });
             },
 
             // Remove change listeners from stores
             componentWillUnmount: function () {
-                CartStore.removeChangeListener('rc-listen',this._onChange);
+                CartStore.removeChangeListener('rc-listen', this._onChange);
             },
 
             // Render our child components, passing state via props
             render: function () {
+
+                if (!this.alexSaysReady) {
+                    return ( <div className="flux-cart-app"></div>);
+                }
 
                 var allViews = require('#allViews');
                 var FluxCart = allViews['reactComponents/FluxCart'];
@@ -129,7 +136,7 @@ define(
                         <FluxCart products={this.state.cartItems} count={this.state.cartCount}
                                   total={this.state.cartTotal} visible={this.state.cartVisible}/>
                         <FluxProduct product={this.state.product} cartitems={this.state.cartItems}
-                                     selected={this.state.selectedProduct}/>
+                                     selected={this.state.selected}/>
                     </div>
                 );
             },

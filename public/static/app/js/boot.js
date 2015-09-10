@@ -20,6 +20,8 @@ define('app/js/boot',
 
     [
         '#appState',
+        '#allFluxActions',
+        '#allFluxConstants',
         'jquery',
         'backbone',
         'app/js/giant',
@@ -30,7 +32,7 @@ define('app/js/boot',
         'async'
     ],
 
-    function (appState, $, Backbone, giant, allModels, allCollections, cssAdder, allCSS, async) {
+    function (appState, allFluxActions, allFluxConstants, $, Backbone, giant, allModels, allCollections, cssAdder, allCSS, async) {
 
         //TODO: might need to figure out how to set ENV before socket.io tries to make connection to server
 
@@ -40,7 +42,6 @@ define('app/js/boot',
 
             //Backbone.history.start();
             //Backbone.history.start({ pushState: true });
-
 
             $.ajax({
                 url: '/authenticate',
@@ -91,7 +92,6 @@ define('app/js/boot',
 
         };
 
-        //TODO: does optimized.js.gz file take longer to parse?
         //TODO: http://superuser.com/questions/205223/pros-and-cons-of-bzip-vs-gzip
         //TODO: effectiveJS not EmbeddedJS...see google for this
         //TODO: create new user with Backbone model
@@ -139,6 +139,7 @@ define('app/js/boot',
             }
 
             console.log('APPLICATION ENVIRONMENT:', appState.get('env'));
+
             if (appState.get('env') === 'development') {
                 require(['app/js/hotReloadHandler'], function (hrh) {
                     hrh.getConnection();

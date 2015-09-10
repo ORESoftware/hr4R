@@ -17,9 +17,9 @@ define(
         return {
 
             collNeedsPersisting: false,
-            numberOfFetches:0, //TODO: once this is 1 or greater, we don't need to keep fetching, we can let websockets do the work
+            numberOfFetches: 0, //TODO: once this is 1 or greater, we don't need to keep fetching, we can let websockets do the work
 
-            fetchCap:2,
+            fetchCap: 2,
             changedModelsToBatchUpdateDomWith: {},
             addedModelsToBatchUpdateDomWith: {},
 
@@ -97,11 +97,11 @@ define(
                 Backbone.Collection.apply(this, arguments);
             },
 
-            dispatchCallback: function(payload){
+            dispatchCallback: function (payload) {
 
                 var self = this;
 
-                switch(payload.actionType){
+                switch (payload.actionType) {
 
                     case 'delete':
                         self.remove(payload.model);
@@ -115,21 +115,20 @@ define(
                     default:
                         return true;
 
-
                 }
 
                 return true;
             },
 
-            sync: function() {
+            sync: function () {
                 //TODO: how does Backbone handle REST HTTP responses from saving models/collections? somehow with jQuery...
                 return Backbone.sync.apply(this, arguments);
             },
 
-            add: function(models, options) {
+            add: function (models, options) {
                 var opts = options || {};
-                if(opts.localCollAdd === true){ //TODO: perhaps move this into the set function and find out how many models were merged and how many were brand new
-                    this.trigger('localCollAdd',models,'localCollAdd');
+                if (opts.localCollAdd === true) { //TODO: perhaps move this into the set function and find out how many models were merged and how many were brand new
+                    this.trigger('localCollAdd', models, 'localCollAdd');
                 }
                 return this.set(models, _.extend({merge: false}, options, addOptions));
             },
@@ -224,23 +223,21 @@ define(
                 });
             },
 
-            fetchOptimized: function(cb){
-                if(this.numberOfFetches < 1){
-                    this.fetch()
-                        .done(function(){
-
+            fetchOptimized: function (cb) {
+                var self = this;
+                if (self.numberOfFetches < 1 && true) {  //TODO: add a check to see if sockets have been connected since time of last fetch
+                    self.fetch()
+                        .done(function () {
+                            self.numberOfFetches++;
+                            cb(null);
                         })
-                        .fail(function(){
-
-                        })
-                        .always(function(){
-
+                        .fail(function (err) {
+                            cb(err);
                         })
                 }
-                else{
+                else {
                     cb(null);
                 }
-
             },
 
             persistCollection: function (opts, cb) {
@@ -252,7 +249,7 @@ define(
                 var self = this;
 
                 this.each(function (model, index) {  //iterate through models, add/push function to async.parallel
-                    if(model.needsPersisting === true){
+                    if (model.needsPersisting === true) {
                         saveArray.push(
                             function (callback) {
                                 model.persistModel(null, null, function (err, val) {
@@ -283,12 +280,12 @@ define(
                 var saveArray = [];
 
                 this.each(function (model, index) {  //iterate through models, add/push function to async.parallel
-                    if(opts.persistAll || model.needsPersisting){
+                    if (opts.persistAll || model.needsPersisting) {
                         saveArray.push(model.toJSON());
                     }
                 });
 
-                var json = {models:saveArray};
+                var json = {models: saveArray};
 
                 $.ajax({
                     url: self.batchURL,

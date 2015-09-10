@@ -38,14 +38,40 @@ define(
         var CartProduct = BaseModel.extend({
 
                 urlRoot: function () {
-                    return '/cartProducts'
+                    return '/products'
                 },
 
                 defaults: function () { //prevents copying default attributes to all instances of JobModel
                     return {
+                        id:'5',
+                        productName:'',
+                        description:'',
                         price: 0,
                         quantity: 0,
-                        sku: null
+                        sku: null,
+                        inventory:5,
+
+                        variants: [
+                            {
+                                sku: '123123',
+                                type: '40oz Bottle',
+                                price: 4.99,
+                                inventory: 1
+
+                            },
+                            {
+                                sku: '123124',
+                                type: '6 Pack',
+                                price: 12.99,
+                                inventory: 5
+                            },
+                            {
+                                sku: '1231235',
+                                type: '30 Pack',
+                                price: 19.99,
+                                inventory: 3
+                            }
+                        ]
                     }
                 },
 

@@ -235,6 +235,7 @@ app.use('/', require('./routes/index'));
 app.use('/updateUserInfo', require('./routes/updateUserInfo'));
 app.use('/users', require('./routes/users'));
 app.use('/jobs', require('./routes/jobs'));
+app.use('/products',require('./routes/products'));
 //app.use('/batch/:collectionName', function(req,res,next){
 //    require('./routes/batch')(req,res,next);
 //});
