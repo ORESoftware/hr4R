@@ -4,7 +4,7 @@
 
 
 
-define(['backbone'],function(Backbone){
+define(function(){
 
     //Backbone.View = function(options) {
     //    this.cid = _.uniqueId('view');

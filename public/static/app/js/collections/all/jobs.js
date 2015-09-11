@@ -14,7 +14,6 @@ console.log('loading app/js/collections/jobsCollection.js');
 define(
     [
         'underscore',
-        'backbone',
         '#allModels',
         '#BaseCollection',
         '@AppDispatcher',
@@ -23,7 +22,7 @@ define(
 
     ],
 
-    function (_, Backbone, models, BaseCollection, AppDispatcher, allFluxConstants, collUpdater) {
+    function (_, models, BaseCollection, AppDispatcher, allFluxConstants, collUpdater) {
 
         var uniqueCollectionName = 'jobs';
 

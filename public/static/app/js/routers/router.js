@@ -17,15 +17,13 @@ define(
     [
         '#appState',
         '#viewState',
-        'backbone',
         'async',
         '#allCollections',
-        'ijson',
         'app/js/cssAdder',
         'react'
     ],
 
-    function (appState, viewState, Backbone, async, collections, IJSON, cssAdder, React) {
+    function (appState, viewState, async, collections, cssAdder, React) {
 
 
         var BootRouter = Backbone.Router.extend({

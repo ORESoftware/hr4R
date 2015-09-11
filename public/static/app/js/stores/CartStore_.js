@@ -6,13 +6,12 @@
 define(
     [
         'underscore',
-        'backbone',
         '@AppDispatcher',
         '#allFluxConstants',
         'events'
     ],
 
-    function (_, Backbone, AppDispatcher, allFluxConstants, events) {
+    function (_, AppDispatcher, allFluxConstants, events) {
 
         var EventEmitter = events.EventEmitter;
 

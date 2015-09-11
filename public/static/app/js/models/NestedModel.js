@@ -16,11 +16,9 @@ define(
     [
         '#appState',
         'underscore',
-        'backbone',
-        'ijson'
     ],
 
-    function (appState, _, Backbone, IJSON) {
+    function (appState, _) {
 
         var NestedModel = Backbone.Model.extend({
 

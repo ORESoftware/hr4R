@@ -12,14 +12,12 @@ console.log('loading app/js/models/userModel.js');
 define(
     [
         'underscore',
-        'backbone',
-        'ijson',
         'app/js/models/BaseModel',
         'app/js/ModelCollectionMediator',
         '@AppDispatcher'
     ],
 
-    function (_, Backbone, IJSON, BaseModel, MCM) {
+    function (_, BaseModel, MCM) {
 
         var urlError = function () {
             throw new Error('A "url" property or function must be specified');

@@ -15,14 +15,13 @@ define(
         'socketio',
         '#allCollections',
         'ijson',
-        'backbone',
         'underscore',
         '#allCSS',
         'app/js/cssAdder',
         '#hotReloader'
     ],
 
-    function (appState, viewState, io, collections, IJSON, Backbone, _, allCSS, cssAdder, hotReloader) {
+    function (appState, viewState, io, collections, IJSON, _, allCSS, cssAdder, hotReloader) {
 
 
         function replaceAll(str, target, replacement) {

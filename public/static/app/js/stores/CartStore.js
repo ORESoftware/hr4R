@@ -19,7 +19,6 @@ console.log('loading app/js/collections/jobsCollection.js');
 define(
     [
         'underscore',
-        'backbone',
         '#allModels',
         '#BaseCollection',
         '@AppDispatcher',
@@ -27,7 +26,7 @@ define(
 
     ],
 
-    function (_, Backbone, allModels, BaseCollection, AppDispatcher, allFluxConstants) {
+    function (_, allModels, BaseCollection, AppDispatcher, allFluxConstants) {
 
 
         var FluxCartConstants = allFluxConstants['FluxCartConstants'];

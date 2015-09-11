@@ -16,7 +16,7 @@
         jqueryUI_CSS: "empty:"
     },
 
-    "include": 'requireLib',
+    "include": ['requireLib','app/js/application','app/js/boot'],
     "stubModules":['text']
     //"stubModules": ['jsx', 'text', 'JSXTransformer'],
     //"modules": [

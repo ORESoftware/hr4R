@@ -24,13 +24,11 @@ console.log('loading app/js/models/jobModel.js');
 define(
     [
         'underscore',
-        'backbone',
-        'ijson',
         'app/js/models/BaseModel',
         '#allFluxConstants'
     ],
 
-    function (_, Backbone, IJSON, BaseModel, allFluxConstants) {
+    function (_, BaseModel, allFluxConstants) {
 
         var FluxCartConstants = allFluxConstants['FluxCartConstants'];
 

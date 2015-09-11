@@ -8,11 +8,10 @@ define('#appState',
 
     [
         'observe',
-        'backbone',
         'underscore'
     ],
 
-    function (Observe,Backbone,_) {
+    function (Observe,_) {
 
     /*
      * here we store the application state, everything that will go into localStorage will come from here

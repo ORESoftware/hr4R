@@ -9,13 +9,12 @@ console.log('loading app/js/collections/usersCollection.js');
 define(
     [
         'underscore',
-        'backbone',
         '#allModels',
         '#BaseCollection',
         '@AppDispatcher'
     ],
 
-    function (_, Backbone, models, BaseCollection, AppDispatcher) {
+    function (_, models, BaseCollection, AppDispatcher) {
 
         var UsersCollection = BaseCollection.extend({
 

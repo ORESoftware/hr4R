@@ -25,12 +25,10 @@ define(
     [
         '#appState',
         'underscore',
-        'backbone',
-        'ijson',
         '@AppDispatcher'
     ],
 
-    function (appState, _, Backbone, IJSON) {
+    function (appState, _) {
 
         var methodMap = {
             'create': 'POST',

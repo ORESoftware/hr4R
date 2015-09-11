@@ -19,7 +19,7 @@
 
     window.startDate = Date.now(); //this is for debugging performance of application
 
-    console.log('loading app/js/main.js, (1) time:', (Date.now() - window.startDate));
+    console.log('loading app/js/main.js ---> (0) ---> time:', (Date.now() - window.startDate));
 
     requirejs.config({
         enforceDefine: false,
@@ -74,7 +74,7 @@
         'shim': {
 
             '@Application': {
-                'deps': 'jquery'
+                'deps': ['backbone']
             },
 
             'underscore': {
@@ -86,10 +86,6 @@
                 'exports': 'Backbone'
             },
 
-            'handlebars': {
-                'exports': 'Handlebars'
-            },
-
             ejs: {
                 exports: "ejs"
             }
@@ -97,14 +93,22 @@
 
     });
 
-    console.log('starting app, time:', (Date.now() - window.startDate));
+    console.log('starting app ---> (1) ---> time:', (Date.now() - window.startDate));
 
-    require(['app/js/application'], function (Application) {
 
-        console.log('Application loaded, (2) time:', (Date.now() - window.startDate));
-        Application.start();
+    define('/////START/////', ['backbone'], function () {
 
+        require(['app/js/application'], function (Application) {
+            console.log('Application module loaded ----> (3) ----> time:', (Date.now() - window.startDate));
+            Application.start();
+
+        });
     });
+
+    require(['/////START/////'], function () {
+        console.log('starting application ---> (2) ----> time:', (Date.now() - window.startDate))
+    });
+
 
 })();
 

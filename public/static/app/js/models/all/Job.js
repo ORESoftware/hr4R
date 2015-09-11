@@ -19,14 +19,12 @@ console.log('loading app/js/models/jobModel.js');
 define(
     [
         'underscore',
-        'backbone',
-        'ijson',
         'app/js/models/BaseModel',
         'app/js/ModelCollectionMediator',
         '@AppDispatcher'
     ],
 
-    function (_, Backbone, IJSON, BaseModel, MCM, AppDispatcher) {
+    function (_, BaseModel, MCM, AppDispatcher) {
 
         var Job = BaseModel.extend({
 
