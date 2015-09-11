@@ -15,16 +15,14 @@ define(
         '#allModels',
         'form2js',
         'ejs',
-        'jquery',
         'underscore',
-        'backbone',
         'backbone-validation',
         'ijson',
-        'app/js/giant'
+        '#oplogSocketClient'
     ],
 
 
-    function (appState, collections, models, form2js, EJS, $, _, Backbone, BackboneValidation, IJSON, giant) {
+    function (appState, collections, models, form2js, EJS, _, BackboneValidation, IJSON, osc) {
 
 
         var LoginView = Backbone.View.extend({
@@ -215,7 +213,7 @@ define(
 
         function createSocketConnection() {
 
-            giant.getSocketIOConn();
+            osc.getSocketIOConn();
 
         }
 

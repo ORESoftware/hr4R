@@ -12,14 +12,12 @@ define(
         '#appState',
         '#allCollections',
         'ejs',
-        'jquery',
         'underscore',
-        'backbone',
         'backbone-validation',
-        'app/js/Adhesive'
+        '#Adhesive'
     ],
 
-    function (appState, collections, EJS, $, _, Backbone, BackboneValidation, Adhesive) {
+    function (appState, collections, EJS, _, BackboneValidation, Adhesive) {
 
 
         var RegisteredUsersView = Backbone.View.extend({

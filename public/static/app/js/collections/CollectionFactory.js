@@ -9,12 +9,11 @@ define(
 
     [
         'observe',
-        'backbone',
         'underscore',
         'app/js/baseCollectionPrototype'
     ],
 
-    function (Observe,Backbone,_, baseCollectionPrototype) {
+    function (Observe,_, baseCollectionPrototype) {
 
         return function(opts){
 

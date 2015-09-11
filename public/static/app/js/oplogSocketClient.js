@@ -7,22 +7,24 @@
 //TODO: http://geeks.bizzabo.com/post/83917692143/7-battle-tested-backbonejs-rules-for-amazing-web-apps
 //TODO: https://www.compose.io/articles/the-mongodb-oplog-and-node-js/
 
-console.log('loading app/js/giant.js');
+console.log('loading app/js/oplogSocketClient.js');
 
 define(
     [
         '#appState',
         'socketio',
         '#allCollections',
-        'ijson',
-        'backbone',
-        'underscore'
+        'underscore',
+        '#allFluxActions'
     ],
 
-    function (appState, io, collections, IJSON, Backbone, _) {
+    function (appState, socketio, collections, _, allFluxActions) {
 
 
         //TODO: perhaps wait to make socket.io connection after logging in
+
+        var OplogClientActions = allFluxActions['OplogClientActions'];
+
 
         function findCollection(name) {
             var ret = null;
@@ -38,7 +40,7 @@ define(
             return ret;
         }
 
-        var socketEvents = _.extend({}, Backbone.Events);
+        //var socketEvents = _.extend({}, Backbone.Events);
 
         var socket = null;
 
@@ -48,25 +50,25 @@ define(
             if (socket == null) {
                 console.log('document.cookie before socketio:', document.cookie);
 
-                socket = io.connect('http://127.0.0.1:3001');
-                //TODO: how to pass user_id in connection request?
+                socket = socketio.connect('http://127.0.0.1:3001');
 
+                //TODO: how to pass user_id in connection request?
                 //TODO: match socket session with express session
 
                 socket.on('error', function socketConnectionErrorCallback(err) {
-                    socketEvents.trigger('socket-error', err);
+                    this.trigger('socket-error', err);
                     console.error('Unable to connect Socket.IO ---->', JSON.stringify(err));
                 });
 
                 socket.on('connect', function (event) {
-                    socketEvents.trigger('socket-connected', 'connected --> id'.concat(socket.id));
-                    console.log('document.cookie after socketio connection:', document.cookie);
+                    this.trigger('socket-connected', 'connected --> id'.concat(socket.id));
+                    //console.log('document.cookie after socketio connection:', document.cookie);
                     console.info('successfully established a working and authorized connection'.toUpperCase());
                 });
 
                 socket.on('disconnect', function (event) {
-                    socketEvents.trigger('socket-disconnected', 'disconnected');
-                    console.log('document.cookie after socketio DIS-connection:', document.cookie);
+                    this.trigger('socket-disconnected', 'disconnected');
+                    //console.log('document.cookie after socketio DIS-connection:', document.cookie);
                     console.info('socket disconnected'.toUpperCase());
                 });
 
@@ -88,30 +90,21 @@ define(
                         }
                     }
                     else{
-
                         //TODO: fix oplog items that don't pass validation but still appear
                         throw new Error('no created_by field present:'+data);
-                        //return;
                     }
 
-                    console.log('INSERT ON SERVER:', data);
                     var ns = oplogDoc.ns;
                     var split = String(ns).split('.');
                     var dbName = split[0];
                     var collectionName = split[1];
                     var coll = findCollection(collectionName);
+
+                    OplogClientActions.insert(collectionName,data);
+
                     if (coll) {
-
                         var _id = data._id;
-                        //coll.create(data);
-                        //var ModelType = coll.model;
-                        //var newModel = new ModelType(data);
                         coll.insertModelSocket(_id,data,{});
-
-                        //coll.add(newModel, {merge: true, silent: true}); //most likely a new model if the DB did an insert
-                        //coll.trigger('coll-add-socket',newModel,{});
-
-                        // coll.create saves the model by default which we don't want for this so we go with coll.add
                         //TODO: if silent is set to false, views to seem to render magically for no reason
                     }
                 });
@@ -131,23 +124,23 @@ define(
                         if(currentUserId && currentUserId.toString() == updateUserID){
                             return;
                         }
-                    }else{
-                        return;
-                        //TODO: fix oplog items that don't pass validation but still appear
-                        //throw new Error('no updated_by field present:'+data);
                     }
-                    console.log('UPDATE FROM SERVER:', data);
+                    else{
+                        throw new Error('no updated_by field present:'+data);
+                        //TODO: fix oplog items that don't pass validation but still appear
+                    }
+
                     var ns = oplogDoc.ns;
                     var split = String(ns).split('.');
                     var dbName = split[0];
                     var collectionName = split[1];
                     var coll = findCollection(collectionName);
+                    var data = {_id:_id,updateInfo:updateInfo};
+                    OplogClientActions.update(collectionName,data);
                     if (coll) {
                         coll.updateModelSocket(_id,updateInfo,{});
-                        //coll.updateModel(_id, updateInfo, {silent:true});
                     }
                 });
-
 
 
                 socket.on('delete', function (data) {
@@ -158,15 +151,15 @@ define(
                     var dbName = split[0];
                     var collectionName = split[1];
                     var coll = findCollection(collectionName);
+                    OplogClientActions.remove(collectionName,data);
                     if (coll) {
                         var _id = oplogDoc.o._id;
-                        //coll.remove({_id: _id});
                         coll.removeModelSocket(_id);
                     }
                 });
-
-
             }
+
+            _.extend(socket, Backbone.Events);
 
             appState.set('socketConnection', socket);
             return socket;
@@ -184,7 +177,7 @@ define(
         return {
             getSocketIOConn: getConnection,
             addEvent: addEvent,
-            socketEvents: socketEvents
+            socketEvents: getConnection()
         };
     });
 

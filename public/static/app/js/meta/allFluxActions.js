@@ -9,12 +9,14 @@
 
 define(
     [
-        "app/js/flux/actions/FluxCartActions"
+        "app/js/flux/actions/FluxCartActions",
+		"app/js/flux/actions/OplogClientActions"
     ],
     function(){
 
         return {
 
-            "FluxCartActions": arguments[0]
+            "FluxCartActions": arguments[0],
+			"OplogClientActions": arguments[1]
         }
   });

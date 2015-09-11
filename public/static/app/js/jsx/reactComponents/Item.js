@@ -14,12 +14,11 @@ define(
 
         var Item = React.createClass({displayName: "Item",
             mixins: [React.Backbone],
-            updateOnProps: { 'item': 'model' },
+            updateOnProps: {'item': 'model'},
 
-            render: function() {
-                return React.createElement("span", null,  this.props.item.get('name') )
-                { this.props.item.get('description') }
+            render: function () {
+                return (React.createElement("span", null,  this.props.item.get('name') ))
             }
-            });
+        });
 
     });

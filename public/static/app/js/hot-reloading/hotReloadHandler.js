@@ -6,7 +6,7 @@
 //TODO: http://devble.com/create-cookies-in-javascript-read-values/
 
 
-console.log('loading app/js/giant.js');
+console.log('loading app/js/hotReloadHandler.js');
 
 define(
     [
@@ -18,10 +18,11 @@ define(
         'backbone',
         'underscore',
         '#allCSS',
-        'app/js/cssAdder'
+        'app/js/cssAdder',
+        '#hotReloader'
     ],
 
-    function (appState, viewState, io, collections, IJSON, Backbone, _, allCSS, cssAdder) {
+    function (appState, viewState, io, collections, IJSON, Backbone, _, allCSS, cssAdder, hotReloader) {
 
 
         function replaceAll(str, target, replacement) {
@@ -134,11 +135,7 @@ define(
 
                     updateProgressBar(40);
 
-                    window.hotReloadSimple(data,function(err,result){
-
-                        //var view = viewState.get('headerView');
-                        //view.template = result;
-                        //view.render();
+                    hotReloader.hotReload(data,function(err,result){
 
                         if(err){
                             alert(err);
@@ -154,7 +151,6 @@ define(
                             allTemplates[filename] = result;
                             updateProgressBar(80);
                             Backbone.history.loadUrl(Backbone.history.fragment);
-
                             updateProgressBar(100);
                         });
 
@@ -166,7 +162,7 @@ define(
 
                     updateProgressBar(40);
 
-                    window.hotReloadSimple(data,function(err,result){
+                    hotReloader.hotReload(data,function(err,result){
 
                         if(err){
                             alert(err);
@@ -176,7 +172,6 @@ define(
                         updateProgressBar(60);
 
                         var filename = deCapitalizeFirstLetter(reconcilePath1(data,'jsx'));
-
 
                         require(['#allViews'],function(allViews){
                             allViews[filename] = result;
@@ -192,7 +187,7 @@ define(
 
                     updateProgressBar(40);
 
-                    window.hotReloadSimple(data,function(err,result){
+                    hotReloader.hotReload(data,function(err,result){
 
                         if(err){
                             alert(err);
@@ -202,8 +197,6 @@ define(
                         updateProgressBar(60);
 
                         var filename = String(data).replace('text!','');
-
-                        //cssAdder.removeByAttr(data); //app will already remove all temp CSS for each view going through router
 
                         require(['#allCSS'],function(allCSS){
                             allCSS[filename] = result;

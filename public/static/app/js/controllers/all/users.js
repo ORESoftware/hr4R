@@ -5,13 +5,11 @@
 
 define(
     [
-        'jquery',
         'underscore',
-        'backbone',
         '#allCollections'
 
     ],
-    function ($, _, Backbone,  allCollections) {
+    function (_, allCollections) {
         return {
             getAll: function (id, changeViewFunction) {
                 require(['app/js/jsx/relViews/getAll/getAll'], function (View) {
@@ -41,7 +39,6 @@ define(
             Users: function (id, changeViewFunction) {
 
                 require(['app/js/jsx/Users/UsersView'], function (View) {
-
                     var viewOpts = {};
                     viewOpts.id = id;
                     var view = new View(viewOpts);
@@ -51,7 +48,7 @@ define(
                 });
             },
             default: function (id) {
-                console.log('id is:!!!',id);
+                console.log('id is:!!!', id);
                 return 'eureka!';
             }
         };

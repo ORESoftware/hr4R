@@ -30,13 +30,8 @@ define(
 
         var BootRouter = Backbone.Router.extend({
 
-            viewState: viewState,
-
             routes: {
                 '': 'canonical',
-                //"+refreshCurrentPage": "refreshCurrentPage",
-                "posts/:id": "getPost",
-                'books/:id': 'bookScreen',
                 'index': 'index',
                 'overview': 'overview',
                 'home': 'home',
@@ -45,7 +40,6 @@ define(
                 'dashboard': 'dashboard',
                 'portal': 'portal',
                 'login': 'login',
-                "lv/:route/:action": "loadView",
                 'ctrl/:controller': 'controllerRoute',
                 'ctrl/:controller/:action': 'controllerRoute',
                 'ctrl/:controller/:action/:id': 'controllerRoute',
@@ -54,19 +48,20 @@ define(
             },
 
             controllerRoute: function (controllerName, actionName, id) {
-                //controllerName = controllerName || Config.Defaults.Controller;
-                //actionName = actionName || Config.Defaults.Action;
 
                 var self = this;
                 require(['app/js/controllers/all/' + controllerName], function (cntr) {
-                    //var code = "ctl." + actionName + "();";
-                    //eval(code);
                     if (typeof cntr[actionName] === 'function') {
                         cntr[actionName](id, self.changeView);
                     }
                     else {
                         cntr['default'](id, self.changeView);
                     }
+                },
+                function(err){
+                    //route was not found, navigate home
+                    console.error('route was not found' + String(err));
+                    Backbone.Events.trigger('bootRouter','home');
                 });
             },
 
@@ -151,10 +146,6 @@ define(
                 });
             },
 
-            bookScreen: function (id) {
-                // Fetch book with `id` and render it.
-            },
-
 
             defaultRoute: function () {
                 alert('route not found so navigating to home view');
@@ -179,9 +170,8 @@ define(
                 var self = this;
 
                 _.bindAll(this, 'changeView', 'destroyView');
-                this.listenTo(Backbone.Events, 'bootRouter', onToggleViewRequest);
 
-                function onToggleViewRequest(viewName) {
+                this.listenTo(Backbone.Events, 'bootRouter', function onToggleViewRequest(viewName) {
 
                     if (window.location.hash && String(window.location.hash).length > 1 && String(window.location.hash).charAt(0) === '#') {
                         var hash = String(window.location.hash).substring(1);
@@ -194,24 +184,11 @@ define(
                     }
 
                     self.navigate(viewName, {trigger: true});
-                }
+                });
 
                 this.listenTo(this, 'all', function (route, action) {
                     console.log('router was invoked, route:', route, 'action:', action);
                 });
-
-                //this.on('route:loadView', function (route, action) {
-                //    alert(route + "_" + action); //
-                //});
-                //
-                //this.on('route:home', function (actions) {
-                //    //alert('Welcome to the SC admin tool.');
-                //});
-                //
-                //this.on('route:getPost', function (id) {
-                //    // Note the variable in the route definition being passed in here
-                //    alert("Get post number " + id);
-                //});
 
             },
 
@@ -227,8 +204,13 @@ define(
 
                     //remove all React components
                     (view.nodes || []).forEach(function(node){
-                        var result = React.unmountComponentAtNode( $(view.el).find(node)[0]);
-                        console.log('node=',node,'result=',result);
+                        try{
+                            var result = React.unmountComponentAtNode( $(view.el).find(node)[0]);
+                            console.log('node=',node,'result=',result);
+                        }
+                        catch(err){
+                            console.error(err);
+                        }
                     });
 
                     view.undelegateEvents();
@@ -244,18 +226,11 @@ define(
                     }.bind(this));
 
                 }
-                //view.remove(); //this deletes DOM element from the DOM, and that is bad
-                //Backbone.View.prototype.remove.call(view);
             },
-
-            //onToggleViewRequest: function (viewName) {
-            //    this.navigate(viewName, {trigger: true});
-            //},
-
 
             changeView: function (opts) {
 
-                //we should sync all collections here before switching views
+                //sync all collections here before switching views
 
                 var self = this;
 
@@ -309,13 +284,13 @@ define(
                 async.parallel(collectionsToSync,
                     function final(err, results) {
                         if (err) {
-                            onError(err);
+                            alert('there was an error syncing collections in the router --->' + err + 'could not change the view.');
                         }
                         else {
 
                             if (!window.documentIsReady) {
                                 //here we don't bother rendering stuff before document is ready?
-                                return;
+                                return null;
                             }
                             else {
                                 continueOn.bind(self)(opts);
@@ -324,33 +299,11 @@ define(
                             //$(function() {
                             //    continueOn.bind(self)(opts);
                             //});
-
                         }
                     }
                 );
-
-                function onError(err) {
-                    alert('there was an error --->' + err + 'could not change the view.');
-                }
-
             }
         });
-
-
-        var bootRouter = new BootRouter();
-
-        bootRouter.on('route:getPost', function (id) {
-            // Note the variable in the route definition being passed in here
-            alert("Get post number " + id);
-        });
-
-        //bootRouter.on('route:defaultRoute', function (actions) {
-        //    console.log('default route invoked...' + actions);
-        //
-        //    //TODO: catch route that was not recognized
-        //
-        //    continueOn.bind(this)();
-        //});
 
 
         function continueOn(opts) {
@@ -380,32 +333,29 @@ define(
 
 
             if (!appState.currentUserSessionIsOK()) {
-                if (this.viewState.get('mainView') != null) {
-                    this.destroyView(this.viewState.get('mainView'));
+                if (viewState.get('mainView') != null) {
+                    this.destroyView(viewState.get('mainView'));
                 }
-                if (this.viewState.get('mainParentView') != null) {
-                    this.destroyView(this.viewState.get('mainParentView'));
+                if (viewState.get('mainParentView') != null) {
+                    this.destroyView(viewState.get('mainParentView'));
                 }
 
-                require(['#allViews'], function (allViews) {
+                require(['#allViews', '#allTemplates'], function (allViews, allTemplates) {
 
-                    self.viewState.set('mainView', new allViews['standardViews/IndexView']());
+                    viewState.set('mainView', new allViews['standardViews/IndexView']());
                     window.location.hash = 'index'; //TODO why do we need this line?
 
-                    if (self.viewState.get('footerView') == null) {
-                        self.viewState.set('footerView', new allViews['standardViews/footerView']());
+                    if (viewState.get('footerView') == null) {
+                        viewState.set('footerView', new allViews['standardViews/footerView']());
                     }
-                    if (self.viewState.get('headerView') == null) {
-                        self.viewState.set('headerView', new allViews['standardViews/headerView']());
+                    if (viewState.get('headerView') == null) {
+                        viewState.set('headerView', new allViews['standardViews/headerView']());
                     }
-                    self.viewState.get('headerView').render();
+                    viewState.get('headerView').render();
 
-                    $('#main-div-id').html(self.viewState.get('mainView').render().el);
-                    //self.viewState.get('mainView').render(function () {
-                    //    $('#main-div-id').html(self.viewState.get('mainView').el);
-                    //});
+                    $('#main-div-id').html(viewState.get('mainView').render().el);
 
-                    self.viewState.get('footerView').render();
+                    viewState.get('footerView').render();
                 });
 
 
@@ -422,21 +372,21 @@ define(
                     //TODO: we can do dependency injection by passing allViews and allTemplates to render function of Backbone
 
                     if (opts.useSidebar === true) {
-                        //this.destroyView(this.viewState.get('mainParentView'));
-                        self.viewState.set('mainParentView', new allViews['standardViews/portalView']());
-                        var temp = self.viewState.get('mainParentView');
+                        //this.destroyView(viewState.get('mainParentView'));
+                        viewState.set('mainParentView', new allViews['standardViews/portalView']());
+                        var temp = viewState.get('mainParentView');
                         temp.render();
                     }
                     else {
-                        self.destroyView(self.viewState.get('mainParentView'));
-                        self.viewState.set('mainParentView', null);
+                        self.destroyView(viewState.get('mainParentView'));
+                        viewState.set('mainParentView', null);
                     }
 
-                    if (self.viewState.get('mainView') != null) {
-                        self.destroyView(self.viewState.get('mainView'));
-                        self.viewState.get('mainView').remove();
+                    if (viewState.get('mainView') != null) {
+                        self.destroyView(viewState.get('mainView'));
+                        viewState.get('mainView').remove();
                     }
-                    self.viewState.set('mainView', view);
+                    viewState.set('mainView', view);
 
                     var collection = view.collection;
                     var model = view.model;
@@ -446,43 +396,31 @@ define(
                         window.currentCollection = collection;
                     }
 
-                    self.viewState.set('footerView', new allViews['standardViews/footerView']({
+                    viewState.set('footerView', new allViews['standardViews/footerView']({
                         model: model,
                         collection: collection
                     }));
 
 
-                    self.viewState.set('headerView', new allViews['standardViews/headerView']());
+                    viewState.set('headerView', new allViews['standardViews/headerView']());
 
 
                     //**add stylesheets
                     cssAdder.addAllVia(opts.cssAdds || []);
 
                     //**render header**
-                    self.viewState.get('headerView').render();
+                    viewState.get('headerView').render();
 
                     //**render mainView**
-                    if (self.viewState.get('mainView').givenName !== '@IndexView') {
-                        $('#main-content-id').html(self.viewState.get('mainView').render().el);
+                    if (viewState.get('mainView').givenName !== '@IndexView') {
+                        $('#main-content-id').html(viewState.get('mainView').render().el);
                     }
                     else {
-                        $('#main-div-id').html(self.viewState.get('mainView').render().el);
+                        $('#main-div-id').html(viewState.get('mainView').render().el);
                     }
 
-                    //if (self.viewState.get('mainView').givenName !== '@IndexView') {
-                    //    self.viewState.get('mainView').render(function(){
-                    //        $('#main-content-id').html(self.viewState.get('mainView').el)
-                    //    });
-                    //}
-                    //else {
-                    //    self.viewState.get('mainView').render(function(){
-                    //        $('#main-div-id').html(self.viewState.get('mainView').el);
-                    //    });
-                    //}
-
-
                     //**render footer**
-                    self.viewState.get('footerView').render();
+                    viewState.get('footerView').render();
 
                 });
             }
@@ -490,6 +428,6 @@ define(
 
 
         return {
-            bootRouter: bootRouter
+            bootRouter: new BootRouter()
         }
     });

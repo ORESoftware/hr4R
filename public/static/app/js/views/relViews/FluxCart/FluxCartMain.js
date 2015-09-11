@@ -11,9 +11,7 @@ define(
         '#allCollections',
         'form2js',
         'ejs',
-        'jquery',
         'underscore',
-        'backbone',
         'backbone-validation',
         'react',
         'require'
@@ -22,7 +20,7 @@ define(
 
     /** @jsx React.DOM */
 
-    function (appState, models, collections, form2js, EJS, $, _, Backbone, BackboneValidation, React,require) {
+    function (appState, models, collections, form2js, EJS, _ , BackboneValidation, React,require) {
 
 
 

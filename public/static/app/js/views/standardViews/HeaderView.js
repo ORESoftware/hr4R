@@ -16,17 +16,15 @@ define(
         '#allModels',
         'form2js',
         'ejs',
-        'jquery',
         'underscore',
-        'app/js/Adhesive',
-        'backbone',
+        '#Adhesive',
         'backbone-validation',
-        'app/js/giant'
+        '#oplogSocketClient',
+        'require'
     ],
 
 
-    function (appState, viewState, async, collections, models, form2js, EJS, $, _, Adhesive, Backbone, BackboneValidation, giant) {
-
+    function (appState, viewState, async, collections, models, form2js, EJS, _, Adhesive, BackboneValidation, osc, require) {
 
 
         //TODO: http://stackoverflow.com/questions/7567404/backbone-js-repopulate-or-recreate-the-view
@@ -52,6 +50,7 @@ define(
                     'click #reset-all-button-id': 'onClickResetAll',
                     'click #reset-front-end-button-id': 'onClickResetFrontEnd',
                     'click #reset-back-end-button-id': 'onClickResetBackEnd',
+                    'click #reconnect-socket-button-id': 'onClickReconnectSocket',
                     'click #disconnect-socket-button-id': 'onClickDisconnectSocket'
                 },
 
@@ -72,18 +71,16 @@ define(
                     this.listenTo(this.model, 'change', this.render);
                     this.listenTo(this.collection, 'change', this.render);
 
-                    this.listenTo(giant.socketEvents, 'socket-disconnected', this.onSocketDisconnected);
+                    this.listenTo(osc.socketEvents, 'socket-disconnected', this.onSocketDisconnected);
 
                     this.adhesive.stick({
                         keyName: 'socket',
+                        domElementUpdate: self.$el,
                         plainObjects: {
-                            listenTo: [giant.socketEvents],
+                            listenTo: [osc.socketEvents],
                             update: [],
                             events: ['socket-error', 'socket-disconnected', 'socket-connected']
-                        },
-                        //domElementUpdate: $(self.el),
-                        domElementUpdate: self.$el,
-                        callback: null
+                        }
                     });
                 },
 
@@ -103,7 +100,7 @@ define(
                     var ret = EJS.render(template, {
                         appState: appState,
                         viewState: viewState,
-                        socketConnection: giant.getSocketIOConn().id
+                        socketConnection: osc.getSocketIOConn().id
                     });
                     self.$el.html(ret);
 
@@ -112,20 +109,29 @@ define(
                 },
 
                 onSocketDisconnected: function () {
-                    alert('socket disconnected successfully');
+                    //alert('socket disconnected successfully');
+                },
+
+                onClickReconnectSocket: function (event) {
+                    event.preventDefault();
+
+                    try {
+                        osc.getSocketIOConn().reconnect();
+                    }
+                    catch (err) {
+                        alert('socket failed reconnect --->' + err.toString());
+                    }
                 },
 
                 onClickDisconnectSocket: function (event) {
                     event.preventDefault();
 
                     try {
-                        giant.getSocketIOConn().disconnect();
+                        osc.getSocketIOConn().disconnect();
                     }
                     catch (err) {
                         alert('socket failed disconnect --->' + err.toString());
-                        return;
                     }
-
                 },
 
                 onClickLogout: function (event) {

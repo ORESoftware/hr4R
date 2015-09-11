@@ -6,19 +6,17 @@
 
 define(
     [
-        'backbone',
-        'underscore',
-        'jquery'
+        'underscore'
     ],
 
-    function (Backbone, _, $) {
+    function (_) {
 
 
         function AdhesiveDOMController(view, opts) {
             this.view = view;
         }
 
-        AdhesiveDOMController.prototype.updateDOMViaPlainObjectChange = function (domKeyName, domElementsToPotentiallyUpdate, obj, event) {
+        AdhesiveDOMController.prototype.updateDOMViaPlainObjectChange = function (domKeyName, domElementsToPotentiallyUpdate, obj, eventName) {
 
             domElementsToPotentiallyUpdate.find('*').each(function () {
 
@@ -26,29 +24,46 @@ define(
                 var attributes = self.attributes;
 
                 $.each(attributes, function (i, attrib) {
+
                     var name = attrib.name;
                     var value = attrib.value;
 
-                    if (name === 'adhesive-value') {
+                    var func = null;
 
-                        var split = String(value).split(':');
-
-                        var modelName = split[0];
-                        var modelProp = split[1];
-
-                        if (domKeyName == modelName) {
-
-                            //var prop = obj[modelProp];
-                            var prop = event;
-                            $(self).html(String(prop));
-
-                        }
+                    switch (name) {
+                        case 'adhesive-value':
+                            func = function (element, val) {
+                                $(element).html(String(val));
+                            };
+                            break;
+                        case 'adhesive-value-checkbox':
+                            func = function (element, val) {
+                                $(element).prop('checked', val);
+                                //$(element).attr('checked', val);
+                            };
+                            break;
+                        default:
+                            return true; //could be return false if 'adhesive-get' was always first attribute
                     }
+
+
+                    var split = String(value).split(':');
+
+                    var modelName = split[0];
+                    var modelProp = split[1];
+
+                    if (domKeyName == modelName) {
+
+                        var prop = obj[modelProp];
+                        $(self).html(String(prop));
+                        //nothing here, just for debugger
+                    }
+
                 });
             });
         };
 
-        AdhesiveDOMController.prototype.updateDOMViaModelChange = function(domKeyName, model, domElementsToPotentiallyUpdate){
+        AdhesiveDOMController.prototype.updateDOMViaModelChange = function (domKeyName, model, domElementsToPotentiallyUpdate) {
 
             console.log('update-DOM-Via-Model-Change:', domElementsToPotentiallyUpdate, 'changes:', model.changed);
 
@@ -72,10 +87,6 @@ define(
 
                 $.each(this.attributes, function (i, attrib) {
 
-                    if(!attrib){
-                        console.log('wtf no attrib defined');
-                        return false;
-                    }
 
                     var name = attrib.name;
                     var value = attrib.value;
@@ -110,7 +121,7 @@ define(
 
                     //if (domKeyName == modelName && _.contains(props, modelProp)) {
 
-                    if (value.indexOf(domKeyName) ===0) {
+                    if (value.indexOf(domKeyName) === 0) {
 
                         var cid = $(self).attr('adhesive-cid');
 
@@ -119,8 +130,8 @@ define(
                             var val = model.get(modelProp);
                             //$(self).html(String(prop));
 
-                            if(nestedProps.length > 0){
-                              val = eval('val.' + nestedProps);
+                            if (nestedProps.length > 0) {
+                                val = eval('val.' + nestedProps);
                             }
 
                             func(self, val); //done!
@@ -139,7 +150,7 @@ define(
 
         };
 
-        AdhesiveDOMController.prototype.updateDOMViaCollectionChange = function(domKeyName, collection, domElement, modelCIDHash, eventName){
+        AdhesiveDOMController.prototype.updateDOMViaCollectionChange = function (domKeyName, collection, domElement, modelCIDHash, eventName) {
 
             console.log('update-DOM-Via-Collection-Change:', domElement, 'models changed:', modelCIDHash);
 
@@ -254,7 +265,6 @@ define(
             });
 
         };
-
 
 
         return AdhesiveDOMController;

@@ -13,16 +13,32 @@
 //TODO it's a waste to (re)render a view that can't be seen by the user anyway right
 
 
-define(function(require){
+define(function (require) {
 
     var Dispatcher = require('flux').Dispatcher;
 
     var AppDispatcher = new Dispatcher();
 
     // Convenience method to handle dispatch requests
-    AppDispatcher.handleAction = function(action) {
+    AppDispatcher.handleAction = function (action) {
         this.dispatch({
             source: 'VIEW_ACTION',
+            action: action
+        });
+    };
+
+    // Convenience method to handle dispatch requests
+    AppDispatcher.handleHTTPServerAction = function (action) {
+        this.dispatch({
+            source: 'HTTP_SERVER_ACTION',
+            action: action
+        });
+    };
+
+    // Convenience method to handle dispatch requests
+    AppDispatcher.handleSocketServerAction = function (action) {
+        this.dispatch({
+            source: 'SOCKET_SERVER_ACTION',
             action: action
         });
     };

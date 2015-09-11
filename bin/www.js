@@ -3,6 +3,33 @@
 //TODO: process.env.UV_THREADPOOL_SIZE = 1;
 //TODO: incorporate cluster module
 
+
+process.on('uncaughtException', function handleUncaughtException(err) {
+    if (global.colors) {
+        console.error('uncaughtException--->'+ colors.red(String(err)));
+    } else {
+        console.error('uncaughtException--->'+ String(err));
+    }
+
+    if(process.env.NODE_ENV === 'production'){
+        //we are in production, let's cross our fingers
+        //set up some alert / email?
+    }
+    else{
+        throw err; //this should crash the server
+    }
+});
+
+process.on('exit', function exitHook(code) {
+
+    if (global.colors) {
+        console.log(colors.magenta('exiting with code', code, '...'));
+    } else {
+        console.log('exiting with code', code, '...');
+    }
+});
+
+
 var app = require('../app');
 var debug = require('debug')('sc-ui-express:server');
 var http = require('http');

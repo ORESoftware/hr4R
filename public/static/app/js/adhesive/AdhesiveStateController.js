@@ -5,36 +5,10 @@
 
 define(
     [
-        'backbone',
-        'underscore',
-        'jquery'
+        'underscore'
     ],
 
-    function (Backbone, _, $) {
-
-
-        //TODO: recursion is even harder in JS due to closures
-
-       /* function getNestedModels(value, index, model, props) {
-
-            var temp = value;
-            var value = model;
-            if (props[index]) {
-                temp = model.get(props[index]);
-
-                ++index;
-                if (props[index]) {
-                    getNestedModels(temp, index, temp, props);
-                }
-                else {
-                    return temp;
-                }
-            }
-            else {
-                return value;
-            }
-        }*/
-
+    function (_) {
 
         function AdhesiveStateController(view, opts) {
             this.view = view;
@@ -48,7 +22,7 @@ define(
 
         };
 
-        AdhesiveStateController.prototype.updateBackboneModels = function(domKeyName, domElement, models, event, limitToEventTarget){
+        AdhesiveStateController.prototype.updateBackboneModels = function (domKeyName, domElement, models, event, limitToEventTarget) {
 
             console.log('update-Backbone-Models:', models, event);
 
@@ -57,7 +31,7 @@ define(
 
                 $.each(attributes, function (i, attrib) {
 
-                    if(!attrib){
+                    if (!attrib) {
                         console.log('wtf no attrib defined');
                         return false;
                     }
@@ -97,16 +71,16 @@ define(
 
                     //if (domKeyName == modelName) {
 
-                    if (value.indexOf(domKeyName) ===0) {
+                    if (value.indexOf(domKeyName) === 0) {
 
                         //TODO: don't need to check CID because we might be updating multiple models from the same element?
                         var val = func(element);
 
                         _.each(models, function (model, index) {
-                            if(nestedModels.length > 0){
-                                model.setNestedAttrForChange(modelProp,nestedModels, val, {localChange:true});
+                            if (nestedModels.length > 0) {
+                                model.setNestedAttrForChange(modelProp, nestedModels, val, {localChange: true});
                             }
-                            else{
+                            else {
                                 model.set(modelProp, val, {localChange: true});
                             }
                             model.persistModel();

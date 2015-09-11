@@ -17,13 +17,46 @@ define(
         'backbone',
         '#allModels',
         '#BaseCollection',
-        '@AppDispatcher'
+        '@AppDispatcher',
+        '#allFluxConstants',
+        'app/js/helpers/collectionUpdater'
 
     ],
 
-    function (_, Backbone, models, BaseCollection, AppDispatcher) {
+    function (_, Backbone, models, BaseCollection, AppDispatcher, allFluxConstants, collUpdater) {
 
-        //var dispatcher = allDispatchers['dispatchers/JobsDispatcher'];
+        var uniqueCollectionName = 'jobs';
+
+        var CollectionConstants = allFluxConstants['CollectionConstants'];
+        var OplogClientConstants = allFluxConstants['OplogClientConstants'];
+
+        var dispatchCallback = function (payload) {
+
+            var action = payload.action;
+            var data = payload.data;
+
+            switch (action) {
+
+                case (OplogClientConstants.OPLOG_INSERT + uniqueCollectionName):
+                    collUpdater.handleInsert(jobsCollection);
+                    break;
+
+                case (OplogClientConstants.OPLOG_UPDATE + uniqueCollectionName):
+                    collUpdater.handleUpdate(jobsCollection);
+                    break;
+
+                case (OplogClientConstants.OPLOG_REMOVE + uniqueCollectionName):
+                    collUpdater.handleRemove(jobsCollection);
+                    break;
+
+
+                default:
+                    return true;
+            }
+
+            return true;
+        };
+
 
         var JobsCollection = BaseCollection.extend({
             // Reference to this collection's model.
@@ -43,26 +76,15 @@ define(
             //    Backbone.Collection.apply(this, arguments);
             //},
 
-            initialize: function (models,opts) {
+            initialize: function (models, opts) {
 
-                console.log('model for JobsCollection is:', this.model);
-
-                this.dispatchToken = AppDispatcher.register(this.dispatchCallback);
+                this.dispatchToken = AppDispatcher.register(dispatchCallback);
 
                 this.givenName = '@JobsCollection';
-                this.uniqueName = 'jobs';
+                this.uniqueName = uniqueCollectionName;
 
                 this.options = opts || {};
                 _.bindAll(this, 'persistCollection');
-
-                // This will be called when an item is added. pushed or unshifted
-                this.on('add', function (model) {
-                    console.log('something got added');
-                });
-                // This will be called when an item is removed, popped or shifted
-                this.on('remove', function (model) {
-                    console.log('something got removed');
-                });
 
             },
 
@@ -70,12 +92,12 @@ define(
             //TODO:http://www.toptal.com/front-end/simple-data-flow-in-react-applications-using-flux-and-backbone
 
 
-
             // Todos are sorted by their original insertion order.
             comparator: 'order'
         });
 
 
+        var jobsCollection = new JobsCollection();
 
-        return new JobsCollection();
+        return jobsCollection;
     });

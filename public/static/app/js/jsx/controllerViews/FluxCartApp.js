@@ -7,10 +7,6 @@
 define(
     [
         'react',
-        //'#allReactComponents',
-        //"app/js/jsx/reactComponents/FluxCart",
-        //"app/js/jsx/reactComponents/FluxProduct",
-        //'app/js/ReactComponentMediator',
         '#allCollections',
         '#allModels',
         'app/js/stores/CartStore',
@@ -21,62 +17,10 @@ define(
     ],
     function (React, allCollections, allModels, CartStore, ProductStore, allFluxActions, require) {
 
-
-        //var FluxCart = RCM.findReactComponentByName('reactComponents/FluxCart');
-        //var FluxProduct = RCM.findReactComponentByName('reactComponents/FluxProduct');
-
         var FluxCartActions = allFluxActions['FluxCartActions'];
 
-        FluxCartActions.getProducts();
+        //FluxCartActions.getProducts();
 
-        var CartAPI_ = {
-
-            getProductData: function () {
-                var data = JSON.parse(localStorage.getItem('product'));
-                FluxCartActions.receiveProduct(data);
-            }
-
-        };
-
-        var ProductData_ = {
-            // Load Mock Product Data Into localStorage
-            init: function () {
-                //localStorage.clear();
-                localStorage.setItem('product', JSON.stringify([
-                    {
-                        id: '0011001',
-                        name: 'Scotch.io Signature Lager',
-                        description: 'The finest lager money can buy.',
-                        variants: [
-                            {
-                                sku: '123123',
-                                type: '40oz Bottle',
-                                price: 4.99,
-                                inventory: 1
-
-                            },
-                            {
-                                sku: '123124',
-                                type: '6 Pack',
-                                price: 12.99,
-                                inventory: 5
-                            },
-                            {
-                                sku: '1231235',
-                                type: '30 Pack',
-                                price: 19.99,
-                                inventory: 3
-                            }
-                        ]
-                    }
-                ]));
-            }
-        };
-
-
-        //ProductData.init();
-        //
-        //CartAPI.getProductData();
 
         function getCartState() {
             return {
@@ -100,7 +44,13 @@ define(
 
             // Add change listeners to stores
             componentDidMount: function () {
+                CartStore.addChangeListener('rc-listen', this._onChange);
+                FluxCartActions.getProducts();
+            },
+
+            componentDidMount_old: function () {
                 var self = this;
+                CartStore.addChangeListener('rc-listen', self._onChange);
                 CartStore.fetchOptimized(function (err) {
                     if (err) {
                         throw err;
@@ -150,7 +100,5 @@ define(
 
         //_.extend(FluxCartApp,Backbone.Events);
 
-
         return FluxCartApp;
-
     });

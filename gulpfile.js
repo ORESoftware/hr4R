@@ -278,9 +278,8 @@ function transpileJSX() {
 
 
 function transpileFile(file) {
-
+    //this doesn't work yet
     var dest = file.path.replace('views', 'jsx');
-
     return gulp.src(file.path)
         .pipe(react({harmony: false}))
         .pipe(gulp.dest(dest));

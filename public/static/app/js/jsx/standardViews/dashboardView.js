@@ -16,14 +16,12 @@ define(
         '#appState',
         '#allCollections',
         'ejs',
-        'jquery',
         'underscore',
-        'backbone',
         'react'
     ],
 
 
-    function (appState, allCollections, EJS, $, _, Backbone, React) {
+    function (appState, allCollections, EJS, _, React) {
 
 
         var DashboardView = Backbone.View.extend({

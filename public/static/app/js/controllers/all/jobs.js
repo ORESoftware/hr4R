@@ -6,15 +6,13 @@
     // Filename: controllers/home.js
 define(
     [
-        'jquery',
         'underscore',
-        'backbone',
         '#allCollections',
         '#allCSS',
         '#SuperController'
 
     ],
-    function ($, _, Backbone, allCollections, allCSS, SuperController) {
+    function (_, allCollections, allCSS, SuperController) {
 
 
         function Controller() {
@@ -35,7 +33,7 @@ define(
                         allCSS['cssx/bootstrap/bootstrap-notify.css']
                     ]
                 };
-                SuperController.control(viewPath, viewOpts, routerOpts, changeViewCallback);
+                this.control(viewPath, viewOpts, routerOpts, changeViewCallback);
             },
 
             make: function () {
@@ -58,7 +56,7 @@ define(
                 var routerOpts = {
                     useSidebar: true
                 };
-                SuperController.control(viewPath, viewOpts, routerOpts, changeViewCallback);
+                this.control(viewPath, viewOpts, routerOpts, changeViewCallback);
             },
 
 
@@ -68,7 +66,7 @@ define(
             }
         };
 
-        //_.extend(Controller.prototype, SuperController.prototype);
+        _.defaults(Controller.prototype, SuperController.prototype);
 
         return new Controller();
     });

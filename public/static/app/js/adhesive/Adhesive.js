@@ -8,21 +8,22 @@
 
 define(
     [
-        'backbone',
         'underscore',
-        'jquery',
-        'app/js/AdhesiveDOMController',
-        'app/js/AdhesiveStateController'
+        'app/js/adhesive/AdhesiveDOMController',
+        'app/js/adhesive/AdhesiveStateController'
     ],
 
-    function (Backbone, _, $, ADC, ASC) {
+    function (_, ADC, ASC) {
+
+
+        var stateController = new ASC();
+        var domController = new ADC();
 
 
         function Adhesive(view, opts) {
             this.view = view;
             _.extend(this, Backbone.Events);
-            this.stick = stick.bind(this);
-            //TODO: do we need to unbind any elements or since we are using 'this.el' Backbone might take care of this already..?
+            //this.stick = stick.bind(this);
             this.jQueryBinds = [];
             this.stateController = new ASC(view);
             this.domController = new ADC(view);
@@ -36,7 +37,7 @@ define(
             });
         };
 
-        function stick(opts) {
+        Adhesive.prototype.stick = function (opts) {
 
             //TODO: give these default values inside this class
             var domKeyName = opts.keyName || 'model';
@@ -45,28 +46,27 @@ define(
             var domEventType = opts.domEventType || 'click';
             var limitToEventTarget = opts.limitToEventTarget === false ? false : true; //default is true, need to explicitly pass in false for it to be false
             var propagateChangesToServerImmediately = opts.propagateChangesToServerImmediately || true;
-
-            var callback = opts.callback;
-
             var limitToClass = opts.limitToClass;
 
+
             this.jQueryBinds.push(domElementListen);
+
 
             var self = this;
 
             var plainObjects = opts.plainObjects;
             if (typeof plainObjects === 'object') {
 
-                var plainObjectsToListenTo = plainObjects.listenTo;
-                var plainObjectEvents = plainObjects.events;
-                var plainObjectsToUpdate = plainObjects.update;
+                var plainObjectsToListenTo = plainObjects.listenTo || [];
+                var plainObjectEvents = plainObjects.events || [];
+                var plainObjectsToUpdate = plainObjects.update || [];
 
                 if (plainObjectEvents && plainObjectEvents.length > 0) {
 
                     plainObjectEvents = plainObjectEvents.join(' '); //separate event-names by a space
                     _.each(plainObjectsToListenTo, function (obj, index) {
-                        self.listenTo(obj, plainObjectEvents, function (event) {
-                            self.domController.updateDOMViaPlainObjectChange(domKeyName, domElementUpdate, obj, event);
+                        self.listenTo(obj, plainObjectEvents, function (eventName) {
+                            self.domController.updateDOMViaPlainObjectChange(domKeyName, domElementUpdate, obj, eventName);
                         });
                     });
 
@@ -84,12 +84,8 @@ define(
                             event.stopPropagation();
                         }
 
-                        if (typeof callback === 'function') {
-                            callback(event);
-                        }
-                        else {
-                            self.stateController.updatePlainObjects(domKeyName, domElementListen, plainObjectsToUpdate, event, limitToEventTarget);
-                        }
+                        self.stateController.updatePlainObjects(domKeyName, domElementListen, plainObjectsToUpdate, event, limitToEventTarget);
+
                     });
                 }
             }
@@ -97,9 +93,9 @@ define(
             var models = opts.models;
             if (typeof models === 'object') {
 
-                var modelsToListenTo = models.listenTo;
-                var modelEvents = models.modelEvents;
-                var modelsToUpdate = models.update;
+                var modelsToListenTo = models.listenTo || [];
+                var modelEvents = models.modelEvents || [];
+                var modelsToUpdate = models.update || [];
 
 
                 if (modelEvents && modelEvents.length > 0) {
@@ -126,12 +122,7 @@ define(
                             event.stopPropagation();
                         }
 
-                        if (typeof callback === 'function') {
-                            callback(event);
-                        }
-                        else {
-                            self.stateController.updateBackboneModels(domKeyName, domElementListen, modelsToUpdate, event, limitToEventTarget);
-                        }
+                        self.stateController.updateBackboneModels(domKeyName, domElementListen, modelsToUpdate, event, limitToEventTarget);
 
                     });
                 }
@@ -140,9 +131,9 @@ define(
             var collections = opts.collections;
             if (typeof collections === 'object') {
 
-                var collectionsToListenTo = collections.listenTo;
-                var collectionEvents = collections.collectionEvents;
-                var collectionsToUpdate = collections.update;
+                var collectionsToListenTo = collections.listenTo || [];
+                var collectionEvents = collections.collectionEvents || [];
+                var collectionsToUpdate = collections.update || [];
                 var filterUpdateFunction = collections.filterUpdateFunction || function () {
                         return true;
                     };
@@ -150,6 +141,7 @@ define(
                 if (collectionEvents && collectionEvents.length > 0) {
 
                     collectionEvents = collectionEvents.join(' '); //separate event-names by a space
+
                     _.each(collectionsToListenTo, function (coll, index) {
                         self.listenTo(coll, collectionEvents, function (models, eventName) {
                             self.domController.updateDOMViaCollectionChange(domKeyName, coll, domElementUpdate, models, eventName);
@@ -164,26 +156,24 @@ define(
                         domElementListen = domElementListen.find(limitToClass);
                     }
 
-                    domElementListen.on(domEventType, function (event) { //click will only be registered if html is in DOM anyway so...assume it is there
+                    domElementListen.on(domEventType, function (event) {
 
                         event.preventDefault();
                         if (limitToEventTarget) {  //TODO: update this with proper condition
                             event.stopPropagation();
                         }
 
-                        if (typeof callback === 'function') {
-                            callback(event);
-                        }
-                        else {
-                            self.stateController.updateBackboneCollections(domKeyName, domElementListen, collectionsToUpdate, event, limitToEventTarget, filterUpdateFunction);
-                        }
+                        self.stateController.updateBackboneCollections(
+                            domKeyName, domElementListen, collectionsToUpdate, event,
+                            limitToEventTarget, filterUpdateFunction
+                        );
 
                     });
                 }
             }
 
             return this;
-        }
+        };
 
         return Adhesive;
     }

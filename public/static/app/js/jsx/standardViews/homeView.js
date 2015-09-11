@@ -16,9 +16,7 @@ define(
         '#allCollections',
         'form2js',
         'ejs',
-        'jquery',
         'underscore',
-        'backbone',
         'backbone-validation',
         'react',
         '#allFluxActions'
@@ -27,7 +25,7 @@ define(
 
     /** @jsx React.DOM */
 
-    function (appState, models, collections, form2js, EJS, $, _, Backbone, BackboneValidation, React, allFluxActions) {
+    function (appState, models, collections, form2js, EJS, _, BackboneValidation, React, allFluxActions) {
 
 
         var FluxCartActions = allFluxActions['FluxCartActions'];
@@ -58,23 +56,12 @@ define(
                 initialize: function (opts) {
 
                     this.setViewProps(opts);
-                    _.bindAll(this, 'render', 'show', 'onChange', 'handleModelSyncSuccess', 'handleModelError');
-                    //this.listenTo(this.collection, 'add reset', this.render);
-                    //this.listenTo(this.collection, 'change', this.onChange, this);
+                    _.bindAll(this, 'render');
+
                     this.listenTo(this.model, 'sync', this.handleModelSyncSuccess);
                     this.listenTo(this.model, 'error', this.handleModelError);
-                    //this.listenTo(Backbone.Events, 'books:created', this.show);
                 },
 
-
-                show: function () {
-                    console.log('heard about BOOKS:CREATED: this:', this);
-                },
-
-                onChange: function (msg) {
-
-                    //console.log(msg);
-                },
 
                 nodes: ['#react-timer-example-div-id','#react-menu-example-div-id'],
 
@@ -92,22 +79,14 @@ define(
                     self.$el.html(ret);
 
 
-                    //var FluxCartApp = allViews['reactComponents/FluxCartApp'];
                     var TimerExample = allViews['reactComponents/TimerExample'];
                     var MenuExample = allViews['reactComponents/MenuExample'];
-
-
-                    //React.render(
-                    //    <FluxCartApp />,
-                    //    $(self.el).find('#react-flux-cart-example-div-id')[0]
-                    //);
 
 
                     React.render(
                         React.createElement(TimerExample, {start: Date.now()}),
                         $(self.el).find('#react-timer-example-div-id')[0]
                     );
-
 
                     React.render(
                         React.createElement(MenuExample, {items:  ['Home', 'Services', 'About', 'Contact us'] }),

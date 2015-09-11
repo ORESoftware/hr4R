@@ -11,14 +11,12 @@ define(
         '#appState',
         '#allCollections',
         'ejs',
-        'jquery',
         'underscore',
-        'backbone',
         'backbone-validation'
     ],
 
 
-    function (appState, collections, EJS, $, _, Backbone, BackboneValidation) {
+    function (appState, collections, EJS, _, BackboneValidation) {
 
 
         var IndexView = Backbone.View.extend({

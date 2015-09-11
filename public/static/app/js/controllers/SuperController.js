@@ -4,12 +4,10 @@
 
 
 define([
-        'jquery',
         'underscore',
-        'backbone',
         '#allCollections'
     ],
-    function ($, _, Backbone, allCollections) {
+    function (_, allCollections) {
 
 
         function SuperController() {
@@ -20,12 +18,12 @@ define([
 
             control: function (viewPath, viewOpts, routerOpts, cb) {
 
-                if(typeof viewPath === 'object'){
+                if (typeof viewPath === 'object') {
                     var options = viewPath;
+                    var cb = viewOpts;
                     var viewPath = options.viewPath;
                     viewOpts = options.viewOpts;
                     routerOpts = options.routerOpts;
-                    cb = options.callback;
                 }
 
                 require([viewPath], function (View) {
@@ -41,8 +39,6 @@ define([
         };
 
 
-        return new SuperController();
-
-        //return SuperController;
+        return SuperController;
 
     });

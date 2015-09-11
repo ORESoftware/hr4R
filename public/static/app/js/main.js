@@ -17,18 +17,18 @@
 
 (function () {
 
-    window.startDate = Date.now();
+    window.startDate = Date.now(); //this is for debugging performance of application
 
     console.log('loading app/js/main.js, (1) time:', (Date.now() - window.startDate));
 
     requirejs.config({
         enforceDefine: false,
-        waitSeconds: 997,
+        waitSeconds: 7,
         baseUrl: '/static',
         paths: {
             'async': 'vendor/async',
             'jquery': 'vendor/jquery',
-            'jqueryUI': 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui',
+            //'jqueryUI': 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui',
             //'jqueryUI_CSS':'text!https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.css',
             //'jqueryUI_smooth':'text!https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css',
             //'jquery': 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min',
@@ -44,22 +44,21 @@
             'observe': 'vendor/observe',
             'react': 'vendor/react-with-addons',
             //'react': 'vendor/react',
+            '#hotReloader': 'app/js/hot-reloading/hotReloader',
             'socketio': 'vendor/socketio',
             'events': 'vendor/events-amd',
             //'socketio' : 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min',
-            //'Adhesive':'app/js/Adhesive',
+            '#Adhesive': 'app/js/adhesive/Adhesive',
             '#jsPatches': 'app/js/patches/jsPatches',
             '#backbonePatches': 'app/js/patches/backbonePatches',
             '#windowPatches': 'app/js/patches/windowPatches',
-            //'#allReactComponents': 'app/js/meta/allReactComponents',
-            //'#allRelViews': 'app/js/meta/allRelViews',
             '#allTemplates': 'app/js/meta/allTemplates',
-            //'#allStandardViews': 'app/js/meta/allStandardViews',
+            '#oplogSocketClient': 'app/js/oplogSocketClient',
             '#allViews': 'app/js/meta/allViews',
             '#allModels': 'app/js/meta/allModels',
             '#allCollections': 'app/js/meta/allCollections',
-            '#appState': 'app/js/appState',
-            '#viewState': 'app/js/viewState',
+            '#appState': 'app/js/state/appState',
+            '#viewState': 'app/js/state/viewState',
             '#allControllers': 'app/js/meta/allControllers',
             '#allDispatchers': 'app/js/meta/allDispatchers',
             '#BaseCollection': 'app/js/collections/BaseCollection',
@@ -67,22 +66,30 @@
             '#allCSS': 'app/js/meta/allCSS',
             '#allFluxActions': 'app/js/meta/allFluxActions',
             '#allFluxConstants': 'app/js/meta/allFluxConstants',
-            '#SuperController': 'app/js/controllers/SuperController'
+            '#SuperController': 'app/js/controllers/SuperController',
+            '@Router': 'app/js/routers/router'
             //'d3':'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min'
         },
 
         'shim': {
 
+            '@Application': {
+                'deps': 'jquery'
+            },
+
             'underscore': {
                 'exports': '_'
             },
+
             'backbone': {
                 'deps': ['jquery', 'underscore'],
                 'exports': 'Backbone'
             },
+
             'handlebars': {
                 'exports': 'Handlebars'
             },
+
             ejs: {
                 exports: "ejs"
             }
@@ -92,7 +99,6 @@
 
     console.log('starting app, time:', (Date.now() - window.startDate));
 
-
     require(['app/js/application'], function (Application) {
 
         console.log('Application loaded, (2) time:', (Date.now() - window.startDate));
@@ -100,7 +106,7 @@
 
     });
 
-})('');
+})();
 
 
 

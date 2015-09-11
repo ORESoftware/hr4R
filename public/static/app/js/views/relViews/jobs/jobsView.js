@@ -13,15 +13,13 @@ define(
         '#appState',
         '#allCollections',
         'ejs',
-        'jquery',
         'underscore',
-        'app/js/Adhesive',
-        'backbone',
+        '#Adhesive',
         'react'
     ],
 
 
-    function (appState, collections, EJS, $, _, Adhesive, Backbone, React) {
+    function (appState, collections, EJS, _, Adhesive, React) {
 
 
         var JobsView = Backbone.View.extend({

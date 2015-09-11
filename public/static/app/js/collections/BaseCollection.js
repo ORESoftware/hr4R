@@ -9,12 +9,11 @@ console.log('loading app/js/collections/BaseCollection.js');
 define(
     [
         'underscore',
-        'backbone',
         'async',
         'app/js/collections/BaseCollectionPrototype'
     ],
 
-    function (_, Backbone, async, baseCollectionPrototype) {
+    function (_, async, baseCollectionPrototype) {
 
         var BaseCollection = Backbone.Collection.extend(baseCollectionPrototype);
 

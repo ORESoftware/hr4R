@@ -5,15 +5,13 @@
 
 define(
     [
-        'jquery',
         'underscore',
-        'backbone',
         '#allCollections',
         '#allCSS',
         '#SuperController'
 
     ],
-    function ($, _, Backbone, allCollections, allCSS, SuperController) {
+    function (_, allCollections, allCSS, SuperController) {
 
 
         function Controller() {
@@ -36,18 +34,17 @@ define(
                             allCSS['cssx/bootstrap/bootstrap-notify.css'],
                             allCSS['cssx/fluxCart/fluxCart.css']
                         ]
-                    },
-                    callback: changeViewCallback
-                });
+                    }
+                }, changeViewCallback)
             },
 
             show: function (id, changeViewCallback) {
 
-                SuperController.control({
+                this.control({
                     viewPath: 'app/js/jsx/relViews/FluxCart/FluxCartMain',
                     viewOpts: {
                         collection: null,
-                        model:null
+                        model: null
                     },
                     routerOpts: {
                         useSidebar: true,
@@ -56,9 +53,8 @@ define(
                             allCSS['cssx/bootstrap/bootstrap-notify.css'],
                             allCSS['cssx/fluxCart/fluxCart.css']
                         ]
-                    },
-                    callback: changeViewCallback
-                });
+                    }
+                }, changeViewCallback)
             },
 
 
@@ -67,7 +63,7 @@ define(
             }
         };
 
-        //_.extend(Controller.prototype, SuperController.prototype);
+        _.defaults(Controller.prototype, SuperController.prototype);
 
         return new Controller();
     });

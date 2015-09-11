@@ -4,6 +4,23 @@
 
 //TODO: http://www.w3.org/wiki/Dynamic_style_-_manipulating_CSS_with_JavaScript
 
+/*
+ TODO:
+
+ To cater to internet explorer, you have to set the stylesheet to be disabled as it keeps the css styles in memory so removing the element will not work,
+ it can also cause it to crash in some instances if I remember correctly.
+
+ This also works for cross browser.
+
+ e.g
+
+ document.styleSheets[0].disabled = true;
+ //so in your case using jquery try
+
+ $('link[title=mystyle]')[0].disabled=true;
+
+ */
+
 define(function () {
 
     function add(sheetDesignator) {

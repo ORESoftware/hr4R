@@ -37,7 +37,7 @@ define(
 
             var action = payload.action;
 
-            switch (action.actionType) {
+            switch (action) {
 
                 case FluxCartConstants.GET_PRODUCTS:
                     fetchModels(null);

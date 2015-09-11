@@ -10,7 +10,7 @@ define(
 
     function (React) {
 
-        /** @jsx React.DOM */
+
         var SearchExample = React.createClass({
 
             getInitialState: function () {
@@ -28,8 +28,8 @@ define(
 
             render: function () {
 
-                var libraries = this.props.items,
-                    searchString = this.state.searchString.trim().toLowerCase();
+                var libraries = this.props.items;
+                var searchString = this.state.searchString.trim().toLowerCase();
 
 
                 if (searchString.length > 0) {

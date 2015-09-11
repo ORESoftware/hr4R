@@ -1,5 +1,5 @@
+
 define(function (require, exports, module) {
-    'use strict';
 
     function IdempotentJSON() {
     }
@@ -79,8 +79,6 @@ define(function (require, exports, module) {
                 throw new Error('You should pass a callback to IdempotentJSON.stringify to handle this error:' + err.stack);
             }
         }
-
-
     };
 
 

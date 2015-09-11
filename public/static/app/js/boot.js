@@ -5,34 +5,37 @@
 //TODO: https://quickleft.com/blog/integrating-react-with-backbone/
 //TODO: http://stackoverflow.com/questions/19827912/package-html-templates-in-require-js-optimizer
 //TODO: http://www.webdeveasy.com/optimize-requirejs-projects/
-
 //TODO: react templates - http://wix.github.io/react-templates/
 //TODO: http://wix.github.io/react-templates/fiddle.html
-
 //TODO: browser cache re-validation - http://stackoverflow.com/questions/49547/making-sure-a-web-page-is-not-cached-across-all-browsers
 
 
-//define(['jquery','backbone','app/js/routers'], function($,Backbone,routers) {
+console.log('loading app/js/boot.js');
 
-console.log('loading app/js/BOOT.js');
-
-define('app/js/boot',
-
+define(
     [
+        'async',
         '#appState',
-        '#allFluxActions',
-        '#allFluxConstants',
-        'jquery',
-        'backbone',
-        'app/js/giant',
+        '#oplogSocketClient',
+        'app/js/cssAdder',
         '#allModels',
         '#allCollections',
-        'app/js/cssAdder',
+        '#allTemplates',
+        '#allControllers',
+        '#allViews',
         '#allCSS',
-        'async'
+        '#allFluxActions',
+        '#allFluxConstants',
+        '@Router'
+
     ],
 
-    function (appState, allFluxActions, allFluxConstants, $, Backbone, giant, allModels, allCollections, cssAdder, allCSS, async) {
+    /*
+     we don't use the majority of these dependencies in this file, but they are loaded here so that (1) r.js can build
+     the optimized file, and (2) so that we can do synchronous requires later on in our application
+     */
+
+    function (async, appState, osc, cssAdder, allModels, allCollections, allTemplates, allControllers, allViews, allCSS, allFluxActions, allFluxConstants, router) {
 
         //TODO: might need to figure out how to set ENV before socket.io tries to make connection to server
 
@@ -125,7 +128,7 @@ define('app/js/boot',
                         //window.location.hash='home';
                         //router.navigate('home', {trigger: true});
                         //Backbone.Events.trigger('bootRouter', 'home');
-                        giant.getSocketIOConn();
+                        osc.getSocketIOConn();
                         var hash = readFromLocalStorage('original_hash_request');
                         Backbone.Events.trigger('bootRouter', hash);
                     });
@@ -141,7 +144,7 @@ define('app/js/boot',
             console.log('APPLICATION ENVIRONMENT:', appState.get('env'));
 
             if (appState.get('env') === 'development') {
-                require(['app/js/hotReloadHandler'], function (hrh) {
+                require(['app/js/hot-reloading/hotReloadHandler'], function (hrh) {
                     hrh.getConnection();
                     loadDefaultModels(run);
                 })

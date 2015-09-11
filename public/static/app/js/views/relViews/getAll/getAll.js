@@ -8,17 +8,15 @@ define(
         '#appState',
         '#allCollections',
         'ejs',
-        'jquery',
         'underscore',
-        'app/js/Adhesive',
-        'backbone',
+        '#Adhesive',
         'react',
         'app/js/jsx/reactComponents/listView',
         '#allTemplates'
     ],
 
 
-    function (appState, collections, EJS, $, _, Adhesive, Backbone, React, ListView, allTemplates) {
+    function (appState, collections, EJS, _, Adhesive, React, ListView, allTemplates) {
 
         var template = allTemplates['templates/getAllTemplate.ejs'];
 

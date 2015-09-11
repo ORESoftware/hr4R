@@ -8,13 +8,11 @@ define(
         '#appState',
         '#allCollections',
         'ejs',
-        'jquery',
         'underscore',
-        'backbone',
         'react'
     ],
 
-    function (appState, collections, EJS, $, _, Backbone, React) {
+    function (appState, collections, EJS, _, React) {
 
 
         var GenericView = Backbone.View.extend({

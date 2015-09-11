@@ -5,12 +5,11 @@
 
 define(
     [
-        'backbone',
         'underscore',
         'async'
     ],
 
-    function (Backbone, _, async) {
+    function ( _, async) {
 
         var addOptions = {add: true, remove: false};
 

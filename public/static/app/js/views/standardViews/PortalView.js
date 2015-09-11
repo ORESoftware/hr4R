@@ -12,15 +12,13 @@ define(
         '#allCollections',
         'form2js',
         'ejs',
-        'jquery',
         'underscore',
-        'backbone',
         'backbone-validation',
         'require'
     ],
 
 
-    function (appState, models, collections, form2js, EJS, $, _, Backbone, BackboneValidation,require) {
+    function (appState, models, collections, form2js, EJS, _, BackboneValidation,require) {
 
 
 

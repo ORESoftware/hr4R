@@ -14,16 +14,14 @@ define(
         '#appState',
         '#allCollections',
         'ejs',
-        'jquery',
         'underscore',
-        'backbone',
         'backbone-validation',
         'form2js',
         'ijson',
-        'app/js/Adhesive'
+        '#Adhesive'
     ],
 
-    function (appState, collections, EJS, $, _, Backbone, BackboneValidation, form2js, IJSON, Adhesive) {
+    function (appState, collections, EJS, _, BackboneValidation, form2js, IJSON, Adhesive) {
 
 
         var UserProfileView = Backbone.View.extend({

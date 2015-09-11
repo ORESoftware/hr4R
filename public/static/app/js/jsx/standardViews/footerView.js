@@ -11,17 +11,14 @@ define(
         '#allModels',
         'form2js',
         'ejs',
-        'jquery',
         'underscore',
-        'backbone',
         'backbone-validation',
-        'app/js/Adhesive',
-        //'text!app/templates/footer.ejs'
+        '#Adhesive',
         '#allTemplates'
     ],
 
 
-    function (appState, models, form2js, EJS, $, _, Backbone, BackboneValidation, Adhesive, allTemplates) {
+    function (appState, models, form2js, EJS, _, BackboneValidation, Adhesive, allTemplates) {
 
         var template = allTemplates['templates/footerTemplate.ejs'];
 

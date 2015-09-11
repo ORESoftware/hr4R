@@ -9,12 +9,14 @@
 
 define(
     [
-        "app/js/flux/constants/FluxCartConstants"
+        "app/js/flux/constants/FluxCartConstants",
+		"app/js/flux/constants/OplogClientConstants"
     ],
     function(){
 
         return {
 
-            "FluxCartConstants": arguments[0]
+            "FluxCartConstants": arguments[0],
+			"OplogClientConstants": arguments[1]
         }
   });
