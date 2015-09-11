@@ -1,21 +1,20 @@
-
-
 //TODO: process.env.UV_THREADPOOL_SIZE = 1;
 //TODO: incorporate cluster module
 
 
 process.on('uncaughtException', function handleUncaughtException(err) {
     if (global.colors) {
-        console.error('uncaughtException--->'+ colors.red(String(err)));
-    } else {
-        console.error('uncaughtException--->'+ String(err));
+        console.error('uncaughtException--->' + colors.red(String(err)));
+    }
+    else {
+        console.error('uncaughtException--->' + String(err));
     }
 
-    if(process.env.NODE_ENV === 'production'){
+    if (process.env.NODE_ENV === 'production') {
         //we are in production, let's cross our fingers
         //set up some alert / email?
     }
-    else{
+    else {
         throw err; //this should crash the server
     }
 });
@@ -24,12 +23,16 @@ process.on('exit', function exitHook(code) {
 
     if (global.colors) {
         console.log(colors.magenta('exiting with code', code, '...'));
-    } else {
+    }
+    else {
         console.log('exiting with code', code, '...');
     }
 });
 
+//config
+var config = require('univ-config')('*SC-Admin*', 'config/conf');
 
+//////
 var app = require('../app');
 var debug = require('debug')('sc-ui-express:server');
 var http = require('http');
@@ -50,8 +53,8 @@ var eventBus = require('../events/eventBus.js');
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
-if(typeof global.gc === 'function'){
-  global.gc(); //garbage collect just for the heck of it
+if (typeof global.gc === 'function') {
+    global.gc(); //garbage collect just for the heck of it
 }
 
 var server = http.createServer(app).listen(port); //Listen on provided port, on all network interfaces.
@@ -71,19 +74,19 @@ server.on('listening', onListening);
  */
 
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+    var port = parseInt(val, 10);
 
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
 
-  if (port >= 0) {
-    // port number
-    return port;
-  }
+    if (port >= 0) {
+        // port number
+        return port;
+    }
 
-  return false;
+    return false;
 }
 
 /**
@@ -91,66 +94,33 @@ function normalizePort(val) {
  */
 
 function onError(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+    var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            console.error(colors.red(bind + ' requires elevated privileges'));
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(colors.red(bind + ' is already in use'));
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
 }
 
-/**
- * Event listener for HTTP server "listening" event.
- */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+    var addr = server.address();
+    var bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+    debug('Listening on ' + bind);
 }
 
-
-/*TODO:
-* // server example
- // Running a gzip operation on every request is quite expensive.
- // It would be much more efficient to cache the compressed buffer.
- var zlib = require('zlib');
- var http = require('http');
- var fs = require('fs');
- http.createServer(function(request, response) {
- var raw = fs.createReadStream('index.html');
- var acceptEncoding = request.headers['accept-encoding'];
- if (!acceptEncoding) {
- acceptEncoding = '';
- }
-
- // Note: this is not a conformant accept-encoding parser.
- // See http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.3
- if (acceptEncoding.match(/\bdeflate\b/)) {
- response.writeHead(200, { 'content-encoding': 'deflate' });
- raw.pipe(zlib.createDeflate()).pipe(response);
- } else if (acceptEncoding.match(/\bgzip\b/)) {
- response.writeHead(200, { 'content-encoding': 'gzip' });
- raw.pipe(zlib.createGzip()).pipe(response);
- } else {
- response.writeHead(200, {});
- raw.pipe(response);
- }
- }).listen(1337);*/

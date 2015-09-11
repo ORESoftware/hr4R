@@ -16,6 +16,7 @@ var socketio = require('socket.io');
 var async = require('async');
 var _ = require('underscore');
 var EE = require('events').EventEmitter;
+var colors = require('colors');
 
 //gulp plugins
 var replace = require('gulp-replace');
@@ -179,17 +180,19 @@ gulp.task('watch:metagen', function () {
 
 gulp.task('watch:hot-reload', function () {
 
-    var io = socketio.listen('3002', function (err, msg) {
+    var io = socketio.listen('3002', function (err, msg,msg2) {
         if (err) {
             console.error(err);
         }
-        console.log(msg);
+        else if(msg){
+            console.log(msg);
+        }
     });
 
     io.on('connection', function (socket) {
-        console.log('a user connected');
+        console.log(colors.yellow('Gulp hot reload: a developer client connected'));
         socket.on('disconnect', function () {
-            console.log('user disconnected');
+            console.log(colors.yellow('Gulp hot reload: a developer client disconnected'));
         });
     });
 
@@ -316,6 +319,8 @@ gulp.task('nodemon', ['metagen:all', 'watch:hot-reload'], function () {
         script: 'bin/www.js',
         ext: 'js',
         ignore: ['public/*','*.git/*','*.idea/*'],
+        args:['--use_socket_server','--use_hot_reloader'],
+        nodeArgs: [],
         env: {'NODE_ENV': 'development'}
 
     }).on('restart', []);

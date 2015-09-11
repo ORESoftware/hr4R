@@ -1,3 +1,7 @@
+//config
+var config = require('univ-config')('*SC-Admin*', 'config/conf');
+
+//core
 var express = require('express');
 var router = express.Router();
 
@@ -36,13 +40,26 @@ router.get('/', function (req, res, next) {
                     var obj = null;
                     var env = process.env.NODE_ENV;
                     var title = 'SmartConnect Admin Portal';
-                    //TODO: put user auth info in index.ejs?
 
                     if (req.isAuthenticated() && req.user) {
-                        obj = {isAuthenticated: true, user: req.user, env: env, title: title};
+                        obj = {
+                            isAuthenticated: true,
+                            user: req.user,
+                            env: env,
+                            title: title,
+                            useSocketServer: String(config.get('use_socket_server')),
+                            useHotReloader: String(config.get('use_hot_reloader'))
+                        };
                     }
                     else {
-                        obj = {isAuthenticated: false, user: null, env: env, title: title};
+                        obj = {
+                            isAuthenticated: false,
+                            user: null,
+                            env: env,
+                            title: title,
+                            useSocketServer: String(config.get('use_socket_server')),
+                            useHotReloader: String(config.get('use_hot_reloader'))
+                        };
                     }
 
                     res.render('index', obj);

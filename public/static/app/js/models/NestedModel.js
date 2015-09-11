@@ -14,7 +14,7 @@ console.log('loading app/js/models/NestedModel.js');
 
 define(
     [
-        '#appState',
+        '+appState',
         'underscore',
     ],
 

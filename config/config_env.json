@@ -1,0 +1,10 @@
+{
+  "environments": {
+    "development": {
+    },
+    "test": {
+    },
+    "production": {
+    }
+  }
+}

@@ -9,7 +9,7 @@ console.log('loading registeredUsersView');
 
 define(
     [
-        '#appState',
+        '+appState',
         '#allCollections',
         'ejs',
         'underscore',

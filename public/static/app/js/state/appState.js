@@ -4,7 +4,7 @@
 
 
 
-define('#appState',
+define('+appState',
 
     [
         'observe',

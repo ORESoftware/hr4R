@@ -23,7 +23,7 @@ console.log('loading app/js/models/BaseModel.js');
 
 define(
     [
-        '#appState',
+        '+appState',
         'underscore',
         '@AppDispatcher'
     ],

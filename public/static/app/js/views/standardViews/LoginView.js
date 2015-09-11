@@ -10,7 +10,7 @@ console.log('loading loginView');
 
 define(
     [
-        '#appState',
+        '+appState',
         '#allCollections',
         '#allModels',
         'form2js',
@@ -18,7 +18,7 @@ define(
         'underscore',
         'backbone-validation',
         'ijson',
-        '#oplogSocketClient'
+        '@oplogSocketClient'
     ],
 
 
@@ -117,10 +117,11 @@ define(
                                     throw new Error('null or undefined currentUser');
                                 }
                                 else {
-                                    console.log('user logged in successfully!!');
-                                    //Backbone.Events.trigger('bootRouter', 'home');
+
+                                    if (readFromLocalStorage('use_socket_server')) {
+                                        osc.getSocketIOConn();
+                                    }
                                     var hash = readFromLocalStorage('original_hash_request');
-                                    createSocketConnection();
                                     Backbone.Events.trigger('bootRouter', hash);
                                 }
 
@@ -132,7 +133,6 @@ define(
                         }
                         else {
                             appState.set('currentUser', null);
-                            console.log('user did not log in successfully..!');
                             Backbone.Events.trigger('bootRouter', 'index');
                             //TODO:http://stackoverflow.com/questions/19588401/backbone-navigation-callback
                         }
@@ -156,20 +156,9 @@ define(
                 onSubmitRegistration: function (event) {
                     event.preventDefault();
 
-
                     var self = this;
-
                     var data = form2js('register-form-id', '.', true);
-
-                    console.log('registration data:', data);
-
-                    //var userData = JSON.stringify(data.user);
-
                     var userData = data.user;
-
-                    //TODO: userdata is not in json format or what??
-                    //TODO: use socket.io to get server data
-                    //TODO: localstorage vs cookies
 
                     $.ajax({
                         type: "POST",
@@ -211,11 +200,6 @@ define(
             }
         );
 
-        function createSocketConnection() {
-
-            osc.getSocketIOConn();
-
-        }
 
         function goHome(res) {
 

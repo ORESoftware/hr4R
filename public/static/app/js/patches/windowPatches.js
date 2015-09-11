@@ -3,7 +3,7 @@
  */
 
 
-define(['#appState'], function (appState) {
+define(['+appState'], function (appState) {
 
 
     window.no_op = function () {

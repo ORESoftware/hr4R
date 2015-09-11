@@ -15,7 +15,7 @@ define(
     [
         'underscore',
         '#allModels',
-        '#BaseCollection',
+        '@BaseCollection',
         '@AppDispatcher',
         '#allFluxConstants',
         'app/js/helpers/collectionUpdater'

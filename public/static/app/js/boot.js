@@ -15,8 +15,8 @@ console.log('loading app/js/boot.js');
 define(
     [
         'async',
-        '#appState',
-        '#oplogSocketClient',
+        '+appState',
+        '@oplogSocketClient',
         'app/js/cssAdder',
         '#allModels',
         '#allCollections',
@@ -27,7 +27,6 @@ define(
         '#allFluxActions',
         '#allFluxConstants',
         '@Router'
-
     ],
 
     /*
@@ -64,9 +63,8 @@ define(
                 },
                 error: function (err) {
                     console.log('server error:', err);
-                    setTimeout(function () {
-                        alert('server error: ' + String(err));
-                    }, 100);
+                    alert('server error: ' + String(err));
+
                 }
             });
 
@@ -105,6 +103,12 @@ define(
 
             Backbone.history.start();
 
+            var useSocketServer = $('#use_socket_server').attr('value') === "true" ? true : false;
+            saveToLocalStorage('use_socket_server', useSocketServer);
+            var useHotReloader = $('#use_hot_reloader').attr('value') === "true" ? true : false;
+            saveToLocalStorage('use_hot_reloader', useHotReloader);
+
+
             function run() {
 
                 if (authenticated === true) {
@@ -125,10 +129,10 @@ define(
                         if (appState.get('currentUser') === null) {
                             throw new Error('null currentUser');
                         }
-                        //window.location.hash='home';
-                        //router.navigate('home', {trigger: true});
-                        //Backbone.Events.trigger('bootRouter', 'home');
-                        osc.getSocketIOConn();
+
+                        if(readFromLocalStorage('use_socket_server')){
+                            osc.getSocketIOConn();
+                        }
                         var hash = readFromLocalStorage('original_hash_request');
                         Backbone.Events.trigger('bootRouter', hash);
                     });
@@ -145,15 +149,15 @@ define(
 
             if (appState.get('env') === 'development') {
                 require(['app/js/hot-reloading/hotReloadHandler'], function (hrh) {
-                    hrh.getConnection();
+                    if(readFromLocalStorage('use_hot_reloader')){
+                        hrh.getConnection();
+                    }
                     loadDefaultModels(run);
-                })
+                });
             }
             else {
                 run();
             }
-
-
         };
 
         function loadDefaultModels(callback) {

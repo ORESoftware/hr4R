@@ -26,6 +26,7 @@
         waitSeconds: 7,
         baseUrl: '/static',
         paths: {
+            //core npm/bower modules
             'async': 'vendor/async',
             'jquery': 'vendor/jquery',
             //'jqueryUI': 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui',
@@ -44,38 +45,36 @@
             'observe': 'vendor/observe',
             'react': 'vendor/react-with-addons',
             //'react': 'vendor/react',
-            '#hotReloader': 'app/js/hot-reloading/hotReloader',
             'socketio': 'vendor/socketio',
             'events': 'vendor/events-amd',
             //'socketio' : 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min',
+
+            //our modules
             '#Adhesive': 'app/js/adhesive/Adhesive',
-            '#jsPatches': 'app/js/patches/jsPatches',
-            '#backbonePatches': 'app/js/patches/backbonePatches',
-            '#windowPatches': 'app/js/patches/windowPatches',
+            '#hotReloader': 'app/js/hot-reloading/hotReloader',
+            '*jsPatches': 'app/js/patches/jsPatches',
+            '*backbonePatches': 'app/js/patches/backbonePatches',
+            '*windowPatches': 'app/js/patches/windowPatches',
+            '+appState': 'app/js/state/appState',
+            '+viewState': 'app/js/state/viewState',
             '#allTemplates': 'app/js/meta/allTemplates',
-            '#oplogSocketClient': 'app/js/oplogSocketClient',
             '#allViews': 'app/js/meta/allViews',
             '#allModels': 'app/js/meta/allModels',
             '#allCollections': 'app/js/meta/allCollections',
-            '#appState': 'app/js/state/appState',
-            '#viewState': 'app/js/state/viewState',
             '#allControllers': 'app/js/meta/allControllers',
             '#allDispatchers': 'app/js/meta/allDispatchers',
-            '#BaseCollection': 'app/js/collections/BaseCollection',
-            '@AppDispatcher': 'app/js/flux/dispatcher/AppDispatcher',
             '#allCSS': 'app/js/meta/allCSS',
             '#allFluxActions': 'app/js/meta/allFluxActions',
             '#allFluxConstants': 'app/js/meta/allFluxConstants',
-            '#SuperController': 'app/js/controllers/SuperController',
+            '@oplogSocketClient': 'app/js/oplogSocketClient',
+            '@BaseCollection': 'app/js/collections/BaseCollection',
+            '@SuperController': 'app/js/controllers/SuperController',
+            '@AppDispatcher': 'app/js/flux/dispatcher/AppDispatcher',
             '@Router': 'app/js/routers/router'
             //'d3':'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min'
         },
 
         'shim': {
-
-            '@Application': {
-                'deps': ['backbone']
-            },
 
             'underscore': {
                 'exports': '_'

@@ -15,8 +15,8 @@ console.log('loading app/js/ROUTERS.js');
 
 define(
     [
-        '#appState',
-        '#viewState',
+        '+appState',
+        '+viewState',
         'async',
         '#allCollections',
         'app/js/cssAdder',
@@ -49,18 +49,19 @@ define(
 
                 var self = this;
                 require(['app/js/controllers/all/' + controllerName], function (cntr) {
-                    if (typeof cntr[actionName] === 'function') {
-                        cntr[actionName](id, self.changeView);
-                    }
-                    else {
-                        cntr['default'](id, self.changeView);
-                    }
-                },
-                function(err){
-                    //route was not found, navigate home
-                    console.error('route was not found' + String(err));
-                    Backbone.Events.trigger('bootRouter','home');
-                });
+                        if (typeof cntr[actionName] === 'function') {
+                            cntr[actionName](id, self.changeView);
+                        }
+                        else {
+                            cntr['default'](id, self.changeView);
+                        }
+                    },
+                    function (err) {
+                        //route was not found, navigate home
+                        console.error('route was not found' + String(err));
+                        alert('route was not found' + String(err));
+                        //Backbone.Events.trigger('bootRouter','home');
+                    });
             },
 
             canonical: function () {
@@ -201,12 +202,12 @@ define(
                     }
 
                     //remove all React components
-                    (view.nodes || []).forEach(function(node){
-                        try{
-                            var result = React.unmountComponentAtNode( $(view.el).find(node)[0]);
-                            console.log('node=',node,'result=',result);
+                    (view.nodes || []).forEach(function (node) {
+                        try {
+                            var result = React.unmountComponentAtNode($(view.el).find(node)[0]);
+                            console.log('node=', node, 'result=', result);
                         }
-                        catch(err){
+                        catch (err) {
                             console.error(err);
                         }
                     });
@@ -244,35 +245,30 @@ define(
                             collectionsToSync.push(
                                 function (cb) {
                                     //TODO: use async.series?
+                                    //TODO: if websockets are on, then shouldn't need to do fetch at all, can just check for connection
+                                    //TODO: we should only fetch a collection after it has been persisted and
+                                    ////TODO: we only need to fetch a collection if it's needed by the next view
                                     coll.persistCollection({}, function (err, res) {
                                         if (err) {
-                                            return cb(err);
+                                            cb(err);
                                         }
-                                        //TODO: if websockets are on, then shouldn't need to do fetch at all, can just check for connection
-                                        //TODO: we should only fetch a collection after it has been persisted and
-                                        ////TODO: we only need to fetch a collection if it's needed by the next view
-                                        coll.fetch()
-                                            .done(function () {
-                                                cb();
-                                            })
-                                            .fail(function (err) {
+                                        else {
+                                            coll.fetchOptimized(function (err) {
                                                 cb(err);
                                             });
+                                        }
+
                                     });
                                 });
                         }
                         else {
                             collectionsToSync.push(
                                 //TODO: if websockets are on, then shouldn't need to do fetch at all, can just check for a current connection
+                                //TODO: we only need to fetch a collection if it's needed by the next view; the collections required by the next view will be passed by the controller
                                 function (cb) {
-                                    //TODO: we only need to fetch a collection if it's needed by the next view; the collections required by the next view will be passed by the controller
-                                    coll.fetch()
-                                        .done(function (msg) {
-                                            cb(null, msg);
-                                        })
-                                        .fail(function (err) {
-                                            cb(err);
-                                        });
+                                    coll.fetchOptimized(function (err) {
+                                        cb(err);
+                                    });
                                 });
                             console.log('avoiding persisting collection that experienced no changes:', coll);
                         }

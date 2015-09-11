@@ -10,7 +10,7 @@ define(
     [
         'underscore',
         '#allModels',
-        '#BaseCollection',
+        '@BaseCollection',
         '@AppDispatcher'
     ],
 

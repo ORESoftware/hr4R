@@ -15,10 +15,9 @@ console.log('loading app/js/APP.js');
 
 define(
     [
-        '#windowPatches',
-        '#backbonePatches',
-        '#jsPatches',
-        'app/js/boot',
+        '*windowPatches',
+        '*backbonePatches',
+        '*jsPatches',
         'observe',
         'backbone',
         'jquery',
@@ -34,7 +33,7 @@ define(
      note: anything dependent on Backbone needs to be loaded in the next file (boot.js)
      */
 
-    function (windowPatches, backbonePatches, jsPatches, boot, Observe, Backbone, $, _, IJSON, React) {
+    function (windowPatches, backbonePatches, jsPatches, Observe, Backbone, $, _, IJSON, React) {
 
 
         /////////////////////////////////////
@@ -44,8 +43,7 @@ define(
 
         //note: we should use the global Backbone and jQuery instances throughout the app
         window.React = React; // export for http://fb.me/react-devtools
-        window.IJSON = IJSON;
-
+        window.IJSON = window.ijson = IJSON;
 
 
         if (window.location.hash && String(window.location.hash).length > 1 && String(window.location.hash).charAt(0) === '#') {
@@ -69,12 +67,14 @@ define(
 
         var start = function () {
 
-            console.log('app.start() fired, boot.initialize() about to fire, time:', (Date.now() - window.startDate));
-            //require(['app/js/boot'], function (boot) {
+            console.log('app.start() fired, boot module is start to load...time:', (Date.now() - window.startDate));
 
-            boot.initialize();
+            //we want to load patches before loading any other files
+            require(['app/js/boot'], function (boot) {
 
-            //});
+                console.log('boot.initialize() about to fire, time:', (Date.now() - window.startDate));
+                boot.initialize();
+            });
 
         };
 

@@ -9,8 +9,8 @@ console.log('loading headerView');
 
 define(
     [
-        '#appState',
-        '#viewState',
+        '+appState',
+        '+viewState',
         'async',
         '#allCollections',
         '#allModels',
@@ -19,7 +19,7 @@ define(
         'underscore',
         '#Adhesive',
         'backbone-validation',
-        '#oplogSocketClient',
+        '@oplogSocketClient',
         'require'
     ],
 
@@ -97,10 +97,12 @@ define(
 
                     var template = allTemplates['templates/headerTemplate.ejs'];
 
+                    var socketConnection = readFromLocalStorage('use_socket_server');
+
                     var ret = EJS.render(template, {
                         appState: appState,
                         viewState: viewState,
-                        socketConnection: osc.getSocketIOConn().id
+                        socketConnection: socketConnection
                     });
                     self.$el.html(ret);
 
@@ -137,8 +139,7 @@ define(
                 onClickLogout: function (event) {
                     event.preventDefault();
 
-                    console.log('attempting to log out...');
-
+                    //TODO: for some reason the server is logging this POST request as occuring twice or more, why?
                     var self = this;
 
                     $.ajax({
@@ -151,8 +152,6 @@ define(
                         if (msg === true) {
                             appState.set('currentUser', null);
                             Backbone.Events.trigger('bootRouter', 'index');
-                            //TODO:why does log out work even if router.navigate isn't invoked?
-                            //Backbone.history.loadUrl();
                         }
                         else {
                             alert('logout failed on server, please try again.')
@@ -163,7 +162,7 @@ define(
                         alert('internal server error - logout failed.')
 
                     }).always(function (a, textStatus, b) {
-                        self.render();
+
                     });
                 },
                 onClickHotReload: function (event) {

@@ -4,7 +4,7 @@
 
 
 
-define('#viewState',function() {
+define('+viewState',function() {
 
     var view = {
 

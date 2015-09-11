@@ -11,7 +11,7 @@ console.log('loading homeView');
 
 define(
     [
-        '#appState',
+        '+appState',
         '#allModels',
         '#allCollections',
         'form2js',

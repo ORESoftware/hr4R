@@ -9,7 +9,7 @@ define(
         'underscore',
         '#allCollections',
         '#allCSS',
-        '#SuperController'
+        '@SuperController'
 
     ],
     function (_, allCollections, allCSS, SuperController) {
@@ -67,6 +67,9 @@ define(
         };
 
         _.defaults(Controller.prototype, SuperController.prototype);
+
+        //var sup = Object.create(SuperController.prototype);
+        //_.extend(Object.create(SuperController.prototype),Controller.prototype);
 
         return new Controller();
     });

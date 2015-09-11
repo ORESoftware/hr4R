@@ -45,8 +45,6 @@ router.get('/',function (req, res, next) {
     req.session.passport.user = null;
     req.user = undefined;
     req.logout();
-    //res.redirect('/login');
-    //res.redirect('/');
     req.session.destroy(function (err) {
         if (err) {
             res.json(false);

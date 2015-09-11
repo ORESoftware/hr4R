@@ -11,7 +11,7 @@ console.log('loading userProfileView');
 
 define(
     [
-        '#appState',
+        '+appState',
         '#allCollections',
         'ejs',
         'underscore',

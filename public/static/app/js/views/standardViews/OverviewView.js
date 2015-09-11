@@ -5,7 +5,7 @@
 
 define(
     [
-        '#appState',
+        '+appState',
         '#allCollections',
         'ejs',
         'underscore',

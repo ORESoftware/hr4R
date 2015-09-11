@@ -10,8 +10,8 @@ console.log('loading app/js/hotReloadHandler.js');
 
 define(
     [
-        '#appState',
-        '#viewState',
+        '+appState',
+        '+viewState',
         'socketio',
         '#allCollections',
         'ijson',
@@ -220,8 +220,7 @@ define(
         }
 
         return {
-            getConnection: getConnection,
-            addEvent: addEvent
+            getConnection: getConnection
         };
     });
 
