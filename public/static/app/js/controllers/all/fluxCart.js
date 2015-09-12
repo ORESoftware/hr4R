@@ -18,7 +18,7 @@ define(
 
         }
 
-        Controller.prototype = {
+        Controller.prototype = Object.assign(Object.create(SuperController.__proto__),{
 
             getAll: function (id, changeViewCallback) {
 
@@ -61,10 +61,13 @@ define(
             default: function (id) {
                 return 'eureka!';
             }
-        };
+        });
 
-        _.defaults(Controller.prototype, SuperController.prototype);
+        //_.defaults(Controller.prototype, SuperController);
+        //_.defaults(Controller.prototype, SuperController.__proto__);
         //_.extend(Object.create(SuperController.prototype),Controller.prototype);
 
-        return new Controller();
+        var controller = new Controller();
+
+        return controller;
     });

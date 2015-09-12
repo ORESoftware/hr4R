@@ -14,21 +14,20 @@ define([
 
         }
 
-        SuperController.prototype = {
+        SuperController.prototype = new Object({
 
             control: function (viewPath, viewOpts, routerOpts, cb) {
 
                 if (typeof viewPath === 'object') {
                     var options = viewPath;
-                    var cb = viewOpts;
-                    var viewPath = options.viewPath;
+                    cb = viewOpts;
+                    viewPath = options.viewPath;
                     viewOpts = options.viewOpts;
                     routerOpts = options.routerOpts;
                 }
 
                 require([viewPath], function (View) {
-                    var view = new View(viewOpts);
-                    routerOpts.view = view;
+                    routerOpts.view = new View(viewOpts);
                     cb(routerOpts);
                 });
             },
@@ -36,9 +35,9 @@ define([
             default: function (id) {
                 alert('controller has not yet implemented a default')
             }
-        };
+        });
 
 
-        return SuperController;
+        return new SuperController();
 
     });

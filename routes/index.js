@@ -22,20 +22,11 @@ router.get('/', function (req, res, next) {
             model.findById(req.session.passport.user, function (err, user) {
                 if (err) {
                     next(err);
-                    return;
                 }
                 else if (!user) {
-                    console.error('user session existed, but no user matched');
                     next(new Error('user session existed, but no user matched'));
-                    return;
                 }
                 else {
-                    //res.json({msg: user});
-                    if (process.env.NODE_ENV !== 'development') {
-                        //res.header("Content-Encoding", "application/x-gzip");
-                        //res.header("Content-Encoding", "application/x-javascript");
-                        //res.header("Transfer-Encoding", "gzip");
-                    }
 
                     var obj = null;
                     var env = process.env.NODE_ENV;
@@ -65,7 +56,6 @@ router.get('/', function (req, res, next) {
                     res.render('index', obj);
                 }
             });
-
         });
 
     }
@@ -74,7 +64,14 @@ router.get('/', function (req, res, next) {
         //TODO: put user auth info in index.ejs?
         var env = process.env.NODE_ENV;
         var title = 'SmartConnect Admin Portal';
-        var obj = {isAuthenticated: false, user: null, env: env, title: title};
+        var obj = {
+            isAuthenticated: false,
+            user: null,
+            env: env,
+            title: title,
+            useSocketServer: String(config.get('use_socket_server')),
+            useHotReloader: String(config.get('use_hot_reloader'))
+        };
         res.render('index', obj);
     }
 
