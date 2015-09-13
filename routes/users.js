@@ -112,7 +112,6 @@ router.get('/:user_id', function (req, res, next) {
 
 router.post('/', function (req, res, next) {
 
-    console.log('about to post new user:', req.body);
 
     var user = req.body;
     var firstName = user.firstName;
@@ -144,7 +143,7 @@ router.post('/', function (req, res, next) {
 
         newUser.save(function (err, result) {
             if (err) {
-                console.log("error in user save method:", err);
+                console.log(colors.red("error in user save method:", err.message));
                 res.send({error: err.errors});
             }
             else if (result) {

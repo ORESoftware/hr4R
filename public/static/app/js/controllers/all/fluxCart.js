@@ -14,8 +14,9 @@ define(
     function (_, allCollections, allCSS, SuperController) {
 
 
-        function Controller() {
-
+        function Controller(a,b) {
+            this.a = a;
+            SuperController.constructor.call(this,b);
         }
 
         Controller.prototype = Object.assign(Object.create(SuperController.__proto__),{

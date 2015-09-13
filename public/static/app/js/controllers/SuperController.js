@@ -10,8 +10,8 @@ define([
     function (_, allCollections) {
 
 
-        function SuperController() {
-
+        function SuperController(b) {
+             this.b = b;
         }
 
         SuperController.prototype = new Object({
@@ -37,7 +37,7 @@ define([
             }
         });
 
-
-        return new SuperController();
-
+        var superController = new SuperController();
+        superController.constructor = SuperController;
+        return superController;
     });

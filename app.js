@@ -46,6 +46,23 @@ app.use(bodyParser.urlencoded({limit: '2mb', extended: true}));
 //    app.use(compression({filter: shouldCompress}));
 //}
 
+if (app.get('env') === 'development') {
+ /*   app.use(function (req, res, next) {
+        Object.keys(require.cache).forEach(function (key) {
+            try {
+                if (String(key).indexOf('node_modules') < 0) {
+                    delete require.cache[require.resolve(key)];
+                    console.log(colors.red('deleted cache with keyname: ', key));
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+        });
+        next();
+    });*/
+}
+
 
 function shouldCompress(req, res) {
     if (req.headers['x-no-compression']) {
@@ -58,15 +75,13 @@ function shouldCompress(req, res) {
 }
 
 
-
-app.use(/(.*)\.gz$/, function(req, res, next) {
+app.use(/(.*)\.gz$/, function (req, res, next) {
     //req.url = req.url + '.gz';
     //TODO: might need .jgz for Safari, etc
     res.set('Content-Encoding', 'gzip');
-    console.log('!!! gz encoding set for url:',req.originalUrl);
+    console.log('!!! gz encoding set for url:', req.originalUrl);
     next();
 });
-
 
 
 app.disable('etag'); //TODO: should ETAG be disabled ?
@@ -235,14 +250,14 @@ app.use('/', require('./routes/index'));
 app.use('/updateUserInfo', require('./routes/updateUserInfo'));
 app.use('/users', require('./routes/users'));
 app.use('/jobs', require('./routes/jobs'));
-app.use('/products',require('./routes/products'));
+app.use('/products', require('./routes/products'));
 //app.use('/batch/:collectionName', function(req,res,next){
 //    require('./routes/batch')(req,res,next);
 //});
 //app.use('/batch/:collection',function(req,res,next){
 //    require('./routes/batch')(req,res,next);
 //});
-app.use('/batch',require('./routes/batch'));
+app.use('/batch', require('./routes/batch'));
 app.use('/authenticate', require('./routes/authenticate'));
 app.use('/register', require('./routes/register'));
 app.use('/login', require('./routes/login'));

@@ -7,8 +7,8 @@ var express = require('express');
 var router = express.Router();
 var IJSON = require('idempotent-json');
 
-var get = require('../lib/httpHelpers/getModel.js');
-var getAll = require('../lib/httpHelpers/getModels.js');
+//var get = require('../lib/httpHelpers/getModel.js');
+//var getAll = require('../lib/httpHelpers/getModels.js');
 var post = require('../lib/httpHelpers/postModel.js');
 var put = require('../lib/httpHelpers/putModel.js');
 var del = require('../lib/httpHelpers/deleteModel.js');
@@ -54,6 +54,7 @@ router.param('job_id', function (req, res, next, job_id) {
 
 router.get('/', function (req, res, next) {
 
+    var getAll = require('../lib/httpHelpers/getModels.js');
 
     var JobModel = req.site.models.Job;
 
@@ -75,6 +76,8 @@ router.get('/', function (req, res, next) {
 
 
 router.get('/:job_id', function (req, res, next) {
+
+    var get = require('../lib/httpHelpers/getModel.js');
 
     var JobModel = req.site.models.Job;
     var job_id = req.params.job_id;
