@@ -178,6 +178,7 @@ gulp.task('watch:metagen', function () {
 });
 
 
+
 gulp.task('watch:hot-reload', function () {
 
     var io = socketio.listen('3002', function (err, msg,msg2) {
@@ -243,7 +244,6 @@ gulp.task('watch:hot-reload', function () {
         }, 100);
 
     });
-
 
 });
 
