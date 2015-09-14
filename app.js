@@ -7,7 +7,7 @@
 //TODO: http://mark.aufflick.com/blog/2007/12/06/serve-pre-compressed-content-with-apache
 
 var passport = require('passport');
-var colors = require('colors');
+var colors = require('colors/safe');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -19,16 +19,17 @@ var express = require('express');
 var sizeof = require('object-sizeof');
 //var compression = require('compression');
 
-//
-// Config
-var config = require('./config/config_constants.json');
+
+
+//config
+var config = require('univ-config')('*SC-Admin*', 'config/conf');
 
 //app
 var app = express();
 
 // Enable CORS
 function allowCrossDomain(req, res, next) {
-    res.header("Access-Control-Allow-Origin", config.allowedCORSOrigins);
+    res.header("Access-Control-Allow-Origin", config.get('sc_admin_constants').allowedCORSOrigins);
     res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
     res.header("Access-Control-Allow-Headers", "Content-Type");
     res.header("Access-Control-Allow-Credentials", "true");
@@ -36,7 +37,6 @@ function allowCrossDomain(req, res, next) {
 }
 
 //app.use(allowCrossDomain);
-//var router = express.Router();
 
 app.use(bodyParser.json({limit: '2mb'}));
 app.use(bodyParser.urlencoded({limit: '2mb', extended: true}));

@@ -10,7 +10,6 @@
 // dependencies
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var colors = require('colors');
 var validator = require('mongoose-validate');
 var bcrypt = require('bcrypt');
 var SALT_WORK_FACTOR = 10;

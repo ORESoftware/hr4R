@@ -3,11 +3,16 @@
  */
 
 
+//logging
+
+
+//config
+var config = require('univ-config')('*SC-Admin*', 'config/conf');
+
+//core
 var express = require('express');
 var router = express.Router();
 var IJSON = require('idempotent-json');
-
-/* GET usersRoutes listing. */
 
 
 //router.use('/', function(req, res, next) {
@@ -19,7 +24,7 @@ var IJSON = require('idempotent-json');
 //});
 
 //TODO: nested router
-//TODO: http://forbeslindesay.github.io/express-route-tester/
+//TODO: http://stackoverflow.com/questions/25260818/rest-with-express-js-nested-router
 
 router.param('user_id', function (req, res, next, user_id) {
     // typically we might sanity check that user_id is of the right format
@@ -48,28 +53,6 @@ router.param('user_id', function (req, res, next, user_id) {
     });
 });
 
-/*
- router.route('/:user_id')
- .all(function(req, res, next) {
-
- next();
- })
- .get(function(req, res, next) {
- res.json(req.user);
- })
- .put(function(req, res, next) {
- // just an example of maybe updating the user
- req.user.name = req.params.name;
- // save user ... etc
- res.json(req.user);
- })
- .post(function(req, res, next) {
- next(new Error('not implemented'));
- })
- .delete(function(req, res, next) {
- next(new Error('not implemented'));
- });
- */
 
 // middleware specific to this router
 router.use(function timeLog(req, res, next) {
@@ -101,7 +84,7 @@ router.get('/:user_id', function (req, res, next) {
     var user = req.specialParams.user_model;
 
     if (user) {
-        res.json({success:user});
+        res.json({success: user});
     }
     else {
         res.json({error: {errorMessage: 'no user found for GET operation, probably deleted from DB'}});
@@ -143,7 +126,7 @@ router.post('/', function (req, res, next) {
 
         newUser.save(function (err, result) {
             if (err) {
-                console.log(colors.red("error in user save method:", err.message));
+                console.log(colors.gray("mongoose user save callback:", err.message));
                 res.send({error: err.errors});
             }
             else if (result) {

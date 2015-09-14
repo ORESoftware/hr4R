@@ -2,9 +2,20 @@
  * Created by amills001c on 6/18/15.
  */
 
-var router = require('express').Router();
+
+//logging
+
+
+//config
+var config = require('univ-config')('*SC-Admin*', 'config/conf');
+
+//core
+var express = require('express');
+var router = express.Router();
 var passport = require('passport');
 
+
+/*** login routes ***/
 
 router.post('/', function (req, res, next) {
 
@@ -17,7 +28,7 @@ router.post('/', function (req, res, next) {
             return next(err);
         }
         else if (!user) {
-            res.json({isAuthenticated:false, user:null ,env:env,errorMessage:'No user found in DB.'});
+            res.json({isAuthenticated: false, user: null, env: env, errorMessage: 'No user found in DB.'});
         }
         else {
 
@@ -31,15 +42,16 @@ router.post('/', function (req, res, next) {
                 //res.locals.app.currentUser = user._doc;
 
                 if (req.isAuthenticated()) {
-                    res.json({isAuthenticated:true, user:req.user, env:env});
-                } else {
-                    res.json({isAuthenticated:false, user:null ,env:env});
+                    res.json({isAuthenticated: true, user: req.user, env: env});
+                }
+                else {
+                    res.json({isAuthenticated: false, user: null, env: env});
                 }
 
-        });
-    }
+            });
+        }
 
-})(req, res, next);
+    })(req, res, next);
 
 });
 

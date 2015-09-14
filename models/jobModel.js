@@ -5,7 +5,6 @@
 
 // dependencies
 var mongoose = require('mongoose');
-var colors = require('colors');
 var validator = require('mongoose-validate');
 
 

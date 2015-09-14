@@ -11,7 +11,7 @@ var appRoot = require('app-root-path');
 
 function setupEnv() {
 
-    global.colors = require('colors');
+    global.colors = require('colors/safe');
 
     console.log('\n\nruntime NODE_ENV:', global.colors.bgYellow.blue(process.env.NODE_ENV));
 

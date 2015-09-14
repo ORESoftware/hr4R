@@ -3,12 +3,23 @@
  */
 
 
+
+//logging
+
+
+//config
+var config = require('univ-config')('*SC-Admin*', 'config/conf');
+
+
 //TODO: save vs insert vs update with upsert:true
 
+//core
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 
+
+/*** registers routes ***/
 
 router.post('/', function (req, res, next) {
 

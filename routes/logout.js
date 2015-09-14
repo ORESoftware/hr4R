@@ -3,41 +3,19 @@
  */
 
 
-/*
- function registerRoutes(app){
 
- app.get('/logout',function (req, res, next) {
- req.session.user_id = undefined;
- req.session.passport.user = null;
- req.user = undefined;
- req.logout();
- //res.redirect('/login');
- res.redirect('/');
- });
-
- app.post('/logout',function (req, res, next) {
- req.session.user_id = undefined;
- req.session.passport.user = null;
- req.user = undefined;
-
- req.logout();
- req.session.destroy(function (err) {
- if (err) {
- res.json(false);
- return next(err);
- }
- else {
- console.log('req.session.destroy called successfully');
- res.json(true);
- }
- });
- });
- }
+//logging
 
 
- module.exports = registerRoutes;*/
+//config
+var config = require('univ-config')('*SC-Admin*', 'config/conf');
 
-var router = require('express').Router();
+//core
+var express = require('express');
+var router = express.Router();
+
+
+/*** logout routes ***/
 
 
 router.get('/',function (req, res, next) {

@@ -3,21 +3,26 @@
  */
 
 
-/**
- * Created by amills001c on 6/15/15.
- */
+//logging
 
 
+//config
+var config = require('univ-config')('*SC-Admin*', 'config/conf');
+
+//core
 var express = require('express');
 var router = express.Router();
 var IJSON = require('idempotent-json');
 
+//http helpers
 var get = require('../lib/httpHelpers/getModel.js');
 var getAll = require('../lib/httpHelpers/getModels.js');
 var post = require('../lib/httpHelpers/postModel.js');
 var put = require('../lib/httpHelpers/putModel.js');
 var del = require('../lib/httpHelpers/deleteModel.js');
 
+
+/*** products routes ***/
 
 router.param('product_id', function (req, res, next, product_id) {
     // TODO: typically we might sanity check that product_id is of the right format

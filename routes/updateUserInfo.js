@@ -2,12 +2,24 @@
  * Created by amills001c on 7/17/15.
  */
 
+
+//logging
+
+
+//config
+var config = require('univ-config')('*SC-Admin*', 'config/conf');
+
+
+//core
 var express = require('express');
 var router = express.Router();
 var IJSON = require('idempotent-json');
 var bcrypt = require('bcrypt');
 var SALT_WORK_FACTOR = 10;
 var _ = require('underscore');
+
+
+/*** update user routes ***/
 
 router.param('user_id', function (req, res, next, user_id) {
     // typically we might sanity check that user_id is of the right format
@@ -107,7 +119,7 @@ router.post('/:user_id', function (req, res, next) {
                                 new_password: null
                             };
 
-                            updates = _.extend({},updates,pwdUpdates);
+                            updates = _.extend({}, updates, pwdUpdates);
 
                             User.update({_id: user._id}, {
                                 $set: updates

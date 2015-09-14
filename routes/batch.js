@@ -2,46 +2,28 @@
  * Created by denman on 7/5/2015.
  */
 
+//logging
 
+
+//config
+var config = require('univ-config')('*SC-Admin*', 'config/conf');
+
+//core
 var express = require('express');
 var router = express.Router();
-
-
 var _ = require('underscore');
 var async = require('async');
 
 //TODO: http://forbeslindesay.github.io/express-route-tester/
 
 
-/*// middleware specific to this router
- router.use(function matchBatchURL(req, res, next) {
-
- var origURLWithoutSlashes = String(req.originalUrl).replace(/^\/|\/$/g, '');
-
- if (typeof batch[origURLWithoutSlashes] === 'function') { //replace all slashes
- batch[origURLWithoutSlashes](req, res, next);
- }
- else {
- next();
- }
- });
-
- router.use(function (req, res, next) {
-
- console.log('no route matched for users batch?!?!');
-
- next();
- });*/
+/*** batch request routes ***/
 
 router.param('collection', function (req, res, next, collectionName) {
     // typically we might sanity check that user_id is of the right format
     next();
 });
 
-//router.post('/',function(req,res,next){
-//
-//    res.send({});
-//});
 
 router.post('/:collection',function(req,res,next){
 

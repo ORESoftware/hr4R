@@ -6,7 +6,8 @@ var express = require('express');
 var router = express.Router();
 
 
-/* GET home page. */
+/*** index routes ***/
+
 router.get('/', function (req, res, next) {
 
     if (req.session.passport.user) {
@@ -77,8 +78,5 @@ router.get('/', function (req, res, next) {
 
 });
 
-/*
- * TODO: The correct usage, as defined in RFC 2616 and actually implemented in the wild, is for the client to send an Accept-Encoding request header
- * */
 
 module.exports = router;

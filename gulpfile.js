@@ -16,7 +16,7 @@ var socketio = require('socket.io');
 var async = require('async');
 var _ = require('underscore');
 var EE = require('events').EventEmitter;
-var colors = require('colors');
+var colors = require('colors/safe');
 var request = require('request');
 
 //gulp plugins
