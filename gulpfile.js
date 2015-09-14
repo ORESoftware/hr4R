@@ -17,6 +17,7 @@ var async = require('async');
 var _ = require('underscore');
 var EE = require('events').EventEmitter;
 var colors = require('colors');
+var request = require('request');
 
 //gulp plugins
 var replace = require('gulp-replace');
@@ -178,13 +179,37 @@ gulp.task('watch:metagen', function () {
 });
 
 
-gulp.task('watch:hot-reload', function () {
+gulp.task('watch:hot-reload-back-end', function () {
 
-    var io = socketio.listen('3002', function (err, msg,msg2) {
+    //if route file changes, we just reload that one route
+    //but if some other module changes, we have to reload all routes because any could be potentially impacted?
+
+    gulp.watch('./routes/**/*.js').on('change', function (file) {
+
+        request({
+            method: 'POST',
+            json: {
+                path: file.path
+            },
+            uri: 'http://localhost:3000/hot-reload'
+        }, function (err, response, body) {
+            if (err) {
+                console.log(colors.red(err));
+            }
+            else {
+                console.log(body);
+            }
+        });
+    });
+});
+
+gulp.task('watch:hot-reload-front-end', function () {
+
+    var io = socketio.listen('3002', function (err, msg, msg2) {
         if (err) {
             console.error(err);
         }
-        else if(msg){
+        else if (msg) {
             console.log(msg);
         }
     });
@@ -306,20 +331,19 @@ function runAllMetagens(done) {
 }
 
 
-
 gulp.task('metagen:all', ['transpile-jsx'], function (done) {
     runAllMetagens(done);
 });
 
 
-gulp.task('nodemon', ['metagen:all', 'watch:hot-reload'], function () {
+gulp.task('nodemon', ['metagen:all', 'watch:hot-reload-front-end', 'watch:hot-reload-back-end'], function () {
 
     nodemon({
 
         script: 'bin/www.js',
         ext: 'js',
-        ignore: ['public/*','*.git/*','*.idea/*'],
-        args:['--use_socket_server','--use_hot_reloader'],
+        ignore: ['public/*', '*.git/*', '*.idea/*', 'routes/*', 'gulpfile.js'],
+        args: ['--use_socket_server', '--use_hot_reloader'],
         nodeArgs: [],
         env: {'NODE_ENV': 'development'}
 
