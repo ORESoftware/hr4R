@@ -46,22 +46,22 @@ app.use(bodyParser.urlencoded({limit: '2mb', extended: true}));
 //    app.use(compression({filter: shouldCompress}));
 //}
 
-if (app.get('env') === 'development') {
- /*   app.use(function (req, res, next) {
-        Object.keys(require.cache).forEach(function (key) {
-            try {
-                if (String(key).indexOf('node_modules') < 0) {
-                    delete require.cache[require.resolve(key)];
-                    console.log(colors.red('deleted cache with keyname: ', key));
-                }
-            }
-            catch (err) {
-                console.log(err);
-            }
-        });
-        next();
-    });*/
-}
+//if (app.get('env') === 'development') {
+//    app.use(function (req, res, next) {
+//        Object.keys(require.cache).forEach(function (key) {
+//            try {
+//                if (String(key).indexOf('node_modules') < 0 && String(key).indexOf('routes') > 0) {
+//                    delete require.cache[require.resolve(key)];
+//                    console.log(colors.red('deleted cache with keyname: ', key));
+//                }
+//            }
+//            catch (err) {
+//                console.log(err);
+//            }
+//        });
+//        next();
+//    });
+//}
 
 
 function shouldCompress(req, res) {
@@ -245,24 +245,58 @@ require('./lib/controllers/passport_setup')(site.models.User);
 //params setup
 require('./lib/controllers/params')(app);
 
+
+var runRoute = null;
+
+if (app.get('env') === 'development') {
+    runRoute = function (path) {
+        return function (req, res, next) {
+            require(path)(req, res, next);
+        };
+    }
+}
+else {
+    runRoute = function (path) {
+        return require(path);
+    }
+}
+
 //routes
-app.use('/', require('./routes/index'));
-app.use('/updateUserInfo', require('./routes/updateUserInfo'));
-app.use('/users', require('./routes/users'));
-app.use('/jobs', require('./routes/jobs'));
-app.use('/products', require('./routes/products'));
+app.use('/', runRoute('./routes/index'));
+app.use('/updateUserInfo', runRoute('./routes/updateUserInfo'));
+app.use('/users', runRoute('./routes/users'));
+app.use('/jobs', runRoute('./routes/jobs'));
+app.use('/products', runRoute('./routes/products'));
 //app.use('/batch/:collectionName', function(req,res,next){
 //    require('./routes/batch')(req,res,next);
 //});
 //app.use('/batch/:collection',function(req,res,next){
 //    require('./routes/batch')(req,res,next);
 //});
-app.use('/batch', require('./routes/batch'));
-app.use('/authenticate', require('./routes/authenticate'));
-app.use('/register', require('./routes/register'));
-app.use('/login', require('./routes/login'));
-app.use('/logout', require('./routes/logout'));
+app.use('/batch', runRoute('./routes/batch'));
+app.use('/authenticate', runRoute('./routes/authenticate'));
+app.use('/register', runRoute('./routes/register'));
+app.use('/login', runRoute('./routes/login'));
+app.use('/logout', runRoute('./routes/logout'));
 //app.use('/testSocketIO', require('./routes/testSocketIO'));
+
+
+if (app.get('env') === 'development') {
+    app.post('/hot-reload', function (req, res, next) {
+        var path = req.body.path;
+        path = require.resolve(path);
+        if (String(path).indexOf('node_modules') < 0 && String(path).indexOf('routes') > 0) {
+            try {
+                delete require.cache[path];
+                console.log(colors.yellow('deleted cache with keyname: ', path));
+                res.send({success: 'successfully deleted cache'});
+            }
+            catch (err) {
+                res.send({error: String(err)});
+            }
+        }
+    });
+}
 
 
 // catch 404 and forward to error handler
