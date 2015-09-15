@@ -51,14 +51,13 @@ define(
                 dataType: 'json',
                 success: function (msg) {
                     console.log('authentication message:', msg);
-                    //appGlobal.env = msg.env;
-                    appState.set('env', msg.env);
+
                     console.log('boot.initialize() waiting for document.ready to fire, time:', (Date.now() - window.startDate));
 
                     $(function () {
-                        window.documentIsReady = true;
+                        //window.documentIsReady = true;
                         console.log('document.ready fired, time:', (Date.now() - window.startDate));
-                        runApplication(msg.isAuthenticated, msg.user);
+                        runApplication(msg);
                     });
                 },
                 error: function (err) {
@@ -95,17 +94,21 @@ define(
 
         //TODO: http://superuser.com/questions/205223/pros-and-cons-of-bzip-vs-gzip
         //TODO: effectiveJS not EmbeddedJS...see google for this
-        //TODO: create new user with Backbone model
 
-        var runApplication = function (authenticated, user) {
+        var runApplication = function (msg) {
 
             console.log('runApplication fired, Backbone History starting', (Date.now() - window.startDate));
 
+            appState.set('env', msg.env);
+
+            var authenticated = msg.isAuthenticated;
+            var user = msg.user;
+
             Backbone.history.start();
 
-            var useSocketServer = $('#use_socket_server').attr('value') === "true" ? true : false;
+            var useSocketServer = msg.useSocketServer ? true : false;
             saveToLocalStorage('use_socket_server', useSocketServer);
-            var useHotReloader = $('#use_hot_reloader').attr('value') === "true" ? true : false;
+            var useHotReloader = msg.useHotReloader ? true : false;
             saveToLocalStorage('use_hot_reloader', useHotReloader);
 
 

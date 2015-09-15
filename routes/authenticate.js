@@ -23,14 +23,18 @@ router.get('/', function (req, res, next) {
         res.json({
             isAuthenticated: true,
             user: req.user,
-            env: env
+            env: env,
+            useSocketServer: config.get('use_socket_server'),
+            useHotReloader: config.get('use_hot_reloader')
         });
     }
     else {
         res.json({
             isAuthenticated: false,
             user: null,
-            env: env
+            env: env,
+            useSocketServer: config.get('use_socket_server'),
+            useHotReloader: config.get('use_hot_reloader')
         });
     }
 });

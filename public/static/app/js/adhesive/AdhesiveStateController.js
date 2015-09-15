@@ -10,16 +10,12 @@ define(
 
     function (_) {
 
-        function AdhesiveStateController(view, opts) {
-            this.view = view;
+        function AdhesiveStateController() {
 
         }
 
         AdhesiveStateController.prototype.updatePlainObjects = function (domKeyName, domElementListen, plainObjectsToUpdate, event, limitToEventTarget) {
-
             throw new Error('shouldnt happen yet!!');
-
-
         };
 
         AdhesiveStateController.prototype.updateBackboneModels = function (domKeyName, domElement, models, event, limitToEventTarget) {

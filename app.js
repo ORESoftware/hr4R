@@ -2,10 +2,6 @@
  * Created by amills001c on 6/15/15.
  */
 
-//TODO: https://scotch.io/tutorials/learn-to-use-the-new-router-in-expressjs-4
-//TODO: http://bulkan-evcimen.com/using_express_router_instead_of_express_namespace.html
-//TODO: http://mark.aufflick.com/blog/2007/12/06/serve-pre-compressed-content-with-apache
-
 
 //config
 var config = require('univ-config')('*SC-Admin*', 'config/conf');
@@ -32,8 +28,9 @@ var util = require('util');
  */
 
 
-//app
+//Express app
 var app = express();
+
 
 // Enable CORS
 function allowCrossDomain(req, res, next) {
@@ -49,27 +46,31 @@ function allowCrossDomain(req, res, next) {
 app.use(bodyParser.json({limit: '2mb'}));
 app.use(bodyParser.urlencoded({limit: '2mb', extended: true}));
 
-//if (process.env.NODE_ENV !== 'development') {
-//    //app.use(compression());
-//    app.use(compression({filter: shouldCompress}));
-//}
+/*
 
-//if (app.get('env') === 'development') {
-//    app.use(function (req, res, next) {
-//        Object.keys(require.cache).forEach(function (key) {
-//            try {
-//                if (String(key).indexOf('node_modules') < 0 && String(key).indexOf('routes') > 0) {
-//                    delete require.cache[require.resolve(key)];
-//                    console.log(colors.red('deleted cache with keyname: ', key));
-//                }
-//            }
-//            catch (err) {
-//                console.log(err);
-//            }
-//        });
-//        next();
-//    });
-//}
+if (process.env.NODE_ENV !== 'development') {
+    //app.use(compression());
+    app.use(compression({filter: shouldCompress}));
+}
+
+if (app.get('env') === 'development') {
+    app.use(function (req, res, next) {
+        Object.keys(require.cache).forEach(function (key) {
+            try {
+                if (String(key).indexOf('node_modules') < 0 && String(key).indexOf('routes') > 0) {
+                    delete require.cache[require.resolve(key)];
+                    console.log(colors.red('deleted cache with keyname: ', key));
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+        });
+        next();
+    });
+}
+
+*/
 
 
 function shouldCompress(req, res) {
@@ -115,8 +116,6 @@ app.use(express.static(path.join(__dirname, 'public'), {
 //app.use(express.static(path.join(__dirname, '/bower_components')));
 //app.use(express.static('bower_components'));
 //app.use('/bower_components', express.static( root +'/bower_components'));
-
-
 
 
 var session = require('./lib/controllers/session.js');
@@ -189,7 +188,7 @@ if (process.env.NODE_ENV === 'development-verbose') {
 }
 
 
-setInterval(function() {
+setInterval(function () {
     console.log(util.inspect(process.memoryUsage()));
 }, 20000);
 

@@ -19,19 +19,15 @@ define(
         'underscore',
         'backbone-validation',
         'react',
-        '#allFluxActions'
+        '#allFluxActions',
+        'require'
     ],
 
-
-    /** @jsx React.DOM */
-
-    function (appState, models, collections, form2js, EJS, _, BackboneValidation, React, allFluxActions) {
+    function (appState, models, collections, form2js, EJS, _, BackboneValidation, React, allFluxActions, require) {
 
 
         var FluxCartActions = allFluxActions['FluxCartActions'];
 
-
-        /** @jsx React.DOM */
         var HomeView = Backbone.View.extend({
 
                 //id: 'HomeViewID',
@@ -52,7 +48,6 @@ define(
                 },
 
 
-
                 initialize: function (opts) {
 
                     this.setViewProps(opts);
@@ -63,7 +58,7 @@ define(
                 },
 
 
-                nodes: ['#react-timer-example-div-id','#react-menu-example-div-id'],
+                nodes: ['#react-timer-example-div-id', '#react-menu-example-div-id'],
 
                 render: function () {
 
@@ -78,10 +73,8 @@ define(
 
                     self.$el.html(ret);
 
-
                     var TimerExample = allViews['reactComponents/TimerExample'];
                     var MenuExample = allViews['reactComponents/MenuExample'];
-
 
                     React.render(
                         <TimerExample start={Date.now()}/>,
@@ -109,8 +102,6 @@ define(
                 //template: template
             }
         );
-
-
 
 
         return HomeView;

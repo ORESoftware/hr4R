@@ -64,31 +64,31 @@ define(
                     this.setViewProps(opts); //has side effects
                     _.bindAll(this, 'render', 'onClickResetAll', 'onClickResetFrontEnd', 'onClickResetBackEnd');
 
-                    this.adhesive = new Adhesive(this, {});
 
                     var self = this;
 
                     this.listenTo(this.model, 'change', this.render);
                     this.listenTo(this.collection, 'change', this.render);
 
-                    this.listenTo(osc.socketEvents, 'socket-disconnected', this.onSocketDisconnected);
+                    this.adhesive = new Adhesive(self, {
 
-                    this.adhesive.stick({
+                    }).stick({
                         keyName: 'socket',
                         domElementUpdate: self.$el,
                         plainObjects: {
                             listenTo: [osc.socketEvents],
                             update: [],
-                            events: ['socket-error', 'socket-disconnected', 'socket-connected']
+                            //events: ['socket-error', 'socket-disconnected', 'socket-connected']
+                            events: ['all']
                         }
                     });
                 },
 
                 render: function () {
 
-                    if (!window.documentIsReady) {
-                        return;
-                    }
+                    //if (!window.documentIsReady) {
+                    //    return;
+                    //}
 
                     var self = this;
 
@@ -118,7 +118,7 @@ define(
                     event.preventDefault();
 
                     try {
-                        osc.getSocketIOConn().reconnect();
+                        osc.getSocketIOConn().connect();
                     }
                     catch (err) {
                         alert('socket failed reconnect --->' + err.toString());
@@ -162,7 +162,7 @@ define(
                         alert('internal server error - logout failed.')
 
                     }).always(function (a, textStatus, b) {
-
+                        self.render();
                     });
                 },
                 onClickHotReload: function (event) {

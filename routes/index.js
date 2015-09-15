@@ -38,9 +38,7 @@ router.get('/', function (req, res, next) {
                             isAuthenticated: true,
                             user: req.user,
                             env: env,
-                            title: title,
-                            useSocketServer: String(config.get('use_socket_server')),
-                            useHotReloader: String(config.get('use_hot_reloader'))
+                            title: title
                         };
                     }
                     else {
@@ -48,9 +46,7 @@ router.get('/', function (req, res, next) {
                             isAuthenticated: false,
                             user: null,
                             env: env,
-                            title: title,
-                            useSocketServer: String(config.get('use_socket_server')),
-                            useHotReloader: String(config.get('use_hot_reloader'))
+                            title: title
                         };
                     }
 
@@ -69,9 +65,7 @@ router.get('/', function (req, res, next) {
             isAuthenticated: false,
             user: null,
             env: env,
-            title: title,
-            useSocketServer: String(config.get('use_socket_server')),
-            useHotReloader: String(config.get('use_hot_reloader'))
+            title: title
         };
         res.render('index', obj);
     }

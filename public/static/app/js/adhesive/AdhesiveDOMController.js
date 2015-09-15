@@ -6,17 +6,18 @@
 
 define(
     [
-        'underscore'
+        'underscore',
+        'util(NPM)'
     ],
 
-    function (_) {
+    function (_, util) {
 
 
-        function AdhesiveDOMController(view, opts) {
-            this.view = view;
+        function AdhesiveDOMController() {
+
         }
 
-        AdhesiveDOMController.prototype.updateDOMViaPlainObjectChange = function (domKeyName, domElementsToPotentiallyUpdate, obj, eventName) {
+        AdhesiveDOMController.prototype.updateDOMViaPlainObjectChange = function (domKeyName, domElementsToPotentiallyUpdate, obj, eventName, eventObj) {
 
             domElementsToPotentiallyUpdate.find('*').each(function () {
 
@@ -54,8 +55,12 @@ define(
 
                     if (domKeyName == modelName) {
 
-                        var prop = obj[modelProp];
-                        $(self).html(String(prop));
+                        //var prop = obj[modelProp];
+                        var result = _.result(eventObj, modelProp);
+                        if (result == null) {
+                            result = util.inspect(eventObj);
+                        }
+                        $(self).html(String(result));
                         //nothing here, just for debugger
                     }
 
@@ -164,12 +169,16 @@ define(
 
             //var maxChanges = models.length;
 
-            if (eventName === 'coll-add') {
-                //if we add a model to a collection, for now we just re-render the view, it's just way easier
-                //later on we can use jQuery to add a row to a table instead of just re-rendering the entire view
-                this.view.render();
-                return;
-            }
+            /*
+
+             if (eventName === 'coll-add') {
+             //if we add a model to a collection, for now we just re-render the view, it's just way easier
+             //later on we can use jQuery to add a row to a table instead of just re-rendering the entire view
+             this.view.render();
+             return;
+             }
+
+             */
 
 
             var exitLoop = false;

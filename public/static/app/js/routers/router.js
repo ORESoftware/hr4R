@@ -282,13 +282,13 @@ define(
                         }
                         else {
 
-                            if (!window.documentIsReady) {
-                                //here we don't bother rendering stuff before document is ready?
-                                return null;
-                            }
-                            else {
+                            //if (!window.documentIsReady) {
+                            //    //here we don't bother rendering stuff before document is ready?
+                            //    return null;
+                            //}
+                            //else {
                                 continueOn.bind(self)(opts);
-                            }
+                            //}
 
                             //$(function() {
                             //    continueOn.bind(self)(opts);

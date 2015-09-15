@@ -1,7 +1,6 @@
 
 
 //TODO: process.env.UV_THREADPOOL_SIZE = 1;
-//TODO: incorporate cluster module
 //TODO: create dummy data procedures to load dummy data in DB
 
 

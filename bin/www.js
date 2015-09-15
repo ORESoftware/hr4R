@@ -1,5 +1,4 @@
 //TODO: process.env.UV_THREADPOOL_SIZE = 1;
-//TODO: incorporate cluster module
 
 
 process.on('uncaughtException', function handleUncaughtException(err) {

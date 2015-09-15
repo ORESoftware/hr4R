@@ -56,18 +56,18 @@ define(
                 //TODO: match socket session with express session
 
                 socket.on('error', function socketConnectionErrorCallback(err) {
-                    socketEvents.trigger('socket-error', err);
+                    socketEvents.trigger('socket-error','socket-error', err);
                     console.error('Unable to connect Socket.IO ---->', JSON.stringify(err));
                 });
 
                 socket.on('connect', function (event) {
-                    socketEvents.trigger('socket-connected', 'connected --> id'.concat(socket.id));
+                    socketEvents.trigger('socket-connected', socket);
                     //console.log('document.cookie after socketio connection:', document.cookie);
                     console.info('successfully established a working and authorized connection'.toUpperCase());
                 });
 
                 socket.on('disconnect', function (event) {
-                    socketEvents.trigger('socket-disconnected', 'disconnected');
+                    socketEvents.trigger('socket-disconnected', socket);
                     //console.log('document.cookie after socketio DIS-connection:', document.cookie);
                     console.info('socket disconnected'.toUpperCase());
                 });
@@ -159,7 +159,6 @@ define(
                 });
             }
 
-            //_.defaults(socket, Backbone.Events);
 
             appState.set('socketConnection', socket);
             return socket;

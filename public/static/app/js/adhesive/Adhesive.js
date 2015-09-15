@@ -25,8 +25,8 @@ define(
             _.extend(this, Backbone.Events);
             //this.stick = stick.bind(this);
             this.jQueryBinds = [];
-            this.stateController = new ASC(view);
-            this.domController = new ADC(view);
+            //this.stateController = new ASC(view);
+            //this.domController = new ADC(view);
         }
 
         Adhesive.prototype.unStick = function () {
@@ -65,8 +65,8 @@ define(
 
                     plainObjectEvents = plainObjectEvents.join(' '); //separate event-names by a space
                     _.each(plainObjectsToListenTo, function (obj, index) {
-                        self.listenTo(obj, plainObjectEvents, function (eventName) {
-                            self.domController.updateDOMViaPlainObjectChange(domKeyName, domElementUpdate, obj, eventName);
+                        self.listenTo(obj, plainObjectEvents, function (eventName, eventObj) {
+                            domController.updateDOMViaPlainObjectChange(domKeyName, domElementUpdate, obj, eventName, eventObj);
                         });
                     });
 
@@ -84,7 +84,7 @@ define(
                             event.stopPropagation();
                         }
 
-                        self.stateController.updatePlainObjects(domKeyName, domElementListen, plainObjectsToUpdate, event, limitToEventTarget);
+                        stateController.updatePlainObjects(domKeyName, domElementListen, plainObjectsToUpdate, event, limitToEventTarget);
 
                     });
                 }
@@ -103,7 +103,7 @@ define(
                     modelEvents = modelEvents.join(' '); //separate event-names by a space
                     _.each(modelsToListenTo, function (model, index) {
                         self.listenTo(model, modelEvents, function (model) {
-                            self.domController.updateDOMViaModelChange(domKeyName, model, domElementUpdate);
+                            domController.updateDOMViaModelChange(domKeyName, model, domElementUpdate);
                         });
                     });
 
@@ -122,7 +122,7 @@ define(
                             event.stopPropagation();
                         }
 
-                        self.stateController.updateBackboneModels(domKeyName, domElementListen, modelsToUpdate, event, limitToEventTarget);
+                        stateController.updateBackboneModels(domKeyName, domElementListen, modelsToUpdate, event, limitToEventTarget);
 
                     });
                 }
@@ -144,7 +144,7 @@ define(
 
                     _.each(collectionsToListenTo, function (coll, index) {
                         self.listenTo(coll, collectionEvents, function (models, eventName) {
-                            self.domController.updateDOMViaCollectionChange(domKeyName, coll, domElementUpdate, models, eventName);
+                            domController.updateDOMViaCollectionChange(domKeyName, coll, domElementUpdate, models, eventName);
                         });
                     });
                 }
@@ -163,7 +163,7 @@ define(
                             event.stopPropagation();
                         }
 
-                        self.stateController.updateBackboneCollections(
+                        stateController.updateBackboneCollections(
                             domKeyName, domElementListen, collectionsToUpdate, event,
                             limitToEventTarget, filterUpdateFunction
                         );

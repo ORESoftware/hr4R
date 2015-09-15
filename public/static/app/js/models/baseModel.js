@@ -129,11 +129,11 @@ define(
                     //}
                 },
 
-                dispatchCallback: function(payload){
+                dispatchCallback: function (payload) {
 
                     var self = this;
 
-                    switch(payload.actionType){
+                    switch (payload.actionType) {
 
                         case 'delete':
                             self.remove(payload.model);
@@ -342,7 +342,7 @@ define(
                                 }
                             },
                             error: function (model, xhr, options) {
-                                self.needsPersisting = false; //TODO: don't want to keep trying an error?
+                                self.needsPersisting = true; //TODO: don't want to keep trying an error?
                                 var err = new Error("Something went wrong while saving the model");
                                 if (typeof callback === 'function') {
                                     callback(err, model, xhr, options);
@@ -390,7 +390,7 @@ define(
                     'delete': '/user/remove'
                 },
 
-                sync_example1: function(method, model, options) {
+                sync_example1: function (method, model, options) {
                     options = options || {};
                     options.url = model.methodToURL[method.toLowerCase()];
 
@@ -401,10 +401,12 @@ define(
                     if (method === 'read') {
                         if (window.localStorage.getItem('myData')) {
                             return window.localStorage.getItem('myData');
-                        } else {
+                        }
+                        else {
                             return Backbone.sync.apply(this, arguments);
                         }
-                    } else {
+                    }
+                    else {
                         return Backbone.sync.apply(this, arguments);
                     }
                 },
@@ -427,7 +429,7 @@ define(
                     // Ensure that we have a URL.
                     if (!options.url) {
                         //params.url = _.result(model, 'url') || urlError();
-                        params.url = (_.isFunction(model.url) ? model.url(method,options) : model.url) || urlError();
+                        params.url = (_.isFunction(model.url) ? model.url(method, options) : model.url) || urlError();
                     }
 
                     // Ensure that we have the appropriate request data.

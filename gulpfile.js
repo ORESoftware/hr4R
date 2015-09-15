@@ -180,7 +180,6 @@ gulp.task('watch:metagen', function () {
 });
 
 
-
 gulp.task('watch:hot-reload-back-end', function () {
 
     //if route file changes, we just reload that one route
@@ -189,23 +188,22 @@ gulp.task('watch:hot-reload-back-end', function () {
     gulp.watch('./routes/**/*.js').on('change', function (file) {
 
         request({
-            method: 'POST',
-            json: {
-                path: file.path
+                method: 'POST',
+                json: {
+                    path: file.path
+                },
+                uri: 'http://localhost:3000/hot-reload'
             },
-            uri: 'http://localhost:3000/hot-reload'
-        }, function (err, response, body) {
-            if (err) {
-                console.log(colors.red(ijson.parse(err).error));
-            }
-            else {
-                console.log(colors.blue(ijson.parse(body).success));
-            }
-        });
+            function (err, response, body) {
+                if (err) {
+                    console.log(colors.red(ijson.parse(err).error));
+                }
+                else {
+                    console.log(colors.blue(ijson.parse(body).success));
+                }
+            });
     });
 });
-
-
 
 
 gulp.task('watch:hot-reload-front-end', function () {

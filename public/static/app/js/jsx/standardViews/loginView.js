@@ -231,7 +231,9 @@ define(
                             if (hash == null) {
                                 hash = readFromLocalStorage('original_hash_request');
                             }
-                            createSocketConnection();
+                            if (readFromLocalStorage('use_socket_server')) {
+                                osc.getSocketIOConn();
+                            }
                             Backbone.Events.trigger('bootRouter', hash);
                         }
 
@@ -250,7 +252,9 @@ define(
                         throw err;
                     }
                     else {
-                        createSocketConnection();
+                        if (readFromLocalStorage('use_socket_server')) {
+                            osc.getSocketIOConn();
+                        }
                         Backbone.Events.trigger('bootRouter', 'home');
                     }
                 });

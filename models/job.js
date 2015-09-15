@@ -71,7 +71,6 @@ var registerSchema = function () {
         return next();
     });
 
-    
 
     jobSchema.post('save', function (doc) {
         console.log('%s has been saved', doc._id);

@@ -14,11 +14,12 @@ define(
         'underscore',
         'backbone-validation',
         '#Adhesive',
-        '#allTemplates'
+        '#allTemplates',
+        'require'
     ],
 
 
-    function (appState, models, form2js, EJS, _, BackboneValidation, Adhesive, allTemplates) {
+    function (appState, models, form2js, EJS, _, BackboneValidation, Adhesive, allTemplates, require) {
 
         var template = allTemplates['templates/footerTemplate.ejs'];
 
@@ -101,9 +102,9 @@ define(
                 },
                 render: function (cb) {
 
-                    if (!window.documentIsReady) {
-                        return;
-                    }
+                    //if (!window.documentIsReady) {
+                    //    return;
+                    //}
 
                     var self = this;
 
