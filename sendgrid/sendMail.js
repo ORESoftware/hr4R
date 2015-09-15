@@ -14,7 +14,7 @@ var options = {
     template:{
         ID:'2a5f64d5-0b79-4a77-9255-32abf01cfadf'
     }
-}
+};
 
 var client = nodemailer.createTransport(sgTransport(options));
 

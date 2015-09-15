@@ -3,7 +3,7 @@
  */
 
 
-describe('@barf',function(){
+describe('@test1',function(){
 
     it('tests stuff',function(){
 

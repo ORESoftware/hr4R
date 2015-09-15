@@ -17,7 +17,7 @@ var REQUIRED_PASSWORD_LENGTH = 8;
 var ACCEPTABLE_EMAIL_DOMAINS = ['temp.com', 'cable.comcast.com', 'comcast.com'];
 
 //stuff
-var eventBus = require('../events/eventBus.js');
+var eventBus = require('../eventBus/eventBus.js');
 
 // variables
 var mongoDB = null;

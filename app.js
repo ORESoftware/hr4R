@@ -6,6 +6,11 @@
 //TODO: http://bulkan-evcimen.com/using_express_router_instead_of_express_namespace.html
 //TODO: http://mark.aufflick.com/blog/2007/12/06/serve-pre-compressed-content-with-apache
 
+
+//config
+var config = require('univ-config')('*SC-Admin*', 'config/conf');
+
+//core
 var passport = require('passport');
 var colors = require('colors/safe');
 var path = require('path');
@@ -14,15 +19,17 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var ejs = require('ejs');
-//var expressLayouts = require('express-ejs-layouts');
 var express = require('express');
 var sizeof = require('object-sizeof');
-//var compression = require('compression');
 
+/*
 
+ TODO: old stuff:
+ var expressLayouts = require('express-ejs-layouts');
+ var compression = require('compression');
 
-//config
-var config = require('univ-config')('*SC-Admin*', 'config/conf');
+ */
+
 
 //app
 var app = express();
@@ -75,11 +82,10 @@ function shouldCompress(req, res) {
 }
 
 
-app.use(/(.*)\.gz$/, function (req, res, next) {
-    //req.url = req.url + '.gz';
+app.use(/(.*)\.gz$/, function (req, res, next) { //checks if request url ends in .gz
     //TODO: might need .jgz for Safari, etc
     res.set('Content-Encoding', 'gzip');
-    console.log('!!! gz encoding set for url:', req.originalUrl);
+    console.log(colors.bgGreen('gzip encoding set for url:', req.originalUrl));
     next();
 });
 
@@ -93,8 +99,18 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser('foo'));
 //app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public'), {
-    etag: false
+    etag: false //TODO what about etags?
 }));
+
+/*
+ TODO: etags
+ app.enable('etag') // use strong etags
+ app.set('etag', 'strong') // same
+ app.set('etag', 'weak') // weak etags
+ */
+
+
+//TODO we should probably *not* directly point browser to bower_components
 //app.use(express.static(path.join(__dirname, '/bower_components')));
 //app.use(express.static('bower_components'));
 //app.use('/bower_components', express.static( root +'/bower_components'));
@@ -142,14 +158,11 @@ app.engine('html', ejs.renderFile);
 // initialize passport
 //TODO: is it app.use(router) before or after passport?
 //TODO: use redis or mongodb for session store?
-
-//app.use(router);
 app.use(passport.initialize());
 app.use(passport.session());
-//app.use(router);
 
 
-if (process.env.NODE_ENV === 'development-extra') {
+if (process.env.NODE_ENV === 'development-verbose') {
     app.use(function (req, res, next) {
 
         console.log('\n\n\n');
@@ -188,11 +201,8 @@ app.use(function (req, res, next) {
         }
     }
     else {
-        //if user is not defined, they are *probably* trying to access the login page, however,
-        //we should check the url here to make sure it doesn't start with "/users"
-        //next();
-
-        //TODO: res.send({msg:'user not authenticated, should be redirected to Backbone index view'});
+        //if user is not defined, they are *probably* trying to access the login page, regardless of what url they enter into the searchbar
+        //TODO: res.send({msg:'user not authenticated'}), should be redirected to index view'});
         if (String(req.originalUrl).indexOf('/ra/') === 0) {
             console.log(colors.bgYellow('unauthorized user attempted to request /ra/ route, so rendering index page...'));
             res.locals.loggedInUser = null;
@@ -207,17 +217,6 @@ app.use(function (req, res, next) {
         }
     }
 });
-
-
-/* TODO
- * <FilesMatch "\.css\.jgz$">
- ForceType text/css
- </FilesMatch>
- <FilesMatch "\.js\.jgz$">
- ForceType application/x-javascript
- </FilesMatch>
-
- */
 
 
 //app.locals = {
@@ -261,35 +260,27 @@ else {
     }
 }
 
-//routes
+//ROUTES
 app.use('/', runRoute('./routes/index'));
 app.use('/updateUserInfo', runRoute('./routes/updateUserInfo'));
 app.use('/users', runRoute('./routes/users'));
 app.use('/jobs', runRoute('./routes/jobs'));
 app.use('/products', runRoute('./routes/products'));
-//app.use('/batch/:collectionName', function(req,res,next){
-//    require('./routes/batch')(req,res,next);
-//});
-//app.use('/batch/:collection',function(req,res,next){
-//    require('./routes/batch')(req,res,next);
-//});
 app.use('/batch', runRoute('./routes/batch'));
 app.use('/authenticate', runRoute('./routes/authenticate'));
 app.use('/register', runRoute('./routes/register'));
 app.use('/login', runRoute('./routes/login'));
 app.use('/logout', runRoute('./routes/logout'));
-//app.use('/testSocketIO', require('./routes/testSocketIO'));
 
 
 if (app.get('env') === 'development') {
     app.post('/hot-reload', function (req, res, next) {
         var path = req.body.path;
         path = require.resolve(path);
-        if (String(path).indexOf('node_modules') < 0 && String(path).indexOf('routes') > 0) {
+        if (path.indexOf('node_modules') < 0 && path.indexOf('routes') > 0) {
             try {
                 delete require.cache[path];
-                console.log(colors.yellow('deleted cache with keyname: ', path));
-                res.send({success: 'successfully deleted cache'});
+                res.send({success: 'successfully deleted cache with keyname: ' + path});
             }
             catch (err) {
                 res.send({error: String(err)});

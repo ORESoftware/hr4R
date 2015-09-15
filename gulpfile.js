@@ -24,6 +24,7 @@ var replace = require('gulp-replace');
 var source = require('vinyl-source-stream');
 var react = require('gulp-react');
 var nodemon = require('gulp-nodemon');
+var ijson = require('idempotent-json');
 
 //misc
 var grm = require('requirejs-metagen');
@@ -195,10 +196,10 @@ gulp.task('watch:hot-reload-back-end', function () {
             uri: 'http://localhost:3000/hot-reload'
         }, function (err, response, body) {
             if (err) {
-                console.log(colors.red(err));
+                console.log(colors.red(ijson.parse(err).error));
             }
             else {
-                console.log(body);
+                console.log(colors.blue(ijson.parse(body).success));
             }
         });
     });

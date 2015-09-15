@@ -2,10 +2,16 @@
  * Created by denman on 7/26/2015.
  */
 
+//TODO: this module is intended to facilitate communication between oplog-listener-socket-server and this HTTP server
+
+//core
 var redis = require('redis');
 
+//clients
 var clientSubscribe = redis.createClient();
 var clientPublish = redis.createClient();
+
+
 
 clientSubscribe.on('ready', function () {
     console.log('clientSubscribe is ready');

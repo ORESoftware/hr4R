@@ -54,7 +54,7 @@ router.get('/', function (req, res, next) {
                         };
                     }
 
-                    res.render('index', obj);//
+                    res.render('index', obj);
                 }
             });
         });
