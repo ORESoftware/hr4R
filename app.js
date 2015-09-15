@@ -21,6 +21,7 @@ var bodyParser = require('body-parser');
 var ejs = require('ejs');
 var express = require('express');
 var sizeof = require('object-sizeof');
+var util = require('util');
 
 /*
 
@@ -116,6 +117,8 @@ app.use(express.static(path.join(__dirname, 'public'), {
 //app.use('/bower_components', express.static( root +'/bower_components'));
 
 
+
+
 var session = require('./lib/controllers/session.js');
 app.use(session);
 
@@ -184,6 +187,11 @@ if (process.env.NODE_ENV === 'development-verbose') {
         next();
     });
 }
+
+
+setInterval(function() {
+    console.log(util.inspect(process.memoryUsage()));
+}, 20000);
 
 
 app.use(function (req, res, next) {
