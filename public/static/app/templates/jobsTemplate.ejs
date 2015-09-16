@@ -1,112 +1,113 @@
 <div>
     <div class="container">
         <div id="jobs-react-example-div-id">react example goes here</div>
-        <div id="jobs-adhesive-example-div-id">adhesive example goes here
+        <div id="jobs-adhesive-example-div-id">adhesive example goes here</div>
 
-            <div>
+                <div class="adhesive">
 
-                <legend>What is Your Favorite Pet?</legend>
-                <input class="checkbox" type="checkbox" onclick="return false;"
-                       adhesive-value-checkbox="job:isVerified" adhesive-get-checkbox="job:isVerified"
-                       adhesive-cid="<%= job.cid %>">Is-Verified
-                <!--<input class="checkbox" type="checkbox" onclick="return false;"-->
-                       <!--adhesive-value-checkbox="job:animals:cats" adhesive-get-checkbox="job:animals:cats"-->
-                       <!--adhesive-cid="<%= job.cid %>">Cats-->
-                <!--<input class="checkbox" type="checkbox" onclick="return false;"-->
-                       <!--adhesive-value-checkbox="job:animals:dogs" adhesive-get-checkbox="job:animals:dogs"-->
-                       <!--adhesive-cid="<%= job.cid %>">Dogs-->
-                <!--<input class="checkbox" type="checkbox" onclick="return false;"-->
-                       <!--adhesive-value-checkbox="job:animals:birds" adhesive-get-checkbox="job:animals:birds"-->
-                       <!--adhesive-cid="<%= job.cid %>">Birds-->
-            </div>
 
-            <div class="row">
-                Update Your Personal Information:
-            </div>
-            <div class="row">
+                    <legend>What is Your Favorite Pet?</legend>
+                    <input class="checkbox" type="checkbox" onclick="return false;"
+                           adhesive-value-checkbox="job:isVerified" adhesive-get-checkbox="job:isVerified"
+                           adhesive-cid="<%= job.cid %>">Is-Verified
+                    <!--<input class="checkbox" type="checkbox" onclick="return false;"-->
+                    <!--adhesive-value-checkbox="job:animals:cats" adhesive-get-checkbox="job:animals:cats"-->
+                    <!--adhesive-cid="<%= job.cid %>">Cats-->
+                    <!--<input class="checkbox" type="checkbox" onclick="return false;"-->
+                    <!--adhesive-value-checkbox="job:animals:dogs" adhesive-get-checkbox="job:animals:dogs"-->
+                    <!--adhesive-cid="<%= job.cid %>">Dogs-->
+                    <!--<input class="checkbox" type="checkbox" onclick="return false;"-->
+                    <!--adhesive-value-checkbox="job:animals:birds" adhesive-get-checkbox="job:animals:birds"-->
+                    <!--adhesive-cid="<%= job.cid %>">Birds-->
 
-                <div class="col-lg-4">
-                    <form role="form" id="job-profile-update-form-id" action="javascript:void(0);" method="post">
+                    <div class="row">
+                        Update Your Job Information:
+                    </div>
+                    <div class="row">
 
-                        <div class="form-group input-group">
-                            <span class="input-group-addon job-profile-update-form">Email</span>
-                            <input type="text" class="form-control" adhesive-get="job:email"
-                                   adhesive-cid="<%= job.cid %>" placeholder="Email">
+                        <div class="col-lg-4">
+                            <form role="form" id="job-profile-update-form-id" action="javascript:void(0);"
+                                  method="post">
+
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon job-profile-update-form">Email</span>
+                                    <input type="text" class="form-control" adhesive-get="job:email"
+                                           adhesive-cid="<%= job.cid %>" placeholder="Email">
+                                </div>
+
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon job-profile-update-form">Job Name</span>
+                                    <input type="text" class="form-control" adhesive-get="job:jobName"
+                                           adhesive-cid="<%= job.cid %>" placeholder="Job Name">
+                                </div>
+
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon job-profile-update-form">First Name</span>
+                                    <input type="text" class="form-control" adhesive-get="job:firstName"
+                                           adhesive-cid="<%= job.cid %>" placeholder="First Name">
+                                </div>
+
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon job-profile-update-form">Last Name</span>
+                                    <input type="text" class="form-control" adhesive-get="job:lastName"
+                                           adhesive-cid="<%= job.cid %>" placeholder="Last Name">
+                                </div>
+
+
+                                <button type="submit" id="submit-job-profile-update-form-id" class="btn btn-default">
+                                    Update Your Info
+                                </button>
+
+                            </form>
                         </div>
+                        <div class="col-lg-4">
+                            <b><i>there should be something here</i></b>
 
-                        <div class="form-group input-group">
-                            <span class="input-group-addon job-profile-update-form">Job Name</span>
-                            <input type="text" class="form-control" adhesive-get="job:jobName"
-                                   adhesive-cid="<%= job.cid %>" placeholder="Job Name">
+                            <div id="job-view">
+                                <p>job name:<span adhesive-value="job:jobName"
+                                                  adhesive-cid="<%= job.cid %>"><%= job.get('jobName') %></span></p>
+
+                                <p>email:<span adhesive-value="job:email"
+                                               adhesive-cid="<%= job.cid %>"><%= job.get('email') %></span></p>
+
+                                <p>first name:<span adhesive-value="job:firstName"
+                                                    adhesive-cid="<%= job.cid %>"><%= job.get('firstName') %></span></p>
+
+                                <p>last name:<span adhesive-value="job:lastName"
+                                                   adhesive-cid="<%= job.cid %>"><%= job.get('lastName') %></span></p>
+
+                                <p>animals:<span adhesive-value="job:animals"
+                                                 adhesive-cid="<%= job.cid %>"><%= job.get('animals') %></span></p>
+                            </div>
                         </div>
-
-                        <div class="form-group input-group">
-                            <span class="input-group-addon job-profile-update-form">First Name</span>
-                            <input type="text" class="form-control" adhesive-get="job:firstName"
-                                   adhesive-cid="<%= job.cid %>" placeholder="First Name">
-                        </div>
-
-                        <div class="form-group input-group">
-                            <span class="input-group-addon job-profile-update-form">Last Name</span>
-                            <input type="text" class="form-control" adhesive-get="job:lastName"
-                                   adhesive-cid="<%= job.cid %>" placeholder="Last Name">
-                        </div>
-
-
-                        <button type="submit" id="submit-job-profile-update-form-id" class="btn btn-default">
-                            Update Your Info
-                        </button>
-
-                    </form>
-                </div>
-                <div class="col-lg-4">
-                    <b><i>there should be something here</i></b>
-
-                    <div id="job-view">
-                        <p>job name:<span adhesive-value="job:jobName"
-                                          adhesive-cid="<%= job.cid %>"><%= job.get('jobName') %></span></p>
-
-                        <p>email:<span adhesive-value="job:email"
-                                       adhesive-cid="<%= job.cid %>"><%= job.get('email') %></span></p>
-
-                        <p>first name:<span adhesive-value="job:firstName"
-                                            adhesive-cid="<%= job.cid %>"><%= job.get('firstName') %></span></p>
-
-                        <p>last name:<span adhesive-value="job:lastName"
-                                           adhesive-cid="<%= job.cid %>"><%= job.get('lastName') %></span></p>
-
-                        <p>animals:<span adhesive-value="job:animals"
-                                         adhesive-cid="<%= job.cid %>"><%= job.get('animals') %></span></p>
                     </div>
                 </div>
             </div>
-
-        </div>
-        <div class="row">
-            <div class="col-md-2">
-                <small>
-                    <div id="collection-div-id">
-                        <% if(locals.collection){ %>
-                        <%= collection.givenName %>(<%= collection.size() %>)
-                        <% }
-                        else { %>
-                        (no collection detected)
-                        <% } %>
-                    </div>
-                </small>
-            </div>
-            <div class="col-md-3">
-                <small>
-                    <div id="model-div-id">
-                        <% if(locals.model) { %>
-                        <%= model.givenName %>, cid: <%= model.cid %> <p>_id: <%= model.get('_id') %></p>
-                        <% }
-                        else { %>
-                        (no model detected)
-                        <% } %>
-                    </div>
-                </small>
+            <div class="row">
+                <div class="col-md-2">
+                    <small>
+                        <div id="collection-div-id">
+                            <% if(locals.collection){ %>
+                            <%= collection.givenName %>(<%= collection.size() %>)
+                            <% }
+                            else { %>
+                            (no collection detected)
+                            <% } %>
+                        </div>
+                    </small>
+                </div>
+                <div class="col-md-3">
+                    <small>
+                        <div id="model-div-id">
+                            <% if(locals.model) { %>
+                            <%= model.givenName %>, cid: <%= model.cid %> <p>_id: <%= model.get('_id') %></p>
+                            <% }
+                            else { %>
+                            (no model detected)
+                            <% } %>
+                        </div>
+                    </small>
+                </div>
             </div>
         </div>
     </div>
-</div>

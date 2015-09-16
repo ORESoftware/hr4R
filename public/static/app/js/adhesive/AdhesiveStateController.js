@@ -10,6 +10,27 @@ define(
 
     function (_) {
 
+
+        function findFunctionHelper(name) {
+
+            switch (name) {
+                case 'adhesive-get':
+                    return function (element) {
+                        //return $(element).text();
+                        return $(element).val();
+                    };
+                    break;
+                case 'adhesive-get-checkbox':
+                    return function (element) {
+                        return ($(element).is(':checked'));
+                    };
+                    break;
+                default:
+                    return null;
+            }
+
+        }
+
         function AdhesiveStateController() {
 
         }
@@ -27,60 +48,34 @@ define(
 
                 $.each(attributes, function (i, attrib) {
 
-                    if (!attrib) {
-                        console.log('wtf no attrib defined');
-                        return false;
-                    }
                     var name = attrib.name;
                     var value = attrib.value;
 
-                    var func = null;
-
-                    switch (name) {
-                        case 'adhesive-get':
-                            func = function (element) {
-                                //return $(element).text();
-                                return $(element).val();
-                            };
-                            break;
-                        case 'adhesive-get-checkbox':
-                            func = function (element) {
-                                var boolean = ($(element).is(':checked'));
-                                $(element).prop('checked', boolean);
-                                return boolean;
-                            };
-                            break;
-                        default:
-                            return true;
-                    }
-
-                    var split = String(value).split(':');
-
-                    //var modelName = split[0];
-                    //var modelProp = split[1];
-
-                    var modelName = split.shift();
-                    var modelProp = split.shift();
-
-                    var nestedModels = split.join('.');
-
-
-                    //if (domKeyName == modelName) {
-
                     if (value.indexOf(domKeyName) === 0) {
+
+                        var func = findFunctionHelper(name);
+
+                        if (func == null) {
+                            return true;
+                        }
+
+                        var propsArray = String(value).split(':');
+                        var modelName = propsArray.shift();
+                        var modelProp = propsArray.shift();
+                        var nestedAttribs = propsArray.join('.');
+
 
                         //TODO: don't need to check CID because we might be updating multiple models from the same element?
                         var val = func(element);
 
                         _.each(models, function (model, index) {
-                            if (nestedModels.length > 0) {
-                                model.setNestedAttrForChange(modelProp, nestedModels, val, {localChange: true});
+                            if (nestedAttribs.length > 0) {
+                                model.setNestedAttrForChange(modelProp, nestedAttribs, val, {localChange: true});
                             }
                             else {
                                 model.set(modelProp, val, {localChange: true});
                             }
                             model.persistModel();
-                            console.log('backbone model property:', modelProp, 'set to:', val);
                         });
                     }
                 });
@@ -90,7 +85,6 @@ define(
 
                 var element = event.target;
                 var attributes = element.attributes;
-
                 iterateOverAttributes(element, attributes);
             }
             else {
@@ -101,10 +95,9 @@ define(
 
                     var element = this;
                     var attributes = element.attributes;
-
                     var result = iterateOverAttributes(element, attributes);
 
-                    //check result to stop looping
+                    //TODO: check result to stop looping
                 });
             }
         };
@@ -121,23 +114,10 @@ define(
                     var name = attrib.name;
                     var value = attrib.value;
 
-                    var func = null;
+                    var func = findFunctionHelper(name);
 
-                    switch (name) {
-                        case 'adhesive-get':
-                            func = function (element) {
-                                //return $(element).text();
-                                return $(element).val();
-                            };
-                            break;
-                        case 'adhesive-get-checkbox':
-                            func = function (element) {
-                                //return $(element).text();
-                                return ($(element).is(':checked'));
-                            };
-                            break;
-                        default:
-                            return true; //could be return false if 'adhesive-get' was always first attribute
+                    if (func == null) {
+                        return true;
                     }
 
                     var split = String(value).split(':');
@@ -164,22 +144,6 @@ define(
 
                             //coll.each(function (model) {
                             _.each(coll, function (model, index) {
-
-                                //var subModel = getNestedModels(null,0, model, props);
-                                //
-                                //if (subModel) {
-                                //    if (subModel instanceof Backbone.Model) {
-                                //        subModel.set(modelProp, val, {localChange: true});
-                                //    }
-                                //    else {
-                                //        subModel[modelProp] = val;
-                                //        model.trigger('model-local-change-broadcast', model);
-                                //    }
-                                //    model.persistModel();
-                                //}
-                                //else{
-                                //    console.error('no submodel found');
-                                //}
 
                                 var attributes = {};
                                 attributes[modelProp] = val;

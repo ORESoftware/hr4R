@@ -107,7 +107,6 @@ define(
                             domController.updateDOMViaModelChange(domKeyName, model, domElementUpdate);
                         });
                     });
-
                 }
 
                 if (modelsToUpdate && modelsToUpdate.length > 0) {

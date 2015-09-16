@@ -211,9 +211,14 @@ define(
                 setNestedAttrForChange: function (parentAttribute, nestedAttributeString, newValue, opts) {
 
                     var clonedValue = _.clone(this.get(parentAttribute));
-                    eval('clonedValue.' + nestedAttributeString + '= newValue;');
-                    this.set(parentAttribute, clonedValue, opts);
-
+                    try{
+                        eval('clonedValue.' + nestedAttributeString + '= newValue;');
+                        this.set(parentAttribute, clonedValue, opts);
+                    }
+                    catch(err){
+                        //TODO: error might occur because nested attributes don't actually exist on the model or there is a null value in the chain
+                        throw err;
+                    }
                 },
 
                 set: function (key, val, options) {

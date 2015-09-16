@@ -31,23 +31,22 @@ define(
 
         var dispatchCallback = function (payload) {
 
-            var action = payload.action;
+            var actionType = payload.actionType;
             var data = payload.data;
 
-            switch (action) {
+            switch (actionType) {
 
                 case (OplogClientConstants.OPLOG_INSERT + uniqueCollectionName):
-                    collUpdater.handleInsert(jobsCollection);
+                    collUpdater.handleInsert(jobsCollection,data);
                     break;
 
                 case (OplogClientConstants.OPLOG_UPDATE + uniqueCollectionName):
-                    collUpdater.handleUpdate(jobsCollection);
+                    collUpdater.handleUpdate(jobsCollection,data);
                     break;
 
                 case (OplogClientConstants.OPLOG_REMOVE + uniqueCollectionName):
-                    collUpdater.handleRemove(jobsCollection);
+                    collUpdater.handleRemove(jobsCollection,data);
                     break;
-
 
                 default:
                     return true;

@@ -40,9 +40,9 @@ define(
 
                     this.model = this.collection.find(function (model) {
 
-                        var _id = model.get('_id');
-                        if (_id) {
-                            return _id.toString() == '55f8e2ac1ae4e5116e5809c4';
+                        var id = model.get('_id');
+                        if (id) {
+                            return id.toString() == '55f9ddb8cc219156ba26d6c8';
                         }
                     });
 
@@ -55,49 +55,50 @@ define(
 
                     var self = this;
 
-                    this.adhesive = new Adhesive(this, {}).stick({
-                            keyName: 'job',
-                            domEventType: 'keyup',
-                            //keyName: 'job:isVerified',
-                            models: {
-                                //listenTo: [],
-                                //update: [],
-                                listenTo: [self.model],
-                                update: [self.model],
-                                //modelEvents: ['model-socket-change-broadcast','model-local-change-broadcast','change'], //works
-                                modelEvents: ['model-local-change-broadcast', 'model-socket-change-broadcast'],
-                                //modelEvents: ['model-socket-change-broadcast','change'], //works
-                                //modelEvents: ['change'],
-                                where: {}
-                            },
-                            collections: {
-                                //listenTo: [self.collection],
-                                //update: [self.collection],
-                                listenTo: [],
-                                update: [],
-                                //TODO: loop with coll-local-change
-                                //collectionEvents: ['coll-local-change-broadcast','coll-socket-change-broadcast']
-                                collectionEvents: []
-                                //where: {cid:self.model.cid},
-                                //filterUpdate: function(model){
-                                //    return model.cid == self.model.cid;
-                                //},
-                                //filterListenTo: function(model){
-                                //    return model.cid == self.model.cid;
-                                //}
-                            },
+                    this.adhesive = new Adhesive(this, {
 
-                            limitToEventTarget: false //will limit updates for just the element touched
-                            //limitToClass: '.barf',  //will limit what elements get listened to at all
-                            //domElementListen: self.$el,
-                            //domElementListen: $(document),
-                            //domElementUpdate: self.$el,
-                            //domElementUpdate: $(self.el),
-                            //domElementUpdate: $(document),
+                    }).stick({
+                        keyName: 'job',
+                        domEventType: 'keyup',
+                        limitToEventTarget: true, //will limit updates for just the element touched
+                        //keyName: 'job:isVerified',
+                        models: {
+                            //listenTo: [],
+                            //update: [],
+                            listenTo: [self.model],
+                            update: [self.model],
+                            //modelEvents: ['model-socket-change-broadcast','model-local-change-broadcast','change'], //works
+                            modelEvents: ['model-local-change-broadcast', 'model-socket-change-broadcast'],
+                            //modelEvents: ['model-socket-change-broadcast','change'], //works
+                            //modelEvents: ['change'],
+                            where: {}
+                        },
+                        collections: {
+                            //listenTo: [self.collection],
+                            //update: [self.collection],
+                            listenTo: [],
+                            update: [],
+                            //TODO: loop with coll-local-change
+                            //collectionEvents: ['coll-local-change-broadcast','coll-socket-change-broadcast']
+                            collectionEvents: []
+                            //where: {cid:self.model.cid},
+                            //filterUpdate: function(model){
+                            //    return model.cid == self.model.cid;
+                            //},
+                            //filterListenTo: function(model){
+                            //    return model.cid == self.model.cid;
+                            //}
+                        }
+                        //limitToClass: '.barf',  //will limit what elements get listened to at all
+                        //domElementListen: self.$el,
+                        //domElementListen: $(document),
+                        //domElementUpdate: self.$el,
+                        //domElementUpdate: $(self.el),
+                        //domElementUpdate: $(document),
 
-                            //domEventType: 'click',
-                            //propagateChangesToServerImmediately: false,
-                        });
+                        //domEventType: 'click',
+                        //propagateChangesToServerImmediately: false,
+                    });
 
                 },
 

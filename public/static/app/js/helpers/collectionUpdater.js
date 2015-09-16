@@ -9,14 +9,14 @@ define(function () {
 
     function handleInsert(collection, data) {
 
-        var self = collection;
         var _id = data._id;
+        //var data = data.upd
 
         for (var i = 0; i < collection.models.length; i++) {
             var model = collection.models[i];
             if (String(model.get('_id')) == String(_id)) {
                 model.set(data, {silent: true, socketChange: true});
-                self.trigger('coll-change-socket', model, {});
+                collection.trigger('coll-change-socket', model, {});
                 return;
             }
         }
@@ -29,14 +29,14 @@ define(function () {
 
     function handleUpdate(collection, data) {
 
-        var self = collection;
         var _id = data._id;
+        data = data.updateInfo;
 
         for (var i = 0; i < collection.models.length; i++) {
             var model = collection.models[i];
             if (String(model.get('_id')) == String(_id)) {
                 model.set(data, {silent: true, socketChange: true});
-                self.trigger('coll-change-socket', model, {});
+                collection.trigger('coll-change-socket', model, {});
                 return;
             }
         }
@@ -49,14 +49,13 @@ define(function () {
 
     function handleRemove(collection, data) {
 
-        var self = collection;
         var _id = data._id;
 
         for (var i = 0; i < collection.models.length; i++) {
             var model = collection.models[i];
             if (String(model.get('_id')) == String(_id)) {
-                self.remove(model);
-                self.trigger('coll-remove-socket', model, {});
+                collection.remove(model);
+                collection.trigger('coll-remove-socket', model, {});
                 break;
             }
         }

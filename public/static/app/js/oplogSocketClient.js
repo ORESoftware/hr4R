@@ -56,7 +56,7 @@ define(
                 //TODO: match socket session with express session
 
                 socket.on('error', function socketConnectionErrorCallback(err) {
-                    socketEvents.trigger('socket-error','socket-error', err);
+                    socketEvents.trigger('socket-error', 'socket-error', err);
                     console.error('Unable to connect Socket.IO ---->', JSON.stringify(err));
                 });
 
@@ -79,34 +79,38 @@ define(
                     var data = oplogDoc.o;
 
                     var created_by = data.created_by;
-                    if(created_by){
-                        if(created_by === 'temp_created_by'){
+                    if (created_by) {
+                        if (created_by === 'temp_created_by') {
                             return;
                         }
                         var createdByUserID = String(created_by).split('@')[0];
                         var currentUserId = appState.get('currentUser') ? appState.get('currentUser').get('_id') : null;
-                        if(currentUserId && currentUserId.toString() == createdByUserID){
+                        if (currentUserId && currentUserId.toString() == createdByUserID) {
                             return;
                         }
                     }
-                    else{
+                    else {
                         //TODO: fix oplog items that don't pass validation but still appear
-                        throw new Error('no created_by field present:'+data);
+                        throw new Error('no created_by field present:' + data);
                     }
 
                     var ns = oplogDoc.ns;
                     var split = String(ns).split('.');
                     var dbName = split[0];
                     var collectionName = split[1];
-                    var coll = findCollection(collectionName);
+                    OplogClientActions.insert(collectionName, data);
 
-                    OplogClientActions.insert(collectionName,data);
+                    /*
 
-                    if (coll) {
-                        var _id = data._id;
-                        coll.insertModelSocket(_id,data,{});
-                        //TODO: if silent is set to false, views to seem to render magically for no reason
-                    }
+                     var coll = findCollection(collectionName);
+
+                     if (coll) {
+                     var _id = data._id;
+                     coll.insertModelSocket(_id,data,{});
+                     //TODO: if silent is set to false, views to seem to render magically for no reason
+                     }
+
+                     */
                 });
 
                 socket.on('update', function (data) {
@@ -115,18 +119,18 @@ define(
                     var _id = oplogDoc.o2._id;
                     var updateInfo = oplogDoc.o.$set;
                     var updated_by = updateInfo.updated_by;
-                    if(updated_by){
-                        if(updated_by === 'temp_updated_by'){
+                    if (updated_by) {
+                        if (updated_by === 'temp_updated_by') {
                             return;
                         }
                         var updateUserID = String(updated_by).split('@')[0];
                         var currentUserId = appState.get('currentUser') ? appState.get('currentUser').get('_id') : null;
-                        if(currentUserId && currentUserId.toString() == updateUserID){
+                        if (currentUserId && currentUserId.toString() == updateUserID) {
                             return;
                         }
                     }
-                    else{
-                        throw new Error('no updated_by field present:'+data);
+                    else {
+                        throw new Error('no updated_by field present:' + data);
                         //TODO: fix oplog items that don't pass validation but still appear
                     }
 
@@ -134,12 +138,18 @@ define(
                     var split = String(ns).split('.');
                     var dbName = split[0];
                     var collectionName = split[1];
-                    var coll = findCollection(collectionName);
-                    var data = {_id:_id,updateInfo:updateInfo};
-                    OplogClientActions.update(collectionName,data);
-                    if (coll) {
-                        coll.updateModelSocket(_id,updateInfo,{});
-                    }
+
+                    var data = {_id: _id, updateInfo: updateInfo};
+                    OplogClientActions.update(collectionName, data);
+
+                    /*
+
+                     var coll = findCollection(collectionName);
+                     if (coll) {
+                     coll.updateModelSocket(_id,updateInfo,{});
+                     }
+
+                     */
                 });
 
 
@@ -151,7 +161,7 @@ define(
                     var dbName = split[0];
                     var collectionName = split[1];
                     var coll = findCollection(collectionName);
-                    OplogClientActions.remove(collectionName,data);
+                    OplogClientActions.remove(collectionName, data);
                     if (coll) {
                         var _id = oplogDoc.o._id;
                         coll.removeModelSocket(_id);
@@ -168,7 +178,7 @@ define(
 
             getConnection().on(eventName, function () {
                 //callback(arguments);
-                callback.prototype.apply(target,arguments);
+                callback.prototype.apply(target, arguments);
             });
 
         }

@@ -269,7 +269,7 @@ define(
 
 
     function (error) {  //this is called an "errback"
-        console.log('Custom ERROR handler', error);
+        console.log('Custom error-back handler', error);
         //error.requireModules : is Array of all failed modules
         var failedId = error.requireModules && error.requireModules[0];
         console.log(failedId);

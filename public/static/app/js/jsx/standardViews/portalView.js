@@ -53,15 +53,18 @@ define(
 
                     var self = this;
 
-                    $('#logout-li-id').on('click', function (event) {
-                        event.preventDefault();
-                        self.onClickLogout(event);
-                    });
 
-                    $('li').on('click', function (event) {
-                        event.preventDefault();
-                        self.onClickLogout(event);
-                    });
+
+                    //$('#logout-li-id').on('click', function (event) {
+                    //    //event.preventDefault();
+                    //    alert("here");
+                    //    //self.onClickLogout(event);
+                    //});
+                    //
+                    //$('li').on('click', function (event) {
+                    //    event.preventDefault();
+                    //    self.onClickLogout(event);
+                    //});
 
                 },
 
@@ -86,6 +89,14 @@ define(
                     var ret = EJS.render(template, {});
 
                     $('#main-div-id').html(ret);
+
+                    this.delegateEvents();
+
+                    //$('#logout-li-id').on('click', function (event) {
+                    //    //event.preventDefault();
+                    //    alert("here");
+                    //    self.onClickLogout(event);
+                    //});
 
                     return this;
                 },
