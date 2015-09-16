@@ -4,7 +4,6 @@
             <div class="col-md-2">
             <% if(locals.appState.get('currentUser') !== null) { %>
             <div>Logged In As: <%= locals.appState.get('currentUser').get('firstName') + " " + locals.appState.get('currentUser').get('lastName') %>(<%= locals.appState.get('currentUser').get('username')%>)</div>
-            <button id="logout-button-id">Logout</button>
             <% if(locals.viewState.get('mainParentView') !== null && locals.viewState.get('mainParentView').givenName === '@PortalView') {%>
                 <div>
                     <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>

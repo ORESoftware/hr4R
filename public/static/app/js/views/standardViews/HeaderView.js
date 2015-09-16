@@ -46,7 +46,6 @@ define(
                 el: '#index_header_div_id',
 
                 events: {
-                    'click #logout-button-id': 'onClickLogout',
                     'click #hot-reload-button-id': 'onClickHotReload',
                     'click #reset-all-button-id': 'onClickResetAll',
                     'click #reset-front-end-button-id': 'onClickResetFrontEnd',
@@ -138,35 +137,7 @@ define(
                     }
                 },
 
-                onClickLogout: function (event) {
-                    event.preventDefault();
 
-                    //TODO: for some reason the server is logging this POST request as occuring twice or more, why?
-                    var self = this;
-
-                    $.ajax({
-                        url: '/logout',
-                        data: {},
-                        dataType: 'json',
-                        type: 'POST'
-
-                    }).done(function (msg, textStatus, jqXHR) {
-                        if (msg === true) {
-                            appState.set('currentUser', null);
-                            eventBus.trigger('bootRouter', 'index');
-                        }
-                        else {
-                            alert('logout failed on server, please try again.')
-                        }
-
-                    }).fail(function (jqXHR, textStatus, errorThrown) {
-                        console.log('error:', err);
-                        alert('internal server error - logout failed.')
-
-                    }).always(function (a, textStatus, b) {
-                        self.render();
-                    });
-                },
                 onClickHotReload: function (event) {
 
                     //var toReload = ['text!app/templates/headerTemplate.ejs'];

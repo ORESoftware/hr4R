@@ -14,12 +14,12 @@ define(
         'ejs',
         'underscore',
         'backbone-validation',
+        '@eventBus',
         'require'
     ],
 
 
-    function (appState, models, collections, form2js, EJS, _, BackboneValidation,require) {
-
+    function (appState, models, collections, form2js, EJS, _, BackboneValidation, eventBus, require) {
 
 
         var PortalView = Backbone.View.extend({
@@ -32,6 +32,9 @@ define(
                     }
                 },
 
+                events: {
+                    'click #logout-li-id': 'onClickLogout'
+                },
 
                 constructor: function () {
                     this.givenName = '@PortalView';
@@ -47,6 +50,18 @@ define(
                     //this.listenTo(this.model, 'sync', this.handleModelSyncSuccess);
                     //this.listenTo(this.model, 'error', this.handleModelError);
                     //this.listenTo(Backbone.Events, 'books:created', this.show);
+
+                    var self = this;
+
+                    $('#logout-li-id').on('click', function (event) {
+                        event.preventDefault();
+                        self.onClickLogout(event);
+                    });
+
+                    $('li').on('click', function (event) {
+                        event.preventDefault();
+                        self.onClickLogout(event);
+                    });
 
                 },
 
@@ -69,10 +84,40 @@ define(
                     var template = allTemplates['templates/portalTemplate.ejs'];
 
                     var ret = EJS.render(template, {});
+
                     $('#main-div-id').html(ret);
 
-
                     return this;
+                },
+
+                onClickLogout: function (event) {
+                    event.preventDefault();
+
+                    //TODO: for some reason the server is logging this POST request as occuring twice or more, why?
+                    var self = this;
+
+                    $.ajax({
+                        url: '/logout',
+                        data: {},
+                        dataType: 'json',
+                        type: 'POST'
+
+                    }).done(function (msg, textStatus, jqXHR) {
+                        if (msg === true) {
+                            appState.set('currentUser', null);
+                            eventBus.trigger('bootRouter', 'index');
+                        }
+                        else {
+                            alert('logout failed on server, please try again.')
+                        }
+
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        console.log('error:', err);
+                        alert('internal server error - logout failed.')
+
+                    }).always(function (a, textStatus, b) {
+                        self.render();
+                    });
                 },
 
                 handleModelSyncSuccess: function () {

@@ -42,7 +42,7 @@ define(
 
                         var _id = model.get('_id');
                         if (_id) {
-                            return _id.toString() == '55f8aec93f62419f4f2e06b2';
+                            return _id.toString() == '55f8e2ac1ae4e5116e5809c4';
                         }
                     });
 

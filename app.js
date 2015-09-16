@@ -278,6 +278,7 @@ app.use('/authenticate', runRoute('./routes/authenticate'));
 app.use('/register', runRoute('./routes/register'));
 app.use('/login', runRoute('./routes/login'));
 app.use('/logout', runRoute('./routes/logout'));
+app.use('/exp', runRoute('./routes/exp'));
 
 
 if (app.get('env') === 'development') {
