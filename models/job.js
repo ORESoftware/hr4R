@@ -40,6 +40,9 @@ var registerSchema = function () {
             lastName: {
                 type: String
             },
+            email: {
+              type: String,
+            },
             animals:{
               type: Object
             },

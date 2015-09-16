@@ -30,13 +30,14 @@
 
                         <div class="form-group input-group">
                             <span class="input-group-addon job-profile-update-form">Email</span>
-                            <input type="text" class="form-control" placeholder="Email">
+                            <input type="text" class="form-control" adhesive-get="job:email"
+                                   adhesive-cid="<%= job.cid %>" placeholder="Email">
                         </div>
 
                         <div class="form-group input-group">
                             <span class="input-group-addon job-profile-update-form">Job Name</span>
                             <input type="text" class="form-control" adhesive-get="job:jobName"
-                                   adhesive-cid="<%= job.cid %>" name="job.jobName" placeholder="Job Name">
+                                   adhesive-cid="<%= job.cid %>" placeholder="Job Name">
                         </div>
 
                         <div class="form-group input-group">

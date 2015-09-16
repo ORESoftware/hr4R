@@ -21,8 +21,8 @@ define(
             c.call(this,b);
         }
 
-
-        Controller.prototype = Object.assign(Object.create(SuperController.__proto__),{
+        Controller.prototype = _.extend(Object.create(SuperController.__proto__),{
+        //Controller.prototype = Object.assign(Object.create(SuperController.__proto__),{   //Opera browser doesn't support Object.assign yet
 
             getAll: function (id, changeViewCallback) {
                 var viewPath = 'app/js/jsx/relViews/getAll/getAll';

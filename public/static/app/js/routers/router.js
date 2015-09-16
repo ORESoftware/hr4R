@@ -20,10 +20,11 @@ define(
         'async',
         '#allCollections',
         'app/js/cssAdder',
-        'react'
+        'react',
+        '@eventBus'
     ],
 
-    function (appState, viewState, async, collections, cssAdder, React) {
+    function (appState, viewState, async, collections, cssAdder, React, eventBus) {
 
 
         var BootRouter = Backbone.Router.extend({
@@ -170,7 +171,7 @@ define(
 
                 _.bindAll(this, 'changeView', 'destroyView');
 
-                this.listenTo(Backbone.Events, 'bootRouter', function onToggleViewRequest(viewName) {
+                this.listenTo(eventBus, 'bootRouter', function onToggleViewRequest(viewName) {
 
                     if (window.location.hash && String(window.location.hash).length > 1 && String(window.location.hash).charAt(0) === '#') {
                         var hash = String(window.location.hash).substring(1);

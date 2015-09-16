@@ -49,6 +49,7 @@ define(
                         jobName: null,
                         firstName: null,
                         lastName: null,
+                        email:null,
                         //animals: new NestedModel(this, {
                         //    cats: true,
                         //    dogs: false,

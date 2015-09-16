@@ -18,11 +18,12 @@ define(
         'underscore',
         'backbone-validation',
         'ijson',
-        '@oplogSocketClient'
+        '@oplogSocketClient',
+        '@eventBus'
     ],
 
 
-    function (appState, collections, models, form2js, EJS, _, BackboneValidation, IJSON, osc) {
+    function (appState, collections, models, form2js, EJS, _, BackboneValidation, IJSON, osc, eventBus) {
 
 
         var LoginView = Backbone.View.extend({
@@ -122,18 +123,18 @@ define(
                                         osc.getSocketIOConn();
                                     }
                                     var hash = readFromLocalStorage('original_hash_request');
-                                    Backbone.Events.trigger('bootRouter', hash);
+                                    eventBus.trigger('bootRouter', hash);
                                 }
 
                             }).fail(function (err) {
                                 throw err;
                             }).always(function () {
-
+                                self.render();
                             });
                         }
                         else {
                             appState.set('currentUser', null);
-                            Backbone.Events.trigger('bootRouter', 'index');
+                            eventBus.trigger('bootRouter', 'index');
                             //TODO:http://stackoverflow.com/questions/19588401/backbone-navigation-callback
                         }
 
@@ -147,7 +148,7 @@ define(
                             }, 200);
                         })
                         .always(function () {
-                            //self.render();
+                            self.render();
                         });
 
 
@@ -191,7 +192,7 @@ define(
                             }, 200);
                         })
                         .always(function () {
-                            //self.render();
+                            self.render();
                         });
                 }
             },
@@ -234,7 +235,7 @@ define(
                             if (readFromLocalStorage('use_socket_server')) {
                                 osc.getSocketIOConn();
                             }
-                            Backbone.Events.trigger('bootRouter', hash);
+                            eventBus.trigger('bootRouter', hash);
                         }
 
                     })
@@ -255,7 +256,7 @@ define(
                         if (readFromLocalStorage('use_socket_server')) {
                             osc.getSocketIOConn();
                         }
-                        Backbone.Events.trigger('bootRouter', 'home');
+                        eventBus.trigger('bootRouter', 'home');
                     }
                 });
             }

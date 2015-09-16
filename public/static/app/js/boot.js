@@ -26,7 +26,8 @@ define(
         '#allCSS',
         '#allFluxActions',
         '#allFluxConstants',
-        '@Router'
+        '@Router',
+        '@eventBus'
     ],
 
     /*
@@ -34,7 +35,9 @@ define(
      the optimized file, and (2) so that we can do synchronous requires later on in our application
      */
 
-    function (async, appState, osc, cssAdder, allModels, allCollections, allTemplates, allControllers, allViews, allCSS, allFluxActions, allFluxConstants, router) {
+    function (async, appState, osc, cssAdder,
+              allModels, allCollections, allTemplates, allControllers, allViews, allCSS, allFluxActions, allFluxConstants,
+              router, eventBus) {
 
         //TODO: might need to figure out how to set ENV before socket.io tries to make connection to server
 
@@ -137,14 +140,14 @@ define(
                             osc.getSocketIOConn();
                         }
                         var hash = readFromLocalStorage('original_hash_request');
-                        Backbone.Events.trigger('bootRouter', hash);
+                        eventBus.trigger('bootRouter', hash);
                     });
                 }
                 else {
 
                     console.log('not authenticated..!');
                     appState.set('currentUser', null);
-                    Backbone.Events.trigger('bootRouter', 'index');
+                    eventBus.trigger('bootRouter', 'index');
                 }
             }
 

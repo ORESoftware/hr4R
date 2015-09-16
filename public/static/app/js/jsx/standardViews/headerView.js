@@ -20,11 +20,12 @@ define(
         '#Adhesive',
         'backbone-validation',
         '@oplogSocketClient',
+        '@eventBus',
         'require'
     ],
 
 
-    function (appState, viewState, async, collections, models, form2js, EJS, _, Adhesive, BackboneValidation, osc, require) {
+    function (appState, viewState, async, collections, models, form2js, EJS, _, Adhesive, BackboneValidation, osc, eventBus, require) {
 
 
         //TODO: http://stackoverflow.com/questions/7567404/backbone-js-repopulate-or-recreate-the-view
@@ -98,11 +99,15 @@ define(
                     var template = allTemplates['templates/headerTemplate.ejs'];
 
                     var socketConnection = readFromLocalStorage('use_socket_server');
+                    var socket = {};
+                    if(socketConnection){
+                        socket = osc.getSocketIOConn();
+                    }
 
                     var ret = EJS.render(template, {
                         appState: appState,
                         viewState: viewState,
-                        socketConnection: socketConnection
+                        socketConnection: socket
                     });
                     self.$el.html(ret);
 
@@ -110,9 +115,6 @@ define(
 
                 },
 
-                onSocketDisconnected: function () {
-                    //alert('socket disconnected successfully');
-                },
 
                 onClickReconnectSocket: function (event) {
                     event.preventDefault();
@@ -151,7 +153,7 @@ define(
                     }).done(function (msg, textStatus, jqXHR) {
                         if (msg === true) {
                             appState.set('currentUser', null);
-                            Backbone.Events.trigger('bootRouter', 'index');
+                            eventBus.trigger('bootRouter', 'index');
                         }
                         else {
                             alert('logout failed on server, please try again.')
@@ -226,7 +228,7 @@ define(
                             throw err;
                         }
                         else {
-                            Backbone.Events.trigger('bootRouter', 'index');
+                            eventBus.trigger('bootRouter', 'index');
                             //self.render();
                         }
                     });

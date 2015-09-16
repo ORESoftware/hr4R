@@ -44,57 +44,12 @@ define(
                     this.givenName = '@UserProfileView';
                     Backbone.View.apply(this, arguments);
 
-                    //this.cid = _.uniqueId('view');
-                    ////_.extend(this, _.pick(options, viewOptions));
-                    ////_.extend(this,opts);
-                    //this._ensureElement();
-                    //this.initialize.apply(this, arguments);
                 },
 
                 initialize: function (opts) {
 
                     this.setViewProps(opts); //has side effects
                     _.bindAll(this, 'render', 'onClickSubmitForm');
-
-                    this.adhesive = new Adhesive(this, {});
-
-                    var self = this;
-
-                    //this.adhesive.stick({
-                    //    keyName: 'user',
-                    //    models: {
-                    //        //listenTo: [self.model],
-                    //        //update: [self.model],
-                    //        listenTo: [self.model],
-                    //        update: [self.model],
-                    //        modelEvents: ['model-local-change-broadcast'],
-                    //        where: {}
-                    //    },
-                    //    collections: {
-                    //        listenTo: [self.collection],
-                    //        update: [self.collection],
-                    //        //listenTo: [],
-                    //        //update: [],
-                    //        collectionEvents: ['coll-socket-change-broadcast']
-                    //        //where: {cid:self.model.cid},
-                    //        //filterUpdate: function(model){
-                    //        //    return model.cid == self.model.cid;
-                    //        //},
-                    //        //filterListenTo: function(model){
-                    //        //    return model.cid == self.model.cid;
-                    //        //}
-                    //    },
-                    //    limitToEventTarget:true, //will limit updates for just the element touched
-                    //    //limitToClass: 'barf',  //will limit what elements get listened to at all
-                    //    //domElementListen: self.$el,
-                    //    domElementListen: $(document),
-                    //    //domElementUpdate: $(self.el),
-                    //    domElementUpdate: $(document),
-                    //
-                    //    domEventType: 'keyup',
-                    //    propagateChangesToServerImmediately:false,
-                    //    callback: null
-                    //});
 
                     //this.listenTo(this.collection, 'change', this.render);
                     //this.listenTo(this.collection, 'add remove reset', this.render);

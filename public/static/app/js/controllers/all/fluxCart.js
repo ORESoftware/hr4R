@@ -19,7 +19,8 @@ define(
             SuperController.constructor.call(this,b);
         }
 
-        Controller.prototype = Object.assign(Object.create(SuperController.__proto__),{
+        //Controller.prototype = Object.assign(Object.create(SuperController.__proto__),{  //Opera browser doesn't support Object.assign yet
+        Controller.prototype = _.extend(Object.create(SuperController.__proto__),{
 
             getAll: function (id, changeViewCallback) {
 

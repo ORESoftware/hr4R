@@ -80,11 +80,12 @@ define(
                     domElementListen.on(domEventType, function (event) { //click will only be registered in html is in DOM anyway so...assume it is there
 
                         event.preventDefault();
+
+                        stateController.updatePlainObjects(domKeyName, domElementListen, plainObjectsToUpdate, event, limitToEventTarget);
+
                         if (limitToEventTarget) { //TODO: update this with proper condition
                             event.stopPropagation();
                         }
-
-                        stateController.updatePlainObjects(domKeyName, domElementListen, plainObjectsToUpdate, event, limitToEventTarget);
 
                     });
                 }
@@ -118,11 +119,12 @@ define(
                     domElementListen.on(domEventType, function (event) { //click will only be registered in html is in DOM anyway so...assume it is there
 
                         event.preventDefault();
+
+                        stateController.updateBackboneModels(domKeyName, domElementListen, modelsToUpdate, event, limitToEventTarget);
+
                         if (limitToEventTarget) { //TODO: update this with proper condition
                             event.stopPropagation();
                         }
-
-                        stateController.updateBackboneModels(domKeyName, domElementListen, modelsToUpdate, event, limitToEventTarget);
 
                     });
                 }
@@ -159,14 +161,15 @@ define(
                     domElementListen.on(domEventType, function (event) {
 
                         event.preventDefault();
-                        if (limitToEventTarget) {  //TODO: update this with proper condition
-                            event.stopPropagation();
-                        }
 
                         stateController.updateBackboneCollections(
                             domKeyName, domElementListen, collectionsToUpdate, event,
                             limitToEventTarget, filterUpdateFunction
                         );
+
+                        if (limitToEventTarget) {  //TODO: update this with proper condition
+                            event.stopPropagation();
+                        }
 
                     });
                 }

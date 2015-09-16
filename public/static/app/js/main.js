@@ -34,7 +34,7 @@
             //'jqueryUI_CSS':'text!https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.css',
             //'jqueryUI_smooth':'text!https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css',
             //'jquery': 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min',
-            'util(NPM)':'vendor/util',
+            'util(NPM)': 'vendor/util',
             'ejs': 'vendor/ejs',
             'flux': 'vendor/Flux',
             'text': 'vendor/text',
@@ -50,7 +50,7 @@
             'socketio': 'vendor/socketio',
             'events': 'vendor/events-amd',
             //'socketio' : 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min',
-
+            '@eventBus': 'app/js/eventBuses/routerEventBus',
             //our modules
             '#Adhesive': 'app/js/adhesive/Adhesive',
             '#hotReloader': 'app/js/hot-reloading/hotReloader',
