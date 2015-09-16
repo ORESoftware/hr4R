@@ -92,18 +92,16 @@ define(
 
                     this.delegateEvents();
 
-                    //$('#logout-li-id').on('click', function (event) {
-                    //    //event.preventDefault();
-                    //    alert("here");
-                    //    self.onClickLogout(event);
-                    //});
+                    $('#logout-li-id').on('click', function (event) {
+                        event.preventDefault();
+                        self.onClickLogout(event);
+                    });
 
                     return this;
                 },
 
                 onClickLogout: function (event) {
                     event.preventDefault();
-
                     //TODO: for some reason the server is logging this POST request as occuring twice or more, why?
                     var self = this;
 

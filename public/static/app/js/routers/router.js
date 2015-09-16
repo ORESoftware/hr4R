@@ -9,9 +9,7 @@
 //TODO: http://stackoverflow.com/questions/17796750/why-is-it-considered-bad-practice-to-call-trigger-true-in-the-navigate-function
 
 //this is a completely single-page-app, so there is only one router
-
-console.log('loading app/js/ROUTERS.js');
-
+console.log('loading app/js/router.js');
 
 define(
     [
@@ -24,7 +22,7 @@ define(
         '@eventBus'
     ],
 
-    function (appState, viewState, async, collections, cssAdder, React, eventBus) {
+    function (appState, viewState, async, allCollections, cssAdder, React, eventBus) {
 
 
         var BootRouter = Backbone.Router.extend({
@@ -103,7 +101,7 @@ define(
                         view: new allViews['standardViews/userProfileView'](
                             {
                                 model: appState.get('currentUser'),
-                                collection: collections.users
+                                collection: allCollections.users
                             }
                         ),
                         useSidebar: true
@@ -118,7 +116,7 @@ define(
                     self.changeView({
                         view: new allViews['standardViews/IndexView'](
                             {
-                                collection: collections.users
+                                collection: allCollections.users
                             }
                         ),
                         useSidebar: false
@@ -238,9 +236,9 @@ define(
 
                 //TODO: turn these into batch saves
 
-                Object.keys(collections).forEach(function (key) {
-                    if (collections.hasOwnProperty(key)) {
-                        var coll = collections[key];
+                Object.keys(allCollections).forEach(function (key) {
+                    if (allCollections.hasOwnProperty(key)) {
+                        var coll = allCollections[key];
 
                         if (coll.collNeedsPersisting) {
                             collectionsToSync.push(
