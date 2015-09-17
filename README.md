@@ -1,4 +1,4 @@
-###### hr4R ###### hr4R ###### hr4R ###### hr4R ###### hr4R ###### hr4R ###### hr4R
+#hr4R 
 
 
 client-side hot-reloading is much more useful than server-side hot-reloading - both can save you time - but client hot-reloading can save you lots more time,
@@ -19,6 +19,10 @@ the air - and you easily require a nominal file on the fly. Thanks RequireJS.
 
 
 ####clientside hot-reloading
+
+to run this server as an example, you should have a local MongoDB instance running with this command
+
+```ulimit -n 1024 && mongod --dbpath /some/path/anywhere/you/want/mongodb_dev_data --replSet rs0```
 
 start the app with
 
@@ -68,7 +72,6 @@ in the client code (all in ./public directory) we have a hotReloadHandler, which
 
 
 there's some extra code that resolves paths that I wish to simplify but essentially the code looks like this
-
 
 
 
