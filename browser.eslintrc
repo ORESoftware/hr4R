@@ -1,5 +1,6 @@
 {
-  //comments are OK in .eslintrc files
+  /////comments are OK in .eslintrc files/////
+
   //http://eslint.org/docs/user-guide/configuring
 
   "parser": "espree",  //esprima //espree
