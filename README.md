@@ -1,16 +1,18 @@
-# hr4R
+###### hr4R ###### hr4R ###### hr4R ###### hr4R ###### hr4R ###### hr4R ###### hr4R
+
 
 client-side hot-reloading is much more useful than server-side hot-reloading - both can save you time - but client hot-reloading can save you lots more time,
 and make designers lives much better.
 
 the steps for clientside reloading are:
 
--[ ](1) gulp watchers listen for filesystem changes
--[ ](2) socket.io server in gulpfile sends a message to all browser clients with the path of the file that changed
--[ ](3) client deletes cache representing that file/module, and re-requires it (using AJAX to pull it from the server filesystem)
--[ ](4) front-end app is configured / designed to re-evaluate all references to the modules that it wishes to hot-reload, in this case, only JS views, templates and CSS are 
+1.  gulp watchers listen for filesystem changes
+2.  socket.io server in gulpfile sends a message to all browser clients with the path of the file that changed
+3.  client deletes cache representing that file/module, and re-requires it (using AJAX to pull it from the server filesystem)
+4.  front-end app is configured / designed to re-evaluate all references to the modules that it wishes to hot-reload, in this case, only JS views, templates and CSS are 
      available to hot reload -  the router, controllers, datastores (Backbone Collections and Models) are not configured yet. I do suspect all files could be hot reloaded
      expect for data stores. 
+
 
 RequireJS makes this all very easy to do since it's an asynchronous module loading system - you don't need to run a build or an incremental build to get the client code in
 the air - and you easily require a nominal file on the fly. Thanks RequireJS.
