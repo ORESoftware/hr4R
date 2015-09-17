@@ -20,8 +20,6 @@ var colors = require('colors/safe');
 var request = require('request');
 
 //gulp plugins
-var replace = require('gulp-replace');
-var source = require('vinyl-source-stream');
 var react = require('gulp-react');
 var nodemon = require('gulp-nodemon');
 var ijson = require('idempotent-json');

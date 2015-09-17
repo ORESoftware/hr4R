@@ -17,10 +17,8 @@ var ACCEPTABLE_EMAIL_DOMAINS = ['temp.com', 'cable.comcast.com', 'comcast.com'];
 
 
 // filescope
-var eventBus = require('../eventBus/eventBus.js');
 var mongoDB = null;
 var userSchema = null;
-
 
 
 var validation = {

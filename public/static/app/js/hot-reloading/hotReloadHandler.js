@@ -114,7 +114,6 @@ define(
                     $("#hot-reload-progress-bar").show();
                 }
 
-
                 function stopProgressBar(){
                     $("#hot-reload-progress-bar").hide();
                 }

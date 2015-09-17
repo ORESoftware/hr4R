@@ -31,7 +31,7 @@ router.get('/', function (req, res, next) {
 
                     var obj = null;
                     var env = process.env.NODE_ENV;
-                    var title = 'SmartConnect Admin Portal';
+                    var title = 'Admin Portal';
 
                     if (req.isAuthenticated() && req.user) {
                         obj = {
@@ -60,7 +60,7 @@ router.get('/', function (req, res, next) {
         console.log("no passport session found in index route, rendering index page...");
         //TODO: put user auth info in index.ejs?
         var env = process.env.NODE_ENV;
-        var title = 'SmartConnect Admin Portal';
+        var title = 'Admin Portal';
         var obj = {
             isAuthenticated: false,
             user: null,

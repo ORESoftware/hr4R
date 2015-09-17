@@ -7,10 +7,7 @@
 var mongoose = require('mongoose');
 var validator = require('mongoose-validate');
 
-//stuff
-var eventBus = require('../eventBus/eventBus.js');
 
-// variables
 var mongoDB = null;
 var jobSchema = null;
 

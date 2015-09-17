@@ -31,16 +31,10 @@ process.on('exit', function exitHook(code) {
 //config
 var config = require('univ-config')('*SC-Admin*', 'config/conf');
 
-//////
+//////////////////////////////////////////////////////////////////////////////////////////
 var app = require('../app');
 var debug = require('debug')('sc-ui-express:server');
 var http = require('http');
-var eventBus = require('../eventBus/eventBus.js');
-
-
-//eventBus.on('userModel',function(msg){
-//  console.log('eventBus message!:',msg);
-//});
 
 
 var port = normalizePort(process.env.PORT || '3000');
@@ -52,9 +46,6 @@ if (typeof global.gc === 'function') {
 
 var server = http.createServer(app).listen(port); //Listen on provided port, on all network interfaces.
 
-//var server = http.Server(app);
-//var io = require('socket.io').listen(server);  //we need to bind socket.io to the http server
-//require('../lib/controllers/socketio')(io);
 
 server.on('error', onError);
 server.on('listening', onListening);

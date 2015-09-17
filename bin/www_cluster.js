@@ -9,10 +9,6 @@ var http = require('http');
 var cluster = require('cluster');
 var numCPUs = require('os').cpus().length;
 
-
-var eventBus = require('../events/eventBus.js');
-
-
 if (cluster.isMaster) {
 
     cluster.on('exit', function(worker, code, signal) {
@@ -40,15 +36,6 @@ if (cluster.isMaster) {
     server.on('error', onError);
     server.on('listening', onListening);
 }
-
-
-
-//var server = http.Server(app);
-//var io = require('socket.io').listen(server);  //we need to bind socket.io to the http server
-//
-//require('../lib/controllers/socketio')(io);
-
-
 
 
 /**
