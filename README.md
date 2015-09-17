@@ -5,18 +5,18 @@ and make designers lives much better.
 
 the steps for clientside reloading are:
 
-###(1) gulp watchers listen for filesystem changes
-###(2) socket.io server in gulpfile sends a message to all browser clients with the path of the file that changed
-###(3) client deletes cache representing that file/module, and re-requires it (using AJAX to pull it from the server filesystem)
-###(4) front-end app is configured / designed to re-evaluate all references to the modules that it wishes to hot-reload, in this case, only JS views, templates and CSS are 
-### available to hot reload -  the router, controllers, datastores (Backbone Collections and Models) are not configured yet. I do suspect all files could be hot reloaded
-### expect for data stores. 
+*(1) gulp watchers listen for filesystem changes
+*(2) socket.io server in gulpfile sends a message to all browser clients with the path of the file that changed
+*(3) client deletes cache representing that file/module, and re-requires it (using AJAX to pull it from the server filesystem)
+*(4) front-end app is configured / designed to re-evaluate all references to the modules that it wishes to hot-reload, in this case, only JS views, templates and CSS are 
+     available to hot reload -  the router, controllers, datastores (Backbone Collections and Models) are not configured yet. I do suspect all files could be hot reloaded
+     expect for data stores. 
 
 RequireJS makes this all very easy to do since it's an asynchronous module loading system - you don't need to run a build or an incremental build to get the client code in
 the air - and you easily require a nominal file on the fly. Thanks RequireJS.
 
 
-##clientside hot-reloading
+####clientside hot-reloading
 
 start the app with
 
@@ -119,5 +119,114 @@ define(function () {
 ```
 
 
-that's pretty much it
+that's pretty much it for client-side hot-reloading
+
+
+next up we have serverside hot-reloading
+
+
+
+
+#### hot-reloading Node.js Express server code
+
+
+I debated whether to include this, but I think it's easier to reload the servercode and then when you get the idea, you can
+try the clientside second.
+
+in app.js, at the root of the project, we have this:
+
+
+```javascript
+
+var runRoute = null;
+
+if (app.get('env') === 'development') {
+    runRoute = function (path) {   //this hot reloads all file in the routes dir (serverside hot-reloading - less time waiting for server to restart with nodemon)
+        return function (req, res, next) {
+            require(path)(req, res, next);
+        };
+    }
+}
+else {
+    runRoute = function (path) {  //for production, resolves immediately
+        return require(path);
+    }
+}
+
+//ROUTES
+app.use('/', runRoute('./routes/index'));
+
+
+```
+
+ as you can see, ```runRoute``` is function that returns a function (known as functor for all you academics),
+ which means that every time a route is hit, it re-evaluates the require statement - so if we reload a file, it will re-evaluate the require pulling in the new file 
+ and avoiding re-referencing the old file.
+ 
+ Got it? pretty straightforward
+ 
+ 
+ we don't need socket.io for serverside reloading - because we already have a server listening for stuff
+ 
+ 
+ so in development mode we just need to add a route that can handle hot-reload requests like so:
+ 
+ ```javascript 
+ 
+ if (app.get('env') === 'development') {
+     app.post('/hot-reload', function (req, res, next) {  //route to handle serverside hot-reloading of routes
+         var path = req.body.path;
+         path = require.resolve(path);
+         if (path.indexOf('node_modules') < 0 && path.indexOf('routes') > 0) {
+             try {
+                 delete require.cache[path];
+                 res.send({success: 'successfully deleted cache with keyname: ' + path});
+             }
+             catch (err) {
+                 res.send({error: String(err)});
+             }
+         }
+     });
+ }
+ ```
+ 
+ as you can see, I configured it to ignore anything in /node_modules/ directory and made sure only the /routes directory was being listened to
+ 
+ 
+ the final part of the equation is similar to front-end reloading - we use gulp to listen to the filesystem - like so:
+ 
+ 
+ ```javascript
+ 
+ gulp.task('watch:hot-reload-back-end', function () {
+ 
+     //if route file changes, we just reload that one route, it works
+ 
+     gulp.watch('./routes/**/*.js').on('change', function (file) {
+ 
+         request({
+                 method: 'POST',
+                 json: {
+                     path: file.path
+                 },
+                 uri: 'http://localhost:3000/hot-reload'
+             },
+             function (err, response, body) {
+                 if (err) {
+                     console.log(colors.red(ijson.parse(err).error));
+                 }
+                 else {
+                     console.log(colors.blue(ijson.parse(body).success));
+                 }
+             });
+     });
+ });
+
+```
+
+(ijson is library that I wrote to make JSON idempotent, it works ok but not great)
+ 
+ 
+ 
+ 
 
