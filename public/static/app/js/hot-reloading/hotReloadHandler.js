@@ -18,7 +18,7 @@ define(
         'underscore',
         '#allCSS',
         'app/js/cssAdder',
-        '#hotReloader'
+        '@hotReloader'
     ],
 
     function (appState, viewState, io, collections, IJSON, _, allCSS, cssAdder, hotReloader) {

@@ -53,7 +53,7 @@
             '@eventBus': 'app/js/eventBuses/routerEventBus',
             //our modules
             '#Adhesive': 'app/js/adhesive/Adhesive',
-            '#hotReloader': 'app/js/hot-reloading/hotReloader',
+            '@hotReloader': 'app/js/hot-reloading/hotReloader',
             '*jsPatches': 'app/js/patches/jsPatches',
             '*backbonePatches': 'app/js/patches/backbonePatches',
             '*windowPatches': 'app/js/patches/windowPatches',
