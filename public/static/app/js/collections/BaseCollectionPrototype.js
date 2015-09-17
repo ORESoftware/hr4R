@@ -16,14 +16,12 @@ define(
         return {
 
             collNeedsPersisting: false,
+            needsFetching: true, //TODO: we can set this to false after a fetch, but if we do a reset, have to set this back to true...
             numberOfFetches: 0, //TODO: once this is 1 or greater, we don't need to keep fetching, we can let websockets do the work
-
             fetchCap: 2,
             changedModelsToBatchUpdateDomWith: {},
             addedModelsToBatchUpdateDomWith: {},
-
             batchURL: null,
-
 
             constructor: function () {
                 var self = this;

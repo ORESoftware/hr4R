@@ -1,43 +1,41 @@
 <header>
     <div>
         <div id="header-div-id" class="page-header">
+
             <div class="col-md-2">
-            <% if(locals.appState.get('currentUser') !== null) { %>
-            <div>Logged In As: <%= locals.appState.get('currentUser').get('firstName') + " " + locals.appState.get('currentUser').get('lastName') %>(<%= locals.appState.get('currentUser').get('username')%>)</div>
-            <% if(locals.viewState.get('mainParentView') !== null && locals.viewState.get('mainParentView').givenName === '@PortalView') {%>
+                <% if(locals.appState.get('currentUser') !== null) { %>
+                <% if(locals.viewState.get('mainParentView') !== null && locals.viewState.get('mainParentView').givenName === '@PortalView') { %>
                 <div>
                     <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
-                    <script>
-                        $("#menu-toggle").click(function(e) {
-                            e.preventDefault();
-                            $("#wrapper").toggleClass("toggled");
-                        });
-                    </script>
                 </div>
                 <% } %>
-            <% } else { %>
-            <div>You need to either register or login.</div>
-            <% } %>
-            </div>
-            <div id="error-dialog"></div>
-            <div class="col-md-2">
-                <p><font color="red"> Socket connected?: <span adhesive-value="socket:connected" ><%= locals.socketConnection.connected %></span></font></p>
+                <% } %>
             </div>
 
-            <div class="col-md-1">
+            <div id="error-dialog"></div>
+            <div class="col-md-2">
+                <p><font color="red"> Socket connected?: <span
+                                adhesive-value="socket:connected"><%= locals.socketConnection.connected %></span></font>
+                </p>
+            </div>
+
+            <div class="btn-group col-md-6" role="group" aria-label="...">
                 <button class="btn btn-default" id="reset-all-button-id">Reset-all</button>
-            </div>
-            <div class="col-md-1">
                 <button class="btn btn-default" id="reset-front-end-button-id">Reset-Front-End</button>
-            </div>
-            <div class="col-md-1">
                 <button class="btn btn-default" id="reset-back-end-button-id">Reset-Backend</button>
-            </div>
-            <div class="col-md-2">
                 <button class="btn btn-default" id="reconnect-socket-button-id">(Re)connect-Socket</button>
-            </div>
-            <div class="col-md-2">
                 <button class="btn btn-default" id="disconnect-socket-button-id">Disconnect-Socket</button>
+            </div>
+
+
+            <div class="col-md-2">
+                <% if(locals.appState.get('currentUser') !== null) { %>
+                <div>Logged In
+                    As: <b><%= locals.appState.get('currentUser').get('username') %></b>
+                </div>
+                <% } else { %>
+                <div>You need to either register or login.</div>
+                <% } %>
             </div>
 
         </div>

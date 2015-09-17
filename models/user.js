@@ -5,7 +5,6 @@
 
 //TODO:http://mongoosejs.com/docs/middleware.html
 
-//TODO:once we get email functionality to work, then we can put the project onto Github
 
 // dependencies
 var mongoose = require('mongoose');
@@ -16,12 +15,12 @@ var SALT_WORK_FACTOR = 10;
 var REQUIRED_PASSWORD_LENGTH = 8;
 var ACCEPTABLE_EMAIL_DOMAINS = ['temp.com', 'cable.comcast.com', 'comcast.com'];
 
-//stuff
-var eventBus = require('../eventBus/eventBus.js');
 
-// variables
+// filescope
+var eventBus = require('../eventBus/eventBus.js');
 var mongoDB = null;
 var userSchema = null;
+
 
 
 var validation = {

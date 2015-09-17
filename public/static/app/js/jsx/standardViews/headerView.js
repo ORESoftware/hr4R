@@ -110,6 +110,11 @@ define(
                     });
                     self.$el.html(ret);
 
+                    $("#menu-toggle").click(function(e) {
+                        e.preventDefault();
+                        $("#wrapper").toggleClass("toggled");
+                    });
+
                     return this;
 
                 },
