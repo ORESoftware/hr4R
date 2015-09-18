@@ -2,44 +2,44 @@
 
 
 client-side hot-reloading is much more useful than server-side hot-reloading - both can save you time - but client hot-reloading can save you lots more time,
-and make designers lives much better.
+and make designers' lives much better.
 
-the steps for clientside reloading are:
+######the steps for clientside reloading are:
 
 1.  gulp watchers listen for filesystem changes
 2.  socket.io server in gulpfile sends a message to all browser clients with the path of the file that changed
 3.  client deletes cache representing that file/module, and re-requires it (using AJAX to pull it from the server filesystem)
 4.  front-end app is configured / designed to re-evaluate all references to the modules that it wishes to hot-reload, in this case, only JS views, templates and CSS are 
      available to hot reload -  the router, controllers, datastores (Backbone Collections and Models) are not configured yet. I do suspect all files could be hot reloaded
-     expect for data stores. 
+     with the only exception being data stores. 
 
 
-RequireJS makes this all very easy to do since it's an asynchronous module loading system - you don't need to run a build or an incremental build to get the client code in
-the air - and you easily require a nominal file on the fly. Thanks RequireJS.
+```RequireJS``` makes this all very easy to do since it's an asynchronous module loading system - you don't need to run a build or an incremental build to get the client code in
+the air - and you may easily require a nominal file on the fly. Thanks RequireJS.
 
 
-####clientside hot-reloading
+####Clientside hot-reloading
 
-to run this server as an example, you should have a local MongoDB instance running with this command
+to run this Express server, you should have a local MongoDB instance running with this command
 
 ```ulimit -n 1024 && mongod --dbpath /some/path/anywhere/you/want/mongodb_dev_data --replSet rs0```
 
-start the app with
+start the server with
 
 ```gulp nodemon```
 
-this runs nodemon, after running some other important gulp tasks. nodemon is a must have, and it should be configured to ignore changes to your client code, in this
-case, nodemon only looks for server changes and ignores changes that we make to the client code in the public directory - on the other hand - our front-end hot-reloading process
+this runs Nodemon, after running some other important gulp tasks. Nodemon is a must-have, and it should be configured to ignore changes to your client code - in this
+case, nodemon only looks for server changes and ignores changes that we make to the client code in the public directory. On the other hand - our front-end hot-reloading process
 will listen exclusively to files in the public directory.
 
 we run a couple tasks before starting nodemon - we transpile JSX and then run a metadata generator that I wrote that allows RequireJS to require entire directories, this is very
 useful for controllers and views, especially controllers that follow some path convention. Without a controller path convention I know of no possible way from keeping 
-your router files from getting enormous.
+your front-end router files from getting enormous.
 
-next up, let's talk about the gulpfile.js at root of the project
+next up, let's talk about the gulpfile.js at the root of the project
 
 
-./gulpfile.js contains this code at the bottom of the file:
+gulpfile.js contains this code at the bottom of the file:
 
 ```javascript
 
@@ -65,14 +65,13 @@ gulp.task('nodemon', ['metagen:all', 'watch:hot-reload-front-end', 'watch:hot-re
 ```
 
 you should look into what the  'watch:hot-reload-front-end' task does - it sends a socket.io message to the browser, however many browsers
-you have open on your development machine, sometimes I have 2 or 3 and I need all to receive an update, of course they all do, thanks websockets
+you have open on your development machine, sometimes I have 2 or 3 and I need all to receive an update, of course they all do, thanks to websockets
 
 
-in the client code (all in ./public directory) we have a hotReloadHandler, which is a socket.io client
+in the client code (all in the ./public directory) we have a hotReloadHandler, which is a socket.io client
 
 
-there's some extra code that resolves paths that I wish to simplify but essentially the code looks like this
-
+there's some extra ugly code in there that resolves paths that I wish to simplify but essentially the code looks like this
 
 
 
@@ -103,7 +102,7 @@ there's some extra code that resolves paths that I wish to simplify but essentia
                 });
 ```
 
-the above calls this module, which does all the reloading, for .js, templates and CSS
+the above calls the following module, which does all the reloading, for .js, templates and CSS
 
 ```javascript
 
@@ -138,7 +137,8 @@ next up we have serverside hot-reloading
 I debated whether to include this, but I think it's easier to reload the servercode and then when you get the idea, you can
 try the clientside second.
 
-in app.js, at the root of the project, we have this:
+
+in our canonical app.js, at the root of the project, we have this:
 
 
 ```javascript
@@ -164,14 +164,15 @@ app.use('/', runRoute('./routes/index'));
 
 ```
 
- as you can see, ```runRoute``` is function that returns a function (known as functor for all you academics),
+ as you can see, if we are in the development environment, ```runRoute``` is function that returns a function (known as functor for all you academics),
  which means that every time a route is hit, it re-evaluates the require statement - so if we reload a file, it will re-evaluate the require pulling in the new file 
- and avoiding re-referencing the old file.
+ and avoiding re-referencing the old file. DON'T WORRY. If the file is already cached it will not slow down your development server, at all. If you delete the cache, only
+ then will it have to do the extra work of re-requiring the file. It does not have to re-require everytime. Just to be sure you get that.
  
  Got it? pretty straightforward
  
  
- we don't need socket.io for serverside reloading - because we already have a server listening for stuff
+ we don't need socket.io for serverside reloading - because we already have an HTTP server listening for stuff
  
  
  so in development mode we just need to add a route that can handle hot-reload requests like so:
@@ -179,7 +180,7 @@ app.use('/', runRoute('./routes/index'));
  ```javascript 
  
  if (app.get('env') === 'development') {
-     app.post('/hot-reload', function (req, res, next) {  //route to handle serverside hot-reloading of routes
+     app.post('/hot-reload', function (req, res, next) {  //route to handle serverside hot-reloading of files in our /routes dir
          var path = req.body.path;
          path = require.resolve(path);
          if (path.indexOf('node_modules') < 0 && path.indexOf('routes') > 0) {
@@ -195,7 +196,9 @@ app.use('/', runRoute('./routes/index'));
  }
  ```
  
- as you can see, I configured it to ignore anything in /node_modules/ directory and made sure only the /routes directory was being listened to
+ as you can see, I configured it to ignore anything in /node_modules/ directory and made sure only the /routes directory was being listened to;
+ I could have just used '/routes/' but just in case there was some node_module with '/routes/' in the path, I added that clause. Not as fail proof
+ as I would like, but should work for now.
  
  
  the final part of the equation is similar to front-end reloading - we use gulp to listen to the filesystem - like so:
@@ -230,6 +233,8 @@ app.use('/', runRoute('./routes/index'));
 ```
 
 (ijson is library that I wrote to make JSON idempotent, it works ok but not great)
+
+if you have any questions you can open an issue, thanks!
  
  
  
