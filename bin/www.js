@@ -1,6 +1,17 @@
 //TODO: process.env.UV_THREADPOOL_SIZE = 1;
 
 
+/*
+*
+*
+* WARNING: you have found the main executable file for the HR4R example app
+*
+* proceed with caution :)
+*
+*
+* */
+
+
 process.on('uncaughtException', function handleUncaughtException(err) {
     if (global.colors) {
         console.error('uncaughtException--->' + colors.red(String(err)));

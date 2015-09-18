@@ -41,7 +41,7 @@ var validation = {
                 return true;
             }
         }
-        return false;
+        return true; //normally we would return false, but for the example HR4R app, we need to make it easy to register
     }
 };
 
