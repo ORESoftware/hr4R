@@ -2,25 +2,12 @@
 <html>
 <head>
 
-
     <!--stylesheets-->
     <link href='/static/stylesheets/style.css' rel='stylesheet'/>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,300' rel='stylesheet' type='text/css'>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css" rel="stylesheet">
-    <!--<link rel="stylesheet" type="text/css" href="/static/cssx/pictureList/pictureList.css" media="screen"/>-->
     <link href="/static/cssx/bootstrap/bootstrap-notify.css" rel="stylesheet">
-
-    <!-- for simple sidebar -->
-    <!--<link rel="stylesheet" type="text/css" href="/static/cssx/portal/simple-sidebar.css" media="screen" />-->
-    <!--<link rel="stylesheet" type="text/css" href="/static/cssx/userProfileView/user-profile.css" media="screen" />-->
-
-    <!-- old -->
-    <!--<link type="text/css" rel="stylesheet" href="bower_components/backbone-modal/backbone.modal.css">-->
-    <!--<link type="text/css" rel="stylesheet" href="bower_components/backbone-modal/backbone.modal.theme.css">-->
-
-    <special id="perm_css"></special>
-    <special id="perm_css"></special>
 
 </head>
 
@@ -40,7 +27,7 @@
 <!-- ///////////////  here we run the front-end application /////////////////////////////-->
 <!-- ////////////////////////////////////////////////////////////////////////////////////-->
 <!-- ////////////////////////////////////////////////////////////////////////////////////-->
-<% if(env === 'development') { %>
+<% if(locals.env === 'development') { %>
 <!-- DEVELOPMENT-->
 <script data-main="/static/app/js/main" src="/static/vendor/require.js"></script>
 <% } else { %>

@@ -2,7 +2,7 @@
   "name": "sc-admin-ui-express",
   "version": "0.0.0",
   "authors": [
-    "Alexander Mills <alexander_mills2@cable.comcast.com>"
+    "Alexander Mills <alex@oresoftware.com>"
   ],
   "main": "static/app/js/main",
   "moduleType": [
