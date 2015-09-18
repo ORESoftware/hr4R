@@ -4,7 +4,7 @@
 client-side hot-reloading is much more useful than server-side hot-reloading - both can save you time - but client hot-reloading can save you lots more time,
 and make designers' lives much better.
 
-######the steps for clientside reloading are:
+######the steps for clientside hot-reloading are:
 
 1.  gulp watchers listen for filesystem changes
 2.  socket.io server in gulpfile sends a message to all browser clients with the path of the file that changed
@@ -54,7 +54,7 @@ gulp.task('nodemon', ['metagen:all', 'watch:hot-reload-front-end', 'watch:hot-re
 
         script: 'bin/www.js',
         ext: 'js',
-        ignore: ['public/*', '*.git/*', '*.idea/*', 'routes/*', 'gulpfile.js'],
+        ignore: ['public/*', '*.git/*', '*.idea/*', 'routes/*', 'gulpfile.js'],     //nodemon monitors our server for changes, but ignores changes to client code in public directory
         args: ['--use_socket_server', '--use_hot_reloader'],
         nodeArgs: [],
         env: {'NODE_ENV': 'development'}
@@ -81,7 +81,7 @@ there's some extra ugly code in there that resolves paths that I wish to simplif
 
                     updateProgressBar(40);
 
-                    hotReloader.hotReload(data,function(err,result){
+                    hotReloader.hotReload(data,function(err,result){              // deletes the cached module reference
 
                         if(err){
                             alert(err);
@@ -92,10 +92,10 @@ there's some extra ugly code in there that resolves paths that I wish to simplif
 
                         var filename = deCapitalizeFirstLetter(reconcilePath1(data,'jsx'));
 
-                        require(['#allViews'],function(allViews){
-                            allViews[filename] = result;
+                        require(['#allViews'],function(allViews){                  // AJAX is used to re-require the file
+                            allViews[filename] = result;                           // new file is loaded and we update the singleton "allViews" that holds the references to every view in the app
                             updateProgressBar(80);
-                            Backbone.history.loadUrl(Backbone.history.fragment);
+                            Backbone.history.loadUrl(Backbone.history.fragment);   // we re-render all views in sight, via the Backbone router (this does not refresh the page!)
                             updateProgressBar(100);
                         });
                     });
@@ -153,7 +153,7 @@ if (app.get('env') === 'development') {
     }
 }
 else {
-    runRoute = function (path) {  //for production, resolves immediately
+    runRoute = function (path) {  //for production and test environments, runRoute function resolves modules immediately
         return require(path);
     }
 }
@@ -233,6 +233,10 @@ app.use('/', runRoute('./routes/index'));
 ```
 
 (ijson is library that I wrote to make JSON idempotent, it works ok but not great)
+
+
+the only advantage of serverside hot-reloading is avoiding the wait for server restarts, which can become all too frequent. However, I don't personally see
+server hot-reloading to be as useful as client hot reloading.
 
 if you have any questions you can open an issue, thanks!
  
