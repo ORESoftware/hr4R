@@ -25,7 +25,7 @@ to run this Express server, you should have a local MongoDB instance running wit
 
 ```ulimit -n 1024 && mongod --dbpath /some/path/anywhere/you/want/mongodb_dev_data --replSet rs0```
 
-start the server with
+start the node.js Express server with
 
 ```gulp nodemon```
 
@@ -66,10 +66,11 @@ gulp.task('nodemon', ['metagen:all', 'watch:hot-reload-front-end', 'watch:hot-re
 ```
 
 you should look into what the  'watch:hot-reload-front-end' task does - it sends a socket.io message to the browser, however many browsers
-you have open on your development machine, sometimes I have 2 or 3 and I need all to receive an update, of course they all do, thanks to websockets
+you have open on your development machine, sometimes I have 2 or 3 and I need all browser windows to receive an update, of course they all do, 
+thanks to websockets, thanks Socket.io.
 
 
-in the client code (all in the ./public directory) we have a hotReloadHandler, which is a socket.io client
+in the client code (all client code is in the ./public directory) we have a hotReloadHandler, which is a socket.io client
 
 
 there's some extra ugly code in there that resolves paths that I wish to simplify but essentially the code looks like this
@@ -78,7 +79,7 @@ there's some extra ugly code in there that resolves paths that I wish to simplif
 
 ```javascript
 
-            socketHotReload.on('hot-reload (.jsx)', function (data) {
+           socketHotReload.on('hot-reload (.jsx)', function (data) {
 
                     updateProgressBar(40);
 
@@ -130,15 +131,17 @@ that's pretty much it for client-side hot-reloading
 
 
 
-next up we have serverside hot-reloading
 
+
+
+next up we have serverside hot-reloading
 
 
 #### hot-reloading Node.js Express server code
 
 
-I debated whether to include this, but I think it's easier to reload the servercode and then when you get the idea, you can
-try the clientside second.
+I debated whether to include this portion of serverside reloading, but I think it's actually easier to reload servercode and then when you get the idea, 
+you can try the clientside second.
 
 
 in our canonical app.js, at the root of the project, we have this:
