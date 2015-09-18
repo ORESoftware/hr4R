@@ -6,7 +6,7 @@ and make designers' lives much better.
 
 ######the steps for clientside hot-reloading are:
 
-1.  gulp watchers listen for filesystem changes
+1.  gulp.js watchers listen for filesystem changes
 2.  socket.io server in gulpfile sends a message to all browser clients with the path of the file that changed
 3.  client deletes cache representing that file/module, and re-requires it (using AJAX to pull it from the server filesystem)
 4.  front-end app is configured / designed to re-evaluate all references to the modules that it wishes to hot-reload, in this case, only JS views, templates and CSS are 
@@ -15,7 +15,8 @@ and make designers' lives much better.
 
 
 ```RequireJS``` makes this all very easy to do since it's an asynchronous module loading system - you don't need to run a build or an incremental build to get the client code in
-the air - and you may easily require a nominal file on the fly. Thanks RequireJS.
+the air - and you may easily require a nominal file on the fly. In production, you can use r.js to build optimized (concatenated, minified) deployment files, and your requires 
+essentially become synchronous instead of asynchronous. RequireJS is the real deal. Thanks RequireJS.
 
 
 ####Clientside hot-reloading
@@ -77,7 +78,7 @@ there's some extra ugly code in there that resolves paths that I wish to simplif
 
 ```javascript
 
-   socketHotReload.on('hot-reload (.jsx)', function (data) {
+            socketHotReload.on('hot-reload (.jsx)', function (data) {
 
                     updateProgressBar(40);
 
@@ -102,11 +103,13 @@ there's some extra ugly code in there that resolves paths that I wish to simplif
                 });
 ```
 
+
 the above calls the following module, which does all the reloading, for .js, templates and CSS
+
 
 ```javascript
 
-define(function () {
+  define(function () {
 
         var hotReloadSimple = function (item, callback) {
             require.undef(item);
@@ -126,8 +129,8 @@ define(function () {
 that's pretty much it for client-side hot-reloading
 
 
-next up we have serverside hot-reloading
 
+next up we have serverside hot-reloading
 
 
 
