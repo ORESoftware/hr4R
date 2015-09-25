@@ -1,5 +1,5 @@
 /**
- * Created by amills001c on 6/16/15.
+ * Created by denmanm1 on 6/16/15.
  */
 
 //TODO:https://github.com/marionettejs/backbone.marionette/issues/611

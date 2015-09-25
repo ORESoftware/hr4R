@@ -1,11 +1,6 @@
 /**
- * Created by amills001c on 6/9/15.
+ * Created by denmanm1 on 6/9/15.
  */
-
-//TODO: https://github.com/gulpjs/gulp/issues/1186
-//TODO: https://medium.com/@webprolific/getting-gulpy-a2010c13d3d5
-//TODO: https://github.com/wix/react-templates
-//TODO: http://10consulting.com/2014/02/11/pipes-and-filters-to-cure-node-async-woes/
 
 
 //core

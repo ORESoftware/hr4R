@@ -1,5 +1,5 @@
 /**
- * Created by amills001c on 7/21/15.
+ * Created by denmanm1 on 7/21/15.
  */
 
 //TODO: http://stackoverflow.com/questions/21854938/using-mixins-vs-components-for-code-reuse-in-facebook-react

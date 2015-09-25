@@ -3,7 +3,7 @@
 <head>
 
     <!--stylesheets-->
-    <link href='/static/stylesheets/style.css' rel='stylesheet'/>
+    <link href='/static/cssx/style.css' rel='stylesheet'/>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,300' rel='stylesheet' type='text/css'>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css" rel="stylesheet">
@@ -24,19 +24,22 @@
 
 <div id="index_footer_div_id" class="footer navbar-fixed-bottom"></div>
 
+
+
 <!-- ///////////////  here we run the front-end application /////////////////////////////-->
-<!-- ////////////////////////////////////////////////////////////////////////////////////-->
-<!-- ////////////////////////////////////////////////////////////////////////////////////-->
+
 <% if(locals.env === 'development') { %>
+
 <!-- DEVELOPMENT-->
 <script data-main="/static/app/js/main" src="/static/vendor/require.js"></script>
+
 <% } else { %>
+
 <!-- TEST and PRODUCTION-->
 <script src="/static/app/optimized/optimized.js.gz"></script>
+
 <% } %>
-<!-- ////////////////////////////////////////////////////////////////////////////////////-->
-<!-- ////////////////////////////////////////////////////////////////////////////////////-->
-<!-- ////////////////////////////////////////////////////////////////////////////////////-->
+
 
 
 </body>

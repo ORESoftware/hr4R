@@ -1,5 +1,5 @@
 /**
- * Created by amills001c on 6/16/15.
+ * Created by denmanm1 on 6/16/15.
  */
 
 console.log('loading footerView');
