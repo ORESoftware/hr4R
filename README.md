@@ -234,12 +234,6 @@ app.use('/', runRoute('./routes/index'));
 
 ```
 
-(ijson is library that I wrote to make JSON idempotent, it works ok but not great)
-
-
-the only advantage of serverside hot-reloading is avoiding the wait for server restarts, which can become all too frequent. However, I don't personally see
-server hot-reloading to be as useful as client hot reloading.
-
 if you have any questions you can open an issue, thanks!
  
  
