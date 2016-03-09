@@ -79,29 +79,30 @@ there's some extra ugly code in there that resolves paths that I wish to simplif
 
 ```javascript
 
-           socketHotReload.on('hot-reload (.jsx)', function (data) {
+socketHotReload.on('hot-reload (.jsx)', function (data) {
 
-                    updateProgressBar(40);
+    updateProgressBar(40);
 
-                    hotReloader.hotReload(data,function(err,result){              // deletes the cached module reference
+    hotReloader.hotReload(data,function(err,result){              // deletes the cached module reference
 
-                        if(err){
-                            alert(err);
-                            return;
-                        }
+        if(err){
+            alert(err);
+            return;
+        }
 
-                        updateProgressBar(60);
+        updateProgressBar(60);
 
-                        var filename = deCapitalizeFirstLetter(reconcilePath1(data,'jsx'));
+        var filename = deCapitalizeFirstLetter(reconcilePath1(data,'jsx'));
 
-                        require(['#allViews'],function(allViews){                  // AJAX is used to re-require the file
-                            allViews[filename] = result;                           // new file is loaded and we update the singleton "allViews" that holds the references to every view in the app
-                            updateProgressBar(80);
-                            Backbone.history.loadUrl(Backbone.history.fragment);   // we re-render all views in sight, via the Backbone router (this does not refresh the page!)
-                            updateProgressBar(100);
-                        });
-                    });
-                });
+        require(['#allViews'],function(allViews){                  // AJAX is used to re-require the file
+            allViews[filename] = result;                           // new file is loaded and we update the singleton "allViews" that holds the references to every view in the app
+            updateProgressBar(80);
+            Backbone.history.loadUrl(Backbone.history.fragment);   // we re-render all views in sight, via the Backbone router (this does not refresh the page!)
+            updateProgressBar(100);
+        });
+    });
+});
+
 ```
 
 
@@ -128,13 +129,8 @@ the above calls the following module, which does all the reloading, for .js, tem
 
 
 that's pretty much it for client-side hot-reloading
-
-
-
-
-
-
-next up we have serverside hot-reloading
+<br>
+...next up we have serverside hot-reloading
 
 
 #### hot-reloading Node.js Express server code
